@@ -4,7 +4,6 @@ about: 새로운 기능 추가
 title: "[Feat]"
 labels: enhancement
 assignees: ''
-
 ---
 
 ### 구현하려는 기능
