@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import show.schedulemanagement.domain.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 
@@ -24,23 +25,23 @@ import show.schedulemanagement.domain.member.Member;
 @Builder
 @AllArgsConstructor
 @Table(name = "REPLY")
-public class Reply{
+public class Reply extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Reply parent;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 }

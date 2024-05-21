@@ -30,8 +30,9 @@ public class BoardAttachment {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    private String fineName;
+    @Column(nullable = false)
+    private String fileName;
 }

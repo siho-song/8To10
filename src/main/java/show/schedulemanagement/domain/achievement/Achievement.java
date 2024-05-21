@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import show.schedulemanagement.domain.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
@@ -24,15 +25,18 @@ import show.schedulemanagement.domain.member.Member;
 @Builder
 @AllArgsConstructor
 @Table(name = "ACHIEVEMENT")
-public class Achievement {
+public class Achievement extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "achievement_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id" , nullable = false)
     private Member member;
 
+    @Column(nullable = false)
     private LocalDate achievementDate;
+
+    @Column(nullable = false)
     private Double achievementRate;
 }

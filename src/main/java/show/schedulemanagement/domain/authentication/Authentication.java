@@ -13,28 +13,34 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
+import show.schedulemanagement.domain.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "AUTHENTICATION")
-public class Authentication {
+public class Authentication extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "authentication_id")
     private Long id;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    private boolean auth_email;
-    private boolean auth_phone;
+    @Column(nullable = false)
+    @ColumnDefault(value = "false")
+    private boolean authEmail;
+
+    @Column(nullable = false)
+    @ColumnDefault(value = "false")
+    private boolean authPhone;
 
     protected Authentication() {
-        auth_email = false;
-        auth_phone = false;
+        authEmail = false;
+        authPhone = false;
     }
 }
