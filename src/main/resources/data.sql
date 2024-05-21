@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS `CAT_UNIT_ACH`;
 DROP TABLE IF EXISTS `ACHIEVEMENT`;
 DROP TABLE IF EXISTS `N_VALUE`;
 DROP TABLE IF EXISTS `N_RANGE`;
-DROP TABLE IF EXISTS `ND_VALUE`;
-DROP TABLE IF EXISTS `ND_RANGE`;
+DROP TABLE IF EXISTS `N_D_VALUE`;
+DROP TABLE IF EXISTS `N_D_RANGE`;
 DROP TABLE IF EXISTS `F_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `N_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `V_SCHEDULE`;
@@ -33,10 +33,10 @@ CREATE TABLE `MEMBER` (
                           `image_file` varchar(255) NULL,
                           `role` ENUM('ADMIN', 'NORMAL_USER', 'PUNCTUAL_USER') NOT NULL DEFAULT 'NORMAL_USER',
                           `created_at` datetime(6) NOT NULL,
-                          `created_by` varchar(80) NOT NULL,
+                          `created_by` varchar(80) NULL,
                           `updated_at` datetime(6) NOT NULL,
-                          `updated_by` varchar(80) NOT NULL,
-                          `score` DOUBLE NOT NULL DEFAULT 0,
+                          `updated_by` varchar(80) NULL,
+                          `score` DOUBLE NULL DEFAULT 0,
                           PRIMARY KEY (`member_id`)
 );
 
@@ -47,9 +47,9 @@ CREATE TABLE `AUTHENTICATION` (
                                   `auth_email` boolean NOT NULL DEFAULT false,
                                   `auth_phone` boolean NOT NULL DEFAULT false,
                                   `created_at` datetime(6) NOT NULL,
-                                  `created_by` varchar(80) NOT NULL,
+                                  `created_by` varchar(80) NULL,
                                   `updated_at` datetime(6) NOT NULL,
-                                  `updated_by` varchar(80) NOT NULL,
+                                  `updated_by` varchar(80) NULL,
                                   PRIMARY KEY (`authentication_id`),
                                   FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -112,7 +112,7 @@ CREATE TABLE `REPLY_HEARTS` (
 CREATE TABLE `BOARD_ATTACHMENT` (
                                     `board_attachment_id` bigint NOT NULL AUTO_INCREMENT,
                                     `board_id` bigint NOT NULL,
-                                    `filename` varchar(255) NOT NULL,
+                                    `file_name` varchar(255) NOT NULL,
                                     PRIMARY KEY (`board_attachment_id`),
                                     FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`)
 );
@@ -126,7 +126,7 @@ CREATE TABLE `SCHEDULE` (
                             `start_date` date NOT NULL,
                             `end_date` date NOT NULL,
                             `created_at` datetime(6) NOT NULL,
-                            `created_by` varchar(80) NOT NULL,
+                            `created_by` varchar(80) NULL,
                             PRIMARY KEY (`schedule_id`),
                             FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -159,7 +159,7 @@ CREATE TABLE `V_SCHEDULE` (
                               `day` varchar(3) NOT NULL,
                               `complete_status` boolean NOT NULL DEFAULT false,
                               `updated_at` datetime(6) NOT NULL,
-                              `updated_by` varchar(80) NOT NULL,
+                              `updated_by` varchar(80) NULL,
                               PRIMARY KEY (`v_schedule_id`),
                               FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
 );
@@ -172,7 +172,7 @@ CREATE TABLE `N_SCHEDULE_DETAIL` (
                                      `complete_status` boolean NOT NULL DEFAULT false,
                                      `day` varchar(3) NOT NULL,
                                      `detail_description` TEXT NULL,
-                                     `updated_by` varchar(80) NOT NULL,
+                                     `updated_by` varchar(80) NULL,
                                      `updated_at` datetime(6) NOT NULL,
                                      PRIMARY KEY (`n_schedule_detail_id`),
                                      FOREIGN KEY (`n_schedule_id`) REFERENCES `N_SCHEDULE` (`n_schedule_id`)
@@ -184,26 +184,26 @@ CREATE TABLE `F_SCHEDULE_DETAIL` (
                                      `day` varchar(3) NOT NULL,
                                      `complete_status` boolean NOT NULL DEFAULT false,
                                      `detail_description` TEXT NULL,
-                                     `updated_by` varchar(80) NOT NULL,
+                                     `updated_by` varchar(80) NULL,
                                      `updated_at` datetime(6) NOT NULL,
                                      PRIMARY KEY (`f_schedule_detail_id`),
                                      FOREIGN KEY (`f_schedule_id`) REFERENCES `F_SCHEDULE` (`f_schedule_id`)
 );
 
-CREATE TABLE `ND_RANGE` (
-                            `nd_range_id` bigint NOT NULL AUTO_INCREMENT,
+CREATE TABLE `N_D_RANGE` (
+                            `n_d_range_id` bigint NOT NULL AUTO_INCREMENT,
                             `start_range` int NOT NULL,
                             `end_range` int NOT NULL,
                             `n_schedule_detail_id` bigint NOT NULL,
-                            PRIMARY KEY (`nd_range_id`),
+                            PRIMARY KEY (`n_d_range_id`),
                             FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
 );
 
-CREATE TABLE `ND_VALUE` (
-                            `nd_value_id` bigint NOT NULL AUTO_INCREMENT,
+CREATE TABLE `N_D_VALUE` (
+                            `n_d_value_id` bigint NOT NULL AUTO_INCREMENT,
                             `n_schedule_detail_id` bigint NOT NULL,
                             `value` int NOT NULL,
-                            PRIMARY KEY (`nd_value_id`),
+                            PRIMARY KEY (`n_d_value_id`),
                             FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
 );
 
@@ -232,8 +232,8 @@ CREATE TABLE `ACHIEVEMENT` (
                                `achievement_rate` double NOT NULL,
                                `created_at` datetime(6) NOT NULL,
                                `updated_at` datetime(6) NOT NULL,
-                               `created_by` varchar(80) NOT NULL,
-                               `updated_by` varchar(80) NOT NULL,
+                               `created_by` varchar(80) NULL,
+                               `updated_by` varchar(80) NULL,
                                PRIMARY KEY (`achievement_id`),
                                FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -245,8 +245,8 @@ CREATE TABLE `CAT_UNIT_ACH` (
                                 `achievement_rate` double NOT NULL,
                                 `created_at` datetime(6) NOT NULL,
                                 `updated_at` datetime(6) NOT NULL,
-                                `created_by` varchar(80) NOT NULL,
-                                `updated_by` varchar(80) NOT NULL,
+                                `created_by` varchar(80) NULL,
+                                `updated_by` varchar(80) NULL,
                                 PRIMARY KEY (`cat_unit_ach_Id`),
                                 FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -315,7 +315,7 @@ VALUES
     (3, 3);
 
 -- BOARD_ATTACHMENT 테이블에 데이터 삽입
-INSERT INTO BOARD_ATTACHMENT (board_id, filename)
+INSERT INTO BOARD_ATTACHMENT (board_id, file_name)
 VALUES
     (1, 'attachment1.jpg'),
     (2, 'attachment2.jpg'),
@@ -380,7 +380,7 @@ VALUES
     (2, 'Fri', false, 'Detail of the second F_SCHEDULE.', 'system', NOW());
 
 -- ND_RANGE 테이블에 데이터 삽입
-INSERT INTO ND_RANGE (start_range, end_range, n_schedule_detail_id)
+INSERT INTO N_D_RANGE (start_range, end_range, n_schedule_detail_id)
 VALUES
     (1, 10, 1),
     (11, 20, 2),
@@ -394,7 +394,7 @@ VALUES
     (91, 100, 10);
 
 -- ND_VALUE 테이블에 데이터 삽입
-INSERT INTO ND_VALUE (n_schedule_detail_id, value)
+INSERT INTO N_D_VALUE (n_schedule_detail_id, value)
 VALUES
     (1, 5),
     (2, 15),
