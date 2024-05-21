@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8' />
+    <!-- rrule lib -->
+    <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.11/index.global.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
+</head>
+<body>
+<div class="main-header">
+    <div class="logo">로고</div>
+    <div class="navigation">
+        <nav>
+            <ul>
+                <li><a href="/">마이페이지</a></li>
+                <li><a href="/">커뮤니티</a></li>
+                <li><a href="/home">홈</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+<!--    왼쪽 사이드바 -->
+    <div class="sidebar" id="left-sidebar">
+        왼쪽 사이드바</div>
+
+<!--    중앙 컨텐츠 ( fullcalendar )-->
+    <div class="main-content">
+        <div id="calendar"></div>
+    </div>
+
+<!--    오른쪽 사이드바 -->
+    <div class="sidebar" id="right-sidebar">
+        <button id="toggle-add-schedule-btn" >일정 생성</button>
+
+        <div id="event-details-container" style="display: none; padding: 20px;">
+            <h4>Event Details</h4>
+            <div id="details-content"></div> <!-- 상세 정보 내용이 여기에 삽입됩니다 -->
+        </div>
+
+        <!-- 일정 생성 폼 -->
+        <div id="schedule-form-container" style="display: none; padding: 20px;">
+            <form id="schedule-form">
+                <div class="form-group">
+                    <label for="schedule-title">제목</label>
+                    <input type="text" id="schedule-title" name="title" placeholder="일정 제목">
+                </div>
+                <div class="form-group">
+                    <label for="schedule-description">설명</label>
+                    <textarea id="schedule-description" name="description" placeholder="일정 설명"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="schedule-start-date">시작 날짜</label>
+                    <input type="date" id="schedule-start-date" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="schedule-end-date">종료 날짜</label>
+                    <input type="date" id="schedule-end-date" name="endDate">
+                </div>
+                <div class="form-group" id="additional-fields">
+
+                </div>
+                <button type="submit">저장</button>
+                <button type="button" onclick="hideScheduleForm()">취소</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- 일정 유형 선택 팝업 -->
+    <div class="popup" id="schedule-type-popup" style="display:none;">
+        <div class="popup-header">
+            <span class="close-button">&times;</span>
+            <h1>일정 생성</h1>
+        </div>
+        <div class="popup-content">
+            <div class="schedule-item">
+                <h3>고정 일정</h3>
+                <p>출근, 수업 등과 같이 항상 고정되어 일어나는 일정입니다.</p>
+                <button onclick="createScheduleForm('fixed')">고정 일정 생성</button>
+            </div>
+            <div class="schedule-item">
+                <h3>일반 일정</h3>
+                <p>공부, 독서 등과 같이 계획을 세워 달성하고자 하는 일정입니다.</p>
+                <button onclick="createScheduleForm('normal')">일반 일정 생성</button>
+            </div>
+            <div class="schedule-item">
+                <h3>변동 일정</h3>
+                <p>약속과 같은 자주와 갑자기 변경되거나 조정되는 일정입니다.</p>
+                <button onclick="createScheduleForm('variable')">변동 일정 생성</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/js/home/form/addScheduleForm.js}"
+        src="/js/home/form/addScheduleForm.js"></script>
+
+<script th:src="@{/js/home/form/scheduleCategoryForm.js}"
+        src="/js/home/form/scheduleCategoryForm.js"></script>
+
+<script th:src="@{/js/home/form/scheduleDetailForm.js}"
+        src="/js/home/form/scheduleDetailForm.js"></script>
+
+<script th:src="@{/js/home/toggle.js}"
+        src="/js/home/toggle.js"></script>
+
+<script th:src="@{/js/home/utils/time-option.js}"
+        src="/js/home/utils/time-option.js"></script>
+
+<script th:src="@{/js/home/utils/date-option.js}"
+        src="/js/home/utils/date-option.js">
+</script>
+<script th:src="@{/js/home/fullcalendarInit.js}"
+        src="/js/home/fullcalendarInit.js">
+</script>
+
+</body>
+
+</html>
+
+
