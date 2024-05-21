@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import show.schedulemanagement.domain.baseEntity.BaseCreatedEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
@@ -23,20 +24,24 @@ import show.schedulemanagement.domain.member.Member;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "SCHEDULE")
-public class Schedule{
+public class Schedule extends BaseCreatedEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "schedule_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false)
     private LocalDate startDate;
+
+    @Column(nullable = false)
     private LocalDate endDate;
 }

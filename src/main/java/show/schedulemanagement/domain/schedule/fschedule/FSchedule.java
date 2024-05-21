@@ -23,17 +23,21 @@ import show.schedulemanagement.domain.schedule.Schedule;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "F_SCHEDULE")
 public class FSchedule {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "f_schedule_id")
     private Long id;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "schedule_id")
+    @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
+    @Column(nullable = false)
     private LocalTime startTime;
+
+    @Column(nullable = false)
     private Integer duration;
+
+    @Column(nullable = false)
     private String frequency;
 }

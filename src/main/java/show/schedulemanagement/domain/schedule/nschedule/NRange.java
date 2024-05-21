@@ -21,17 +21,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "N_RANGE")
 public class NRange {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "n_range_id")
     private Long id;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "n_schedule_id")
+    @JoinColumn(name = "n_schedule_id", nullable = false)
     private NSchedule nSchedule;
 
+    @Column(nullable = false)
     private Integer startRange;
+
+    @Column(nullable = false)
     private Integer endRange;
 }
 

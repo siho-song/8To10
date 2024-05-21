@@ -15,6 +15,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.DynamicInsert;
+import show.schedulemanagement.domain.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
@@ -22,22 +26,27 @@ import show.schedulemanagement.domain.member.Member;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "BOARD")
-public class Board {
-
+@DynamicInsert
+public class Board extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    @ColumnDefault(value = "0")
     private Long totalLike;
+
+    @Column(nullable = false)
+    @ColumnDefault(value = "0")
     private Long totalScrap;
 }

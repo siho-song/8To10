@@ -22,17 +22,16 @@ import show.schedulemanagement.domain.member.Member;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "REPLY_HEARTS")
 public class ReplyHearts{
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_hearts_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "reply_id")
+    @JoinColumn(name = "reply_id", nullable = false)
     private Reply reply;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 }
