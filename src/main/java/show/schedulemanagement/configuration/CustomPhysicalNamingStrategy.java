@@ -1,9 +1,11 @@
-package show.schedulemanagement.configuration.namingStrategy;
+package show.schedulemanagement.configuration;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
+@Slf4j
 public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
     @Override
     public Identifier toPhysicalCatalogName(Identifier logicalName, JdbcEnvironment jdbcEnvironment) {
@@ -12,7 +14,7 @@ public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalSchemaName(Identifier logicalName, JdbcEnvironment jdbcEnvironment) {
-        return null;
+        return convertToSnakeCase(logicalName);
     }
 
     @Override
@@ -22,7 +24,7 @@ public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalSequenceName(Identifier logicalName, JdbcEnvironment jdbcEnvironment) {
-        return null;
+        return convertToSnakeCase(logicalName);
     }
 
     @Override
@@ -30,12 +32,17 @@ public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
         return convertToSnakeCase(logicalName);
     }
 
-    private Identifier convertToSnakeCase(final Identifier identifier){
-        final String regex = "([a-z])([A-Z])";
-        final String replacement = "$1_$2";
+    private Identifier convertToSnakeCase(final Identifier identifier) {
+        if (identifier == null) {
+            log.warn("Received null Identifier, returning null.");
+            return null;
+        }
+        final String regex = "([a-z])([A-Z])|([A-Z])([A-Z][a-z])";
+        final String replacement = "$1$3_$2$4";
         final String newName = identifier.getText()
-                .replaceAll(regex,replacement)
+                .replaceAll(regex, replacement)
                 .toLowerCase();
+        log.info("Converted '{}' to '{}'", identifier.getText(), newName);
         return Identifier.toIdentifier(newName);
     }
 }
