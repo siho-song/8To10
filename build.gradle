@@ -31,6 +31,8 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //parametererized test
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
 
     // P6Spy 의존성 추가 (개발 서버용)
     implementation 'p6spy:p6spy:3.9.1'
