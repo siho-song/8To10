@@ -10,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @MappedSuperclass
 public abstract class BaseUpdatedEntity {
     @LastModifiedDate
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     //TODO Spring Security 적용 후 구현

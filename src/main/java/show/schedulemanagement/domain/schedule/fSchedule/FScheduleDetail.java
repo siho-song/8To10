@@ -1,8 +1,8 @@
-package show.schedulemanagement.domain.schedule.nschedule;
+package show.schedulemanagement.domain.schedule.fSchedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,15 +10,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalTime;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.baseEntity.BaseUpdatedEntity;
 
 @Entity
@@ -26,28 +22,21 @@ import show.schedulemanagement.domain.baseEntity.BaseUpdatedEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@DynamicInsert
-public class NScheduleDetail extends BaseUpdatedEntity {
+public class FScheduleDetail extends BaseUpdatedEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "n_schedule_detail_id")
+    @Column(name = "f_schedule_detail_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "n_schedule_id", nullable = false)
-    private NSchedule nSchedule;
+    @JoinColumn(name = "f_schedule_id", nullable = false)
+    private FSchedule fSchedule;
 
     @Column(nullable = false)
-    private LocalTime startTime;
-
-    @Column(nullable = false)
-    private LocalTime endTime;
+    private String day;
 
     @Column(nullable = false)
     @ColumnDefault(value = "false")
     private boolean completeStatus;
-
-    @Column(nullable = false)
-    private String day;
 
     @Column(columnDefinition = "TEXT")
     private String detailDescription;
