@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS `CAT_UNIT_ACH`;
 DROP TABLE IF EXISTS `ACHIEVEMENT`;
 DROP TABLE IF EXISTS `N_VALUE`;
 DROP TABLE IF EXISTS `N_RANGE`;
-DROP TABLE IF EXISTS `N_D_VALUE`;
-DROP TABLE IF EXISTS `N_D_RANGE`;
+DROP TABLE IF EXISTS `nd_value`;
+DROP TABLE IF EXISTS `nd_range`;
 DROP TABLE IF EXISTS `F_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `N_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `V_SCHEDULE`;
@@ -33,9 +33,9 @@ CREATE TABLE `MEMBER`
     `mode`       ENUM('MILD', 'SPICY') NOT NULL,
     `image_file` varchar(255) NULL,
     `role`       ENUM('ADMIN', 'NORMAL_USER', 'PUNCTUAL_USER') NOT NULL DEFAULT 'NORMAL_USER',
-    `created_at` datetime(6) NOT NULL,
+    `created_at`  datetime(6) NULL,
     `created_by` varchar(80) NULL,
-    `updated_at` datetime(6) NOT NULL,
+    `updated_at` datetime(6) NULL,
     `updated_by` varchar(80) NULL,
     `score` DOUBLE NULL DEFAULT 0,
     PRIMARY KEY (`member_id`)
@@ -48,9 +48,9 @@ CREATE TABLE `AUTHENTICATION`
     `member_id`         bigint  NOT NULL,
     `auth_email`        boolean NOT NULL DEFAULT false,
     `auth_phone`        boolean NOT NULL DEFAULT false,
-    `created_at`        datetime(6) NOT NULL,
+    `created_at`        datetime(6) NULL,
     `created_by`        varchar(80) NULL,
-    `updated_at`        datetime(6) NOT NULL,
+    `updated_at`        datetime(6) NULL,
     `updated_by`        varchar(80) NULL,
     PRIMARY KEY (`authentication_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
@@ -63,8 +63,8 @@ CREATE TABLE `BOARD`
     `member_id`   bigint       NOT NULL,
     `title`       varchar(255) NOT NULL,
     `content`     TEXT         NOT NULL,
-    `created_at`  datetime(6) NOT NULL,
-    `updated_at`  datetime(6) NOT NULL,
+    `created_at`  datetime(6)   NULL,
+    `updated_at`  datetime(6)   NULL,
     `total_like`  bigint       NOT NULL DEFAULT 0,
     `total_scrap` bigint       NOT NULL DEFAULT 0,
     PRIMARY KEY (`board_id`),
@@ -78,8 +78,8 @@ CREATE TABLE `REPLY`
     `board_id`   bigint NOT NULL,
     `parent_id`  bigint NULL,
     `content`    TEXT   NOT NULL,
-    `created_at` datetime(6) NOT NULL,
-    `updated_at` datetime(6) NOT NULL,
+    `created_at`  datetime(6)   NULL,
+    `updated_at` datetime(6)    NULL,
     PRIMARY KEY (`reply_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`),
     FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
@@ -134,11 +134,11 @@ CREATE TABLE `SCHEDULE`
     `description` TEXT NULL,
     `start_date`  date         NOT NULL,
     `end_date`    date         NOT NULL,
-    `created_at`  datetime(6) NOT NULL,
+    `created_at`  datetime(6) NULL,
     `created_by`  varchar(80) NULL,
-    `updated_at`  datetime(6) NOT NULL,
+    `updated_at`  datetime(6) NULL,
     `updated_by`  varchar(80) NULL,
-    `dtype` varchar(40) NOT NULL,
+    `dtype` varchar(40) NOT NULL default 'V',
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -149,9 +149,9 @@ CREATE TABLE `N_SCHEDULE`
     `category_unit` ENUM('PAGE', 'CHAPTER','LECTURE','PROJECT','WORKOUT','NONE') NOT NULL DEFAULT 'NONE',
     `buffer_time`   TIME        NOT NULL DEFAULT '00:00:00',
     `frequency`     varchar(10) NOT NULL,
-    `created_at`    datetime(6) NOT NULL,
+    `created_at`    datetime(6) NULL,
     `created_by`    varchar(80) NULL,
-    `updated_at`    datetime(6) NOT NULL,
+    `updated_at`    datetime(6) NULL,
     `updated_by`    varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
@@ -161,11 +161,11 @@ CREATE TABLE `F_SCHEDULE`
 (
     `schedule_id` bigint      NOT NULL,
     `start_time`    time        NOT NULL,
-    `duration`      int         NOT NULL,
+    `duration`      time         NOT NULL,
     `frequency`     varchar(10) NOT NULL,
-    `created_at`    datetime(6) NOT NULL,
+    `created_at`    datetime(6) NULL,
     `created_by`    varchar(80) NULL,
-    `updated_at`    datetime(6) NOT NULL,
+    `updated_at`    datetime(6) NULL,
     `updated_by`    varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
@@ -178,9 +178,9 @@ CREATE TABLE `V_SCHEDULE`
     `end_time`        time       NOT NULL,
     `day`             varchar(3) NOT NULL,
     `complete_status` boolean    NOT NULL DEFAULT false,
-    `created_at`      datetime(6) NOT NULL,
+    `created_at`       datetime(6) NULL,
     `created_by`      varchar(80) NULL,
-    `updated_at`      datetime(6) NOT NULL,
+    `updated_at`      datetime(6) NULL,
     `updated_by`      varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
@@ -214,22 +214,22 @@ CREATE TABLE `F_SCHEDULE_DETAIL`
     FOREIGN KEY (`schedule_id`) REFERENCES `F_SCHEDULE` (`schedule_id`)
 );
 
-CREATE TABLE `N_D_RANGE`
+CREATE TABLE `nd_range`
 (
-    `n_d_range_id`         bigint NOT NULL AUTO_INCREMENT,
+    `nd_range_id`         bigint NOT NULL AUTO_INCREMENT,
     `start_range`          int    NOT NULL,
     `end_range`            int    NOT NULL,
     `n_schedule_detail_id` bigint NOT NULL,
-    PRIMARY KEY (`n_d_range_id`),
+    PRIMARY KEY (`nd_range_id`),
     FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
 );
 
-CREATE TABLE `N_D_VALUE`
+CREATE TABLE `nd_value`
 (
-    `n_d_value_id`         bigint NOT NULL AUTO_INCREMENT,
+    `nd_value_id`         bigint NOT NULL AUTO_INCREMENT,
     `n_schedule_detail_id` bigint NOT NULL,
     `value`                int    NOT NULL,
-    PRIMARY KEY (`n_d_value_id`),
+    PRIMARY KEY (`nd_value_id`),
     FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
 );
 
@@ -259,8 +259,8 @@ CREATE TABLE `ACHIEVEMENT`
     `member_id`        bigint NOT NULL,
     `achievement_date` date   NOT NULL,
     `achievement_rate` double NOT NULL,
-    `created_at`       datetime(6) NOT NULL,
-    `updated_at`       datetime(6) NOT NULL,
+    `created_at`        datetime(6) NULL,
+    `updated_at`       datetime(6) NULL,
     `created_by`       varchar(80) NULL,
     `updated_by`       varchar(80) NULL,
     PRIMARY KEY (`achievement_id`),
@@ -273,8 +273,8 @@ CREATE TABLE `CAT_UNIT_ACH`
     `member_id`       bigint NOT NULL,
     `category_unit`   ENUM('PAGE', 'CHAPTER','LECTURE','PROJECT','WORKOUT','NONE') NOT NULL DEFAULT 'NONE',
     `achievement_rate` double NOT NULL,
-    `created_at`      datetime(6) NOT NULL,
-    `updated_at`      datetime(6) NOT NULL,
+    `created_at`      datetime(6) NULL,
+    `updated_at`      datetime(6) NULL,
     `created_by`      varchar(80) NULL,
     `updated_by`      varchar(80) NULL,
     PRIMARY KEY (`cat_unit_ach_Id`),
@@ -289,7 +289,7 @@ CREATE TABLE `NOTIFICATION`
     `message`         TEXT    NOT NULL,
     `is_read`         boolean NOT NULL DEFAULT false,
     `entity_id`       bigint NULL,
-    `created_at`      datetime(6) NOT NULL,
+    `created_at`    datetime(6) NULL,
     `type`            varchar(255) NULL COMMENT 'null 이면 일반 메시지',
     PRIMARY KEY (`notification_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
@@ -392,7 +392,7 @@ VALUES
 
 
 -- ND_RANGE 테이블에 데이터 삽입
-INSERT INTO N_D_RANGE (start_range, end_range, n_schedule_detail_id)
+INSERT INTO nd_range (start_range, end_range, n_schedule_detail_id)
 VALUES
     (1, 10, 1),
     (11, 20, 2),
@@ -401,7 +401,7 @@ VALUES
     (41, 50, 5);
 
 -- ND_VALUE 테이블에 데이터 삽입
-INSERT INTO N_D_VALUE (n_schedule_detail_id, value)
+INSERT INTO nd_value (n_schedule_detail_id, value)
 VALUES
     (6, 15),
     (7, 15),
@@ -428,9 +428,9 @@ VALUES
 -- F_SCHEDULE 테이블에 데이터 삽입
 INSERT INTO F_SCHEDULE (start_time, duration, frequency, schedule_id,created_at,created_by,updated_at,updated_by)
 VALUES
-    ('09:00:00', 60, 'daily', 1,NOW(), 'system',NOW(), 'system'),
-    ('10:00:00', 90, 'weekly', 2,NOW(), 'system',NOW(), 'system'),
-    ('11:00:00', 120, 'monthly', 3,NOW(), 'system',NOW(), 'system');
+    ('09:00:00', '01:00:00', 'daily', 1,NOW(), 'system',NOW(), 'system'),
+    ('10:00:00', '01:30:00', 'weekly', 2,NOW(), 'system',NOW(), 'system'),
+    ('11:00:00', '02:00:00', 'monthly', 3,NOW(), 'system',NOW(), 'system');
 
 INSERT INTO F_SCHEDULE_DETAIL (schedule_id, day, complete_status, detail_description, updated_by, updated_at)
 VALUES
