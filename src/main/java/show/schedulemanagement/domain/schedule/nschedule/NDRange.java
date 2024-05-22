@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.nSchedule;
+package show.schedulemanagement.domain.schedule.nschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +21,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-public class NDValue {
+public class NDRange {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "n_d_value_id")
+    @Column(name = "n_d_range_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -30,5 +31,8 @@ public class NDValue {
     private NScheduleDetail nScheduleDetail;
 
     @Column(nullable = false)
-    private Integer value;
+    private Integer startRange;
+
+    @Column(nullable = false)
+    private Integer endRange;
 }

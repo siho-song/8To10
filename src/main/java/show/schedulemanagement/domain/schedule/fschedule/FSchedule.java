@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.vschedule;
+package show.schedulemanagement.domain.schedule.fschedule;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -8,26 +8,19 @@ import jakarta.persistence.Entity;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.schedule.Schedule;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = PROTECTED)
-@DynamicInsert
-@DiscriminatorValue(value = "V")
-public class VSchedule extends Schedule{
+@Getter
+@DiscriminatorValue(value = "F")
+public class FSchedule extends Schedule{
     @Column(nullable = false)
     private LocalTime startTime;
 
     @Column(nullable = false)
-    private LocalTime endTime;
+    private Integer duration;
 
     @Column(nullable = false)
-    private String day;
-
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
-    private boolean completeStatus;
+    private String frequency;
 }
