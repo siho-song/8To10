@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
+@Table(name = "BOARD_ATTACHMENT")
 public class BoardAttachment {
 
     @Id @GeneratedValue(strategy = IDENTITY)
