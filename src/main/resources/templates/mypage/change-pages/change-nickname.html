@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>닉네임 변경</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
+</head>
+<body>
+<div class="main-header">
+    <div class="logo">로고</div>
+    <div class="navigation">
+        <nav>
+            <ul>
+                <div class="image-container" data-alt="마이페이지">
+                    <a href="/mypage" class="image-link">
+                        <img th:src="@{/images/mypage.png}" src="/images/mypage.png" alt="마이페이지">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="커뮤니티">
+                    <a href="/community" class="image-link">
+                        <img th:src="@{/images/community.png}" src="images/community.png" alt="커뮤니티">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="홈">
+                    <a href="/home" class="image-link">
+                        <img th:src="@{/images/home.png}" src="images/home.png" alt="홈">
+                    </a>
+                </div>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="change-form-container">
+    <div class="change-form-content">
+        <h2>닉네임 변경</h2>
+        <div class="change-form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임">
+        </div>
+        <div class="note">
+            ※ 닉네임을 설정하면 <span style="color: red;">30일간 변경할 수 없습니다.</span>
+        </div>
+        <button class="change-button">닉네임 설정</button>
+    </div>
+</div>
+
+</body>
+</html>

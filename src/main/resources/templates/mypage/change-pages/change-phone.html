@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>휴대폰 번호 변경</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
+</head>
+<body>
+<div class="main-header">
+  <div class="logo">로고</div>
+  <div class="navigation">
+    <nav>
+      <ul>
+        <div class="image-container" data-alt="마이페이지">
+          <a href="/mypage" class="image-link">
+            <img th:src="@{/images/mypage.png}" src="/images/mypage.png" alt="마이페이지">
+          </a>
+        </div>
+        <div class="image-container" data-alt="커뮤니티">
+          <a href="/community" class="image-link">
+            <img th:src="@{/images/community.png}" src="images/community.png" alt="커뮤니티">
+          </a>
+        </div>
+        <div class="image-container" data-alt="홈">
+          <a href="/home" class="image-link">
+            <img th:src="@{/images/home.png}" src="images/home.png" alt="홈">
+          </a>
+        </div>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="change-form-container">
+  <div class="change-form-content">
+    <h2>휴대폰 번호 변경</h2>
+    <div class="change-form-group">
+      <label for="country">국가</label>
+      <select id="country" name="country">
+        <option value="KR">대한민국 +82</option>
+        <!-- 다른 국가 옵션 추가 가능 -->
+      </select>
+    </div>
+    <div class="change-form-group">
+      <label for="phone">전화번호</label>
+      <div class="phone-input-group">
+        <input type="text" id="phone" name="phone" placeholder="전화번호">
+        <button class="verify-button">인증</button>
+      </div>
+    </div>
+    <div class="change-form-group">
+      <label for="verification">인증번호 입력</label>
+      <input type="password" id="verification" name="verification" placeholder="인증번호 입력">
+    </div>
+    <button class="change-button">휴대폰 번호 변경</button>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
+    <title>마이페이지</title>
+</head>
+<body>
+<div class="main-header">
+    <div class="logo">로고</div>
+    <div class="navigation">
+        <nav>
+            <ul>
+                <div class="image-container" data-alt="마이페이지">
+                    <a href="/mypage" class="image-link">
+                        <img th:src="@{/images/mypage.png}" src="/images/mypage.png" alt="마이페이지">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="커뮤니티">
+                    <a href="/community" class="image-link">
+                        <img th:src="@{/images/community.png}" src="images/community.png" alt="커뮤니티">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="홈">
+                    <a href="/home" class="image-link">
+                        <img th:src="@{/images/home.png}" src="images/home.png" alt="홈">
+                    </a>
+                </div>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="mypage-container">
+    <div class="mypage-content">
+        <div class="mypage-section">
+            <div class="section-header">
+                <h2>내 정보</h2>
+                <button class="logout-button">로그아웃</button>
+            </div>
+            <div class="profile-info">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-picture">
+                <div class="user-info">
+                    <strong>이름 / 닉네임</strong><br>
+                    <span>아이디</span>
+                </div>
+            </div>
+        </div>
+        <div class="mypage-section">
+            <h2>계정</h2>
+            <ul>
+                <li class="clickable-item" onclick="location.href='/mypage/change-pages/change-email'">이메일 변경</li>
+                <li class="clickable-item" onclick="location.href='/mypage/change-pages/change-phone'">휴대폰 번호 변경</li>
+                <li class="clickable-item" onclick="location.href='/mypage/change-pages/change-nickname'">닉네임 변경</li>
+                <li class="clickable-item" onclick="location.href='/mypage/change-pages/change-password'">비밀번호 변경</li>
+            </ul>
+        </div>
+        <div class="mypage-section">
+            <h2>커뮤니티</h2>
+            <ul>
+                <li class="clickable-item" onclick="location.href='/mypage/my-posts'">내가 쓴 게시글 보기</li>
+                <li class="clickable-item" onclick="location.href='/mypage/my-comments'">댓글 쓴 글보기</li>
+                <li class="clickable-item" onclick="location.href='/mypage/my-scrap'">스크랩한 게시글 보기</li>
+            </ul>
+        </div>
+        <div class="mypage-section">
+            <h2>개인 정보 수정</h2>
+        </div>
+        <div class="mypage-section">
+            <h2>고정 일정 수정</h2>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
