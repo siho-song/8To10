@@ -34,7 +34,6 @@ public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     private Identifier convertToSnakeCase(final Identifier identifier) {
         if (identifier == null) {
-            log.warn("Received null Identifier, returning null.");
             return null;
         }
         final String regex = "([a-z])([A-Z])|([A-Z])([A-Z][a-z])";
