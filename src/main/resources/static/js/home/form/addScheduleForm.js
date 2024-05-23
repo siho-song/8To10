@@ -17,7 +17,9 @@ function submitAddScheduleForm(calendar) {
         event.start = startDateTime;
         event.end = endDateTime;
 
+
         calendar.addEvent(event);
+        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
     }
     else if (type === 'fixed') { //고정 일정
         const fixedProperties = initFixAndVariableProperties(startDate, endDate);
@@ -36,7 +38,11 @@ function submitAddScheduleForm(calendar) {
             until: endDateTime
         };
         event.duration = '01:00'; // 고정 일정의 지속 시간 설정
+
+
+
         calendar.addEvent(event);
+        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
     }
     else if (type === 'normal') {
         const normalProperties = initFixAndVariableProperties(startDate, endDate);
@@ -63,6 +69,7 @@ function submitAddScheduleForm(calendar) {
         event.type = type;
 
         calendar.addEvent(event);
+        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
     }
     hideScheduleForm();
 }

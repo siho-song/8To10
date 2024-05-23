@@ -12,9 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
         titleRangeSeparator: ' - ',
         windowResize: () => handleWindowResize(calendar),
         dateClick: (info) => handleDateClick(calendar, info),
-        eventClick: (info) => displayEventDetailsInSidebar(info.event)
+        eventClick: (info) => displayEventDetailsInSidebar(info.event),
+        eventDidMount: function(info) {
+            addToDoItem(info.event);  // 이벤트가 렌더링될 때 To-Do 리스트에 추가
+        }
     });
     calendar.render();
+
+
 
     document.getElementById('toggle-add-schedule-btn').addEventListener('click', function() {
         document.getElementById('schedule-type-popup').style.display = 'block';  /* 팝업 표시 */
@@ -45,7 +50,7 @@ function getHeaderToolbarOptions() {
     if (window.innerWidth < 480) {
         return { left: 'prev,next', center: 'title', right: 'dayGridMonth,timeGridDay' };
     } else {
-        return { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,dayGridDay,listWeek' };
+        return { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,dayGridDay' };
     }
 }
 
@@ -116,4 +121,123 @@ function loadInitialEvents() {
 
         }
     ];
+
+
 }
+
+// To-Do 리스트에 이벤트 추가 함수 -> 로직 잘못되어있음
+function addToDoItem(event) {
+    const eventDate = new Date(event.start);
+    const today = new Date();
+
+    // 이벤트가 오늘의 일정인지 확인
+    if (eventDate.toDateString() === today.toDateString()) {
+        const todoList = document.getElementById('todo-list');
+        const todoItem = document.createElement('div');
+        todoItem.className = 'todo-item';
+
+        const eventTitle = document.createElement('span');
+        eventTitle.textContent = event.title + ': 하루 수행량';
+        todoItem.appendChild(eventTitle);
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'todo-checkbox';
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                todoItem.classList.add('completed');
+            } else {
+                todoItem.classList.remove('completed');
+            }
+        });
+        todoItem.appendChild(checkbox);
+
+        todoList.appendChild(todoItem);
+    }
+}
+
+
+// TODO 풀캘린더 이벤트를 식별하기 위해 자동으로 id를 부여해주는 로직이 있어야 작동할 수 있음 -> 지금은 event.id가 null로 유지되기 때문에 투두리스트에 반영이 안된다.
+// // To-Do 리스트에 오늘 날짜 이벤트 추가 함수
+// function addToDoItem(event) {
+//     const eventDate = new Date(event.start);
+//     const today = new Date();
+//
+//     // 이벤트가 오늘의 일정인지 확인
+//     if (eventDate.toDateString() === today.toDateString()) {
+//         const toDoList = document.getElementById('to-do-list');
+//
+//         // 이벤트 ID가 없으면 고유 ID 할당
+//         if (!event.id) {
+//             event.id = 'event-' + Math.random().toString(36).substr(2, 9);
+//         }
+//
+//         // 이벤트 ID를 기반으로 중복 체크
+//         if (!toDoList.querySelector(`[data-event-id="${event.id}"]`)) {
+//             const listItem = document.createElement('li');
+//             listItem.className = 'todo-item';
+//             listItem.setAttribute('data-event-id', event.id);
+//
+//             // 체크박스 생성
+//             const checkbox = document.createElement('input');
+//             checkbox.type = 'checkbox';
+//             checkbox.className = 'todo-checkbox';
+//             checkbox.addEventListener('change', function() {
+//                 if (this.checked) {
+//                     listItem.classList.add('completed');
+//                 } else {
+//                     listItem.classList.remove('completed');
+//                 }
+//             });
+//
+//             // 텍스트 노드 생성
+//             const text = document.createTextNode(`${event.title} : 하루 수행량`);
+//
+//             listItem.appendChild(text);
+//             listItem.appendChild(checkbox);
+//             toDoList.appendChild(listItem);
+//         }
+//     }
+// }
+//
+// // To-Do 리스트에 기존 이벤트 추가 함수
+// function addExistingToDoItem(event) {
+//     const eventDate = new Date(event.start);
+//     const today = new Date();
+//
+//     // 이벤트가 오늘의 일정인지 확인
+//     if (eventDate.toDateString() === today.toDateString()) {
+//         const toDoList = document.getElementById('to-do-list');
+//
+//         // 이벤트 ID가 없으면 고유 ID 할당
+//         if (!event.id) {
+//             event.id = 'event-' + Math.random().toString(36).substr(2, 9);
+//         }
+//
+//         // 이벤트 ID를 기반으로 중복 체크
+//         if (!toDoList.querySelector(`[data-event-id="${event.id}"]`)) {
+//             const listItem = document.createElement('li');
+//             listItem.className = 'todo-item';
+//             listItem.setAttribute('data-event-id', event.id);
+//
+//             // 체크박스 생성
+//             const checkbox = document.createElement('input');
+//             checkbox.type = 'checkbox';
+//             checkbox.className = 'todo-checkbox';
+//             checkbox.addEventListener('change', function() {
+//                 if (this.checked) {
+//                     listItem.classList.add('completed');
+//                 } else {
+//                     listItem.classList.remove('completed');
+//                 }
+//             });
+//
+//             // 텍스트 노드 생성
+//             const text = document.createTextNode(`${event.title} : 하루 수행량`);
+//
+//             listItem.appendChild(text);
+//             listItem.appendChild(checkbox);
+//             toDoList.appendChild(listItem);
+//         }
+//     }
+// }
