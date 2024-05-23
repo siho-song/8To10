@@ -2,7 +2,7 @@ package show.schedulemanagement.domain.member;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +17,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.baseEntity.BaseEntity;
+import show.schedulemanagement.web.request.signup.SignUpRequestDto;
 
 @Entity
 @Getter
@@ -67,5 +66,18 @@ public class Member extends BaseEntity {
 
     public void changeNickname(String nickname){
         this.nickname = nickname;
+    }
+
+    //TODO 비밀번호 암호화
+    public static Member of(SignUpRequestDto signUpRequestDto){
+        return Member.builder()
+                .username(signUpRequestDto.getUsername())
+                .nickname(signUpRequestDto.getNickname())
+                .email(signUpRequestDto.getEmail())
+                .password(signUpRequestDto.getPassword())
+                .gender(signUpRequestDto.getGender())
+                .mode(signUpRequestDto.getMode())
+                .role(Role.NORMAL_USER)
+                .build();
     }
 }
