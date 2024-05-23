@@ -58,10 +58,7 @@ class ScheduleRepositoryTest {
         assertThat(scheduleRepository.save(schedule).getTitle()).isEqualTo(scheduleRequestDto.getTitle());
         assertThat(scheduleRepository.findAll().size()).isEqualTo(10);
         assertThat(scheduleRepository.findByMemberId(member.getId()).size()).isEqualTo(4);
-
     }
-
-
 
     private static NormalRequestDto getNormalRequestDto() {
         return new NormalRequestDto("Normal Schedule", "Description", LocalDate.now(), LocalDate.now().plusDays(14),

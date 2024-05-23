@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.nschedule;
+package show.schedulemanagement.domain.schedule.nSchedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
