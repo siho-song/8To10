@@ -11,264 +11,90 @@
 <div class="signup-container">
     <h2>회원가입</h2>
     <form id="signup-form" action="/signup" method="POST">
-        <div class="form-group">
+        <div class="signup-form-group">
             <label for="name">이름</label>
-            <input type="text" id="name" name="name" autocomplete="name" required>
+            <input type="text" id="name" name="name" autocomplete="name" placeholder="이름 (2~6글자)" required maxlength="6">
+            <span id="name-verification-message" class="verification-message"></span>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label for="nickname">닉네임</label>
-            <input type="text" id="nickname" name="nickname" autocomplete="nickname" required>
-            <button type="button" id="verify-nickname-btn" onclick="verifyNickname()">중복 확인</button>
-            <span id="nickname-verification-message"></span>
+            <div class="input-with-button">
+                <input type="text" id="nickname" name="nickname" autocomplete="nickname" placeholder="닉네임 (2~6글자)" required maxlength="6">
+                <button type="button" class="verify-btn" id="verify-nickname-btn" onclick="validateNickname()">중복 확인</button>
+            </div>
+            <span id="nickname-verification-message" class="verification-message"></span>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label for="email">이메일</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-            <button type="button" id="verify-email-btn" onclick="verifyEmail()">중복 확인</button>
-            <span id="email-verification-message"></span>
-            <button type="button" id="send-email-code-btn" onclick="showEmailVerification()">인증</button>
+            <div class="input-with-button">
+                <input type="text" id="email-id" placeholder="아이디" required>
+                <span>@</span>
+                <select id="email-domain" onchange="handleDomainChange()" required>
+                    <option value="" selected disabled>선택하세요</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="google.com">google.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="nate.com">nate.com</option>
+                    <option value="kakao.com">kakao.com</option>
+                    <option value="custom">직접 입력</option>
+                </select>
+                <input type="text" id="custom-domain" placeholder="직접 입력" style="display: none;">
+                <button type="button" class="verify-btn" id="verify-email-btn" onclick="validateEmail()">중복 확인</button>
+                <button type="button" class="verify-btn" onclick="showEmailVerification()">인증</button>
+            </div>
+            <span id="email-verification-message" class="verification-message"></span>
         </div>
-        <div class="form-group" id="email-verification" style="display: none;">
+
+        <div class="signup-form-group" id="email-verification" style="display: none;">
             <label for="email-verification-code">이메일 인증번호</label>
-            <input type="text" id="email-verification-code" name="email-verification-code" autocomplete="off">
+            <input type="text" id="email-verification-code" name="email-verification-code" placeholder="인증번호" autocomplete="off">
             <button type="button" onclick="verifyEmailCode()">인증하기</button>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label for="phone">전화번호</label>
-            <input type="text" id="phone" name="phone" autocomplete="tel" required>
-            <button type="button" id="verify-phone-btn" onclick="verifyPhone()">중복 확인</button>
-            <span id="phone-verification-message"></span>
-            <button type="button" id="send-phone-code-btn" onclick="showPhoneVerification()">인증</button>
+            <div class="input-with-button">
+                <input type="text" id="phone" name="phone" autocomplete="tel" placeholder="전화번호" required maxlength="11">
+                <button type="button" class="verify-btn" id="verify-phone-btn" onclick="validatePhone()">중복 확인</button>
+            </div>
+            <span id="phone-verification-message" class="verification-message"></span>
         </div>
-        <div class="form-group" id="phone-verification" style="display: none;">
-            <label for="phone-verification-code">전화번호 인증번호</label>
-            <input type="text" id="phone-verification-code" name="phone-verification-code" autocomplete="off">
-            <button type="button" onclick="verifyPhoneCode()">인증하기</button>
-        </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label for="password1">비밀번호</label>
-            <input type="password" id="password1" name="password" autocomplete="new-password" style="font-family: Arial;" required>
-            <span id="password-requirements">비밀번호는 대문자, 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.</span>
+            <input type="password" id="password1" name="password" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호" required maxlength="20">
+            <span id="password-requirements" class="verification-message"></span>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label for="password2">비밀번호 확인</label>
-            <input type="password" id="password2" name="password" autocomplete="new-password" style="font-family: Arial;" required>
+            <input type="password" id="password2" name="password" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호 확인" required maxlength="20">
+            <span id="password2-message" class="verification-message"></span>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label>성별</label>
             <label><input type="radio" name="gender" value="Male" required> 남성</label>
             <label><input type="radio" name="gender" value="Female" required> 여성</label>
         </div>
-        <div class="form-group">
+
+        <div class="signup-form-group">
             <label>모드</label>
             <label><input type="radio" name="mode" value="spicy" required> 매운맛</label>
             <label><input type="radio" name="mode" value="mild" required> 순한맛</label>
         </div>
+
         <div class="button-group">
             <button type="submit" class="button">회원가입</button>
             <button type="button" class="button button-cancel" onclick="history.back()">취소</button>
         </div>
     </form>
 </div>
-<script>
-    let emailVerified = false;
-    let phoneVerified = false;
-    let emailDuplicateChecked = false;
-    let phoneDuplicateChecked = false;
-    let nicknameDuplicateChecked = false;
 
-    function showEmailVerification() {
-        document.getElementById('email-verification').style.display = 'block';
-    }
+<script th:href="@{/js/signUp/signUp.js}"
+        src="/js/signUp/signUp.js"></script>
 
-    function verifyEmailCode() {
-        const verificationCode = document.getElementById('email-verification-code').value;
-
-        // 서버 요청을 시뮬레이션하는 코드
-        if (verificationCode === "123456") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
-            emailVerified = true;
-            alert('이메일 인증되었습니다.');
-        } else {
-            alert('이메일 인증번호가 올바르지 않습니다.');
-        }
-    }
-
-    function showPhoneVerification() {
-        document.getElementById('phone-verification').style.display = 'block';
-    }
-
-    function verifyPhoneCode() {
-        const verificationCode = document.getElementById('phone-verification-code').value;
-
-        // 서버 요청을 시뮬레이션하는 코드
-        if (verificationCode === "654321") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
-            phoneVerified = true;
-            alert('전화번호 인증되었습니다.');
-        } else {
-            alert('전화번호 인증번호가 올바르지 않습니다.');
-        }
-    }
-
-    function verifyEmail() {
-        const email = document.getElementById('email').value;
-
-        if (!email) {
-            document.getElementById('email-verification-message').innerText = "이메일을 입력해 주세요.";
-            emailDuplicateChecked = false;
-            return;
-        }
-
-        // 이메일 중복 확인 서버 요청 시뮬레이션
-        if (email === "test@example.com") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
-            document.getElementById('email-verification-message').innerText = "이미 사용 중인 이메일입니다.";
-            emailDuplicateChecked = false;
-        } else {
-            document.getElementById('email-verification-message').innerText = "사용 가능한 이메일입니다.";
-            emailDuplicateChecked = true;
-        }
-    }
-
-    function verifyPhone() {
-        const phone = document.getElementById('phone').value;
-
-        if (!phone) {
-            document.getElementById('phone-verification-message').innerText = "전화번호를 입력해 주세요.";
-            phoneDuplicateChecked = false;
-            return;
-        }
-
-        // 전화번호 중복 확인 서버 요청 시뮬레이션
-        if (phone === "01012345678") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
-            document.getElementById('phone-verification-message').innerText = "이미 사용 중인 전화번호입니다.";
-            phoneDuplicateChecked = false;
-        } else {
-            document.getElementById('phone-verification-message').innerText = "사용 가능한 전화번호입니다.";
-            phoneDuplicateChecked = true;
-        }
-    }
-
-    function verifyNickname() {
-        const nickname = document.getElementById('nickname').value;
-
-        if (!nickname) {
-            document.getElementById('nickname-verification-message').innerText = "닉네임을 입력해 주세요.";
-            nicknameDuplicateChecked = false;
-            return;
-        }
-
-        // 닉네임 중복 확인 서버 요청 시뮬레이션
-        if (nickname === "testuser") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
-            document.getElementById('nickname-verification-message').innerText = "이미 사용 중인 닉네임입니다.";
-            nicknameDuplicateChecked = false;
-        } else {
-            document.getElementById('nickname-verification-message').innerText = "사용 가능한 닉네임입니다.";
-            nicknameDuplicateChecked = true;
-        }
-    }
-
-    document.getElementById('signup-form').addEventListener('submit', function(event) {
-        const email = document.getElementById('email').value;
-
-        if (!validateEmail(email)) {
-            event.preventDefault();
-            alert('유효한 이메일 주소를 입력해 주세요.');
-            return;
-        }
-
-        if (!emailDuplicateChecked) {
-            event.preventDefault();
-            alert('이메일 중복 확인을 해 주세요.');
-            return;
-        }
-
-        if (!emailVerified) {
-            event.preventDefault();
-            alert('이메일 인증을 완료해 주세요.');
-            return;
-        }
-
-        const phone = document.getElementById('phone').value;
-
-        if (!validatePhone(phone)) {
-            event.preventDefault();
-            alert('유효한 전화번호를 입력해 주세요.');
-            return;
-        }
-
-        if (!phoneDuplicateChecked) {
-            event.preventDefault();
-            alert('전화번호 중복 확인을 해 주세요.');
-            return;
-        }
-
-        if (!phoneVerified) {
-            event.preventDefault();
-            alert('전화번호 인증을 완료해 주세요.');
-            return;
-        }
-
-        const nickname = document.getElementById('nickname').value;
-
-        if (!nicknameDuplicateChecked) {
-            event.preventDefault();
-            alert('닉네임 중복 확인을 해 주세요.');
-            return;
-        }
-
-        const password1 = document.getElementById('password1').value;
-        const password2 = document.getElementById('password2').value;
-
-        if (!validatePassword(password1)) {
-            event.preventDefault();
-            alert('비밀번호가 요구 사항을 충족하지 않습니다.');
-            return;
-        }
-
-        if (password1 !== password2) {
-            event.preventDefault();
-            alert('비밀번호가 일치하지 않습니다.');
-            return;
-        }
-
-        const name = document.getElementById('name').value;
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const mode = document.querySelector('input[name="mode"]:checked');
-
-        if (!name || !gender || !mode) {
-            event.preventDefault();
-            alert('모든 정보를 입력해 주세요.');
-            return;
-        }
-    });
-
-    function validateEmail(email) {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-    }
-
-    function validatePhone(phone) {
-        const phonePattern = /^\d{10,11}$/;
-        return phonePattern.test(phone);
-    }
-
-    function validatePassword(password) {
-        const requirements = [
-            /[A-Z]/, // 대문자
-            /[a-z]/, // 소문자
-            /[0-9]/, // 숫자
-            /[!@#$%^&*(),.?":{}|<>]/ // 특수문자
-        ];
-
-        let validCount = 0;
-
-        requirements.forEach((requirement) => {
-            if (requirement.test(password)) {
-                validCount++;
-            }
-        });
-
-        return validCount >= 3;
-    }
-</script>
 </body>
 </html>
