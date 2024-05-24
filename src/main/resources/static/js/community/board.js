@@ -305,14 +305,16 @@ const exampleData = [
 ];
 
 
+
+
 let postsPerPage = 10;
+let filteredData = exampleData.slice(); // 초기 데이터로 filteredData를 설정합니다.
 
 document.addEventListener('DOMContentLoaded', () => {
     showBoard();
 });
 
 function showBoard() {
-    const mainContent = document.querySelector('.board-main-content');
     const boardContent = document.getElementById('board-content');
     const boardTitle = document.getElementById('board-title');
 
@@ -320,8 +322,8 @@ function showBoard() {
     boardTitle.textContent = '자유게시판';
 
     // 게시글 렌더링
-    boardContent.innerHTML = renderPosts(exampleData.slice(0, postsPerPage));
-    updatePagination(exampleData.length, postsPerPage);
+    boardContent.innerHTML = renderPosts(filteredData.slice(0, postsPerPage));
+    updatePagination(filteredData.length, postsPerPage);
 }
 
 function renderPosts(data) {
@@ -355,7 +357,7 @@ function updatePagination(totalPosts, postsPerPage) {
             e.preventDefault();
             const start = (i - 1) * postsPerPage;
             const end = start + postsPerPage;
-            document.getElementById('board-content').innerHTML = renderPosts(exampleData.slice(start, end));
+            document.getElementById('board-content').innerHTML = renderPosts(filteredData.slice(start, end));
 
             // 현재 페이지 표시
             const currentPage = document.querySelector('.pagination-button.active');
@@ -372,7 +374,7 @@ function updatePagination(totalPosts, postsPerPage) {
         pagination.firstChild.classList.add('active');
         const start = 0;
         const end = postsPerPage;
-        document.getElementById('board-content').innerHTML = renderPosts(exampleData.slice(start, end));
+        document.getElementById('board-content').innerHTML = renderPosts(filteredData.slice(start, end));
     }
 }
 
@@ -381,6 +383,15 @@ function updatePostsPerPage() {
     showBoard();
 }
 
+function filterPosts() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    filteredData = exampleData.filter(post =>
+        post.title.toLowerCase().includes(searchInput) ||
+        post.content.toLowerCase().includes(searchInput) ||
+        post.created_by.toLowerCase().includes(searchInput)
+    );
+    showBoard();
+}
 
 function writePost() {
     window.location.href = '/community/post';
