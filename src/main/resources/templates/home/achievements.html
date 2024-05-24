@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
+    <title>마이페이지</title>
+</head>
+<body>
+<div class="main-header">
+    <div class="logo">로고</div>
+    <div class="navigation">
+        <nav>
+            <ul>
+                <div class="image-container" data-alt="마이페이지">
+                    <a href="/mypage" class="image-link">
+                        <img th:src="@{/images/mypage.png}" src="/images/mypage.png" alt="마이페이지">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="커뮤니티">
+                    <a href="/community" class="image-link">
+                        <img th:src="@{/images/community.png}" src="images/community.png" alt="커뮤니티">
+                    </a>
+                </div>
+                <div class="image-container" data-alt="홈">
+                    <a href="/home" class="image-link">
+                        <img th:src="@{/images/home.png}" src="images/home.png" alt="홈">
+                    </a>
+                </div>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- 좌측 사이드바 -->
+    <div class="sidebar" id="left-sidebar">
+        <ul class="achievement-menu">
+            <li onclick="showAchievement('score')">내 점수</li>
+            <li onclick="">일간 성취도 상세</li>
+            <li>주간 성취도 상세</li>
+            <li>월간 성취도 상세</li>
+        </ul>
+    </div>
+
+    <!-- 중앙 컨텐츠 -->
+    <div class="achievement-main-content">
+        <div id="achievement-content">
+            <!-- 성취도 컨텐츠가 동적으로 로드됩니다. -->
+        </div>
+    </div>
+</div>
+
+<!-- 이미지 경로를 hidden input으로 추가 -->
+<input type="hidden" id="runningGifPath" th:value="@{/images/running.gif}" value="/images/running.gif">
+
+<script th:src="@{/js/home/achievements.js}" src="/js/home/achievements.js"></script>
+</body>
+</html>
