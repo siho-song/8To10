@@ -54,6 +54,11 @@
                         <option value="50">50</option>
                     </select>
                 </div>
+                <!-- 검색창 추가 -->
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" oninput="filterPosts()">
+                    <button id="search-button" onclick="filterPosts()">검색</button>
+                </div>
                 <button id="write-post" onclick="writePost()">글쓰기</button>
             </div>
         </div>
