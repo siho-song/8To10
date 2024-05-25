@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 - 일정 관리 애플리케이션</title>
-    <link rel="stylesheet"
-          th:href="@{/css/styles.css}"
-          href="styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
 </head>
 <body>
 <div class="signup-container">
     <h2>회원가입</h2>
-    <form id="signup-form" action="/signup" method="POST">
+    <form id="signup-form" th:action="@{/signup}" method="POST" th:object="${dto}" onsubmit="mergeEmailFields()">
         <div class="signup-form-group">
             <label for="name">이름</label>
-            <input type="text" id="name" name="name" autocomplete="name" placeholder="이름 (2~6글자)" required maxlength="6">
+            <input type="text" id="name" th:field="*{username}" autocomplete="name" placeholder="이름 (2~6글자)" required maxlength="6">
             <span id="name-verification-message" class="verification-message"></span>
+            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="verification-message"></div>
         </div>
 
         <div class="signup-form-group">
             <label for="nickname">닉네임</label>
             <div class="input-with-button">
-                <input type="text" id="nickname" name="nickname" autocomplete="nickname" placeholder="닉네임 (2~6글자)" required maxlength="6">
+                <input type="text" id="nickname" th:field="*{nickname}" autocomplete="nickname" placeholder="닉네임 (2~6글자)" required maxlength="6">
                 <button type="button" class="verify-btn" id="verify-nickname-btn" onclick="validateNickname()">중복 확인</button>
             </div>
             <span id="nickname-verification-message" class="verification-message"></span>
+            <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="verification-message"></div>
         </div>
 
         <div class="signup-form-group">
@@ -44,47 +44,63 @@
                 <button type="button" class="verify-btn" id="verify-email-btn" onclick="validateEmail()">중복 확인</button>
                 <button type="button" class="verify-btn" onclick="showEmailVerification()">인증</button>
             </div>
+            <input type="hidden" id="email" th:field="*{email}">
             <span id="email-verification-message" class="verification-message"></span>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="verification-message"></div>
         </div>
 
         <div class="signup-form-group" id="email-verification" style="display: none;">
             <label for="email-verification-code">이메일 인증번호</label>
-            <input type="text" id="email-verification-code" name="email-verification-code" placeholder="인증번호" autocomplete="off">
+            <input type="text" id="email-verification-code" name="emailVerificationCode" placeholder="인증번호" autocomplete="off">
             <button type="button" onclick="verifyEmailCode()">인증하기</button>
         </div>
 
         <div class="signup-form-group">
             <label for="phone">전화번호</label>
             <div class="input-with-button">
-                <input type="text" id="phone" name="phone" autocomplete="tel" placeholder="전화번호" required maxlength="11">
+                <input type="text" id="phone" th:field="*{phoneNumber}" autocomplete="tel" placeholder="전화번호" required maxlength="11">
                 <button type="button" class="verify-btn" id="verify-phone-btn" onclick="validatePhone()">중복 확인</button>
             </div>
             <span id="phone-verification-message" class="verification-message"></span>
+            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="verification-message"></div>
+        </div>
+
+        <div class="signup-form-group" id="phone-verification" style="display: none;">
+            <label for="phone-verification-code">전화번호 인증번호</label>
+            <input type="text" id="phone-verification-code" name="phoneVerificationCode" autocomplete="off" placeholder="인증번호">
+            <button type="button" onclick="verifyPhoneCode()">인증하기</button>
         </div>
 
         <div class="signup-form-group">
             <label for="password1">비밀번호</label>
-            <input type="password" id="password1" name="password" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호" required maxlength="20">
-            <span id="password-requirements" class="verification-message"></span>
+            <input type="password" id="password1" th:field="*{password}" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호" required maxlength="20">
+            <span id="password-requirements" class="verification-message">비밀번호는 대문자, 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.</span>
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="verification-message"></div>
         </div>
 
         <div class="signup-form-group">
             <label for="password2">비밀번호 확인</label>
-            <input type="password" id="password2" name="password" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호 확인" required maxlength="20">
+            <input type="password" id="password2" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호 확인" required maxlength="20">
             <span id="password2-message" class="verification-message"></span>
         </div>
 
         <div class="signup-form-group">
             <label>성별</label>
-            <label><input type="radio" name="gender" value="Male" required> 남성</label>
-            <label><input type="radio" name="gender" value="Female" required> 여성</label>
+            <label><input type="radio" th:field="*{gender}" value="MALE" required> 남성</label>
+            <label><input type="radio" th:field="*{gender}" value="FEMAIL" required> 여성</label>
+            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="verification-message"></div>
         </div>
 
         <div class="signup-form-group">
             <label>모드</label>
-            <label><input type="radio" name="mode" value="spicy" required> 매운맛</label>
-            <label><input type="radio" name="mode" value="mild" required> 순한맛</label>
+            <label><input type="radio" th:field="*{mode}" value="SPICY" required> 매운맛</label>
+            <label><input type="radio" th:field="*{mode}" value="MILD" required> 순한맛</label>
+            <div th:if="${#fields.hasErrors('mode')}" th:errors="*{mode}" class="verification-message"></div>
         </div>
+
+        <!-- hidden inputs for authEmail and authPhone -->
+        <input type="hidden" id="authEmail" th:field="*{authEmail}" th:value="false">
+        <input type="hidden" id="authPhone" th:field="*{authPhone}" th:value="false">
 
         <div class="button-group">
             <button type="submit" class="button">회원가입</button>
@@ -93,8 +109,6 @@
     </form>
 </div>
 
-<script th:href="@{/js/signUp/signUp.js}"
-        src="/js/signUp/signUp.js"></script>
-
+<script th:src="@{/js/signUp/signUp.js}" src="/js/signUp/signUp.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package show.schedulemanagement.configuration;
+package show.schedulemanagement.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.Identifier;
@@ -41,7 +41,7 @@ public class CustomPhysicalNamingStrategy implements PhysicalNamingStrategy {
         final String newName = identifier.getText()
                 .replaceAll(regex, replacement)
                 .toLowerCase();
-        log.info("Converted '{}' to '{}'", identifier.getText(), newName);
+//        log.info("Converted '{}' to '{}'", identifier.getText(), newName);
         return Identifier.toIdentifier(newName);
     }
 }
