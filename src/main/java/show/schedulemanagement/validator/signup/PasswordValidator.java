@@ -2,8 +2,13 @@ package show.schedulemanagement.validator.signup;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.extern.slf4j.Slf4j;
 
-public class PasswordValidator implements ConstraintValidator<Password,String> {
+@Slf4j
+public class PasswordValidator implements ConstraintValidator<Password, String> {
+
+    String PASSWORD_PATTERN = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$";
+
     @Override
     public void initialize(Password constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
@@ -11,14 +16,7 @@ public class PasswordValidator implements ConstraintValidator<Password,String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.length() > 20 || value.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
-            return false;
-        }
-        int count = 0;
-        if (value.matches(".*[A-Z]+.*")) count++;
-        if (value.matches(".*[a-z]+.*")) count++;
-        if (value.matches(".*\\d+.*")) count++;
-        if (value.matches(".*[^A-Za-z0-9]+.*")) count++;
-        return count >= 3;
+        log.debug("PasswordValidator :  value : {} , isValid : {} ", value,value != null && value.matches(PASSWORD_PATTERN));
+        return value != null && value.matches(PASSWORD_PATTERN);
     }
 }
