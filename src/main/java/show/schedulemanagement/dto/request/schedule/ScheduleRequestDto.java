@@ -1,4 +1,4 @@
-package show.schedulemanagement.web.request.schedule;
+package show.schedulemanagement.dto.request.schedule;
 
 import java.time.LocalDate;
 import lombok.Getter;
