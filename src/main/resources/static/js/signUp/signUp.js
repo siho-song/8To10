@@ -13,6 +13,7 @@ function verifyEmailCode() {
     // 서버 요청을 시뮬레이션하는 코드
     if (verificationCode === "123456") { // 실제 구현에서는 서버로부터 검증 결과를 받아와야 합니다.
         emailVerified = true;
+        document.getElementById('authEmail').value = 'true'; // 이메일 인증 성공 시 true 설정
         alert('이메일 인증되었습니다.');
     } else {
         alert('이메일 인증번호가 올바르지 않습니다.');
@@ -116,10 +117,10 @@ function validatePassword() {
     const password2 = document.getElementById('password2').value;
     const passwordMessage = document.getElementById('password-requirements');
 
-    const requirements = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    const requirements = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
 
     if (!requirements.test(password1)) {
-        passwordMessage.textContent = "비밀번호는 대문자, 소문자, 숫자, 특수문자 중 3가지 이상을 포함해야 합니다.";
+        passwordMessage.textContent = "비밀번호는 영문자, 대문자, 숫자, 특수문자 중 3가지 이상 포함 , 8자 이상";
         passwordMessage.className = "verification-message error";
     } else {
         passwordMessage.textContent = "";
@@ -173,6 +174,21 @@ function removeWhitespaceAndDots(event) {
     input.value = input.value.replace(/[\s·]/g, '');
 }
 
+function mergeEmailFields() {
+    const emailId = document.getElementById('email-id').value;
+    const domainSelect = document.getElementById('email-domain');
+    const customDomainInput = document.getElementById('custom-domain');
+    let emailDomain = domainSelect.value;
+
+    if (emailDomain === 'custom') {
+        emailDomain = customDomainInput.value;
+    }
+
+    const email = emailId + '@' + emailDomain;
+    const emailField = document.getElementById('email');
+    emailField.value = email;
+}
+
 document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"]').forEach(input => {
     input.addEventListener('keydown', preventWhitespace);
     input.addEventListener('input', removeWhitespaceAndDots);
@@ -191,11 +207,13 @@ document.getElementById('password1').addEventListener('input', validatePassword)
 document.getElementById('password2').addEventListener('input', validatePassword);
 
 document.getElementById('signup-form').addEventListener('submit', function (event) {
+    document.getElementById('authPhone').value = 'false'
     validateName();
     validateNickname();
     validateEmail();
     validatePhone();
     validatePassword();
+    mergeEmailFields();
 
     if (document.querySelector('.verification-message.error')) {
         event.preventDefault(); // 폼 제출 방지
