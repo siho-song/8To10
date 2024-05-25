@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
-import javax.swing.text.html.parser.Entity;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +17,10 @@ import show.schedulemanagement.domain.CategoryUnit;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.repository.member.MemberRepository;
-import show.schedulemanagement.web.request.schedule.FixRequestDto;
-import show.schedulemanagement.web.request.schedule.NormalRequestDto;
-import show.schedulemanagement.web.request.schedule.ScheduleRequestDto;
-import show.schedulemanagement.web.request.schedule.VariableRequestDto;
+import show.schedulemanagement.dto.request.schedule.FixRequestDto;
+import show.schedulemanagement.dto.request.schedule.NormalRequestDto;
+import show.schedulemanagement.dto.request.schedule.ScheduleRequestDto;
+import show.schedulemanagement.dto.request.schedule.VariableRequestDto;
 
 @SpringBootTest
 @Transactional

@@ -20,7 +20,7 @@ class SignUpControllerTest {
     @Test
     void 회원가입_성공() throws Exception {
         mockMvc.perform(post("/signup")
-                        .content("username=송시호&nickname=쇼쇼&email=thdtlgh234@naver.com&password=aksdf124124!&gender=MALE&mode=SPICY&authEmail=true&authPhone=true")
+                        .content("username=송시호&nickname=쇼쇼&email=thdtlgh234@naver.com&password=aksdf124124!&gender=MALE&mode=SPICY&authEmail=true&authPhone=true&phoneNumber=01099921438")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE))
                 .andExpect(status().is3xxRedirection());
     }
