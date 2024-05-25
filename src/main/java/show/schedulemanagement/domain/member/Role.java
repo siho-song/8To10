@@ -1,5 +1,8 @@
 package show.schedulemanagement.domain.member;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
 
     ADMIN("관리자"),NORMAL_USER("일반 유저"),PUNCTUAL_USER("일정을 잘 지키는 유저");
