@@ -926,8 +926,46 @@ select {
     text-align: right;
     margin-bottom: 5px;
 }
-/* 0517 마이페이지- 이메일 변경 페이지*/
 
+/* Add this to your existing CSS */
+
+/* Verification button and input styles */
+.input-with-button {
+    display: flex;
+    align-items: center;
+}
+
+.input-with-button input[type="text"],
+.input-with-button input[type="email"] {
+    flex-grow: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.verify-email-btn, .verify-code-btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    width: 20%;
+    margin-left: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    transition: background-color 0.3s ease;
+}
+
+.verify-email-btn:hover, .verify-code-btn:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 12px;
+    margin-top: 5px;
+}
+/* 0517 마이페이지- 이메일 변경 페이지*/
+/* 0525 마이페이지 -이메일 변경 페이지 기능 추가 (인증)*/
 
 
 
