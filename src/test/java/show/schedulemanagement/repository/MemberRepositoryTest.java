@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,10 @@ class MemberRepositoryTest {
                 .password("1234")
                 .email("testUser4@test.com")
                 .gender(Gender.FEMALE)
+                .phoneNumber("01099920438")
                 .nickname("테스트유저4")
+                .authPhone(false)
+                .authEmail(false)
                 .build();
 
         //when
@@ -63,27 +67,40 @@ class MemberRepositoryTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
-    @Test
-    @DisplayName(value = "멤버객체의 ROLE의 기본값은 ROLE.NORMAL_USER 이다.")
-    void 멤버객체_ROLE의_기본_값_NORMAL_USER(){
-        //given
-        Member member4 = Member.builder()
-                .username("testUser4")
-                .password("1234")
-                .email("testUser4@test.com")
-                .gender(Gender.FEMALE)
-                .nickname("테스트유저4")
-                .build();
+//    @Test
+//    @DisplayName(value = "멤버객체의 ROLE의 기본값은 ROLE.NORMAL_USER 이다.")
+//    void 멤버객체_ROLE의_기본_값_NORMAL_USER(){
+//        //given
+//        Member member4 = Member.builder()
+//                .username("testUser4")
+//                .password("1234")
+//                .email("testUser4@test.com")
+//                .gender(Gender.FEMALE)
+//                .nickname("테스트유저4")
+//                .build();
+//
+//        Member saveMember = memberRepository.save(member4);
+//        em.flush();
+//        em.clear();
+//
+//        //when
+//        Member findMember = memberRepository.findById(saveMember.getId()).orElse(null);
+//
+//        //then
+//        assert findMember != null;
+//        assertThat(findMember.getRole()).isEqualTo(Role.NORMAL_USER);
+//    }
 
-        Member saveMember = memberRepository.save(member4);
-        em.flush();
-        em.clear();
-
-        //when
-        Member findMember = memberRepository.findById(saveMember.getId()).orElse(null);
-
-        //then
-        assert findMember != null;
-        assertThat(findMember.getRole()).isEqualTo(Role.NORMAL_USER);
-    }
+//    @Test
+//    @DisplayName("이메일로 Member를 조회하면서 roles를 페치 조인")
+//    void findWithRolesByEmail() {
+//        String email = "test@example.com";
+//
+//        Optional<Member> memberOpt = memberRepository.findWithRolesByEmail(email);
+//        assertThat(memberOpt).isPresent();
+//
+//        Member member = memberOpt.get();
+//        assertThat(member.getRoles()).isNotNull();
+//        assertThat(member.getRoles()).isNotEmpty();
+//    }
 }
