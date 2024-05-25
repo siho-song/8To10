@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.web.request.schedule.VariableRequestDto;
+import show.schedulemanagement.dto.request.schedule.VariableRequestDto;
 
 @Entity
 @Getter

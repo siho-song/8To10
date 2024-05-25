@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `BOARD_SCRAP`;
 DROP TABLE IF EXISTS `BOARD_HEARTS`;
 DROP TABLE IF EXISTS `REPLY`;
 DROP TABLE IF EXISTS `BOARD`;
-DROP TABLE IF EXISTS `AUTHENTICATION`;
+DROP TABLE IF EXISTS `MEMBER_ROLE`;
 DROP TABLE IF EXISTS `MEMBER`;
 
 -- 회원
@@ -26,33 +26,33 @@ CREATE TABLE `MEMBER`
 (
     `member_id`  bigint       NOT NULL AUTO_INCREMENT,
     `username`   varchar(20)  NOT NULL,
-    `nickname`   varchar(20)  NOT NULL,
+    `nickname`   varchar(40)  NOT NULL,
     `email`      varchar(80)  NOT NULL UNIQUE,
     `password`   varchar(100) NOT NULL,
     `gender`     ENUM('MALE', 'FEMALE') NOT NULL,
     `mode`       ENUM('MILD', 'SPICY') NOT NULL,
     `image_file` varchar(255) NULL,
-    `role`       ENUM('ADMIN', 'NORMAL_USER', 'PUNCTUAL_USER') NOT NULL DEFAULT 'NORMAL_USER',
     `created_at`  datetime(6) NULL,
     `created_by` varchar(80) NULL,
     `updated_at` datetime(6) NULL,
     `updated_by` varchar(80) NULL,
     `score` DOUBLE NULL DEFAULT 0,
+    `phone_number` varchar(11) NOT NULL UNIQUE,
+    `auth_email` boolean NULL DEFAULT false,
+    `auth_phone` boolean NULL DEFAULT false,
     PRIMARY KEY (`member_id`)
 );
 
--- 인증
-CREATE TABLE `AUTHENTICATION`
+CREATE TABLE `MEMBER_ROLE`
 (
-    `authentication_id` bigint  NOT NULL AUTO_INCREMENT,
-    `member_id`         bigint  NOT NULL,
-    `auth_email`        boolean NOT NULL DEFAULT false,
-    `auth_phone`        boolean NOT NULL DEFAULT false,
-    `created_at`        datetime(6) NULL,
-    `created_by`        varchar(80) NULL,
-    `updated_at`        datetime(6) NULL,
-    `updated_by`        varchar(80) NULL,
-    PRIMARY KEY (`authentication_id`),
+    `member_role_id` bigint NOT NULL AUTO_INCREMENT,
+    `member_id`      bigint NOT NULL,
+    `role`           ENUM('ADMIN', 'NORMAL_USER', 'PUNCTUAL_USER') NOT NULL DEFAULT 'NORMAL_USER',
+    `created_at`     datetime(6) NULL,
+    `created_by`     varchar(80) NULL,
+    `updated_at`     datetime(6) NULL,
+    `updated_by`     varchar(80) NULL,
+    PRIMARY KEY (`member_role_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
@@ -295,20 +295,20 @@ CREATE TABLE `NOTIFICATION`
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
--- 데이터 삽입
 -- MEMBER 테이블에 데이터 삽입
-INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, role, created_at, created_by, updated_at, updated_by, score)
+INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
 VALUES
-    ('user1', 'nick1', 'user1@example.com', 'password1', 'MALE', 'MILD', NULL, 'NORMAL_USER', NOW(), 'system', NOW(), 'system', 10),
-    ('user2', 'nick2', 'user2@example.com', 'password2', 'FEMALE', 'SPICY', NULL, 'ADMIN', NOW(), 'system', NOW(), 'system', 20),
-    ('user3', 'nick3', 'user3@example.com', 'password3', 'MALE', 'MILD', NULL, 'PUNCTUAL_USER', NOW(), 'system', NOW(), 'system', 30);
+    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
+    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
+    ('user3', 'nick3', 'user3@example.com', 'password3', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
 
--- authentication 테이블에 데이터 삽입
-INSERT INTO authentication (member_id, auth_email, auth_phone, created_at, created_by, updated_at, updated_by)
+-- MEMBER_ROLE 테이블에 데이터 삽입
+INSERT INTO MEMBER_ROLE (member_id, role, created_at, created_by, updated_at, updated_by)
 VALUES
-    (1, true, false, NOW(), 'system', NOW(), 'system'),
-    (2, true, true, NOW(), 'system', NOW(), 'system'),
-    (3, false, true, NOW(), 'system', NOW(), 'system');
+    (1, 'NORMAL_USER', NOW(), 'system', NOW(), 'system'),
+    (2, 'ADMIN', NOW(), 'system', NOW(), 'system'),
+    (3, 'PUNCTUAL_USER', NOW(), 'system', NOW(), 'system');
+
 
 -- BOARD 테이블에 데이터 삽입
 INSERT INTO BOARD (member_id, title, content, created_at, updated_at, total_like, total_scrap)

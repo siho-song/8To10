@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.CategoryUnit;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.web.request.schedule.NormalRequestDto;
+import show.schedulemanagement.dto.request.schedule.NormalRequestDto;
 
 @Entity
 @Getter

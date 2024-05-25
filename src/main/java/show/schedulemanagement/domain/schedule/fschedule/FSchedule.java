@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.web.request.schedule.FixRequestDto;
+import show.schedulemanagement.dto.request.schedule.FixRequestDto;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
