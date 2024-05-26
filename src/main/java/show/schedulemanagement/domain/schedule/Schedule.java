@@ -19,13 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import show.schedulemanagement.domain.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
-import show.schedulemanagement.dto.request.schedule.FixRequestDto;
-import show.schedulemanagement.dto.request.schedule.NormalRequestDto;
-import show.schedulemanagement.dto.request.schedule.ScheduleRequestDto;
-import show.schedulemanagement.dto.request.schedule.VariableRequestDto;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -53,21 +46,4 @@ public abstract class Schedule extends BaseEntity {
 
     @Column(nullable = false)
     protected LocalDate endDate;
-
-    public static Schedule createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
-        String scheduleType = scheduleRequestDto.getDtype();
-
-        if (scheduleType.equals("F")) {
-            FixRequestDto fixRequestDto = (FixRequestDto) scheduleRequestDto;
-            return FSchedule.createFSchedule(member, fixRequestDto);
-        }
-        else if (scheduleType.equals("V")) {
-            VariableRequestDto variableRequestDto = (VariableRequestDto) scheduleRequestDto;
-            return VSchedule.createVSchedule(member, variableRequestDto);
-        }
-        NormalRequestDto normalRequestDto = (NormalRequestDto) scheduleRequestDto;
-
-        return NSchedule.createNSchedule(member,normalRequestDto);
-    }
-
 }

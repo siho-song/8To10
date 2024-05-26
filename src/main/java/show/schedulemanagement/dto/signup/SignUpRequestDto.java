@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.request.signup;
+package show.schedulemanagement.dto.signup;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
