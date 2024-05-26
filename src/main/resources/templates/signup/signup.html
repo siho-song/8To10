@@ -87,7 +87,7 @@
         <div class="signup-form-group">
             <label>성별</label>
             <label><input type="radio" th:field="*{gender}" value="MALE" required> 남성</label>
-            <label><input type="radio" th:field="*{gender}" value="FEMALE" required> 여성</label>
+            <label><input type="radio" th:field="*{gender}" value="FEMAIL" required> 여성</label>
             <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="verification-message"></div>
         </div>
 
