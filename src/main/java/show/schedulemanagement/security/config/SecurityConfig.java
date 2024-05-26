@@ -34,6 +34,7 @@ import show.schedulemanagement.security.utils.TokenUtils;
 
 import java.util.Collections;
 import java.util.function.Supplier;
+import show.schedulemanagement.service.MemberService;
 
 @Configuration
 @EnableWebSecurity
@@ -117,8 +118,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomAuthSuccessHandler customAuthSuccessHandler() {
-        return new CustomAuthSuccessHandler(tokenUtils);
+    public CustomAuthSuccessHandler customAuthSuccessHandler(MemberDetailsService memberDetailsService) {
+        return new CustomAuthSuccessHandler(tokenUtils,memberDetailsService);
     }
 
     @Bean
