@@ -92,6 +92,7 @@ function loadInitialEvents() {
                 dtstart: '2023-01-06T10:00:00',
                 until: '2023-12-31T23:59:59'
             }
+            ,color:"#aaaaaa"
         },
         {
             id: '1',
@@ -119,7 +120,11 @@ function loadInitialEvents() {
             },
             description: "asdfaskldnfalksndf"
 
+        },
+        {
+            title: '식사', start: '2024-05-26T17:00:00', end: '2024-05-26T17:00:00', constraint: 'businessHours', color: "#aaaaaa"
         }
+
     ];
 
 
