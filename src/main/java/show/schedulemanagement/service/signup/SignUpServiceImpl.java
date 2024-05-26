@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.member.MemberRole;
 import show.schedulemanagement.domain.member.Role;
-import show.schedulemanagement.dto.request.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequestDto;
 import show.schedulemanagement.repository.member.MemberRepository;
 
 @Service

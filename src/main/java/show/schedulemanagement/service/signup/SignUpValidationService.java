@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.repository.member.MemberRepository;
-import show.schedulemanagement.dto.request.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequestDto;
 
 @Service
 @RequiredArgsConstructor

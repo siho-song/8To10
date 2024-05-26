@@ -1,12 +1,12 @@
 function submitAddScheduleForm(calendar) {
     // 공통 입력에 대한 처리
     const commonProps = initCommonProperties();
-    const { type, title, startDate, endDate, description } = commonProps;
+    const { type, title, startDate, endDate, commonDescription } = commonProps;
     //type, title, startDate, endDate, description 초기화
 
     let event = {
         title: title,
-        description: description,
+        commonDescription: commonDescription,
         type: type // 이벤트 타입을 추가하여 구분
     };
 
@@ -17,10 +17,30 @@ function submitAddScheduleForm(calendar) {
         event.start = startDateTime;
         event.end = endDateTime;
 
+        // 서버로 이벤트 객체 전송
+        fetch('http://localhost:8080/schedule/variable/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(event)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                calendar.addEvent(event);
+                addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
-        calendar.addEvent(event);
-        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
+        console.log(event)
+
     }
+
+
+    //고정 일정
     else if (type === 'fixed') { //고정 일정
         const fixedProperties = initFixAndVariableProperties(startDate, endDate);
         const { startDateTime, endDateTime } = fixedProperties;
@@ -44,6 +64,9 @@ function submitAddScheduleForm(calendar) {
         calendar.addEvent(event);
         addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
     }
+
+
+    //일반 일정
     else if (type === 'normal') {
         const normalProperties = initFixAndVariableProperties(startDate, endDate);
         //TODO initNormalProperties로 변경
@@ -85,14 +108,14 @@ function initCommonProperties() {
     const title = document.getElementById('schedule-title').value;
     const startDate = document.getElementById('schedule-start-date').value;
     const endDate = document.getElementById('schedule-end-date').value;
-    const description = document.getElementById('schedule-description').value;
+    const commonDescription = document.getElementById('schedule-description').value;
 
     return {
         type,
         title,
         startDate,
         endDate,
-        description
+        commonDescription
     };
 }
 
@@ -110,24 +133,3 @@ function initFixAndVariableProperties(startDate, endDate) {
         endDateTime
     };
 }
-
-
-// //TODO 구현해야함
-// function initNormalProperties(){
-//     // const startHour = document.getElementById('schedule-start-hour').value;
-//     // const startMinute = document.getElementById('schedule-start-minute').value;
-//     // const endHour = document.getElementById('schedule-end-hour').value;
-//     // const endMinute = document.getElementById('schedule-end-minute').value;
-//
-//     const startDateTime = convertTo24HourFormat(startDate, startHour, startMinute);
-//     const endDateTime = convertTo24HourFormat(endDate, endHour, endMinute);
-//
-//     return {
-//         startDateTime,
-//         endDateTime
-//     };
-// }
-//
-//
-//
-

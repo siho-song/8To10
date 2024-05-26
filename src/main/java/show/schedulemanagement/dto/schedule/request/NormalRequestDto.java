@@ -1,6 +1,5 @@
-package show.schedulemanagement.dto.request.schedule;
+package show.schedulemanagement.dto.schedule.request;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.Getter;
@@ -18,10 +17,10 @@ public class NormalRequestDto extends ScheduleRequestDto {
     private Integer endRange;
     private Integer totalValue;
 
-    public NormalRequestDto(String title, String description, LocalDate startDate, LocalDate endDate,
+    public NormalRequestDto(String title, String description,
                             String dtype, CategoryUnit categoryUnit, LocalTime bufferTime, String frequency,
                             List<String> days, Integer startRange, Integer endRange, Integer totalValue) {
-        super(title, description, startDate, endDate, dtype);
+        super(title, description, dtype);
         this.categoryUnit = categoryUnit;
         this.bufferTime = bufferTime;
         this.frequency = frequency;

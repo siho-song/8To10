@@ -176,7 +176,6 @@ CREATE TABLE `V_SCHEDULE`
     `schedule_id`   bigint     NOT NULL,
     `start_time`      time       NOT NULL,
     `end_time`        time       NOT NULL,
-    `day`             varchar(3) NOT NULL,
     `complete_status` boolean    NOT NULL DEFAULT false,
     `created_at`       datetime(6) NULL,
     `created_by`      varchar(80) NULL,
@@ -451,11 +450,11 @@ VALUES
     (3, 'Fri', false, 'Detail of the second F_SCHEDULE.', 'system', NOW());
 
 -- V_SCHEDULE 테이블에 데이터 삽입
-INSERT INTO V_SCHEDULE (start_time, end_time, schedule_id, day, complete_status, created_at,created_by,updated_at, updated_by)
+INSERT INTO V_SCHEDULE (start_time, end_time, schedule_id, complete_status, created_at,created_by,updated_at, updated_by)
 VALUES
-    ('09:00:00', '10:00:00', 7, 'Mon', false, NOW(), 'system',NOW(), 'system'),
-    ('10:00:00', '11:00:00', 8, 'Tue', false, NOW(), 'system',NOW(), 'system'),
-    ('11:00:00', '12:00:00', 9, 'Wed', false, NOW(), 'system',NOW(), 'system');
+    ('09:00:00', '10:00:00', 7, false, NOW(), 'system',NOW(), 'system'),
+    ('10:00:00', '11:00:00', 8, false, NOW(), 'system',NOW(), 'system'),
+    ('11:00:00', '12:00:00', 9, false, NOW(), 'system',NOW(), 'system');
 
 
 -- ACHIEVEMENT 테이블에 데이터 삽입

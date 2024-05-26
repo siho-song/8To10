@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import show.schedulemanagement.dto.request.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequestDto;
 
 
 @SpringBootTest
