@@ -623,6 +623,77 @@ select {
     text-align: left; /* 제목 왼쪽 정렬 */
 }
 
+/* START 0526 고정 일정 타임슬롯 관련*/
+/* 타임슬롯 박스 스타일 */
+#timeslot-container {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.timeslot-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timeslot-item span {
+    margin-right: 10px;
+}
+
+.timeslot-item button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.timeslot-item button:hover {
+    background-color: #c82333;
+}
+
+/* 추가 버튼 스타일 */
+#add-timeslot-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#add-timeslot-btn:hover {
+    background-color: #218838;
+}
+
+/* 저장 버튼 스타일 */
+#save-schedule-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#save-schedule-btn:hover {
+    background-color: #0056b3;
+}
+/* END 0526 고정 일정 타임슬롯 관련*/
+
+
+
 /* START 0522 회원 가입*/
 .signup-container {
     margin-top: 20px;

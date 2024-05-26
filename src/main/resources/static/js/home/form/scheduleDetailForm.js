@@ -10,8 +10,8 @@ function displayEventDetailsInSidebar(event) {
     if (event.end) {
         detailsHTML += `<strong>종료 시간:</strong> ${event.end.toLocaleString()}<br>`;
     }
-    if (event.extendedProps.commonDescription) {
-        detailsHTML += `<strong>일정 메모:</strong> ${event.extendedProps.commonDescription}<br>`;
+    if (event.extendedProps.description) {
+        detailsHTML += `<strong>일정 메모:</strong> ${event.extendedProps.description}<br>`;
     }
     detailsHTML += `<button onclick="togglePanel('')">닫기</button>`;
     // 상세보기 컨테이너에 HTML 설정
