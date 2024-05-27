@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    let timeslots = [];
+
     const calendarEl = document.getElementById('calendar');
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: '2024-05-12',
@@ -32,7 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        submitAddScheduleForm(calendar);
+        submitAddScheduleForm(timeslots, calendar);
+    });
+    document.getElementById('add-timeslot-btn').addEventListener('click', function() {
+        createTimeSlot(timeslots); // timeslots 배열을 매개변수로 전달
+        renderTimeslots(timeslots);
     });
 });
 
