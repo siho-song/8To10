@@ -1,5 +1,134 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // 더미 데이터
+    const dummyData = {
+        "daily": {
+            "page": 75,
+            "lecture": 50,
+            "chapter": 90,
+            "exercise": 60,
+            "project": 80,
+            "none": 100
+        },
+        "weekly": {
+            "page": 60,
+            "lecture": 70,
+            "chapter": 85,
+            "exercise": 55,
+            "project": 90,
+            "none": 100
+        },
+        "monthly": {
+            "page": 50,
+            "lecture": 65,
+            "chapter": 80,
+            "exercise": 70,
+            "project": 75,
+            "none": 95
+        }
+    };
+
+    // 성취도 업데이트 함수
+    function updateProgressBars(containerId, data) {
+        const progressBars = document.getElementById(containerId);
+        progressBars.innerHTML = `
+            <div class="progress-category">
+                <div class="category-title">페이지 수</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.page}%;"></div>
+                </div>
+                <div class="percentage">${data.page}%</div>
+            </div>
+            <div class="progress-category">
+                <div class="category-title">강의 수</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.lecture}%;"></div>
+                </div>
+                <div class="percentage">${data.lecture}%</div>
+            </div>
+            <div class="progress-category">
+                <div class="category-title">챕터 수</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.chapter}%;"></div>
+                </div>
+                <div class="percentage">${data.chapter}%</div>
+            </div>
+            <div class="progress-category">
+                <div class="category-title">운동</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.exercise}%;"></div>
+                </div>
+                <div class="percentage">${data.exercise}%</div>
+            </div>
+            <div class="progress-category">
+                <div class="category-title">프로젝트</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.project}%;"></div>
+                </div>
+                <div class="percentage">${data.project}%</div>
+            </div>
+            <div class="progress-category">
+                <div class="category-title">해당 없음</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${data.none}%;"></div>
+                </div>
+                <div class="percentage">${data.none}%</div>
+            </div>
+        `;
+    }
+
+    // 각 성취도 페이지 표시 함수
+    function showDailyAchievement() {
+        const achievementContent = document.getElementById('achievement-content');
+        achievementContent.innerHTML = `
+            <div id="daily-container">
+                <h2>일간 성취도 상세</h2>
+                <div id="daily-progress-bars"></div>
+            </div>
+        `;
+        updateProgressBars('daily-progress-bars', dummyData.daily);
+    }
+
+    function showWeeklyAchievement() {
+        const achievementContent = document.getElementById('achievement-content');
+        achievementContent.innerHTML = `
+            <div id="weekly-container">
+                <h2>주간 성취도 상세</h2>
+                <div id="weekly-progress-bars"></div>
+            </div>
+        `;
+        updateProgressBars('weekly-progress-bars', dummyData.weekly);
+    }
+
+    function showMonthlyAchievement() {
+        const achievementContent = document.getElementById('achievement-content');
+        achievementContent.innerHTML = `
+            <div id="monthly-container">
+                <h2>월간 성취도 상세</h2>
+                <div id="monthly-progress-bars"></div>
+            </div>
+        `;
+        updateProgressBars('monthly-progress-bars', dummyData.monthly);
+    }
+
+    // 이벤트 리스너 등록
+    document.getElementById('daily-achievement').addEventListener('click', showDailyAchievement);
+    document.getElementById('weekly-achievement').addEventListener('click', showWeeklyAchievement);
+    document.getElementById('monthly-achievement').addEventListener('click', showMonthlyAchievement);
+
+    // 초기 로드 설정
+    showDailyAchievement();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     showAchievement('score');
+
+    // 사이드바 메뉴 클릭 이벤트 추가
+    document.querySelectorAll('.achievement-menu li').forEach(item => {
+        item.addEventListener('click', () => {
+            const type = item.getAttribute('data-type');
+            showAchievement(type);
+        });
+    });
 });
 
 function showAchievement(type) {
@@ -151,4 +280,3 @@ function changeDate(type, offset, event) {
     const newContent = generateAchievementContent(type, currentDate, runningGifPath);
     currentDateElement.closest('.achievement-section').outerHTML = newContent;
 }
-

@@ -1,4 +1,4 @@
-function submitAddScheduleForm(calendar) {
+function submitAddScheduleForm(timeslots, calendar) {
     // 공통 입력에 대한 처리
     const commonProps = initCommonProperties();
     const { type, title, startDate, endDate, commonDescription } = commonProps;
@@ -39,32 +39,59 @@ function submitAddScheduleForm(calendar) {
 
     }
 
+    else if (type === 'fixed') {
 
-    //고정 일정
-    else if (type === 'fixed') { //고정 일정
-        const fixedProperties = initFixAndVariableProperties(startDate, endDate);
-        const { startDateTime, endDateTime } = fixedProperties;
+        let interval;
+        event = timeslots.map(slot => {
+            console.log(slot.frequency);
+            if (slot.frequency === "biweekly"){
+                slot.frequency = "weekly";
+                interval = 2;
+            } else {
+                interval = 1;
+            }
+            return {
+                title: title,
+                rrule: {
+                    freq: slot.frequency,
+                    interval: interval,
+                    byweekday: slot.days,
+                    dtstart:`${startDate}T${slot.startTime}`,
+                    until: endDate
+                },
+                duration: slot.duration,
+                commonDescription:commonDescription,
+                color:"#3788d8"
+            }
+        });
 
-        const frequency = document.getElementById('schedule-frequency').value;
-        const weekdays = Array.from(document.querySelectorAll('input[name="weekdays"]:checked')).map(checkbox => checkbox.value);
+        const events = timeslots.map(slot => {
+            return {
+                startTime: slot.startTime,
+                duration: `${slot.duration}:00`,
+                frequency: slot.frequency,
+                days: slot.days
+            };
+        });
+        console.log(events);
+        const fixedEvents = {
+            title:title,
+            commonDescription:commonDescription,
+            startDate:startDate,
+            endDate:endDate,
+            events:events
+        }
 
-        event.start = startDateTime;
-        event.end = endDateTime;
-        event.rrule = {
-            freq: frequency.toUpperCase(),
-            interval: 1,
-            byweekday: weekdays,
-            dtstart: startDateTime,
-            until: endDateTime
-        };
-        event.duration = '01:00'; // 고정 일정의 지속 시간 설정
+        console.log(fixedEvents);
 
 
 
-        calendar.addEvent(event);
-        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
+        event.forEach(e => calendar.addEvent(e));
+        timeslots.length = 0;
+        renderTimeslots(timeslots);
+        document.getElementById('add-timeslot-btn').style.display = 'none';
+        hideScheduleForm();
     }
-
 
     //일반 일정
     else if (type === 'normal') {
