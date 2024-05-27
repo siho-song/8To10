@@ -48,7 +48,7 @@ function createScheduleForm(type) {
                 <select id="schedule-frequency" name="frequency" onchange="handleFrequencyChange()">
                     <option value="daily">매일</option>
                     <option value="weekly">매주</option>
-                    <option value="monthly">매월</option>
+                    <option value="biweekly">격주</option>
                 </select>
             </div>
             <div class="form-group">
