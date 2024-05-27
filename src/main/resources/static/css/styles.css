@@ -1975,3 +1975,21 @@ hr {
     font-weight: bold;
 }
 
+/* START 0527 타임 슬롯 스타일 수정 */
+.slot-box {
+    width: 100%;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.slot-info p {
+    margin-top:3px;
+    margin-bottom:3px;
+}
+
+.slot-delete-btn {
+    width: 50%;
+}
+/* END 0527 타임 슬롯 스타일 수정 */
