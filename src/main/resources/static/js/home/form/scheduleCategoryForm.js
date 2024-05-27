@@ -139,6 +139,25 @@ function createScheduleForm(type) {
     setDefaultDate();
 }
 
+// 요일 선택 시에 '매일' 옵션이 들어가면 체크박스 비활성화
+function handleFrequencyChange() {
+    const frequency = document.getElementById('schedule-frequency').value;
+    const weekdayCheckboxes = document.querySelectorAll('input[name="days"]');
+
+    console.log(frequency)
+
+    if (frequency === 'daily') {
+        weekdayCheckboxes.forEach(checkbox => {
+            checkbox.checked = true;
+            checkbox.disabled = true;
+        });
+    } else {
+        weekdayCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+            checkbox.disabled = false;
+        });
+    }
+}
 
 
 function createTimeSlot(timeslots) {
