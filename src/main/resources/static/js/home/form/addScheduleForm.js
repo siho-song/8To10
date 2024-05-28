@@ -13,7 +13,8 @@ function submitAddScheduleForm(timeslots, calendar) {
     if (type === 'variable') { //변동 일정
         const variableProperties = initFixAndVariableProperties(startDate, endDate);
         const { startDateTime, endDateTime } = variableProperties;
-
+        a = 10;
+        
         event.start = startDateTime;
         event.end = endDateTime;
 
