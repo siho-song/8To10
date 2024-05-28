@@ -17,6 +17,12 @@ function initializeBufferTimeOptions() {
     fillBufferTimeSelect('schedule-buffer-hour', 'schedule-buffer-minute'); // 추가된 희망 여유 시간 필드 초기화
 }
 
+// 취침시간, 기상시간을 설정
+function initializeSleepWakeTimeOptions() {
+    fillTimeSelect('sleep-time-hour', 'sleep-time-minute');
+    fillTimeSelect('wake-time-hour', 'wake-time-minute');
+}
+
 function fillTimeSelect(hourId, minuteId) {
     const hourSelect = document.getElementById(hourId);
     const minuteSelect = document.getElementById(minuteId);
