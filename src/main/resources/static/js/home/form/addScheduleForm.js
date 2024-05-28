@@ -95,31 +95,55 @@ function submitAddScheduleForm(timeslots, calendar) {
 
     //일반 일정
     else if (type === 'normal') {
-        const normalProperties = initFixAndVariableProperties(startDate, endDate);
-        //TODO initNormalProperties로 변경
-        const { startDateTime, endDateTime } = normalProperties;
 
-        const frequency = document.getElementById('schedule-frequency').value;
-        const bufferTime = document.getElementById('schedule-buffer-time').value;
-        const weekdays = Array.from(document.querySelectorAll('input[name="weekdays"]:checked')).map(checkbox => checkbox.value);
+        const bufferHour = document.getElementById('schedule-buffer-hour').value;
+        const bufferMinute = document.getElementById('schedule-buffer-minute').value;
+        const performHour = document.getElementById('schedule-perform-hour').value;
+        const performMinute = document.getElementById('schedule-perform-minute').value;
+
+        const bufferTime = `${bufferHour}:${bufferMinute}:00`;
+        const totalAmount = document.getElementById('schedule-total-amount').value;
+        const performInDay = `${performHour}:${performMinute}:00`;
+        const performInWeek = document.getElementById('schedule-perform-in-week').value;
 
         // TODO: 서버로 요청 전송, 서버에서 생성한 랜덤시간을 받아서 랜덤시간 주입해야 함
 
-        event.start = startDateTime; // + 랜덤 시간
-        event.end = endDateTime; // + 랜덤 시간
-        event.rrule = {
-            freq: frequency.toUpperCase(),
-            interval: 1,
-            byweekday: weekdays,
-            dtstart: startDateTime,
-            until: endDateTime
+        const event = {
+            title: title,
+            commonDescription: commonDescription,
+            startDate: startDate,
+            endDate: endDate,
+            bufferTime: bufferTime,
+            totalAmount: totalAmount,
+            performInDay: performInDay,
+            performInWeek: performInWeek
         };
-        event.duration = '01:00';
-        event.bufferTime = bufferTime;
-        event.type = type;
 
-        calendar.addEvent(event);
-        addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
+        console.log(event);
+
+        // 서버로 이벤트 객체 전송
+        fetch('http://localhost:8080/schedule/normal/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(event)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.events && typeof data.events === 'object') {
+                    Object.keys(data.events).forEach(key => {
+                        const e = data.events[key];
+                        calendar.addEvent(e);
+                        console.log(e);
+                    });
+                } else {
+                    console.error('Expected an object but got:', data);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
     hideScheduleForm();
 }

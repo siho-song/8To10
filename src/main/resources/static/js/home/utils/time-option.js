@@ -13,8 +13,9 @@ function initializeFixedTimeOptions() {
 
 //일반 일정은 시간을 받지 않기 때문에 따로 처리해주는 함수
 //시간,분 단위로 선택창을 초기화한다.
-function initializeBufferTimeOptions() {
+function initializeNormalTimeOptions() {
     fillBufferTimeSelect('schedule-buffer-hour', 'schedule-buffer-minute'); // 추가된 희망 여유 시간 필드 초기화
+    fillTimeSelect('schedule-perform-hour','schedule-perform-minute');
 }
 
 // 취침시간, 기상시간을 설정

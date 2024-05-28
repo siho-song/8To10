@@ -581,6 +581,13 @@ input[type="email"] {
     background-color: #45a049;
 }
 
+#right-sidebar button:disabled {
+    flex: 1;
+    background-color: #a2a2a2;
+    color: white;
+    margin-right: 10px;
+}
+
 #add-event-form-container {
     background-color: #f4f4f4;
     border: 1px solid #ccc;
