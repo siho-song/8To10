@@ -1,4 +1,4 @@
-package show.schedulemanagement.validator.signup;
+package show.schedulemanagement.validator.signup.fieldError;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
