@@ -21,7 +21,7 @@ public class FixResponseDto extends ScheduleResponseDto {
                 fScheduleDetail.getStartDate(),
                 fScheduleDetail.getEndDate(),
                 "fixed",
-                ScheduleColor.FIXED.name(),
+                ScheduleColor.FIXED.hexCode,
                 fScheduleDetail.isCompleteStatus());
 
         this.parentId = fSchedule.getId();
