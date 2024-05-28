@@ -13,6 +13,8 @@ function createScheduleForm(type) {
     const additionalFields = document.getElementById('additional-fields');
     additionalFields.innerHTML = '';
 
+    initializeInputField();
+
     if (type === 'fixed') {  <!-- 고정 일정-->
         document.getElementById('add-timeslot-btn').style.display = 'block';
 
@@ -34,7 +36,7 @@ function createScheduleForm(type) {
             </div>
             <div class="form-group">
                 <label for="schedule-duration-hour">지속 시간</label>
-                <div class="time-input-group">
+                <div class="time-input-group" id="duration-time-input-group">
                     <select id="schedule-duration-hour" name="durationHour">
                         <!-- 시간 옵션 -->
                     </select>
@@ -78,7 +80,7 @@ function createScheduleForm(type) {
             <div class="form-group">
                     <label for="schedule-buffer-time">희망 여유 시간</label>
                     <select id="schedule-buffer-hour" name="bufferHour">
-                    <!-- 시간 옵션 -->
+                        <!-- 시간 옵션 -->
                     </select>
                     <select id="schedule-buffer-minute" name="bufferMinute">
                         <!-- 분 옵션 -->
@@ -104,7 +106,7 @@ function createScheduleForm(type) {
         additionalFields.innerHTML = `
             <div class="form-group">
                     <label for="schedule-start-time">시작 시간</label>
-                    <div class="time-input-group">
+                    <div class="time-input-group" id="start-time-input-group">
                         <select id="schedule-start-time" name="startTime">
                             <option value="AM">오전</option>
                             <option value="PM">오후</option>
@@ -119,7 +121,7 @@ function createScheduleForm(type) {
             </div>
             <div class="form-group">
                 <label for="schedule-end-time">종료 시간</label>
-                <div class="time-input-group">
+                <div class="time-input-group" id="end-time-input-group">
                         <select id="schedule-end-time" name="endTime">
                             <option value="AM">오전</option>
                             <option value="PM">오후</option>
@@ -134,7 +136,11 @@ function createScheduleForm(type) {
             </div>
         `;
         initializeTimeOptions();
+        addVariableStartTimeInputListeners();
+        addVariableEndTimeInputListeners();
     }
+
+
     document.getElementById('schedule-form').dataset.type = type;
     setDefaultDate();
 }
@@ -182,44 +188,17 @@ function createTimeSlot(timeslots) {
         }
     }
 
-    // 지속 시간 계산
-    let endPeriod = startPeriod;
-    let endTimeHour = parseInt(startHour) + parseInt(durationHour);
-    let endTimeMinute = parseInt(startMinute) + parseInt(durationMinute);
-    if (endTimeMinute >= 60) {
-        endTimeHour += Math.floor(endTimeMinute / 60);
-        endTimeMinute = endTimeMinute % 60;
-    }
-
-    if (endTimeHour >= 12) {
-        endPeriod = endTimeHour >= 24 ? 'AM' : 'PM';
-        if (endTimeHour > 24) {
-            endTimeHour = endTimeHour - 24;
-        } else if (endTimeHour >= 12) {
-            endTimeHour = endTimeHour - 12;
-        }
-    }
-
-    if (endTimeHour === 0) {
-        endTimeHour = 12;
-    }
-
-    let endTimeWithPeriod = `${endTimeHour < 10 ? '0' : ''}${endTimeHour}:${endTimeMinute < 10 ? '0' : ''}${endTimeMinute}`;
-    let endTime = calculateEndTime(startPeriod, startHour, startMinute, durationHour, durationMinute);
-
     const timeslot = {
-        weekdays: weekdays,
-        startTimeWithPeriod: `${startPeriod} ${startHour}:${startMinute}`,
         startTime: startTime,
-        endTimeWithPeriod: `${endPeriod} ${endTimeWithPeriod}`,
-        endTime: endTime,
+        duration:`${durationHour}:${durationMinute}`,
         frequency: frequency,
         days: weekdays,
-        duration:`${durationHour}:${durationMinute}`
     };
 
     timeslots.push(timeslot);
     renderTimeslots(timeslots);
+    toggleFormFields(timeslots.length);
+    console.log("timeslots.length", timeslots.length);
 }
 
 function renderTimeslots(timeslots) {
@@ -231,10 +210,15 @@ function renderTimeslots(timeslots) {
         item.className = 'timeslot-item';
         const buttonId = `delete-btn-${index}`;
         item.innerHTML = `
-            <div>
-                <strong>${slot.weekdays.join(', ')}</strong> (${slot.frequency}) : ${slot.startTime} ~ ${slot.endTime}
+            <div class="slot-box">
+                <div class="slot-info">
+                    <p>빈도 : ${slot.frequency}</p>
+                    <p>요일 : ${slot.days.join(', ')}</p> 
+                    <p>시작 시간 :${slot.startTime.substring(0, 6)}</p>
+                    <p>지속 시간 : ${slot.duration}</p>
+                </div>
+                <button type="button" class="slot-delete-btn" id="${buttonId}">삭제</button>
             </div>
-            <button type="button" id="${buttonId}">삭제</button>
         `;
 
         container.appendChild(item);
@@ -245,12 +229,19 @@ function renderTimeslots(timeslots) {
         });
     });
 
-
 }
 
 function removeTimeslot(timeslots, index) {
     timeslots.splice(index, 1);
     console.log("삭제", timeslots)
-
     renderTimeslots(timeslots);
+    toggleFormFields(timeslots.length);
+    validateDuration();
+}
+
+function initializeInputField() {
+    // 처음 렌더링 될 때 내용 초기화, 저장 버튼 비활성화
+    document.getElementById('schedule-title').value ="";
+    document.getElementById('schedule-description').value ="";
+    document.getElementById('submit-button').disabled = true;
 }

@@ -13,7 +13,8 @@ function submitAddScheduleForm(timeslots, calendar) {
     if (type === 'variable') { //변동 일정
         const variableProperties = initFixAndVariableProperties(startDate, endDate);
         const { startDateTime, endDateTime } = variableProperties;
-
+        a = 10;
+        
         event.start = startDateTime;
         event.end = endDateTime;
 
@@ -41,30 +42,6 @@ function submitAddScheduleForm(timeslots, calendar) {
 
     else if (type === 'fixed') {
 
-        let interval;
-        event = timeslots.map(slot => {
-            console.log(slot.frequency);
-            if (slot.frequency === "biweekly"){
-                slot.frequency = "weekly";
-                interval = 2;
-            } else {
-                interval = 1;
-            }
-            return {
-                title: title,
-                rrule: {
-                    freq: slot.frequency,
-                    interval: interval,
-                    byweekday: slot.days,
-                    dtstart:`${startDate}T${slot.startTime}`,
-                    until: endDate
-                },
-                duration: slot.duration,
-                commonDescription:commonDescription,
-                color:"#3788d8"
-            }
-        });
-
         const events = timeslots.map(slot => {
             return {
                 startTime: slot.startTime,
@@ -73,7 +50,6 @@ function submitAddScheduleForm(timeslots, calendar) {
                 days: slot.days
             };
         });
-        console.log(events);
         const fixedEvents = {
             title:title,
             commonDescription:commonDescription,
@@ -81,16 +57,32 @@ function submitAddScheduleForm(timeslots, calendar) {
             endDate:endDate,
             events:events
         }
-
         console.log(fixedEvents);
 
 
+        // 서버로 이벤트 객체 전송
+        fetch('http://localhost:8080/schedule/fixed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fixedEvents)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                calendar.addEvent(data);
+                // addToDoItem(data); // 일정 추가 시 To-Do 리스트에 반영
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
-        event.forEach(e => calendar.addEvent(e));
+        // event.forEach(e => calendar.addEvent(e));
         timeslots.length = 0;
         renderTimeslots(timeslots);
         document.getElementById('add-timeslot-btn').style.display = 'none';
-        hideScheduleForm();
+        document.getElementById('add-timeslot-btn').disabled = true;
     }
 
     //일반 일정

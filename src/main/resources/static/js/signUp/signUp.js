@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', () => {
+    initializeSleepWakeTimeOptions();
+    document.getElementById('sleep-time-period').addEventListener('change', validateSleepWakeTime);
+    document.getElementById('sleep-time-hour').addEventListener('change', validateSleepWakeTime);
+    document.getElementById('sleep-time-minute').addEventListener('change', validateSleepWakeTime);
+    document.getElementById('wake-time-period').addEventListener('change', validateSleepWakeTime);
+    document.getElementById('wake-time-hour').addEventListener('change', validateSleepWakeTime);
+    document.getElementById('wake-time-minute').addEventListener('change', validateSleepWakeTime);
+});
+
 let emailVerified = false;
 let nicknameDuplicateChecked = false;
 let emailDuplicateChecked = false;

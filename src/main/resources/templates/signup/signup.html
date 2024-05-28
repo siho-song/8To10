@@ -85,6 +85,32 @@
         </div>
 
         <div class="signup-form-group">
+            <label for="sleep-time">취침 시간</label>
+            <div class="time-input-group" id="sleep-time-input-group">
+                <select id="sleep-time-period" name="sleepTimePeriod">
+                    <option value="AM">오전</option>
+                    <option value="PM">오후</option>
+                </select>
+                <select id="sleep-time-hour" name="sleepHour"></select>
+                <select id="sleep-time-minute" name="sleepMinute"></select>
+            </div>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="wake-time">기상 시간</label>
+            <div class="time-input-group" id="wake-time-input-group">
+                <select id="wake-time-period" name="wakeTimePeriod">
+                    <option value="AM">오전</option>
+                    <option value="PM">오후</option>
+                </select>
+                <select id="wake-time-hour" name="wakeHour"></select>
+                <select id="wake-time-minute" name="wakeMinute"></select>
+            </div>
+        </div>
+
+
+
+        <div class="signup-form-group">
             <label>성별</label>
             <label><input type="radio" th:field="*{gender}" value="MALE" required> 남성</label>
             <label><input type="radio" th:field="*{gender}" value="FEMALE" required> 여성</label>
@@ -110,5 +136,7 @@
 </div>
 
 <script th:src="@{/js/signUp/signUp.js}" src="/js/signUp/signUp.js"></script>
+<script th:src="@{/js/signUp/validateSignUp.js}" src="/js/signUp/validateSignUp.js"></script>
+
 </body>
 </html>
