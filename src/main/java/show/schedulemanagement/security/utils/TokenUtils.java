@@ -28,7 +28,7 @@ public class TokenUtils {
     }
 
     public String generateJwtToken(LoginMemberDto loginMemberDto) {
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(loginMemberDto))
                 .setSubject(loginMemberDto.getEmail())
@@ -36,6 +36,8 @@ public class TokenUtils {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(createExpirationDate())
                 .compact();
+        log.debug("Generated Token: {}", token);
+        return token;
     }
 
     public boolean isValidToken(String token) {
