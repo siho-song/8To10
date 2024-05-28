@@ -44,12 +44,10 @@ public class FScheduleService {
         List<ScheduleAble> scheduleAbles = newSchedule.getScheduleAbles();
         log.debug("addDetailsToFSchedule after newSchedule scheduleAbles : {} ",scheduleAbles);
 
+        //기간내 멤버의 모든 일정 불러오기
+        List<Schedule> allSchedule = scheduleService.findAllBetweenStartAndEnd(member, startDate, endDate);
         //겹치는 일정이 있는지 검사
-        Schedule conflictSchedule = scheduleService.getConflictSchedule(
-                scheduleAbles,
-                member,
-                startDate.atStartOfDay(),
-                endDate.atStartOfDay().plusDays(1L));
+        Schedule conflictSchedule = scheduleService.getConflictSchedule(scheduleAbles,allSchedule);
 
         log.debug("addDetailsToFSchedule after getConflictSchedule about conflictSchedule: {} ",conflictSchedule);
 
@@ -87,63 +85,41 @@ public class FScheduleService {
             List<String> days = event.getDays();
             //주기 체크
             if (frequency.equals("weekly") || frequency.equals("daily")) {
-                addWeeklyAndDailyDetails(newSchedule, commonDescription, startDate, endDate, event);
+                addDetails(newSchedule, commonDescription, startDate, endDate, event,false);
             }
             if (frequency.equals("biweekly")) {
-                addBiWeeklyDetails(newSchedule, commonDescription, startDate, endDate, event);
+                addDetails(newSchedule, commonDescription, startDate, endDate, event,true);
             }
         }
     }
 
-    private void addWeeklyAndDailyDetails(FSchedule schedule,
-                                  String detailDescription,
-                                  LocalDate startDate,
-                                  LocalDate endDate,
-                                  FixDetailAddDto event) {
+    private void addDetails(FSchedule schedule,
+                            String detailDescription,
+                            LocalDate startDate,
+                            LocalDate endDate,
+                            FixDetailAddDto event,
+                            boolean isBiweekly
+    ) {
 
         LocalDate currentDate = startDate;
         List<String> days = event.getDays();
         LocalTime duration = event.getDuration();
         LocalTime startTime = event.getStartTime();
 
-        while(!currentDate.isAfter(endDate)){
+        while (!currentDate.isAfter(endDate)) {
             DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
             for (String day : days) {
                 DayOfWeek dayOfWeek = ScheduleDay.of(day);
-                if(currentDayOfWeek.equals(dayOfWeek)){
+                if (currentDayOfWeek.equals(dayOfWeek)) {
                     LocalDateTime startDateTime = LocalDateTime.of(currentDate, startTime);
-                    LocalDateTime endDateTime = startDateTime.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-                    FScheduleDetail fscheduleDetail = FScheduleDetail.createFscheduleDetail(detailDescription,startDateTime,endDateTime);
+                    LocalDateTime endDateTime = startDateTime.plusHours(duration.getHour())
+                            .plusMinutes(duration.getMinute());
+                    FScheduleDetail fscheduleDetail = FScheduleDetail.createFscheduleDetail(detailDescription,
+                            startDateTime, endDateTime);
                     fscheduleDetail.setFSchedule(schedule);
                 }
             }
-            currentDate = currentDate.plusDays(1);
-        }
-    }
-
-    private void addBiWeeklyDetails(FSchedule schedule,
-                                  String detailDescription,
-                                  LocalDate startDate,
-                                  LocalDate endDate,
-                                    FixDetailAddDto event) {
-
-        LocalDate currentDate = startDate;
-        List<String> days = event.getDays();
-        LocalTime duration = event.getDuration();
-        LocalTime startTime = event.getStartTime();
-
-        while(!currentDate.isAfter(endDate)){
-            DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
-            for (String day : days) {
-                DayOfWeek dayOfWeek = ScheduleDay.of(day);
-                if(currentDayOfWeek.equals(dayOfWeek)){
-                    LocalDateTime startDateTime = LocalDateTime.of(currentDate, startTime);
-                    LocalDateTime endDateTime = startDateTime.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-                    FScheduleDetail fscheduleDetail = FScheduleDetail.createFscheduleDetail(detailDescription,startDateTime,endDateTime);
-                    fscheduleDetail.setFSchedule(schedule);
-                }
-            }
-            if(currentDayOfWeek.equals(DayOfWeek.SUNDAY)){
+            if(isBiweekly && currentDayOfWeek.equals(DayOfWeek.SUNDAY)){
                 currentDate = currentDate.plusDays(7);
             }
             currentDate = currentDate.plusDays(1);
