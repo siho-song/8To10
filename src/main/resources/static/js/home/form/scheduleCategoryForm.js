@@ -56,13 +56,13 @@ function createScheduleForm(type) {
             <div class="form-group">
                 <label>수행 요일</label>
                 <div class="weekday-checkbox-group">
-                    <label for="weekday-mo"><input type="checkbox" id="weekday-mo" name="days" value="MO">월</label>
-                    <label for="weekday-tu"><input type="checkbox" id="weekday-tu" name="days" value="TU">화</label>
-                    <label for="weekday-we"><input type="checkbox" id="weekday-we" name="days" value="WE">수</label>
-                    <label for="weekday-th"><input type="checkbox" id="weekday-th" name="days" value="TH">목</label>
-                    <label for="weekday-fr"><input type="checkbox" id="weekday-fr" name="days" value="FR">금</label>
-                    <label for="weekday-sa"><input type="checkbox" id="weekday-sa" name="days" value="SA">토</label>
-                    <label for="weekday-su"><input type="checkbox" id="weekday-su" name="days" value="SU">일</label>
+                    <label for="weekday-mo"><input type="checkbox" id="weekday-mo" name="days" value="mo">월</label>
+                    <label for="weekday-tu"><input type="checkbox" id="weekday-tu" name="days" value="tu">화</label>
+                    <label for="weekday-we"><input type="checkbox" id="weekday-we" name="days" value="we">수</label>
+                    <label for="weekday-th"><input type="checkbox" id="weekday-th" name="days" value="th">목</label>
+                    <label for="weekday-fr"><input type="checkbox" id="weekday-fr" name="days" value="fr">금</label>
+                    <label for="weekday-sa"><input type="checkbox" id="weekday-sa" name="days" value="sa">토</label>
+                    <label for="weekday-su"><input type="checkbox" id="weekday-su" name="days" value="su">일</label>
                 </div>
             </div>
             <div class="form-group">

@@ -29,7 +29,7 @@ function submitAddScheduleForm(timeslots, calendar) {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                calendar.addEvent(event);
+                calendar.addEvent(data);
                 addToDoItem(event); // 일정 추가 시 To-Do 리스트에 반영
             })
             .catch((error) => {
@@ -61,7 +61,7 @@ function submitAddScheduleForm(timeslots, calendar) {
 
 
         // 서버로 이벤트 객체 전송
-        fetch('http://localhost:8080/schedule/fixed', {
+        fetch('http://localhost:8080/schedule/fixed/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,7 +71,15 @@ function submitAddScheduleForm(timeslots, calendar) {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                calendar.addEvent(data);
+                if (data.events && typeof data.events === 'object') {
+                    Object.keys(data.events).forEach(key => {
+                        const e = data.events[key];
+                        calendar.addEvent(e);
+                        console.log(e);
+                    });
+                } else {
+                    console.error('Expected an object but got:', data);
+                }
                 // addToDoItem(data); // 일정 추가 시 To-Do 리스트에 반영
             })
             .catch((error) => {

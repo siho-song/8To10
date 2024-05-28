@@ -146,6 +146,17 @@ function loadInitialEvents() {
             },
             description: "asdfaskldnfalksndf"
 
+        },
+        {
+            id: 27,
+            title : "aefwa",
+            start: "2024-07-13T07:00:00",
+            end: "2024-07-13T22:00:00",
+            commonDescription: "awfewe",
+            color: "FIXED",
+            parentId: 10,
+            type: "fixed",
+            completeStatue: false
         }
     ];
 
