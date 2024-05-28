@@ -1,19 +1,19 @@
 package show.schedulemanagement.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.assertj.core.api.Assertions;
+import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Gender;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.member.Mode;
@@ -21,7 +21,7 @@ import show.schedulemanagement.repository.member.MemberRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Rollback
+@Transactional
 class LoginControllerTest {
 
     @Autowired
@@ -40,6 +40,8 @@ class LoginControllerTest {
                 .gender(Gender.MALE)
                 .authEmail(false)
                 .authPhone(false)
+                .wakeUpTime(LocalTime.now())
+                .bedTime(LocalTime.now())
                 .mode(Mode.MILD)
                 .email("test1@example.com")
                 .password("$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2")

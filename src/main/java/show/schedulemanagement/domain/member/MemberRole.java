@@ -12,14 +12,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.List;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
-import show.schedulemanagement.domain.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 
 @Entity
 @Getter
@@ -44,7 +44,7 @@ public class MemberRole extends BaseEntity {
 
     private void setRole(Member member, Role role){
         this.role= role;
-        member.getRoles().add(this);
+        member.getMemberRoles().add(this);
     }
 
     public static MemberRole createMemberRoleInfo(Member member, Role role){
@@ -54,5 +54,11 @@ public class MemberRole extends BaseEntity {
 
         memberRole.setRole(member,role);
         return memberRole;
+    }
+
+    @PrePersist
+    void prePersist(){
+        this.createdBy = "ADMIN";
+        this.updatedBy = "ADMIN";
     }
 }

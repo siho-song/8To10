@@ -77,6 +77,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         try {
             if (token != null && !token.isEmpty()) {
+                log.debug("Token found: {}", token);
                 if (tokenUtils.isValidToken(token)) {
                     String loginId = tokenUtils.getUserIdFromToken(token);
                     log.debug("[+] loginId Check: {}", loginId);

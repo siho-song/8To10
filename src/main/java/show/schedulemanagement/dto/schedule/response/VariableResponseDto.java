@@ -12,19 +12,16 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 public class VariableResponseDto extends ScheduleResponseDto {
 
-    Boolean completeStatus;
-
     public VariableResponseDto(VSchedule schedule) {
         super(
                 schedule.getId(),
                 schedule.getTitle(),
-                schedule.getDescription(),
-                LocalDateTime.of(schedule.getStartDate(),schedule.getStartTime()),
-                LocalDateTime.of(schedule.getEndDate(),schedule.getEndTime()),
+                schedule.getCommonDescription(),
+                schedule.getStartDate(),
+                schedule.getEndDate(),
                 "variable",
-                ScheduleColor.RED.name()
-                );
-
-        completeStatus = false;
+                ScheduleColor.VARIABLE.name(),
+                schedule.isCompleteStatus()
+        );
     }
 }

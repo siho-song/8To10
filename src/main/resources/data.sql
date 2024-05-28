@@ -2,15 +2,11 @@
 DROP TABLE IF EXISTS `NOTIFICATION`;
 DROP TABLE IF EXISTS `CAT_UNIT_ACH`;
 DROP TABLE IF EXISTS `ACHIEVEMENT`;
-DROP TABLE IF EXISTS `N_VALUE`;
-DROP TABLE IF EXISTS `N_RANGE`;
-DROP TABLE IF EXISTS `nd_value`;
-DROP TABLE IF EXISTS `nd_range`;
-DROP TABLE IF EXISTS `F_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `N_SCHEDULE_DETAIL`;
-DROP TABLE IF EXISTS `V_SCHEDULE`;
-DROP TABLE IF EXISTS `F_SCHEDULE`;
 DROP TABLE IF EXISTS `N_SCHEDULE`;
+DROP TABLE IF EXISTS `F_SCHEDULE_DETAIL`;
+DROP TABLE IF EXISTS `F_SCHEDULE`;
+DROP TABLE IF EXISTS `V_SCHEDULE`;
 DROP TABLE IF EXISTS `SCHEDULE`;
 DROP TABLE IF EXISTS `BOARD_ATTACHMENT`;
 DROP TABLE IF EXISTS `REPLY_HEARTS`;
@@ -40,6 +36,8 @@ CREATE TABLE `MEMBER`
     `phone_number` varchar(11) NOT NULL UNIQUE,
     `auth_email` boolean NULL DEFAULT false,
     `auth_phone` boolean NULL DEFAULT false,
+    `wake_up_time` time NOT NULL,
+    `bed_time` time NOT NULL,
     PRIMARY KEY (`member_id`)
 );
 
@@ -131,14 +129,14 @@ CREATE TABLE `SCHEDULE`
     `schedule_id` bigint       NOT NULL AUTO_INCREMENT,
     `member_id`   bigint       NOT NULL,
     `title`       varchar(255) NOT NULL,
-    `description` TEXT NULL,
-    `start_date`  date         NOT NULL,
-    `end_date`    date         NOT NULL,
+    `common_description` TEXT NOT NULL,
+    `start_date`  datetime(6)    NOT NULL,
+    `end_date`    datetime(6)    NOT NULL,
     `created_at`  datetime(6) NULL,
     `created_by`  varchar(80) NULL,
     `updated_at`  datetime(6) NULL,
     `updated_by`  varchar(80) NULL,
-    `dtype` varchar(40) NOT NULL default 'V',
+    `dtype` varchar(40) NOT NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -147,12 +145,8 @@ CREATE TABLE `N_SCHEDULE`
 (
     `schedule_id`   bigint      NOT NULL,
     `category_unit` ENUM('PAGE', 'CHAPTER','LECTURE','PROJECT','WORKOUT','NONE') NOT NULL DEFAULT 'NONE',
+    `total_value`         int      NULL,
     `buffer_time`   TIME        NOT NULL DEFAULT '00:00:00',
-    `frequency`     varchar(10) NOT NULL,
-    `created_at`    datetime(6) NULL,
-    `created_by`    varchar(80) NULL,
-    `updated_at`    datetime(6) NULL,
-    `updated_by`    varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
 );
@@ -160,13 +154,6 @@ CREATE TABLE `N_SCHEDULE`
 CREATE TABLE `F_SCHEDULE`
 (
     `schedule_id` bigint      NOT NULL,
-    `start_time`    time        NOT NULL,
-    `duration`      time         NOT NULL,
-    `frequency`     varchar(10) NOT NULL,
-    `created_at`    datetime(6) NULL,
-    `created_by`    varchar(80) NULL,
-    `updated_at`    datetime(6) NULL,
-    `updated_by`    varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
 );
@@ -174,13 +161,7 @@ CREATE TABLE `F_SCHEDULE`
 CREATE TABLE `V_SCHEDULE`
 (
     `schedule_id`   bigint     NOT NULL,
-    `start_time`      time       NOT NULL,
-    `end_time`        time       NOT NULL,
     `complete_status` boolean    NOT NULL DEFAULT false,
-    `created_at`       datetime(6) NULL,
-    `created_by`      varchar(80) NULL,
-    `updated_at`      datetime(6) NULL,
-    `updated_by`      varchar(80) NULL,
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
 );
@@ -189,11 +170,11 @@ CREATE TABLE `N_SCHEDULE_DETAIL`
 (
     `n_schedule_detail_id` bigint     NOT NULL AUTO_INCREMENT,
     `schedule_id`          bigint     NOT NULL,
-    `start_time`           time       NOT NULL,
-    `end_time`             time       NOT NULL,
+    `start_date`           datetime(6)       NOT NULL,
+    `end_date`             datetime(6)       NOT NULL,
     `complete_status`      boolean    NOT NULL DEFAULT false,
-    `day`                  varchar(3) NOT NULL,
     `detail_description`   TEXT NULL,
+    `value`                int NULL,
     `updated_by`           varchar(80) NULL,
     `updated_at`           datetime(6) NOT NULL,
     PRIMARY KEY (`n_schedule_detail_id`),
@@ -204,51 +185,14 @@ CREATE TABLE `F_SCHEDULE_DETAIL`
 (
     `f_schedule_detail_id` bigint     NOT NULL AUTO_INCREMENT,
     `schedule_id`          bigint     NOT NULL,
-    `day`                  varchar(3) NOT NULL,
     `complete_status`      boolean    NOT NULL DEFAULT false,
     `detail_description`   TEXT NULL,
+    `start_date`           datetime(6)       NOT NULL,
+    `end_date`             datetime(6)       NOT NULL,
     `updated_by`           varchar(80) NULL,
     `updated_at`           datetime(6) NOT NULL,
     PRIMARY KEY (`f_schedule_detail_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `F_SCHEDULE` (`schedule_id`)
-);
-
-CREATE TABLE `nd_range`
-(
-    `nd_range_id`         bigint NOT NULL AUTO_INCREMENT,
-    `start_range`          int    NOT NULL,
-    `end_range`            int    NOT NULL,
-    `n_schedule_detail_id` bigint NOT NULL,
-    PRIMARY KEY (`nd_range_id`),
-    FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
-);
-
-CREATE TABLE `nd_value`
-(
-    `nd_value_id`         bigint NOT NULL AUTO_INCREMENT,
-    `n_schedule_detail_id` bigint NOT NULL,
-    `value`                int    NOT NULL,
-    PRIMARY KEY (`nd_value_id`),
-    FOREIGN KEY (`n_schedule_detail_id`) REFERENCES `N_SCHEDULE_DETAIL` (`n_schedule_detail_id`)
-);
-
-CREATE TABLE `N_RANGE`
-(
-    `n_range_id`  bigint NOT NULL AUTO_INCREMENT,
-    `schedule_id` bigint NOT NULL,
-    `start_range` int    NOT NULL,
-    `end_range`   int    NOT NULL,
-    PRIMARY KEY (`n_range_id`),
-    FOREIGN KEY (`schedule_id`) REFERENCES `N_SCHEDULE` (`schedule_id`)
-);
-
-CREATE TABLE `N_VALUE`
-(
-    `n_value_id`  bigint NOT NULL AUTO_INCREMENT,
-    `schedule_id` bigint NOT NULL,
-    `value`       int    NOT NULL,
-    PRIMARY KEY (`n_value_id`),
-    FOREIGN KEY (`schedule_id`) REFERENCES `N_SCHEDULE` (`schedule_id`)
 );
 
 -- 성취도
@@ -295,11 +239,11 @@ CREATE TABLE `NOTIFICATION`
 );
 
 -- MEMBER 테이블에 데이터 삽입
-INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
+INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone,wake_up_time,bed_time)
 VALUES
-    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
-    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
-    ('user3', 'nick3', 'user3@example.com', 'password3', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
+    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false, '08:00:00','00:00:00'),
+    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true, '07:00:00','11:00:00'),
+    ('user3', 'nick3', 'user3@example.com', '$2a$12$G/1E6IsBkKxQyCUGChLUG.AtUgKyn.eQlGs1HV3uCxlnsXHMvIdRK', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true,'00:06:00','10:00:00');
 
 -- MEMBER_ROLE 테이블에 데이터 삽입
 INSERT INTO MEMBER_ROLE (member_id, role, created_at, created_by, updated_at, updated_by)
@@ -307,7 +251,6 @@ VALUES
     (1, 'NORMAL_USER', NOW(), 'system', NOW(), 'system'),
     (2, 'ADMIN', NOW(), 'system', NOW(), 'system'),
     (3, 'PUNCTUAL_USER', NOW(), 'system', NOW(), 'system');
-
 
 -- BOARD 테이블에 데이터 삽입
 INSERT INTO BOARD (member_id, title, content, created_at, updated_at, total_like, total_scrap)
@@ -352,117 +295,81 @@ VALUES
     (3, 'attachment3.jpg');
 
 -- SCHEDULE 테이블에 데이터 삽입
-INSERT INTO SCHEDULE (member_id, title, description, start_date, end_date, created_at, created_by, dtype , updated_at , updated_by)
+INSERT INTO SCHEDULE (member_id, title, common_description, start_date, end_date, created_at, created_by, dtype, updated_at, updated_by)
 VALUES
-    (1, 'fixed schedule1', 'Description of the first schedule.', '2024-01-01', '2024-01-07', NOW(), 'system', 'F',NOW(), 'system'),
-    (1, 'fixed schedule2', 'Description of the second schedule.', '2024-02-01', '2024-02-14', NOW(), 'system', 'F',NOW(), 'system'),
-    (1, 'fixed schedule3', 'Description of the third schedule.', '2024-03-01', '2024-03-21', NOW(), 'system', 'F',NOW(), 'system'),
-    (2, 'normal schedule1', 'Description of the fourth schedule.', '2024-05-01', '2024-05-07', NOW(), 'system', 'N',NOW(), 'system'),
-    (2, 'normal schedule2', 'Description of the fifth schedule.', '2024-06-01', '2024-06-14', NOW(), 'system', 'N',NOW(), 'system'),
-    (2, 'normal schedule3', 'Description of the sixth schedule.', '2024-07-01', '2024-07-22', NOW(), 'system', 'N',NOW(), 'system'),
-    (3, 'variable Schedule1', 'Description of the seventh schedule.', '2024-08-01', '2024-08-01', NOW(), 'system', 'V',NOW(), 'system'),
-    (3, 'variable Schedule2', 'Description of the eighth schedule.', '2024-09-01', '2024-09-01', NOW(), 'system', 'V',NOW(), 'system'),
-    (3, 'variable Schedule3', 'Description of the ninth schedule.', '2024-10-01', '2024-10-01', NOW(), 'system', 'V',NOW(), 'system');
--- N_SCHEDULE 테이블에 데이터 삽입
-INSERT INTO N_SCHEDULE (category_unit, buffer_time, frequency, schedule_id,created_at, created_by,updated_at,updated_by)
-VALUES
-    ('PAGE', '01:00:00', 'weekly', 4,NOW(), 'system',NOW(), 'system'),
-    ('CHAPTER', '00:30:00', 'monthly', 5,NOW(), 'system',NOW(), 'system'),
-    ('LECTURE', '02:00:00', 'weekly', 6,NOW(), 'system',NOW(), 'system');
+    (1, 'fixed schedule1', 'Description of the first schedule.', '2024-01-01 00:00:00.000000', '2024-01-07 00:00:00.000000', NOW(), 'system', 'F', NOW(), 'system'),
+    (1, 'fixed schedule2', 'Description of the second schedule.', '2024-02-01 00:00:00.000000', '2024-02-14 00:00:00.000000', NOW(), 'system', 'F', NOW(), 'system'),
+    (1, 'fixed schedule3', 'Description of the third schedule.', '2024-03-01 00:00:00.000000', '2024-03-21 00:00:00.000000', NOW(), 'system', 'F', NOW(), 'system'),
+    (2, 'normal schedule1', 'Description of the fourth schedule.', '2024-05-01 00:00:00.000000', '2024-05-07 00:00:00.000000', NOW(), 'system', 'N', NOW(), 'system'),
+    (2, 'normal schedule2', 'Description of the fifth schedule.', '2024-06-01 00:00:00.000000', '2024-06-14 00:00:00.000000', NOW(), 'system', 'N', NOW(), 'system'),
+    (2, 'normal schedule3', 'Description of the sixth schedule.', '2024-07-01 00:00:00.000000', '2024-07-22 00:00:00.000000', NOW(), 'system', 'N', NOW(), 'system'),
+    (3, 'variable Schedule1', 'Description of the seventh schedule.', '2024-08-01 00:00:00.000000', '2024-08-01 00:00:00.000000', NOW(), 'system', 'V', NOW(), 'system'),
+    (3, 'variable Schedule2', 'Description of the eighth schedule.', '2024-09-01 00:00:00.000000', '2024-09-01 00:00:00.000000', NOW(), 'system', 'V', NOW(), 'system'),
+    (3, 'variable Schedule3', 'Description of the ninth schedule.', '2024-10-01 00:00:00.000000', '2024-10-01 00:00:00.000000', NOW(), 'system', 'V', NOW(), 'system');
 
+INSERT INTO N_SCHEDULE (schedule_id,buffer_time,total_value)
+VALUES
+    (4,'02:00:00',100),
+    (5,'01:00:00',200),
+    (6,'00:30:00',300);
 -- N_SCHEDULE_DETAIL 테이블에 데이터 삽입
-INSERT INTO N_SCHEDULE_DETAIL (schedule_id, start_time, end_time, complete_status, day, detail_description, updated_by, updated_at)
+INSERT INTO N_SCHEDULE_DETAIL (schedule_id, start_date, end_date, complete_status, detail_description, updated_by, updated_at, value)
 VALUES
-    (4, '09:00:00', '10:00:00', false, 'Mon', 'Detail of the first N_SCHEDULE.', 'system', NOW()),
-    (4, '10:00:00', '11:00:00', false, 'Tue', 'Detail of the first N_SCHEDULE.', 'system', NOW()),
-    (4, '11:00:00', '12:00:00', false, 'Wed', 'Detail of the first N_SCHEDULE.', 'system', NOW()),
-    (4, '12:00:00', '13:00:00', false, 'Thu', 'Detail of the first N_SCHEDULE.', 'system', NOW()),
-    (4, '13:00:00', '14:00:00', false, 'Fri', 'Detail of the first N_SCHEDULE.', 'system', NOW()),
-    (5, '09:00:00', '10:00:00', false, 'Mon', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (5, '10:00:00', '11:00:00', false, 'Tue', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (5, '11:00:00', '12:00:00', false, 'Wed', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (5, '12:00:00', '13:00:00', false, 'Thu', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (5, '13:00:00', '14:00:00', false, 'Fri', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (6, '09:00:00', '10:00:00', false, 'Mon', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (6, '10:00:00', '11:00:00', false, 'Tue', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (6, '11:00:00', '12:00:00', false, 'Wed', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (6, '12:00:00', '13:00:00', false, 'Thu', 'Detail of the second N_SCHEDULE.', 'system', NOW()),
-    (6, '13:00:00', '14:00:00', false, 'Fri', 'Detail of the second N_SCHEDULE.', 'system', NOW());
-
-
--- ND_RANGE 테이블에 데이터 삽입
-INSERT INTO nd_range (start_range, end_range, n_schedule_detail_id)
-VALUES
-    (1, 10, 1),
-    (11, 20, 2),
-    (21, 30, 3),
-    (31, 40, 4),
-    (41, 50, 5);
-
--- ND_VALUE 테이블에 데이터 삽입
-INSERT INTO nd_value (n_schedule_detail_id, value)
-VALUES
-    (6, 15),
-    (7, 15),
-    (8, 15),
-    (9, 15),
-    (10, 15),
-    (11, 5),
-    (12, 5),
-    (13, 5),
-    (14, 5),
-    (15, 5);
-
--- N_RANGE 테이블에 데이터 삽입
-INSERT INTO N_RANGE (schedule_id, start_range, end_range)
-VALUES
-    (4, 1, 50);
-
--- N_VALUE 테이블에 데이터 삽입
-INSERT INTO N_VALUE (schedule_id, value)
-VALUES
-    (5, 75),
-    (6, 25);
+    (4, '2024-05-01 09:00:00', '2024-05-01 10:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
+    (4, '2024-05-02 10:00:00', '2024-05-02 11:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
+    (4, '2024-05-03 11:00:00', '2024-05-03 12:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
+    (4, '2024-05-04 12:00:00', '2024-05-04 13:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
+    (4, '2024-05-05 13:00:00', '2024-05-05 14:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
+    (5, '2024-06-01 09:00:00', '2024-06-01 10:00:00', false, 'Detail of the second N_SCHEDULE.', 'system', NOW(),40),
+    (5, '2024-06-02 10:00:00', '2024-06-02 11:00:00', false, 'Detail of the second N_SCHEDULE.', 'system', NOW(),40),
+    (5, '2024-06-03 11:00:00', '2024-06-03 12:00:00', false, 'Detail of the second N_SCHEDULE.', 'system', NOW(),40),
+    (5, '2024-06-04 12:00:00', '2024-06-04 13:00:00', false, 'Detail of the second N_SCHEDULE.', 'system', NOW(),40),
+    (5, '2024-06-05 13:00:00', '2024-06-05 14:00:00', false, 'Detail of the second N_SCHEDULE.', 'system', NOW(),40),
+    (6, '2024-07-01 09:00:00', '2024-07-01 10:00:00', false, 'Detail of the third N_SCHEDULE.', 'system', NOW(),60),
+    (6, '2024-07-02 10:00:00', '2024-07-02 11:00:00', false, 'Detail of the third N_SCHEDULE.', 'system', NOW(),60),
+    (6, '2024-07-03 11:00:00', '2024-07-03 12:00:00', false, 'Detail of the third N_SCHEDULE.', 'system', NOW(),60),
+    (6, '2024-07-04 12:00:00', '2024-07-04 13:00:00', false, 'Detail of the third N_SCHEDULE.', 'system', NOW(),60),
+    (6, '2024-07-05 13:00:00', '2024-07-05 14:00:00', false, 'Detail of the third N_SCHEDULE.', 'system', NOW(),60);
 
 -- F_SCHEDULE 테이블에 데이터 삽입
-INSERT INTO F_SCHEDULE (start_time, duration, frequency, schedule_id,created_at,created_by,updated_at,updated_by)
+INSERT INTO F_SCHEDULE (schedule_id)
 VALUES
-    ('09:00:00', '01:00:00', 'daily', 1,NOW(), 'system',NOW(), 'system'),
-    ('10:00:00', '01:30:00', 'weekly', 2,NOW(), 'system',NOW(), 'system'),
-    ('11:00:00', '02:00:00', 'monthly', 3,NOW(), 'system',NOW(), 'system');
+    (1),
+    (2),
+    (3);
 
-INSERT INTO F_SCHEDULE_DETAIL (schedule_id, day, complete_status, detail_description, updated_by, updated_at)
+-- F_SCHEDULE_DETAIL 테이블에 데이터 삽입
+INSERT INTO F_SCHEDULE_DETAIL (schedule_id, complete_status, detail_description, updated_by, updated_at,start_date,end_date)
 VALUES
-    (1, 'Mon', false, 'Detail of the first F_SCHEDULE.', 'system', NOW()),
-    (1, 'Tue', false, 'Detail of the first F_SCHEDULE.', 'system', NOW()),
-    (1, 'Wed', false, 'Detail of the first F_SCHEDULE.', 'system', NOW()),
-    (1, 'Thu', false, 'Detail of the first F_SCHEDULE.', 'system', NOW()),
-    (1, 'Fri', false, 'Detail of the first F_SCHEDULE.', 'system', NOW()),
-    (2, 'Mon', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (2, 'Tue', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (2, 'Wed', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (2, 'Thu', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (2, 'Fri', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (3, 'Mon', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (3, 'Tue', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (3, 'Wed', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (3, 'Thu', false, 'Detail of the second F_SCHEDULE.', 'system', NOW()),
-    (3, 'Fri', false, 'Detail of the second F_SCHEDULE.', 'system', NOW());
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-01 00:00:00.000000','2024-01-01 01:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-02 00:00:00.000000','2024-01-02 02:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-03 00:00:00.000000','2024-01-03 03:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-04 00:00:00.000000','2024-01-04 02:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-05 00:00:00.000000','2024-01-05 01:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-01 00:00:00.000000','2024-02-01 01:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-08 00:00:00.000000','2024-02-08 02:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-14 00:00:00.000000','2024-02-14 03:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-03 00:00:00.000000','2024-02-03 02:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-10 00:00:00.000000','2024-02-10 01:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-01 00:00:00.000000','2024-03-01 01:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-08 00:00:00.000000','2024-03-08 02:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-14 00:00:00.000000','2024-03-14 03:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-21 00:00:00.000000','2024-03-21 02:00:00.000000');
+
 
 -- V_SCHEDULE 테이블에 데이터 삽입
-INSERT INTO V_SCHEDULE (start_time, end_time, schedule_id, complete_status, created_at,created_by,updated_at, updated_by)
+INSERT INTO V_SCHEDULE (schedule_id, complete_status)
 VALUES
-    ('09:00:00', '10:00:00', 7, false, NOW(), 'system',NOW(), 'system'),
-    ('10:00:00', '11:00:00', 8, false, NOW(), 'system',NOW(), 'system'),
-    ('11:00:00', '12:00:00', 9, false, NOW(), 'system',NOW(), 'system');
-
+    (7, false),
+    (8, false),
+    (9, false);
 
 -- ACHIEVEMENT 테이블에 데이터 삽입
-# INSERT INTO ACHIEVEMENT (member_id, achievement_date, achievement_rate, created_at, updated_at, created_by, updated_by)
-# VALUES
-#     (1, '2024-01-01', 90, NOW(), NOW(), 'system', 'system'),
-#     (2, '2024-01-02', 80, NOW(), NOW(), 'system', 'system'),
-#     (3, '2024-01-03', 70, NOW(), NOW(), 'system', 'system');
+INSERT INTO ACHIEVEMENT (member_id, achievement_date, achievement_rate, created_at, updated_at, created_by, updated_by)
+VALUES
+    (1, '2024-01-01', 90, NOW(), NOW(), 'system', 'system'),
+    (2, '2024-01-02', 80, NOW(), NOW(), 'system', 'system'),
+    (3, '2024-01-03', 70, NOW(), NOW(), 'system', 'system');
 
 -- CAT_UNIT_ACH 테이블에 데이터 삽입
 INSERT INTO CAT_UNIT_ACH (member_id, category_unit, achievement_rate, created_at, updated_at, created_by, updated_by)

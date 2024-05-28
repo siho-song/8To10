@@ -20,7 +20,7 @@ public class MemberDetailsDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return member.getRoles().stream()
+        return member.getMemberRoles().stream()
                 .map(MemberRole::getRole)
                 .map(role -> (GrantedAuthority) role::toString)
                 .collect(Collectors.toList());

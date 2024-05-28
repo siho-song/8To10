@@ -11,7 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,7 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 import show.schedulemanagement.dto.signup.SignUpRequestDto;
 
 @Entity
@@ -31,7 +35,7 @@ import show.schedulemanagement.dto.signup.SignUpRequestDto;
 @AllArgsConstructor
 @Table(name = "MEMBER")
 @DynamicInsert
-@ToString
+@ToString(exclude = {"memberRoles"})
 @Builder
 public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -77,9 +81,15 @@ public class Member extends BaseEntity {
     @ColumnDefault(value = "false")
     private boolean authPhone;
 
+    @Column(nullable = false)
+    private LocalTime wakeUpTime;
+
+    @Column(nullable = false)
+    private LocalTime bedTime;
+
     @Default
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberRole> roles = new ArrayList<>();
+    private List<MemberRole> memberRoles = new ArrayList<>();
 
     public void changeNickname(String nickname){
         this.nickname = nickname;
@@ -96,6 +106,20 @@ public class Member extends BaseEntity {
                 .mode(signUpRequestDto.getMode())
                 .authEmail(signUpRequestDto.getAuthEmail())
                 .authPhone(signUpRequestDto.getAuthPhone())
+                .wakeUpTime(signUpRequestDto.getWakeUpTime())
+                .bedTime(signUpRequestDto.getBedTime())
                 .build();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdBy = "ADMIN"; // 또는 다른 값
+        this.updatedBy = "ADMIN"; // 또는 다른 값
+    }
+
+    public List<Role> getRoles(){
+        return memberRoles.stream()
+                .map(MemberRole::getRole)
+                .toList();
     }
 }

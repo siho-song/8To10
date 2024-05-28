@@ -52,10 +52,14 @@ class SignUpRequestDtoTest {
                 .username(username)
                 .nickname("asadf")
                 .password("asdfg123!!")
+                .phoneNumber("01012345678")
                 .email("asdf@naver.com")
                 .build();
         //when
         Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(signUp);
+        for (ConstraintViolation<SignUpRequestDto> violation : violations) {
+            System.out.println("violation = " + violation);
+        }
 
         //then
         Assertions.assertThat(violations.size()).isEqualTo(0);
@@ -69,6 +73,7 @@ class SignUpRequestDtoTest {
                 .username(username)
                 .nickname("asadf")
                 .password("asdfg123!!")
+                .phoneNumber("01012345678")
                 .email("asdf@naver.com")
                 .build();
         //when

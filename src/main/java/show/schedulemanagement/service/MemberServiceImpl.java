@@ -3,11 +3,14 @@ package show.schedulemanagement.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.repository.member.MemberRepository;
+import show.schedulemanagement.security.dto.MemberDetailsDto;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +32,12 @@ public class MemberServiceImpl implements MemberService{
 
     public Member loadUserByEmail(String email) throws UsernameNotFoundException {
         return memberRepository.findWithRolesByEmail(email).orElseThrow(()->new UsernameNotFoundException("Member email not found."));
+    }
+
+    @Override
+    public Member getAuthenticatedMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberDetailsDto principal = (MemberDetailsDto) authentication.getPrincipal();
+        return principal.getMember();
     }
 }

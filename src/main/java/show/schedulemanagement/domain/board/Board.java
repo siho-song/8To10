@@ -10,15 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.baseEntity.BaseTimeEntity;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
