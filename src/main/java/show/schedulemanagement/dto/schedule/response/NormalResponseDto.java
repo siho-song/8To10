@@ -1,7 +1,5 @@
 package show.schedulemanagement.dto.schedule.response;
 
-import java.time.LocalTime;
-import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
