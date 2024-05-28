@@ -1,29 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+
     const startDateInput = document.getElementById('schedule-start-date');
     const endDateInput = document.getElementById('schedule-end-date');
 
     startDateInput.addEventListener('change', handleStartDateChange);
     endDateInput.addEventListener('change', handleEndDateChange);
 
+    // 지속 시간 변경 시 검증
+    document.addEventListener('change', function(event) {
+        if (event.target.id === 'schedule-duration-hour' || event.target.id === 'schedule-duration-minute') {
+            validateDuration();
+        }
+    });
+
     // 스타일 추가
     const style = document.createElement('style');
     style.innerHTML = `
-    .tooltip {
-        position: absolute;
-        background-color: #333;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 4px;
-        width: 20%;
-        font-size: 12px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        z-index: 10;
-    }
-    .tooltip.show {
-        opacity: 1;
-    }
-`;
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            width: 20%;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        .tooltip.show {
+            opacity: 1;
+        }
+    `;
     document.head.appendChild(style);
 });
 
@@ -53,17 +62,11 @@ function handleEndDateChange() {
     }
 }
 
+// 변동일정 같은 날짜의 시작시간 검증
 function addVariableStartTimeInputListeners() {
     const startTimeInputs = document.querySelectorAll('#start-time-input-group select');
     startTimeInputs.forEach(input => {
         input.addEventListener('change', handleStartTimeChange);
-    });
-}
-
-function addVariableEndTimeInputListeners() {
-    const endTimeInputs = document.querySelectorAll('#end-time-input-group select');
-    endTimeInputs.forEach(input => {
-        input.addEventListener('change', handleEndTimeChange);
     });
 }
 
@@ -78,6 +81,14 @@ function handleStartTimeChange(event) {
     }
 }
 
+// 변동일정 같은 날짜의 종료시간 검증
+function addVariableEndTimeInputListeners() {
+    const endTimeInputs = document.querySelectorAll('#end-time-input-group select');
+    endTimeInputs.forEach(input => {
+        input.addEventListener('change', handleEndTimeChange);
+    });
+}
+
 function handleEndTimeChange(event) {
     const targetId = event.target.id;
     const startDate = document.getElementById('schedule-start-date').value;
@@ -89,6 +100,7 @@ function handleEndTimeChange(event) {
     }
 }
 
+// 변동 일정
 function validateVariableScheduleTimes(startDate, endDate, type) {
     const startTimeInput = document.getElementById('schedule-start-time');
     const endTimeInput = document.getElementById('schedule-end-time');
@@ -126,6 +138,40 @@ function validateVariableScheduleTimes(startDate, endDate, type) {
         }
     }
 }
+
+// 고정 일정에서 타임 슬롯이 하나라도 있으면 공통 입력인 제목, 설명 시작날짜, 종료날짜 필드의 입력을 막음
+function toggleFormFields(timeslotCount) {
+    const titleInput = document.getElementById('schedule-title');
+    const descriptionInput = document.getElementById('schedule-description');
+    const startDateInput = document.getElementById('schedule-start-date');
+    const endDateInput = document.getElementById('schedule-end-date');
+    const saveBtn = document.getElementById('submit-button');
+    const disableFields = timeslotCount > 0;
+
+    console.log('disableFields', disableFields);
+
+    titleInput.disabled = disableFields;
+    descriptionInput.disabled = disableFields;
+    startDateInput.disabled = disableFields;
+    endDateInput.disabled = disableFields;
+    saveBtn.disabled = (timeslotCount === 0);
+}
+
+// 고정일정에서 지속시간이 0시간 0분이면 추가버튼 비활성화
+function validateDuration() {
+    const addTimeslotBtn = document.getElementById('add-timeslot-btn');
+    const durationHour = document.getElementById('schedule-duration-hour').value;
+    const durationMinute = document.getElementById('schedule-duration-minute').value;
+
+    // 지속 시간이 0시간 0분일 때 추가 버튼 비활성화
+    if (parseInt(durationHour, 10) === 0 && parseInt(durationMinute, 10) === 0) {
+        addTimeslotBtn.disabled = true;
+        showTooltip(addTimeslotBtn, '지속 시간은 최소 1분 이상이어야 합니다.');
+    } else {
+        addTimeslotBtn.disabled = false;
+    }
+}
+
 
 function showTooltip(element, message) {
     const tooltip = document.createElement('div');

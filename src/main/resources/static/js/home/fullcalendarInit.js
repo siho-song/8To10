@@ -22,11 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
 
 
-
     document.getElementById('toggle-add-schedule-btn').addEventListener('click', function() {
         document.getElementById('schedule-type-popup').style.display = 'block';  /* 팝업 표시 */
     });
-
 
     document.querySelector('.close-button').addEventListener('click', function() {
         document.getElementById('schedule-type-popup').style.display = 'none';  /* 팝업 숨기기 */
@@ -35,11 +33,34 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
         submitAddScheduleForm(timeslots, calendar);
+        toggleFormFields(timeslots);
     });
+
     document.getElementById('add-timeslot-btn').addEventListener('click', function() {
+
         createTimeSlot(timeslots); // timeslots 배열을 매개변수로 전달
         renderTimeslots(timeslots);
     });
+
+    const titleInput = document.getElementById('schedule-title');
+    const saveBtn = document.getElementById('submit-button');
+
+    // 이름 글자 수 제한 검증
+    titleInput.addEventListener('input', function () {
+        const titleLength = titleInput.value.length;
+
+        if (titleLength > 80) {
+            showTooltip(titleInput, '글자 제한은 80자 입니다.');
+            titleInput.value = titleInput.value.substring(0, 80);
+        }
+
+        if(document.getElementById('schedule-form').dataset.type === 'fixed') {
+            saveBtn.disabled = (titleLength === 0) || timeslots.length === 0;
+        } else {
+            saveBtn.disabled = (titleLength === 0);
+        }
+    });
+
 });
 
 function handleWindowResize(calendar) {

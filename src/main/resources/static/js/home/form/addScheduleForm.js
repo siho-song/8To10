@@ -81,6 +81,7 @@ function submitAddScheduleForm(timeslots, calendar) {
         timeslots.length = 0;
         renderTimeslots(timeslots);
         document.getElementById('add-timeslot-btn').style.display = 'none';
+        document.getElementById('add-timeslot-btn').disabled = true;
     }
 
     //일반 일정

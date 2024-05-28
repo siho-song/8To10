@@ -13,6 +13,8 @@ function createScheduleForm(type) {
     const additionalFields = document.getElementById('additional-fields');
     additionalFields.innerHTML = '';
 
+    initializeInputField();
+
     if (type === 'fixed') {  <!-- 고정 일정-->
         document.getElementById('add-timeslot-btn').style.display = 'block';
 
@@ -34,7 +36,7 @@ function createScheduleForm(type) {
             </div>
             <div class="form-group">
                 <label for="schedule-duration-hour">지속 시간</label>
-                <div class="time-input-group">
+                <div class="time-input-group" id="duration-time-input-group">
                     <select id="schedule-duration-hour" name="durationHour">
                         <!-- 시간 옵션 -->
                     </select>
@@ -195,6 +197,8 @@ function createTimeSlot(timeslots) {
 
     timeslots.push(timeslot);
     renderTimeslots(timeslots);
+    toggleFormFields(timeslots.length);
+    console.log("timeslots.length", timeslots.length);
 }
 
 function renderTimeslots(timeslots) {
@@ -225,12 +229,19 @@ function renderTimeslots(timeslots) {
         });
     });
 
-
 }
 
 function removeTimeslot(timeslots, index) {
     timeslots.splice(index, 1);
     console.log("삭제", timeslots)
-
     renderTimeslots(timeslots);
+    toggleFormFields(timeslots.length);
+    validateDuration();
+}
+
+function initializeInputField() {
+    // 처음 렌더링 될 때 내용 초기화, 저장 버튼 비활성화
+    document.getElementById('schedule-title').value ="";
+    document.getElementById('schedule-description').value ="";
+    document.getElementById('submit-button').disabled = true;
 }
