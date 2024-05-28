@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
+import java.time.LocalTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,8 @@ class MemberRepositoryTest {
                 .nickname("테스트유저4")
                 .authPhone(false)
                 .authEmail(false)
+                .wakeUpTime(LocalTime.now())
+                .bedTime(LocalTime.now())
                 .build();
 
         //when
