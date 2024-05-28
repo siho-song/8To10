@@ -10,16 +10,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalTime;
-import lombok.AccessLevel;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.baseEntity.BaseUpdatedEntity;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
+import show.schedulemanagement.domain.schedule.ScheduleAble;
 
 @Entity
 @Getter
@@ -27,20 +26,20 @@ import show.schedulemanagement.domain.baseEntity.BaseUpdatedEntity;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @DynamicInsert
-public class NScheduleDetail extends BaseUpdatedEntity {
+public class NScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "n_schedule_detail_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "n_schedule_id", nullable = false)
+    @JoinColumn(name = "schedule_id", nullable = false)
     private NSchedule nSchedule;
 
     @Column(nullable = false)
-    private LocalTime startTime;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalTime endTime;
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
     @ColumnDefault(value = "false")

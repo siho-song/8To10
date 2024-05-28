@@ -13,11 +13,12 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import show.schedulemanagement.domain.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
@@ -39,11 +40,14 @@ public abstract class Schedule extends BaseEntity {
     protected String title;
 
     @Column(columnDefinition = "TEXT")
-    protected String description;
+    protected String commonDescription;
 
     @Column(nullable = false)
-    protected LocalDate startDate;
+    protected LocalDateTime startDate;
 
     @Column(nullable = false)
-    protected LocalDate endDate;
+    protected LocalDateTime endDate;
+
+    public abstract boolean isConflict(ScheduleAble scheduleAble);
+    public abstract List<ScheduleAble> getScheduleAbles();
 }

@@ -3,14 +3,15 @@ package show.schedulemanagement.dto.schedule.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import show.schedulemanagement.validator.ScheduleType;
 
 @Getter
 @SuperBuilder
 @ToString
-public abstract class ScheduleRequestDto {
+@NoArgsConstructor
+public abstract class ScheduleAddDto {
     @NotBlank
     @Size(min = 1,max = 80)
     private String title;
@@ -18,12 +19,8 @@ public abstract class ScheduleRequestDto {
     @NotBlank
     private String commonDescription;
 
-    @ScheduleType
-    private String type; // "variable","fixed","normal"
-
-    protected ScheduleRequestDto(String title, String commonDescription, String type) {
+    protected ScheduleAddDto(String title, String commonDescription) {
         this.title = title;
         this.commonDescription = commonDescription;
-        this.type = type;
     }
 }
