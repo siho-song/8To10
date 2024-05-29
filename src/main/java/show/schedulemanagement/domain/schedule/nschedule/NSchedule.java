@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 
 @Entity
@@ -27,24 +26,24 @@ import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 @DynamicInsert
 @DiscriminatorValue(value = "N")
 public class NSchedule extends Schedule{
-
     @Column(nullable = false)
     @ColumnDefault(value = "'00:00:00'")
     private LocalTime bufferTime;
 
-    private Integer totalValue;
+    private Integer totalAmount;
 
     @OneToMany(mappedBy = "nSchedule", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<NScheduleDetail> nScheduleDetails = new ArrayList<>();
 
-    public static NSchedule createNSchedule(Member member, NormalAddDto normalRequestDto){
+    public static NSchedule createNSchedule(Member member, NormalAddDto normalAddDto){
         NSchedule nSchedule = new NSchedule();
         nSchedule.member = member;
-        nSchedule.title = normalRequestDto.getTitle();
-        nSchedule.commonDescription = normalRequestDto.getCommonDescription();
-//        nSchedule.startDate = normalRequestDto.getStart();
-//        nSchedule.endDate = normalRequestDto.getEnd();
-        nSchedule.bufferTime = normalRequestDto.getBufferTime();
+        nSchedule.title = normalAddDto.getTitle();
+        nSchedule.commonDescription = normalAddDto.getCommonDescription();
+        nSchedule.startDate = LocalDateTime.of(normalAddDto.getStartDate(),LocalTime.of(0,0));
+        nSchedule.endDate = LocalDateTime.of(normalAddDto.getEndDate(),LocalTime.of(0,0));
+        nSchedule.bufferTime = normalAddDto.getBufferTime();
+        nSchedule.totalAmount = normalAddDto.getTotalAmount();
         return nSchedule;
     }
 
@@ -64,7 +63,4 @@ public class NSchedule extends Schedule{
     public List<ScheduleAble> getScheduleAbles() {
         return nScheduleDetails.stream().map(nScheduleDetail -> (ScheduleAble) nScheduleDetail).toList();
     }
-
-    //TODO 편의 메서드 구현
-
 }
