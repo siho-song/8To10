@@ -5,6 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import show.schedulemanagement.domain.schedule.Schedule;
+import show.schedulemanagement.domain.schedule.ScheduleAble;
+import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
+import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
+import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 
 @SuperBuilder
 @ToString
@@ -39,5 +46,17 @@ public abstract class ScheduleResponseDto {
         this.type = type;
         this.color = color;
         this.completeStatue = completeStatue;
+    }
+
+    public static ScheduleResponseDto from(Schedule schedule, ScheduleAble scheduleAble) {
+        if (schedule instanceof NSchedule) {
+            return new NormalResponseDto((NSchedule) schedule, (NScheduleDetail) scheduleAble);
+        } else if (schedule instanceof FSchedule) {
+            return new FixResponseDto((FSchedule) schedule,(FScheduleDetail) scheduleAble);
+        } else if (schedule instanceof VSchedule) {
+            return new VariableResponseDto((VSchedule) schedule);
+        } else {
+            throw new IllegalArgumentException("Unknown schedule type");
+        }
     }
 }
