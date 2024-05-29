@@ -41,10 +41,4 @@ public class FScheduleController {
 
         return new ResponseEntity<>(fScheduleService.getResult(schedule), HttpStatus.CREATED);
     }
-
-    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) throws Exception {
-        scheduleService.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
-    }
 }

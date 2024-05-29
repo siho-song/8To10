@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -16,10 +15,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
@@ -31,6 +30,7 @@ import show.schedulemanagement.service.schedule.timeslot.TimeSlotService;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NScheduleService {
 
     private final ScheduleService scheduleService;
@@ -38,6 +38,7 @@ public class NScheduleService {
     private final TimeSlotService timeSlotService;
     private final Random random = new Random();
 
+    @Transactional
     public NSchedule addNSchedule(Member member, NormalAddDto dto) {
         LocalDate startDate = dto.getStartDate();
         LocalDate endDate = dto.getEndDate();

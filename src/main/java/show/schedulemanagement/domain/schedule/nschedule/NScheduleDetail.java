@@ -48,9 +48,6 @@ public class NScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
     @ColumnDefault(value = "false")
     private boolean completeStatus;
 
-    @Column(nullable = false)
-    private String day;
-
     @Column(columnDefinition = "TEXT")
     private String detailDescription;
 

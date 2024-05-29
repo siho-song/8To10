@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
+import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
 import show.schedulemanagement.service.MemberService;
 
@@ -64,5 +66,24 @@ public class ScheduleServiceImpl implements ScheduleService{
                 member,
                 LocalDateTime.of(start, LocalTime.of(0, 0)),
                 LocalDateTime.of(end, LocalTime.of(0, 0)));
+    }
+
+    @Override
+    public List<Schedule> findAll(Member member) {
+        return scheduleRepository.findAll(member);
+    }
+
+    @Override
+    public Result<ScheduleResponseDto> getResult(Member member){
+        List<Schedule> all = findAll(member);
+        Result<ScheduleResponseDto> result = new Result<>();
+        List<ScheduleResponseDto> events = result.getEvents();
+        for (Schedule schedule : all) {
+            List<ScheduleAble> scheduleAbles = schedule.getScheduleAbles();
+            for (ScheduleAble scheduleAble : scheduleAbles) {
+                events.add(ScheduleResponseDto.from(schedule, scheduleAble));
+            }
+        }
+        return result;
     }
 }

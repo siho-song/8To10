@@ -18,16 +18,59 @@ import show.schedulemanagement.domain.schedule.nSchedule.QNScheduleDetail;
 import show.schedulemanagement.domain.schedule.vSchedule.QVSchedule;
 import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 
-@RequiredArgsConstructor
+
 @Slf4j
 public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
 
     private final EntityManager em;
+
     private JPAQueryFactory query;
+    private QFSchedule qFSchedule;
+    private QFScheduleDetail qfScheduleDetail;
+    private QNSchedule qNSchedule;
+    private QNScheduleDetail qnScheduleDetail;
+    private QVSchedule qVSchedule;
+
+    public ScheduleRepositoryCustomImpl(EntityManager em) {
+        this.em = em;
+        init();
+    }
 
     @Override
-    public List<Schedule> findAll() {
-        return List.of();
+    public List<Schedule> findAll(Member member) {
+        List<Schedule> schedules = new ArrayList<>();
+
+        //변동일정 불러오기
+        List<VSchedule> vSchedules = query
+                .select(qVSchedule)
+                .from(qVSchedule)
+                .where(qVSchedule.member.eq(member))
+                .fetch();
+
+        schedules.addAll(vSchedules);
+
+        //고정일정 불러오기
+        List<FSchedule> fSchedules = query
+                .select(qFSchedule)
+                .distinct()
+                .from(qFSchedule)
+                .leftJoin(qFSchedule.fScheduleDetails, qfScheduleDetail)
+                .fetchJoin()
+                .where(qFSchedule.member.eq(member))
+                .fetch();
+        schedules.addAll(fSchedules);
+
+        //일반일정 불러오기
+        List<NSchedule> nSchedules = query
+                .select(qNSchedule)
+                .distinct()
+                .from(qNSchedule)
+                .leftJoin(qNSchedule.nScheduleDetails, qnScheduleDetail)
+                .fetchJoin()
+                .where(qNSchedule.member.eq(member))
+                .fetch();
+        schedules.addAll(nSchedules);
+        return schedules;
     }
 
     @Override
@@ -35,13 +78,6 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
             Member member,
             LocalDateTime start,
             LocalDateTime end) {
-        query = new JPAQueryFactory(em);
-
-        QFSchedule qFSchedule = QFSchedule.fSchedule;
-        QFScheduleDetail qfScheduleDetail = QFScheduleDetail.fScheduleDetail;
-        QNSchedule qNSchedule = QNSchedule.nSchedule;
-        QNScheduleDetail qnScheduleDetail = QNScheduleDetail.nScheduleDetail;
-        QVSchedule qVSchedule = QVSchedule.vSchedule;
 
         List<Schedule> schedules = new ArrayList<>();
 
@@ -82,5 +118,14 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
                 .fetch();
         schedules.addAll(nSchedules);
         return schedules;
+    }
+
+    private void init(){
+        query = new JPAQueryFactory(em);
+        qFSchedule = QFSchedule.fSchedule;
+        qfScheduleDetail = QFScheduleDetail.fScheduleDetail;
+        qNSchedule = QNSchedule.nSchedule;
+        qnScheduleDetail = QNScheduleDetail.nScheduleDetail;
+        qVSchedule = QVSchedule.vSchedule;
     }
 }
