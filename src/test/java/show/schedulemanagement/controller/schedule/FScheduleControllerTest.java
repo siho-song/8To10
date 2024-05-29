@@ -68,12 +68,6 @@ class FScheduleControllerTest {
                         .content(fixAddDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-//
-//        FixDetailAddDto FixDetailAddDto= new FixDetailAddDto();
-
-
-
-
     }
 
     private FixDetailAddDto getFixDetailAddDto(LocalTime startTime, LocalTime duration, String frequency, List<String> days) {
