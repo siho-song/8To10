@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalTime;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Gender;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.member.Role;
 import show.schedulemanagement.repository.member.MemberRepository;
 
 @SpringBootTest
@@ -44,8 +42,8 @@ class MemberRepositoryTest {
                 .nickname("테스트유저4")
                 .authPhone(false)
                 .authEmail(false)
-                .wakeUpTime(LocalTime.now())
-                .bedTime(LocalTime.now())
+                .startOfWork(LocalTime.now())
+                .endOfWork(LocalTime.now())
                 .build();
 
         //when
