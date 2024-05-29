@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
         locale: 'ko',
         headerToolbar: getHeaderToolbarOptions(),
         dayMaxEvents: true,
-        eventLimit: 3,
         // events: loadInitialEvents(),
         events: {},
+        eventLimit: 3,
         titleRangeSeparator: ' - ',
         windowResize: () => handleWindowResize(calendar),
         dateClick: (info) => handleDateClick(calendar, info),
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     calendar.render();
+
 
 
     document.getElementById('toggle-add-schedule-btn').addEventListener('click', function() {
@@ -41,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         createTimeSlot(timeslots); // timeslots 배열을 매개변수로 전달
         renderTimeslots(timeslots);
+
+        console.log(calendar.events);
     });
 
     const titleInput = document.getElementById('schedule-title');

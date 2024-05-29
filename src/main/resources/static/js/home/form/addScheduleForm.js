@@ -7,7 +7,7 @@ function submitAddScheduleForm(timeslots, calendar) {
     let event = {
         title: title,
         commonDescription: commonDescription,
-        type: type // 이벤트 타입을 추가하여 구분
+        // type: type // 이벤트 타입을 추가하여 구분
     };
 
     if (type === 'variable') { //변동 일정
@@ -105,7 +105,8 @@ function submitAddScheduleForm(timeslots, calendar) {
         const totalAmount = document.getElementById('schedule-total-amount').value;
         const performInDay = `${performHour}:${performMinute}:00`;
         const performInWeek = document.getElementById('schedule-perform-in-week').value;
-
+        const isIncludeSaturday = document.getElementById('include-saturday').checked;
+        const isIncludeSunday = document.getElementById('include-sunday').checked;
         // TODO: 서버로 요청 전송, 서버에서 생성한 랜덤시간을 받아서 랜덤시간 주입해야 함
 
         const event = {
@@ -116,7 +117,9 @@ function submitAddScheduleForm(timeslots, calendar) {
             bufferTime: bufferTime,
             totalAmount: totalAmount,
             performInDay: performInDay,
-            performInWeek: performInWeek
+            performInWeek: performInWeek,
+            isIncludeSaturday: isIncludeSaturday,
+            isIncludeSunday: isIncludeSunday
         };
 
         console.log(event);
@@ -145,6 +148,8 @@ function submitAddScheduleForm(timeslots, calendar) {
                 console.error('Error:', error);
             });
     }
+    document.getElementById('schedule-form-header').textContent = "";
+
     hideScheduleForm();
 }
 

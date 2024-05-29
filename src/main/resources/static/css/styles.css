@@ -145,6 +145,11 @@ button:disabled {
     font-size: 16px;
 }
 
+#schedule-form-header{
+    margin-top: 7px;
+    margin-bottom: 3px;
+}
+
 /* START 0526 폼그룹 css 수정*/
 /* 폼 전체 스타일 */
 #schedule-form-container {

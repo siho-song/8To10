@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function createScheduleForm(type) {
+    document.getElementById('schedule-form-header').textContent = "";
+
     document.getElementById('schedule-type-popup').style.display = 'none';
     document.getElementById('schedule-form-container').style.display = 'block';
 
@@ -16,6 +18,7 @@ function createScheduleForm(type) {
     initializeInputField();
 
     if (type === 'fixed') {  <!-- 고정 일정-->
+        document.getElementById('schedule-form-header').textContent = "고정 일정";
         document.getElementById('add-timeslot-btn').style.display = 'block';
 
         additionalFields.innerHTML = `
@@ -75,6 +78,7 @@ function createScheduleForm(type) {
         handleFrequencyChange(); // 초기 빈도 값 설정
     }
     else if (type === 'normal') {   <!-- 일반 일정-->
+        document.getElementById('schedule-form-header').textContent = "일반 일정";
         document.getElementById('add-timeslot-btn').style.display = 'none';
         additionalFields.innerHTML = `
             <div class="form-group">
@@ -107,11 +111,19 @@ function createScheduleForm(type) {
                     <option value="7">7회</option>
                 </select>
             </div>
+            <div class="form-group">
+            <label for="include-weekend">주말 포함 여부</label>
+            <div>
+                <label><input type="checkbox" id="include-saturday" name="includeSaturday"> 토요일 포함</label>
+                <label><input type="checkbox" id="include-sunday" name="includeSunday"> 일요일 포함</label>
+            </div>
+        </div>
         `;
         initializeNormalTimeOptions();
     }
 
     else if (type === 'variable') {   <!-- 변동 일정-->
+        document.getElementById('schedule-form-header').textContent = "변동 일정";
         document.getElementById('add-timeslot-btn').style.display = 'none';
         additionalFields.innerHTML = `
             <div class="form-group">
