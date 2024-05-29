@@ -36,8 +36,8 @@ CREATE TABLE `MEMBER`
     `phone_number` varchar(11) NOT NULL UNIQUE,
     `auth_email` boolean NULL DEFAULT false,
     `auth_phone` boolean NULL DEFAULT false,
-    `wake_up_time` time NOT NULL,
-    `bed_time` time NOT NULL,
+    `start_of_work` time NOT NULL,
+    `end_of_work` time NOT NULL,
     PRIMARY KEY (`member_id`)
 );
 
@@ -145,7 +145,7 @@ CREATE TABLE `N_SCHEDULE`
 (
     `schedule_id`   bigint      NOT NULL,
     `category_unit` ENUM('PAGE', 'CHAPTER','LECTURE','PROJECT','WORKOUT','NONE') NOT NULL DEFAULT 'NONE',
-    `total_value`         int      NULL,
+    `total_amount`         int      NULL,
     `buffer_time`   TIME        NOT NULL DEFAULT '00:00:00',
     PRIMARY KEY (`schedule_id`),
     FOREIGN KEY (`schedule_id`) REFERENCES `SCHEDULE` (`schedule_id`)
@@ -174,7 +174,7 @@ CREATE TABLE `N_SCHEDULE_DETAIL`
     `end_date`             datetime(6)       NOT NULL,
     `complete_status`      boolean    NOT NULL DEFAULT false,
     `detail_description`   TEXT NULL,
-    `value`                int NULL,
+    `daily_amount`               double NULL,
     `updated_by`           varchar(80) NULL,
     `updated_at`           datetime(6) NOT NULL,
     PRIMARY KEY (`n_schedule_detail_id`),
@@ -239,11 +239,11 @@ CREATE TABLE `NOTIFICATION`
 );
 
 -- MEMBER 테이블에 데이터 삽입
-INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone,wake_up_time,bed_time)
+INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone,start_of_work,end_of_work)
 VALUES
-    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false, '08:00:00','00:00:00'),
-    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true, '07:00:00','11:00:00'),
-    ('user3', 'nick3', 'user3@example.com', '$2a$12$G/1E6IsBkKxQyCUGChLUG.AtUgKyn.eQlGs1HV3uCxlnsXHMvIdRK', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true,'00:06:00','10:00:00');
+    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false, '08:00:00','23:00:00'),
+    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true, '07:00:00','22:00:00'),
+    ('user3', 'nick3', 'user3@example.com', '$2a$12$G/1E6IsBkKxQyCUGChLUG.AtUgKyn.eQlGs1HV3uCxlnsXHMvIdRK', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true,'00:06:00','21:00:00');
 
 -- MEMBER_ROLE 테이블에 데이터 삽입
 INSERT INTO MEMBER_ROLE (member_id, role, created_at, created_by, updated_at, updated_by)
@@ -307,13 +307,13 @@ VALUES
     (3, 'variable Schedule2', 'Description of the eighth schedule.', '2024-09-01 00:00:00.000000', '2024-09-01 00:00:00.000000', NOW(), 'system', 'V', NOW(), 'system'),
     (3, 'variable Schedule3', 'Description of the ninth schedule.', '2024-10-01 00:00:00.000000', '2024-10-01 00:00:00.000000', NOW(), 'system', 'V', NOW(), 'system');
 
-INSERT INTO N_SCHEDULE (schedule_id,buffer_time,total_value)
+INSERT INTO N_SCHEDULE (schedule_id,buffer_time,total_amount)
 VALUES
     (4,'02:00:00',100),
     (5,'01:00:00',200),
     (6,'00:30:00',300);
 -- N_SCHEDULE_DETAIL 테이블에 데이터 삽입
-INSERT INTO N_SCHEDULE_DETAIL (schedule_id, start_date, end_date, complete_status, detail_description, updated_by, updated_at, value)
+INSERT INTO N_SCHEDULE_DETAIL (schedule_id, start_date, end_date, complete_status, detail_description, updated_by, updated_at, daily_amount)
 VALUES
     (4, '2024-05-01 09:00:00', '2024-05-01 10:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
     (4, '2024-05-02 10:00:00', '2024-05-02 11:00:00', false, 'Detail of the first N_SCHEDULE.', 'system', NOW(),20),
@@ -341,20 +341,21 @@ VALUES
 -- F_SCHEDULE_DETAIL 테이블에 데이터 삽입
 INSERT INTO F_SCHEDULE_DETAIL (schedule_id, complete_status, detail_description, updated_by, updated_at,start_date,end_date)
 VALUES
-    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-01 00:00:00.000000','2024-01-01 01:00:00.000000'),
-    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-02 00:00:00.000000','2024-01-02 02:00:00.000000'),
-    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-03 00:00:00.000000','2024-01-03 03:00:00.000000'),
-    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-04 00:00:00.000000','2024-01-04 02:00:00.000000'),
-    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-05 00:00:00.000000','2024-01-05 01:00:00.000000'),
-    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-01 00:00:00.000000','2024-02-01 01:00:00.000000'),
-    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-08 00:00:00.000000','2024-02-08 02:00:00.000000'),
-    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-14 00:00:00.000000','2024-02-14 03:00:00.000000'),
-    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-03 00:00:00.000000','2024-02-03 02:00:00.000000'),
-    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-10 00:00:00.000000','2024-02-10 01:00:00.000000'),
-    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-01 00:00:00.000000','2024-03-01 01:00:00.000000'),
-    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-08 00:00:00.000000','2024-03-08 02:00:00.000000'),
-    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-14 00:00:00.000000','2024-03-14 03:00:00.000000'),
-    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-21 00:00:00.000000','2024-03-21 02:00:00.000000');
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-01 10:00:00.000000','2024-01-01 14:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-01 17:30:00.000000','2024-01-01 18:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-01 21:30:00.000000','2024-01-01 22:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-03 10:00:00.000000','2024-01-03 14:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-04 10:00:00.000000','2024-01-04 14:00:00.000000'),
+    (1, false, 'Detail of the first F_SCHEDULE.', 'system', NOW(),'2024-01-05 10:00:00.000000','2024-01-05 14:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-01 10:00:00.000000','2024-02-01 14:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-08 10:00:00.000000','2024-02-08 14:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-14 10:00:00.000000','2024-02-14 14:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-03 10:00:00.000000','2024-02-03 14:00:00.000000'),
+    (2, false, 'Detail of the second F_SCHEDULE.', 'system', NOW(),'2024-02-10 10:00:00.000000','2024-02-10 14:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-01 10:00:00.000000','2024-03-01 14:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-08 10:00:00.000000','2024-03-08 14:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-14 10:00:00.000000','2024-03-14 14:00:00.000000'),
+    (3, false, 'Detail of the third F_SCHEDULE.', 'system', NOW(),'2024-03-21 10:00:00.000000','2024-03-21 14:00:00.000000');
 
 
 -- V_SCHEDULE 테이블에 데이터 삽입
