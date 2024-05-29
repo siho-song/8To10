@@ -16,7 +16,8 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @NoArgsConstructor
 public class NormalResponseDto extends ScheduleResponseDto {
     private Long parentId;
-    private Integer dailyAmount;
+    private String detailDescription;
+    private Double dailyAmount;
 
     public NormalResponseDto(NSchedule nSchedule, NScheduleDetail nScheduleDetail) {
         super(nScheduleDetail.getId(),
@@ -30,5 +31,6 @@ public class NormalResponseDto extends ScheduleResponseDto {
 
         this.parentId = nSchedule.getId();
         this.dailyAmount = nScheduleDetail.getDailyAmount();
+        this.detailDescription = nSchedule.getCommonDescription();
     }
 }

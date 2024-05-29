@@ -8,25 +8,23 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
 @ToString(callSuper = true)
+@NoArgsConstructor
 public class NormalAddDto extends ScheduleAddDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime bufferTime;
     private LocalTime performInDay;
-    @NotEmpty
-    private Boolean isIncludeSaturday;
-    @NotEmpty
-    private Boolean isIncludeSunday;
-    @NotEmpty
-    private Integer totalAmount;
-    @NotEmpty
-    private Integer performInWeek;
+    private boolean isIncludeSaturday;
+    private boolean isIncludeSunday;
+    private int totalAmount;
+    private int performInWeek;
 
     public List<DayOfWeek> getCandidateDays() {
         List<DayOfWeek> candidateDays = new ArrayList<>(
