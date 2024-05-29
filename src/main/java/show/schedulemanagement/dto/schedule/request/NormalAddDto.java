@@ -2,8 +2,8 @@ package show.schedulemanagement.dto.schedule.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;

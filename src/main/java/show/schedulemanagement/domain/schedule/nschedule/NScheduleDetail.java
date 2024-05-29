@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
@@ -50,4 +51,23 @@ public class NScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
 
     @Column(columnDefinition = "TEXT")
     private String detailDescription;
+
+    @Setter
+    private Integer dailyAmount;
+
+    public static NScheduleDetail createNscheduleDetail(String commonDescription, LocalDateTime startDate,
+                                                        LocalDateTime endDate, String day) {
+        NScheduleDetail nScheduleDetail = new NScheduleDetail();
+        nScheduleDetail.completeStatus = false;
+        nScheduleDetail.detailDescription = commonDescription;
+        nScheduleDetail.day = day;
+        nScheduleDetail.startDate = startDate;
+        nScheduleDetail.endDate = endDate;
+        return nScheduleDetail;
+    }
+
+    public void setNSchedule(NSchedule nSchedule) {
+        this.nSchedule = nSchedule;
+        nSchedule.getNScheduleDetails().add(this);
+    }
 }
