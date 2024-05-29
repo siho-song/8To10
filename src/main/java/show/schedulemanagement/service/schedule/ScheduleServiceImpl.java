@@ -2,6 +2,7 @@ package show.schedulemanagement.service.schedule;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedule getConflictSchedule(List<ScheduleAble> newSchedule, Member member, LocalDateTime start, LocalDateTime end) {
-        List<Schedule> allSchedule = scheduleRepository.findAllBetweenStartAndEnd(member, start, end);
+    public Schedule getConflictSchedule(List<ScheduleAble> newSchedule, List<Schedule> allSchedule) {
         for (Schedule schedule : allSchedule) {
             for (ScheduleAble scheduleAble : newSchedule) {
                 if(schedule.isConflict(scheduleAble)){
@@ -56,5 +56,13 @@ public class ScheduleServiceImpl implements ScheduleService{
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end) {
+        return scheduleRepository.findAllBetweenStartAndEnd(
+                member,
+                LocalDateTime.of(start, LocalTime.of(0, 0)),
+                LocalDateTime.of(end, LocalTime.of(0, 0)));
     }
 }

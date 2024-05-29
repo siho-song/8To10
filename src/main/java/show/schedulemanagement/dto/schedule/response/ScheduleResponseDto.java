@@ -1,11 +1,15 @@
 package show.schedulemanagement.dto.schedule.response;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @ToString
+@Getter
+@NoArgsConstructor
 public abstract class ScheduleResponseDto {
     private Long id;
     private String title;

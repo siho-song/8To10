@@ -144,7 +144,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         } else if (e instanceof JwtException) {
             return "TOKEN Parsing JwtException";
         } else {
-            return "OTHER TOKEN ERROR";
+            return "OTHER ERROR";
         }
     }
 }

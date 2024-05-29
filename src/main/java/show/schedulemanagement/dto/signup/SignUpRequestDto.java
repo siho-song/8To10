@@ -39,6 +39,4 @@ public class SignUpRequestDto {
     private Mode mode;
     private Boolean authEmail;
     private Boolean authPhone;
-    private LocalTime wakeUpTime;
-    private LocalTime bedTime;
 }

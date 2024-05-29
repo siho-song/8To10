@@ -15,6 +15,7 @@ import show.schedulemanagement.service.MemberService;
 @Slf4j
 public class HomeController {
     private final MemberService memberService;
+
     @GetMapping
     public String home(Model model){
         Member member = memberService.getAuthenticatedMember();

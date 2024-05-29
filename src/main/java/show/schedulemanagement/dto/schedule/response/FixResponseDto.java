@@ -1,7 +1,7 @@
 package show.schedulemanagement.dto.schedule.response;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
@@ -11,9 +11,9 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @SuperBuilder
 @Getter
 @ToString(callSuper = true)
+@NoArgsConstructor
 public class FixResponseDto extends ScheduleResponseDto {
     private Long parentId;
-
     public FixResponseDto(FSchedule fSchedule, FScheduleDetail fScheduleDetail) {
         super(fScheduleDetail.getId(),
                 fSchedule.getTitle(),
@@ -21,7 +21,7 @@ public class FixResponseDto extends ScheduleResponseDto {
                 fScheduleDetail.getStartDate(),
                 fScheduleDetail.getEndDate(),
                 "fixed",
-                ScheduleColor.FIXED.name(),
+                ScheduleColor.FIXED.hexCode,
                 fScheduleDetail.isCompleteStatus());
 
         this.parentId = fSchedule.getId();

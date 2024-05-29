@@ -13,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,10 +80,10 @@ public class Member extends BaseEntity {
     private boolean authPhone;
 
     @Column(nullable = false)
-    private LocalTime wakeUpTime;
+    private LocalTime startOfWork;
 
     @Column(nullable = false)
-    private LocalTime bedTime;
+    private LocalTime endOfWork;
 
     @Default
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
@@ -106,8 +104,8 @@ public class Member extends BaseEntity {
                 .mode(signUpRequestDto.getMode())
                 .authEmail(signUpRequestDto.getAuthEmail())
                 .authPhone(signUpRequestDto.getAuthPhone())
-                .wakeUpTime(signUpRequestDto.getWakeUpTime())
-                .bedTime(signUpRequestDto.getBedTime())
+                .startOfWork(LocalTime.of(8,0))
+                .endOfWork(LocalTime.of(22,0))
                 .build();
     }
 

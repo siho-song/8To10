@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +25,10 @@ import show.schedulemanagement.service.schedule.ScheduleService;
 @RequestMapping("/schedule/variable")
 @Slf4j
 public class VScheduleController {
-
     private final ScheduleService scheduleService;
     private final MemberService memberService;
 
-
-    @PostMapping("/add")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody @Valid VariableAddDto dto){
 
         //TODO 일정이 있으면 해당일정을 삭제하고 덮는다 .
@@ -37,7 +36,6 @@ public class VScheduleController {
         Member member = memberService.getAuthenticatedMember();
         VSchedule schedule = VSchedule.createVSchedule(member, dto);
         scheduleService.save(schedule);
-
         return new ResponseEntity<>(new VariableResponseDto(schedule), HttpStatus.CREATED);
     }
 

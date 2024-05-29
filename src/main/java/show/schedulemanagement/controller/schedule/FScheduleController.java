@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +26,12 @@ import show.schedulemanagement.service.schedule.ScheduleService;
 @RequestMapping("/schedule/fixed")
 @Slf4j
 public class FScheduleController {
-
     private final ScheduleService scheduleService;
     private final FScheduleService fScheduleService;
     private final MemberService memberService;
 
-
-    @PostMapping("/add")
-    public ResponseEntity<Result<FixResponseDto>> addFSchedule(@RequestBody @Valid FixAddDto dto){
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Result<FixResponseDto>> addFSchedule(@RequestBody @Valid FixAddDto dto) {
         log.debug("FScheduleController addSchedule call FixAddDto : {}", dto);
         Member member = memberService.getAuthenticatedMember();
         FSchedule schedule = fScheduleService.addDetailsToFSchedule(member, dto);
@@ -43,9 +42,7 @@ public class FScheduleController {
         return new ResponseEntity<>(fScheduleService.getResult(schedule), HttpStatus.CREATED);
     }
 
-
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) throws Exception {
         scheduleService.deleteById(id);
         return new ResponseEntity<>(id, HttpStatus.OK);

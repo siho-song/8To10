@@ -28,6 +28,13 @@ public enum ScheduleDay {
         return Arrays.stream(ScheduleDay.values()).filter(value -> value.day.equals(day))
                 .map(ScheduleDay::getValue)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 day 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 day(String) 입니다."));
+    }
+
+    public static String from(DayOfWeek day){
+        return Arrays.stream(ScheduleDay.values()).filter(value -> value.value.equals(day))
+                .map(ScheduleDay::getDay)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 day(DayOfWeek) 입니다."));
     }
 }
