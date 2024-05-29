@@ -24,7 +24,7 @@ public class VariableResponseDto extends ScheduleResponseDto {
                 schedule.getStartDate(),
                 schedule.getEndDate(),
                 "variable",
-                ScheduleColor.VARIABLE.name(),
+                ScheduleColor.VARIABLE.hexCode,
                 schedule.isCompleteStatus()
         );
     }
