@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
@@ -25,6 +26,7 @@ import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 @NoArgsConstructor(access = PROTECTED)
 @DynamicInsert
 @DiscriminatorValue(value = "N")
+@ToString(callSuper = true)
 public class NSchedule extends Schedule{
     @Column(nullable = false)
     @ColumnDefault(value = "'00:00:00'")
