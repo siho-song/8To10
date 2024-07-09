@@ -217,7 +217,9 @@ document.getElementById('password1').addEventListener('input', validatePassword)
 document.getElementById('password2').addEventListener('input', validatePassword);
 
 document.getElementById('signup-form').addEventListener('submit', function (event) {
-    document.getElementById('authPhone').value = 'false'
+    document.getElementById('authPhone').value = 'false';
+    document.getElementById('authEmail').value= 'false';
+    console.log(document.getElementById('authEmail').value);
     validateName();
     validateNickname();
     validateEmail();

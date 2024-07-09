@@ -305,8 +305,6 @@ const exampleData = [
 ];
 
 
-
-
 let postsPerPage = 10;
 let filteredData = exampleData.slice(); // 초기 데이터로 filteredData를 설정합니다.
 
