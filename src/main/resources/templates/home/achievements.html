@@ -3,11 +3,16 @@
 <head>
     <meta charset='utf-8'/>
     <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
-    <title>마이페이지</title>
+    <title>성취도 보기</title>
 </head>
 <body>
 <div class="main-header">
-    <div class="logo">로고</div>
+    <div class="logo">
+        <a href="/home" class="image-link" style="display:flex; flex-direction: row; align-items: center">
+            <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="로고">
+            <p style="margin-left: 10px;">EightToTen</p>
+        </a>
+    </div>
     <div class="navigation">
         <nav>
             <ul>
@@ -33,14 +38,14 @@
 
 <div class="container">
     <!-- 좌측 사이드바 -->
-    <div class="sidebar" id="left-sidebar">
-        <ul class="achievement-menu">
-            <li onclick="showAchievement('score')">내 점수</li>
-            <li onclick="">일간 성취도 상세</li>
-            <li>주간 성취도 상세</li>
-            <li>월간 성취도 상세</li>
-        </ul>
-    </div>
+<!--    <div class="sidebar" id="left-sidebar">-->
+<!--        <ul class="achievement-menu">-->
+<!--            <li onclick="showAchievement('score')">내 점수</li>-->
+<!--            <li onclick="">일간 성취도 상세</li>-->
+<!--            <li>주간 성취도 상세</li>-->
+<!--            <li>월간 성취도 상세</li>-->
+<!--        </ul>-->
+<!--    </div>-->
 
     <!-- 중앙 컨텐츠 -->
     <div class="achievement-main-content">

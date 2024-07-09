@@ -1,45 +1,58 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     let timeslots = [];
 
     const calendarEl = document.getElementById('calendar');
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialDate: '2024-05-12',
+        initialDate: new Date(),
         initialView: 'dayGridMonth',
+        slotMinTime: '07:00:00',
+        slotMaxTime: '23:59:59',
         nowIndicator: true,
         locale: 'ko',
         headerToolbar: getHeaderToolbarOptions(),
-        dayMaxEvents: true,
+        dayMaxEvents: false,
+        allDaySlot : false,
+        firstDay: 1,
+        // events: loadInitialEvents(),
+        events: {},
         eventLimit: 3,
-        events: loadInitialEvents(),
         titleRangeSeparator: ' - ',
         windowResize: () => handleWindowResize(calendar),
         dateClick: (info) => handleDateClick(calendar, info),
         eventClick: (info) => displayEventDetailsInSidebar(info.event),
         eventDidMount: function(info) {
-            addToDoItem(info.event);  // 이벤트가 렌더링될 때 To-Do 리스트에 추가
+            // displayEventDetails(info.event);  // 이벤트가 렌더링될 때 To-Do 리스트에 추가
         }
     });
     calendar.render();
 
 
+    // 일정 생성폼을 위한 팝업창
     document.getElementById('toggle-add-schedule-btn').addEventListener('click', function() {
         document.getElementById('schedule-type-popup').style.display = 'block';  /* 팝업 표시 */
     });
 
+    // 일정 생성 팝업 닫기
     document.querySelector('.close-button').addEventListener('click', function() {
         document.getElementById('schedule-type-popup').style.display = 'none';  /* 팝업 숨기기 */
     });
 
+
+    // 일정 생성 폼 제출
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
         submitAddScheduleForm(timeslots, calendar);
         toggleFormFields(timeslots);
     });
 
+    // 시간슬롯 추가 이벤트
     document.getElementById('add-timeslot-btn').addEventListener('click', function() {
 
         createTimeSlot(timeslots); // timeslots 배열을 매개변수로 전달
         renderTimeslots(timeslots);
+
+        console.log(calendar.events);
     });
 
     const titleInput = document.getElementById('schedule-title');
@@ -58,6 +71,96 @@ document.addEventListener('DOMContentLoaded', function() {
             saveBtn.disabled = (titleLength === 0) || timeslots.length === 0;
         } else {
             saveBtn.disabled = (titleLength === 0);
+        }
+    });
+
+    // 서버에서 일정 요청
+    fetch('http://localhost:8080/schedule', {
+        method: 'GET',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json(); // JSON 데이터를 파싱
+        })
+        .then(data => {
+            console.log('Success:', data);
+            if (data.events && typeof data.events === 'object') {
+                Object.keys(data.events).forEach(key => {
+                    const e = data.events[key];
+                    calendar.addEvent(e);
+                    console.log(e);
+                });
+            } else {
+                console.error('Expected an object but got:', data);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+
+    // 날짜 네비게이션 기능
+    const currentDateEl = document.getElementById('current-date');
+    const updateDate = () => currentDateEl.textContent = calendar.getDate().toLocaleDateString();
+
+    document.getElementById('prev-date-btn').addEventListener('click', () => {
+        handleDateClick(calendar, info);
+        // calendar.prev();
+        updateDate();
+    });
+    document.getElementById('next-date-btn').addEventListener('click', () => {
+        handleDateClick(calendar, info);
+        // calendar.next();
+        updateDate();
+    });
+    updateDate();
+
+    // 제출 버튼 기능
+    document.getElementById('submit-todo-btn').addEventListener('click', () => {
+        const events = calendar.getEvents();
+        const todoItems = [];
+        events.forEach(event => {
+            todoItems.push({
+                type: event.extendedProps.type || 'normal',
+                id: event.id,
+                completeStatus: event.extendedProps.completeStatus || false
+            });
+        });
+        fetch('http://localhost:8080/schedule/todo', {
+            method: 'PUT', // PUT 메서드로 변경
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(todoItems)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // 일정 상세보기 기능
+    function displayEventDetails(event) {
+        const modal = document.getElementById('event-details-modal');
+        const details = document.getElementById('event-details');
+        details.innerHTML = `
+            <p>제목: ${event.title}</p>
+            <p>시작: ${event.start.toLocaleString()}</p>
+            <p>종료: ${event.end.toLocaleString()}</p>
+            <p>설명: ${event.extendedProps.commonDescription || ''}</p>
+            <p>타입: ${event.extendedProps.type || 'normal'}</p>
+        `;
+        modal.style.display = 'block';
+    }
+
+    // 팝업 닫기 기능
+    document.querySelector('.close-button').addEventListener('click', () => {
+        document.getElementById('event-details-modal').style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+        if (event.target == document.getElementById('event-details-modal')) {
+            document.getElementById('event-details-modal').style.display = 'none';
         }
     });
 
@@ -146,125 +249,18 @@ function loadInitialEvents() {
             },
             description: "asdfaskldnfalksndf"
 
+        },
+        {
+            id: 27,
+            title : "aefwa",
+            start: "2024-07-13T07:00:00",
+            end: "2024-07-13T22:00:00",
+            commonDescription: "awfewe",
+            color: "FIXED",
+            parentId: 10,
+            type: "fixed",
+            completeStatue: false
         }
     ];
 
-
 }
-
-// To-Do 리스트에 이벤트 추가 함수 -> 로직 잘못되어있음
-function addToDoItem(event) {
-    const eventDate = new Date(event.start);
-    const today = new Date();
-
-    // 이벤트가 오늘의 일정인지 확인
-    if (eventDate.toDateString() === today.toDateString()) {
-        const todoList = document.getElementById('todo-list');
-        const todoItem = document.createElement('div');
-        todoItem.className = 'todo-item';
-
-        const eventTitle = document.createElement('span');
-        eventTitle.textContent = event.title + ': 하루 수행량';
-        todoItem.appendChild(eventTitle);
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'todo-checkbox';
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                todoItem.classList.add('completed');
-            } else {
-                todoItem.classList.remove('completed');
-            }
-        });
-        todoItem.appendChild(checkbox);
-
-        todoList.appendChild(todoItem);
-    }
-}
-
-
-// TODO 풀캘린더 이벤트를 식별하기 위해 자동으로 id를 부여해주는 로직이 있어야 작동할 수 있음 -> 지금은 event.id가 null로 유지되기 때문에 투두리스트에 반영이 안된다.
-// // To-Do 리스트에 오늘 날짜 이벤트 추가 함수
-// function addToDoItem(event) {
-//     const eventDate = new Date(event.start);
-//     const today = new Date();
-//
-//     // 이벤트가 오늘의 일정인지 확인
-//     if (eventDate.toDateString() === today.toDateString()) {
-//         const toDoList = document.getElementById('to-do-list');
-//
-//         // 이벤트 ID가 없으면 고유 ID 할당
-//         if (!event.id) {
-//             event.id = 'event-' + Math.random().toString(36).substr(2, 9);
-//         }
-//
-//         // 이벤트 ID를 기반으로 중복 체크
-//         if (!toDoList.querySelector(`[data-event-id="${event.id}"]`)) {
-//             const listItem = document.createElement('li');
-//             listItem.className = 'todo-item';
-//             listItem.setAttribute('data-event-id', event.id);
-//
-//             // 체크박스 생성
-//             const checkbox = document.createElement('input');
-//             checkbox.type = 'checkbox';
-//             checkbox.className = 'todo-checkbox';
-//             checkbox.addEventListener('change', function() {
-//                 if (this.checked) {
-//                     listItem.classList.add('completed');
-//                 } else {
-//                     listItem.classList.remove('completed');
-//                 }
-//             });
-//
-//             // 텍스트 노드 생성
-//             const text = document.createTextNode(`${event.title} : 하루 수행량`);
-//
-//             listItem.appendChild(text);
-//             listItem.appendChild(checkbox);
-//             toDoList.appendChild(listItem);
-//         }
-//     }
-// }
-//
-// // To-Do 리스트에 기존 이벤트 추가 함수
-// function addExistingToDoItem(event) {
-//     const eventDate = new Date(event.start);
-//     const today = new Date();
-//
-//     // 이벤트가 오늘의 일정인지 확인
-//     if (eventDate.toDateString() === today.toDateString()) {
-//         const toDoList = document.getElementById('to-do-list');
-//
-//         // 이벤트 ID가 없으면 고유 ID 할당
-//         if (!event.id) {
-//             event.id = 'event-' + Math.random().toString(36).substr(2, 9);
-//         }
-//
-//         // 이벤트 ID를 기반으로 중복 체크
-//         if (!toDoList.querySelector(`[data-event-id="${event.id}"]`)) {
-//             const listItem = document.createElement('li');
-//             listItem.className = 'todo-item';
-//             listItem.setAttribute('data-event-id', event.id);
-//
-//             // 체크박스 생성
-//             const checkbox = document.createElement('input');
-//             checkbox.type = 'checkbox';
-//             checkbox.className = 'todo-checkbox';
-//             checkbox.addEventListener('change', function() {
-//                 if (this.checked) {
-//                     listItem.classList.add('completed');
-//                 } else {
-//                     listItem.classList.remove('completed');
-//                 }
-//             });
-//
-//             // 텍스트 노드 생성
-//             const text = document.createTextNode(`${event.title} : 하루 수행량`);
-//
-//             listItem.appendChild(text);
-//             listItem.appendChild(checkbox);
-//             toDoList.appendChild(listItem);
-//         }
-//     }
-// }
