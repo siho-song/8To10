@@ -6,6 +6,10 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}" href="styles.css">
 </head>
 <body>
+<a href="/" class="image-link" style="margin-top:30px; display:flex; flex-direction: row; align-items: center">
+    <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="로고">
+    <p style="margin-left: 10px;">EightToTen</p>
+</a>
 <div class="signup-container">
     <h2>회원가입</h2>
     <form id="signup-form" th:action="@{/signup}" method="POST" th:object="${dto}" onsubmit="mergeEmailFields()">
@@ -83,32 +87,6 @@
             <input type="password" id="password2" autocomplete="new-password" style="font-family: Arial;" placeholder="비밀번호 확인" required maxlength="20">
             <span id="password2-message" class="verification-message"></span>
         </div>
-
-        <div class="signup-form-group">
-            <label for="sleep-time">취침 시간</label>
-            <div class="time-input-group" id="sleep-time-input-group">
-                <select id="sleep-time-period" name="sleepTimePeriod">
-                    <option value="AM">오전</option>
-                    <option value="PM">오후</option>
-                </select>
-                <select id="sleep-time-hour" name="sleepHour"></select>
-                <select id="sleep-time-minute" name="sleepMinute"></select>
-            </div>
-        </div>
-
-        <div class="signup-form-group">
-            <label for="wake-time">기상 시간</label>
-            <div class="time-input-group" id="wake-time-input-group">
-                <select id="wake-time-period" name="wakeTimePeriod">
-                    <option value="AM">오전</option>
-                    <option value="PM">오후</option>
-                </select>
-                <select id="wake-time-hour" name="wakeHour"></select>
-                <select id="wake-time-minute" name="wakeMinute"></select>
-            </div>
-        </div>
-
-
 
         <div class="signup-form-group">
             <label>성별</label>
