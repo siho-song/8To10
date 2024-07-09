@@ -10,7 +10,12 @@
 </head>
 <body>
 <div class="main-header">
-    <div class="logo">로고</div>
+    <div class="logo">
+        <a href="/home" class="image-link" style="display:flex; flex-direction: row; align-items: center">
+            <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="로고">
+            <p style="margin-left: 10px;">EightToTen</p>
+        </a>
+    </div>
     <div class="navigation">
         <nav>
             <ul>
@@ -46,7 +51,13 @@
 
         <div class="todo-container">
             <h3>TO-DO</h3>
+            <div id="date-navigation">
+                <button id="prev-date-btn">이전</button>
+                <span id="current-date"></span>
+                <button id="next-date-btn">다음</button>
+            </div>
             <div id="todo-list"></div>
+            <button id="submit-todo-btn">제출</button>
         </div>
     </div>
 
@@ -66,6 +77,7 @@
 
         <!-- 일정 생성 폼 -->
         <div id="schedule-form-container" style="display: none; padding: 20px;">
+            <h2 id="schedule-form-header"></h2>
             <form id="schedule-form">
                 <div class="form-group">
                     <label for="schedule-title">제목</label>
@@ -121,6 +133,15 @@
         </div>
     </div>
 
+</div>
+
+<!-- 일정 상세보기 팝업 -->
+<div id="event-details-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close-button">&times;</span>
+        <h2>일정 상세</h2>
+        <div id="event-details"></div>
+    </div>
 </div>
 
 <script th:src="@{/js/home/form/validateScheduleForm.js}"
