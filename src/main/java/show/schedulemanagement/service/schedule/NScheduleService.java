@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -34,7 +35,6 @@ import show.schedulemanagement.service.schedule.timeslot.TimeSlotService;
 public class NScheduleService {
 
     private final ScheduleService scheduleService;
-    private final ScheduleFilterService scheduleFilterService;
     private final TimeSlotService timeSlotService;
     private final Random random = new Random();
 
@@ -44,54 +44,57 @@ public class NScheduleService {
         LocalDate endDate = dto.getEndDate();
         List<DayOfWeek> candidateDays = dto.getCandidateDays();
         Duration necessaryTime = Duration.ofHours(dto.getNecessaryTime().getHour())
-                .plusMinutes(dto.getNecessaryTime().getMinute());
-        LocalTime wakeUpTime = member.getStartOfWork();
-        LocalTime bedTime = member.getEndOfWork();
+                .plusMinutes(dto.getNecessaryTime().getMinute()); //총 필요한 시간
         int performInWeek = dto.getPerformInWeek();
 
         List<Schedule> allSchedule = scheduleService.findAllBetweenStartAndEnd(member, startDate, endDate);
-        // ok
-        Map<LocalDate, List<ScheduleAble>> sortedScheduleMap = new TreeMap<>(scheduleFilterService.filterScheduleByTime(allSchedule, wakeUpTime, bedTime));
-
-        Map<LocalDate, List<TimeSlot>> availableTimeSlotsForPeriod = timeSlotService.findAvailableTimeSlotsForPeriod(
-                sortedScheduleMap, wakeUpTime, bedTime, startDate, endDate, necessaryTime);
-
-        Map<DayOfWeek, List<TimeSlot>> availableTimeSlots = timeSlotService.findCommonTimeSlotsByDayOfWeek(availableTimeSlotsForPeriod, necessaryTime);
+        Map<LocalDate, List<ScheduleAble>> sortedScheduleByDate = new TreeMap<>(filterScheduleByTime(allSchedule));
+        Map<LocalDate, List<TimeSlot>> allSlotsForPeriodByDate = timeSlotService.findAllForPeriodByDate(sortedScheduleByDate, startDate, endDate);
+        Map<DayOfWeek, List<TimeSlot>> availableTimeSlots = timeSlotService.findCommonRangeSlotsByDay(allSlotsForPeriodByDate, necessaryTime);
 
         List<DayOfWeek> selectedDays = selectRandomDays(candidateDays, availableTimeSlots.keySet(), performInWeek);
+        canCreateNSchedule(selectedDays, performInWeek);
+
         Map<DayOfWeek, TimeSlot> selectedTimeSlots = selectRandomTimeSlots(selectedDays, availableTimeSlots);
-
-        canCreateNSchedule(selectedTimeSlots.size(), performInWeek);
-
         NSchedule nSchedule = NSchedule.createNSchedule(member, dto);
-        addNScheduleDetails(nSchedule, selectedTimeSlots, necessaryTime,nSchedule.getBufferTime());
+        addNScheduleDetails(nSchedule, selectedTimeSlots, dto.getPerformInDay(),nSchedule.getBufferTime());
 
-        log.debug("NScheduleService nSchedule : {} ", nSchedule);
         return nSchedule;
     }
 
-    private void canCreateNSchedule(int size, int performInWeek) {
-        if(size < performInWeek){
-            String errorMessage = String.format("일반 일정을 생성할 수 없습니다. 일정을 조율해주세요. %d 만큼의 수행일 수를 줄여야 합니다.",
-                    performInWeek - size);
+    public Result<NormalResponseDto> getResult(NSchedule nSchedule) {
+        Result<NormalResponseDto> result = new Result<>();
+        List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
+        List<NormalResponseDto> events = result.getEvents();
+        for (NScheduleDetail nScheduleDetail : nScheduleDetails) {
+            NormalResponseDto dto = new NormalResponseDto(nSchedule, nScheduleDetail);
+            events.add(dto);
+        }
+        return result;
+    }
+
+    private void canCreateNSchedule(List<DayOfWeek> selectedDays, int performInWeek) {
+        if(selectedDays.size() < performInWeek){
+            String errorMessage = String.format("일반 일정을 생성할 수 없습니다. 일정을 조율해주세요. %d 만큼의 수행일 수를 줄이거나, %d 만큼의 수행일 수를 늘려야 합니다.",
+                    performInWeek - selectedDays.size());
             throw new RuntimeException(errorMessage);
         }
     }
 
-    private void addNScheduleDetails(NSchedule nSchedule, Map<DayOfWeek, TimeSlot> timeSlots, Duration necessaryTime, LocalTime bufferTime) {
+    private void addNScheduleDetails(NSchedule nSchedule, Map<DayOfWeek, TimeSlot> availableTimeSlots, LocalTime performInDay, LocalTime bufferTime) {
         LocalDateTime current = nSchedule.getStartDate().toLocalDate().atStartOfDay();
         LocalDateTime end = nSchedule.getEndDate().toLocalDate().atStartOfDay();
 
         while(!current.isAfter(end)){
             LocalDateTime startDate = current;
             DayOfWeek day = current.getDayOfWeek();
-            TimeSlot timeSlot = timeSlots.get(day);
+            TimeSlot timeSlot = availableTimeSlots.get(day);
             if(timeSlot != null){
                 LocalDateTime startDateTime = startDate.plusHours(timeSlot.getStartTime().getHour()+bufferTime.getHour())
                         .plusMinutes(timeSlot.getStartTime().getMinute()+bufferTime.getMinute());
 
-                LocalDateTime endDateTime = startDateTime.plusHours(necessaryTime.toHours())
-                        .plusMinutes(necessaryTime.toMinutesPart());
+                LocalDateTime endDateTime = startDateTime.plusHours(performInDay.getHour())
+                        .plusMinutes(performInDay.getMinute());
 
                 NScheduleDetail nscheduleDetail = NScheduleDetail.createNscheduleDetail(nSchedule.getCommonDescription(),
                         startDateTime, endDateTime);
@@ -117,8 +120,13 @@ public class NScheduleService {
 
         // 마지막 요소에 차이를 더하여 총량의 오차를 최소화
         for (int i = 0; i < size; i++) {
-            if (i == size - 1) {
-                nScheduleDetails.get(i).setDailyAmount(roundedDiv + difference / roundedDiv);
+            if (i == size - 1){
+                if(!Double.isNaN((roundedDiv + difference / roundedDiv))){
+                    nScheduleDetails.get(i).setDailyAmount(roundedDiv + difference / roundedDiv);
+                }
+                else {
+                    nScheduleDetails.get(i).setDailyAmount(roundedDiv);
+                }
             } else {
                 nScheduleDetails.get(i).setDailyAmount(roundedDiv);
             }
@@ -138,18 +146,18 @@ public class NScheduleService {
                 .filter(availableTimeSlotsByDay::containsKey)
                 .collect(Collectors.toMap(
                         day -> day,
-                        day -> availableTimeSlotsByDay.get(day).get(random.nextInt(availableTimeSlotsByDay.get(day).size()))
+//                        day -> availableTimeSlotsByDay.get(day).get(random.nextInt(availableTimeSlotsByDay.get(day).size()))
+                        day -> availableTimeSlotsByDay.get(day).get(0)
                 ));
     }
 
-    public Result<NormalResponseDto> getResult(NSchedule nSchedule) {
-        Result<NormalResponseDto> result = new Result<>();
-        List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
-        List<NormalResponseDto> events = result.getEvents();
-        for (NScheduleDetail nScheduleDetail : nScheduleDetails) {
-            NormalResponseDto dto = new NormalResponseDto(nSchedule, nScheduleDetail);
-            events.add(dto);
-        }
-        return result;
+    private Map<LocalDate, List<ScheduleAble>> filterScheduleByTime(List<Schedule> schedules) {
+        return schedules.stream()
+                .flatMap(schedule -> schedule.getScheduleAbles().stream())
+                .collect(Collectors.groupingBy(scheduleAble -> scheduleAble.getStartDate().toLocalDate(),
+                        Collectors.collectingAndThen(Collectors.toList(), list -> {
+                            list.sort(Comparator.comparing(ScheduleAble::getStartDate));
+                            return list;
+                        })));
     }
 }

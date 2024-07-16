@@ -1,9 +1,9 @@
 package show.schedulemanagement.dto.schedule.request;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +11,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
+import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
+import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
+import show.schedulemanagement.validator.schedule.objectError.PerformInWeek;
+import show.schedulemanagement.validator.schedule.objectError.StartEqualBeforeEnd;
 
 @SuperBuilder
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class NormalAddDto extends ScheduleAddDto {
+@Slf4j
+@PerformInWeek
+@StartEqualBeforeEnd
+public class NormalAddDto extends ScheduleAddDto implements DateRangeValidatable{
+    @NotNull
     private LocalDate startDate;
+    @NotNull
     private LocalDate endDate;
+    @ZeroSeconds
     private LocalTime bufferTime;
+    @PerformInDay
+    @ZeroSeconds
     private LocalTime performInDay;
-    private boolean isIncludeSaturday;
-    private boolean isIncludeSunday;
+    @NotNull
+    private Boolean isIncludeSaturday;
+    @NotNull
+    private Boolean isIncludeSunday;
     private int totalAmount;
     private int performInWeek;
 
@@ -30,6 +45,7 @@ public class NormalAddDto extends ScheduleAddDto {
         List<DayOfWeek> candidateDays = new ArrayList<>(
                 List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY,
                         DayOfWeek.FRIDAY));
+
         if(isIncludeSaturday) {
             candidateDays.add(DayOfWeek.SATURDAY);
         }
@@ -41,5 +57,15 @@ public class NormalAddDto extends ScheduleAddDto {
 
     public LocalTime getNecessaryTime() {
         return bufferTime.plusHours(performInDay.getHour()).plusMinutes(performInDay.getMinute());
+    }
+
+    @Override
+    public LocalDateTime takeStartDateTime() {
+        return this.getStartDate().atStartOfDay();
+    }
+
+    @Override
+    public LocalDateTime takeEndDateTime() {
+        return this.getEndDate().atStartOfDay();
     }
 }
