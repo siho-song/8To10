@@ -1,5 +1,6 @@
 package show.schedulemanagement.dto.schedule.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +20,9 @@ import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 @ToString(callSuper = true)
 @Slf4j
 public class FixAddDto extends ScheduleAddDto implements DateRangeValidatable{
+    @NotNull
     private LocalDate startDate;
+    @NotNull
     private LocalDate endDate;
 
     @NotNull

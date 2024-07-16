@@ -15,8 +15,7 @@ public abstract class ScheduleAddDto {
     @NotBlank
     @Size(min = 1,max = 80)
     private String title;
-
-    @NotBlank
+    
     private String commonDescription;
 
     protected ScheduleAddDto(String title, String commonDescription) {
