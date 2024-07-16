@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
+import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 
 @Entity
@@ -67,5 +69,11 @@ public class NScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
     public void setNSchedule(NSchedule nSchedule) {
         this.nSchedule = nSchedule;
         nSchedule.getNScheduleDetails().add(this);
+    }
+
+    @Override
+    public LocalDateTime getStartDate(){
+        LocalTime bufferTime = nSchedule.getBufferTime();
+        return this.startDate.minusHours(bufferTime.getHour()).minusMinutes(bufferTime.getMinute());
     }
 }
