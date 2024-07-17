@@ -218,6 +218,8 @@ function createTimeSlot(timeslots) {
     };
 
     timeslots.push(timeslot);
+
+    resetFixedScheduleForm();
     renderTimeslots(timeslots);
     toggleFormFields(timeslots.length);
     console.log("timeslots.length", timeslots.length);
@@ -266,4 +268,17 @@ function initializeInputField() {
     document.getElementById('schedule-title').value ="";
     document.getElementById('schedule-description').value ="";
     document.getElementById('submit-button').disabled = true;
+}
+
+function resetFixedScheduleForm() {
+    document.getElementById('schedule-start-time').value = "AM";
+    document.getElementById('schedule-start-hour').value = "01";
+    document.getElementById('schedule-start-minute').value = "00";
+    document.getElementById('schedule-duration-hour').value = "00";
+    document.getElementById('schedule-duration-minute').value = "00";
+    document.getElementById('schedule-frequency').value = "daily";
+    document.querySelectorAll('input[name="days"]').forEach(checkbox => {
+        checkbox.checked = true;
+        checkbox.disabled = true;
+    });
 }
