@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('schedule-type-popup').style.display = 'none';  /* 팝업 숨기기 */
     });
 
-
     // 일정 생성 폼 제출
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -117,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     updateDate();
 
+
     // 제출 버튼 기능
     document.getElementById('submit-todo-btn').addEventListener('click', () => {
         const events = calendar.getEvents();
@@ -158,8 +158,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.close-button').addEventListener('click', () => {
         document.getElementById('event-details-modal').style.display = 'none';
     });
+
+    document.querySelector('#cancel-btn').addEventListener('click', () => {
+        hideScheduleForm();
+        timeslots = [];
+        toggleFormFields(timeslots.length);
+    });
+
     window.addEventListener('click', (event) => {
-        if (event.target == document.getElementById('event-details-modal')) {
+        if (event.target === document.getElementById('event-details-modal')) {
             document.getElementById('event-details-modal').style.display = 'none';
         }
     });
