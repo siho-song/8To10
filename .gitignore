@@ -37,7 +37,8 @@ out/
 .vscode/
 
 ### app config ###
-**/src/main/**/application.yaml
+**/src/main/**/*.yaml
+**/src/test/**/*.yaml
 
 ### resources ###
 **/src/main/resources/static/lib/**
