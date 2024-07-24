@@ -42,8 +42,6 @@ class MemberRepositoryTest {
                 .nickname("테스트유저4")
                 .authPhone(false)
                 .authEmail(false)
-                .startOfWork(LocalTime.now())
-                .endOfWork(LocalTime.now())
                 .build();
 
         //when

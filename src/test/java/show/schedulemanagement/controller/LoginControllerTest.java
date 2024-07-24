@@ -40,8 +40,6 @@ class LoginControllerTest {
                 .gender(Gender.MALE)
                 .authEmail(false)
                 .authPhone(false)
-                .startOfWork(LocalTime.now())
-                .endOfWork(LocalTime.now())
                 .mode(Mode.MILD)
                 .email("test1@example.com")
                 .password("$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2")
