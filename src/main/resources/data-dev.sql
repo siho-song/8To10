@@ -1,6 +1,5 @@
 -- Drop tables if they exist
 DROP TABLE IF EXISTS `NOTIFICATION`;
-DROP TABLE IF EXISTS `CAT_UNIT_ACH`;
 DROP TABLE IF EXISTS `ACHIEVEMENT`;
 DROP TABLE IF EXISTS `N_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `N_SCHEDULE`;
@@ -36,8 +35,6 @@ CREATE TABLE `MEMBER`
     `phone_number` varchar(11) NOT NULL UNIQUE,
     `auth_email` boolean NULL DEFAULT false,
     `auth_phone` boolean NULL DEFAULT false,
-    `start_of_work` time NOT NULL,
-    `end_of_work` time NOT NULL,
     PRIMARY KEY (`member_id`)
 );
 
@@ -210,20 +207,6 @@ CREATE TABLE `ACHIEVEMENT`
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
-CREATE TABLE `CAT_UNIT_ACH`
-(
-    `cat_unit_ach_Id` bigint NOT NULL AUTO_INCREMENT,
-    `member_id`       bigint NOT NULL,
-    `category_unit`   ENUM('PAGE', 'CHAPTER','LECTURE','PROJECT','WORKOUT','NONE') NOT NULL DEFAULT 'NONE',
-    `achievement_rate` double NOT NULL,
-    `created_at`      datetime(6) NULL,
-    `updated_at`      datetime(6) NULL,
-    `created_by`      varchar(80) NULL,
-    `updated_by`      varchar(80) NULL,
-    PRIMARY KEY (`cat_unit_ach_Id`),
-    FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
-);
-
 -- 알림
 CREATE TABLE `NOTIFICATION`
 (
@@ -239,11 +222,11 @@ CREATE TABLE `NOTIFICATION`
 );
 
 -- MEMBER 테이블에 데이터 삽입
-INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone,start_of_work,end_of_work)
+INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
 VALUES
-    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false, '08:00:00','23:00:00'),
-    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true, '07:00:00','22:00:00'),
-    ('user3', 'nick3', 'user3@example.com', '$2a$12$G/1E6IsBkKxQyCUGChLUG.AtUgKyn.eQlGs1HV3uCxlnsXHMvIdRK', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true,'00:06:00','21:00:00');
+    ('user1', 'nick1', 'user1@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
+    ('user2', 'nick2', 'user2@example.com', '$2a$12$u2/pqTqGrM1RnV2EE7Js5Oi4ObvmED284iPiFlOw20ATRKbfuCvq2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
+    ('user3', 'nick3', 'user3@example.com', '$2a$12$G/1E6IsBkKxQyCUGChLUG.AtUgKyn.eQlGs1HV3uCxlnsXHMvIdRK', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
 
 -- MEMBER_ROLE 테이블에 데이터 삽입
 INSERT INTO MEMBER_ROLE (member_id, role, created_at, created_by, updated_at, updated_by)
