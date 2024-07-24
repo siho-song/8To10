@@ -79,12 +79,6 @@ public class Member extends BaseEntity {
     @ColumnDefault(value = "false")
     private boolean authPhone;
 
-    @Column(nullable = false)
-    private LocalTime startOfWork;
-
-    @Column(nullable = false)
-    private LocalTime endOfWork;
-
     @Default
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberRole> memberRoles = new ArrayList<>();
@@ -104,8 +98,6 @@ public class Member extends BaseEntity {
                 .mode(signUpRequestDto.getMode())
                 .authEmail(signUpRequestDto.getAuthEmail())
                 .authPhone(signUpRequestDto.getAuthPhone())
-                .startOfWork(LocalTime.of(8,0))
-                .endOfWork(LocalTime.of(22,0))
                 .build();
     }
 
