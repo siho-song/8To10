@@ -10,7 +10,7 @@ import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 
 public interface ScheduleService {
     void save(Schedule Schedule);
-    void deleteById(Long id) throws Exception;
+    void deleteById(Long id);
     Schedule findById(Long id);
     Schedule getConflictSchedule(List<ScheduleAble> newSchedule, List<Schedule> allSchedule);
     List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);

@@ -33,14 +33,15 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     @Transactional
-    public void deleteById(Long id) throws Exception {
+    public void deleteById(Long id){
         Member member = memberService.getAuthenticatedMember();
         Schedule schedule = findById(id);
         String createdBy = schedule.getCreatedBy();
-        if(member.getEmail().equals(createdBy)){
+        if(member.getEmail().equals(createdBy)) {
             scheduleRepository.deleteById(id);
+            return;
         }
-        throw new Exception("작성자만 삭제할 수 있습니다.");
+        throw new RuntimeException("작성자만 삭제할 수 있습니다.");
     }
 
     @Override
