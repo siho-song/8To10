@@ -39,10 +39,9 @@ class FScheduleControllerTest {
 
     @Test
     @DisplayName("올바른 형식의 고정일정 데이터를 삽입하면 테스트가 성공한다.")
-    @WithMockUser(username = "user1@example.com", roles = {"NORMAL_USER"})  // 인증된 사용자 설정
     void addFSchedule() throws Exception {
 
-        String token = tokenUtils.generateJwtToken(new LoginMemberDto("user1@example.com")); // 토큰 생성
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         List<FixDetailAddDto> events = new ArrayList<>();

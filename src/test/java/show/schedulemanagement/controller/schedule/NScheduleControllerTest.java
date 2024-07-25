@@ -54,7 +54,7 @@ public class NScheduleControllerTest {
     @Test
     public void testAddSchedule() throws Exception {
         log.debug("testAddSchedule called normal Add dto : {}", normalAddDto);
-        String token = tokenUtils.generateJwtToken(new LoginMemberDto("user1@example.com")); // 토큰 생성
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         mockMvc.perform(post("/schedule/normal/add")
