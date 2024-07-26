@@ -46,3 +46,34 @@ function validateDuration() {
         }
     }
 }
+
+// 겹치는 시간슬롯이 있는지를 검증하기 위한 메소드
+function validateTimeSlotOverlap(timeslots, newTimeslot) {
+    for (let existingTimeslot of timeslots) {
+        // 요일이 겹치는지 확인
+        const overlappingDays = existingTimeslot.days.filter(day => newTimeslot.days.includes(day));
+
+        if (overlappingDays.length > 0) {
+            const existingStartTime = convertToMinutes(existingTimeslot.startTime);
+            const existingEndTime = existingStartTime + convertDurationToMinutes(existingTimeslot.duration);
+            const newStartTime = convertToMinutes(newTimeslot.startTime);
+            const newEndTime = newStartTime + convertDurationToMinutes(newTimeslot.duration);
+
+            // 시간 겹침 여부 검사
+            if (Math.max(existingStartTime, newStartTime) < Math.min(existingEndTime, newEndTime)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function convertToMinutes(timeStr) {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+}
+
+function convertDurationToMinutes(durationStr) {
+    const [hours, minutes] = durationStr.split(':').map(Number);
+    return hours * 60 + minutes;
+}

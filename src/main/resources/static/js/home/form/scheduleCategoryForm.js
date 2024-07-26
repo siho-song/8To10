@@ -217,12 +217,21 @@ function createTimeSlot(timeslots) {
         days: weekdays,
     };
 
-    timeslots.push(timeslot);
+    if (validateTimeSlotOverlap(timeslots, timeslot)) {
+        timeslots.push(timeslot);
 
-    resetFixedScheduleForm();
-    renderTimeslots(timeslots);
-    toggleFormFields(timeslots.length);
-    console.log("timeslots.length", timeslots.length);
+        resetFixedScheduleForm();
+        renderTimeslots(timeslots);
+        toggleFixedFormFields(timeslots.length);
+        console.log("timeslots.length", timeslots.length);
+    } else {
+        const addTimeslotButton = document.getElementById("add-timeslot-btn");
+
+        // alert("겹치는 시간대가 있어서 시간슬롯 생성이 불가능합니다.");
+
+        showTooltip(addTimeslotButton, "겹치는 시간대가 있어서 시간슬롯 생성이 불가능 합니다.")
+        resetFixedScheduleForm();
+    }
 }
 
 function renderTimeslots(timeslots) {
@@ -259,7 +268,7 @@ function removeTimeslot(timeslots, index) {
     timeslots.splice(index, 1);
     console.log("삭제", timeslots)
     renderTimeslots(timeslots);
-    toggleFormFields(timeslots.length);
+    toggleFixedFormFields(timeslots.length);
     validateDuration();
 }
 
