@@ -30,7 +30,7 @@ class ScheduleRepositoryCustomImplTest {
 
     @Test
     void findAllBetweenStartAndEnd() {
-        Member member = memberService.findByEmail("user1@example.com");
+        Member member = memberService.findByEmail("normal@example.com");
         System.out.println("findAllBetweenStartAndEnd findByEmail 실행");
 
         List<Schedule> allBetweenStartAndEnd = scheduleRepository
