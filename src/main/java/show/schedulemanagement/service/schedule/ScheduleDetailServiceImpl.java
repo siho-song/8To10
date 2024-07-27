@@ -43,6 +43,23 @@ public class ScheduleDetailServiceImpl implements ScheduleDetailService{
     }
 
     @Override
+    @Transactional
+    public void deleteNdById(Long id) {
+        Member member = memberService.getAuthenticatedMember();
+        NScheduleDetail nScheduleDetail = findNdById(id);
+        NSchedule nSchedule = nScheduleDetail.getNSchedule();
+        List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
+        if (member.getEmail().equals(nSchedule.getCreatedBy())) {
+            nScheduleDetails.remove(nScheduleDetail);
+            nSchedule.minusUpdateTotalAmount(nScheduleDetail.getDailyAmount().intValue());
+        }
+
+        if (nScheduleDetails.isEmpty()) {
+            scheduleService.deleteById(nSchedule.getId());
+        }
+    }
+
+    @Override
     public FScheduleDetail findFdById(Long id) {
         //TODO 예외처리
         return fScheduleDetailRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 고정일정 세부사항을 찾을 수 없습니다."));
