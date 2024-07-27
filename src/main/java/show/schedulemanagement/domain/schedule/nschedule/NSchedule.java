@@ -65,4 +65,8 @@ public class NSchedule extends Schedule{
     public List<ScheduleAble> getScheduleAbles() {
         return nScheduleDetails.stream().map(nScheduleDetail -> (ScheduleAble) nScheduleDetail).toList();
     }
+
+    public void minusUpdateTotalAmount(int updateAmount) {
+        this.totalAmount -= updateAmount;
+    }
 }
