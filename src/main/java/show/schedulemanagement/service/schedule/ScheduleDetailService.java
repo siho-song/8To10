@@ -5,6 +5,7 @@ import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 
 public interface ScheduleDetailService {
     void deleteFdById(Long id);
+    void deleteNdById(Long id);
     FScheduleDetail findFdById(Long id);
     NScheduleDetail findNdById(Long id);
 }
