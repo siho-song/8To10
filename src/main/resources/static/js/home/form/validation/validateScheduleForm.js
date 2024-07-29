@@ -12,11 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     style.innerHTML = `
         .tooltip {
             position: absolute;
-            background-color: #333;
-            color: #fff;
+            background-color: #ffffff;
+            color: #000000;
             padding: 5px 10px;
+            border: 4px;
+            border-style: solid;
+            border-color: #ff69b4;
             border-radius: 4px;
-            width: 20%;
+            width: 15%;
             font-size: 12px;
             opacity: 0;
             transition: opacity 0.3s;
