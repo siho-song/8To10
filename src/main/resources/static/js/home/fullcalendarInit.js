@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
         submitAddScheduleForm(timeslots, calendar);
-        toggleFormFields(timeslots);
+        toggleFixedFormFields(timeslots.length);
     });
 
     // 시간슬롯 추가 이벤트
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#cancel-btn').addEventListener('click', () => {
         hideScheduleForm();
         timeslots = [];
-        toggleFormFields(timeslots.length);
+        toggleFixedFormFields(timeslots.length);
     });
 
     window.addEventListener('click', (event) => {
