@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     startDateInput.addEventListener('change', handleStartDateChange);
     endDateInput.addEventListener('change', handleEndDateChange);
 
+    // title 글자수 제한 검증
+    document.getElementById('schedule-title').addEventListener('input', validateTitleInput);
+
     // 스타일 추가
     const style = document.createElement('style');
     style.innerHTML = `
@@ -30,7 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+
 });
+
 
 // 시작 날짜 검증
 function handleStartDateChange() {
@@ -175,6 +181,22 @@ function showTooltip(element, message) {
             tooltip.remove();
         }, 4000);
     });
+}
+
+
+// title의 글자 제한을 확인
+function validateTitleInput() {
+    const titleInput = document.getElementById('schedule-title');
+    const titleValue = titleInput.value.trim();
+
+    if (titleValue.length === 0 || titleValue.length > 80) {
+        showTooltip(titleInput, '제목은 1자 이상 80자 이하로 입력해야 합니다.');
+        titleInput.classList.add('invalid-input'); // 입력 필드에 스타일을 적용하여 사용자에게 시각적 피드백을 제공합니다.
+        return false;
+    } else {
+        titleInput.classList.remove('invalid-input'); // 입력이 유효하면 오류 표시를 제거합니다.
+        return true;
+    }
 }
 
 
