@@ -188,7 +188,7 @@ function handleFrequencyChange() {
 }
 
 
-function createTimeSlot(timeslots) {
+function  createTimeSlot(timeslots) {
     const startPeriod = document.getElementById('schedule-start-time').value;
     const startHour = document.getElementById('schedule-start-hour').value;
     const startMinute = document.getElementById('schedule-start-minute').value;
@@ -226,8 +226,6 @@ function createTimeSlot(timeslots) {
         console.log("timeslots.length", timeslots.length);
     } else {
         const addTimeslotButton = document.getElementById("add-timeslot-btn");
-
-        // alert("겹치는 시간대가 있어서 시간슬롯 생성이 불가능합니다.");
 
         showTooltip(addTimeslotButton, "겹치는 시간대가 있어서 시간슬롯 생성이 불가능 합니다.")
         resetFixedScheduleForm();
@@ -269,8 +267,9 @@ function removeTimeslot(timeslots, index) {
     console.log("삭제", timeslots)
     renderTimeslots(timeslots);
     toggleFixedFormFields(timeslots.length);
-    validateDuration();
+    validateTimeslotCreation();
 }
+
 
 function initializeInputField() {
     // 처음 렌더링 될 때 내용 초기화, 저장 버튼 비활성화

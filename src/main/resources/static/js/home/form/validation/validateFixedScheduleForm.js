@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 지속 시간 변경 시 검증
     document.addEventListener('change', function(event) {
-        if (event.target.id === 'schedule-duration-hour' || event.target.id === 'schedule-duration-minute') {
-            validateDuration();
-        }
+
+        // 지속 시간 및 제목 입력 변경 시 검증
+        document.addEventListener('change', function(event) {
+            if (['schedule-duration-hour', 'schedule-duration-minute', 'schedule-title'].includes(event.target.id)) {
+                validateTimeslotCreation();
+            }
+        });
+
     });
 });
 
@@ -25,27 +30,30 @@ function toggleFixedFormFields(timeslotCount) {
     saveBtn.disabled = (timeslotCount === 0);
 }
 
-// 고정일정에서 지속시간이 0시간 0분이면 추가버튼 비활성화
-function validateDuration() {
-
-    const title = document.getElementById("schedule-title").value;
-    const addTimeslotBtn = document.getElementById('add-timeslot-btn');
+// 지속시간이 0시간 0분이거나 title이 비어있다면 타임슬롯 추가 버튼을 사용할 수 없다.
+function validateTimeslotCreation() {
+    const titleInput = document.getElementById('schedule-title');
     const durationHour = document.getElementById('schedule-duration-hour').value;
     const durationMinute = document.getElementById('schedule-duration-minute').value;
+    const addTimeslotBtn = document.getElementById('add-timeslot-btn');
 
-    // 지속 시간이 0시간 0분일 때 추가 버튼 비활성화
-    if (parseInt(durationHour, 10) === 0 && parseInt(durationMinute, 10) === 0) {
-        addTimeslotBtn.disabled = true;
-        showTooltip(addTimeslotBtn, '지속 시간은 최소 1분 이상이어야 합니다.');
-    }
-    else {
+    const isTitleValid = titleInput.value.trim() !== '';
+    const isDurationValid = !(parseInt(durationHour, 10) === 0 && parseInt(durationMinute, 10) === 0);
+
+    if (isTitleValid && isDurationValid) {
         addTimeslotBtn.disabled = false;
-        if (title === "") {
-            addTimeslotBtn.disabled = true;
-            showTooltip(addTimeslotBtn, '일정의 시간대를 만들기 위해서 제목을 입력해주세요.');
+    } else {
+        addTimeslotBtn.disabled = true;
+        let message = '';
+        if (!isTitleValid) {
+            message = '제목을 입력해주세요.';
+        } else if (!isDurationValid) {
+            message = '지속 시간은 최소 1분 이상이어야 합니다.';
         }
+        showTooltip(addTimeslotBtn, message);
     }
 }
+
 
 // 겹치는 시간슬롯이 있는지를 검증하기 위한 메소드
 function validateTimeSlotOverlap(timeslots, newTimeslot) {
@@ -76,4 +84,11 @@ function convertToMinutes(timeStr) {
 function convertDurationToMinutes(durationStr) {
     const [hours, minutes] = durationStr.split(':').map(Number);
     return hours * 60 + minutes;
+}
+
+function isTitleEmpty() {
+    const titleInputArea = document.getElementById("schedule-title").value;
+    console.log(titleInputArea);
+
+    return titleInputArea.length === 0;
 }
