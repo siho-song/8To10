@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 지속 시간 및 제목 입력 변경 시 검증
         document.addEventListener('change', function(event) {
-            if (['schedule-duration-hour', 'schedule-duration-minute', 'schedule-title'].includes(event.target.id)) {
+            if (['schedule-duration-hour', 'schedule-duration-minute', 'schedule-title', 'weekday-mo', 'weekday-tu', 'weekday-we', 'weekday-th', 'weekday-fr', 'weekday-sa', 'weekday-su'].includes(event.target.id)) {
+                console.log("change 이벤트 리스너 실행 (validateFixedScheduleForm.js)")
                 validateTimeslotCreation();
             }
         });

@@ -197,6 +197,15 @@ function  createTimeSlot(timeslots) {
     const frequency = document.getElementById('schedule-frequency').value;
     const weekdays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(checkbox => checkbox.value);
 
+    const dayCheckboxes = document.querySelectorAll('input[name="days"]:checked');
+    const isDaySelected = dayCheckboxes.length > 0; // 요일이 하나 이상 선택되었는지 확인
+
+    if (!isDaySelected) {
+        // 요일이 하나도 선택되지 않았을 경우
+        showTooltip(document.getElementById('add-timeslot-btn'), '적어도 하나의 요일을 선택해야 합니다.');
+        return; // 함수 실행 중단
+    }
+
     // 시작 시간 계산
     let startTime = `${startHour}:${startMinute}:00`;
 
@@ -221,7 +230,6 @@ function  createTimeSlot(timeslots) {
         timeslots.push(timeslot);
 
         resetFixedScheduleForm();
-        renderTimeslots(timeslots);
         toggleFixedFormFields(timeslots.length);
         console.log("timeslots.length", timeslots.length);
     } else {
@@ -233,6 +241,7 @@ function  createTimeSlot(timeslots) {
 }
 
 function renderTimeslots(timeslots) {
+
     const container = document.querySelector('.timeslot-container');
     container.innerHTML = '';
 
@@ -289,4 +298,5 @@ function resetFixedScheduleForm() {
         checkbox.checked = true;
         checkbox.disabled = true;
     });
+    document.getElementById('add-timeslot-btn').disabled = true;
 }
