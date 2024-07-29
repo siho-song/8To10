@@ -62,8 +62,20 @@ function handleEndDateChange() {
     const endDateInput = document.getElementById('schedule-end-date');
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
+    const form = document.getElementById('schedule-form');
+    const type = form.dataset.type;
 
-    if (endDate < startDate) {
+    console.log(type);
+
+    // Fixed 일정에 대한 추가 검증
+    if (type === 'fixed') {
+        const maxStartDate = new Date(endDate.getTime() - (1000 * 3600 * 24)); // 최소 종료 날짜 설정 (시작 날짜 + 1일)
+        console.log("maxStartDate : ", maxStartDate);
+        if (startDate > maxStartDate) {
+            startDateInput.valueAsDate = maxStartDate; // 자동으로 시작 날짜 재설정
+            showTooltip(startDateInput, '고정 일정의 종료날짜는 시작날짜보다 늦어야 합니다.');
+        }
+    } else if (endDate < startDate) {
         startDateInput.value = endDateInput.value;
         showTooltip(startDateInput, '시작 날짜는 종료 날짜와 같거나 더 빨라야 합니다.');
     }
