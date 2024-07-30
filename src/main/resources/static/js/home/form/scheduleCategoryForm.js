@@ -188,7 +188,7 @@ function handleFrequencyChange() {
 }
 
 
-function createTimeSlot(timeslots) {
+function  createTimeSlot(timeslots) {
     const startPeriod = document.getElementById('schedule-start-time').value;
     const startHour = document.getElementById('schedule-start-hour').value;
     const startMinute = document.getElementById('schedule-start-minute').value;
@@ -196,6 +196,15 @@ function createTimeSlot(timeslots) {
     const durationMinute = document.getElementById('schedule-duration-minute').value;
     const frequency = document.getElementById('schedule-frequency').value;
     const weekdays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(checkbox => checkbox.value);
+
+    const dayCheckboxes = document.querySelectorAll('input[name="days"]:checked');
+    const isDaySelected = dayCheckboxes.length > 0; // 요일이 하나 이상 선택되었는지 확인
+
+    if (!isDaySelected) {
+        // 요일이 하나도 선택되지 않았을 경우
+        showTooltip(document.getElementById('add-timeslot-btn'), '적어도 하나의 요일을 선택해야 합니다.');
+        return; // 함수 실행 중단
+    }
 
     // 시작 시간 계산
     let startTime = `${startHour}:${startMinute}:00`;
@@ -217,15 +226,22 @@ function createTimeSlot(timeslots) {
         days: weekdays,
     };
 
-    timeslots.push(timeslot);
+    if (validateTimeSlotOverlap(timeslots, timeslot)) {
+        timeslots.push(timeslot);
 
-    resetFixedScheduleForm();
-    renderTimeslots(timeslots);
-    toggleFormFields(timeslots.length);
-    console.log("timeslots.length", timeslots.length);
+        resetFixedScheduleForm();
+        toggleFixedFormFields(timeslots.length);
+        console.log("timeslots.length", timeslots.length);
+    } else {
+        const addTimeslotButton = document.getElementById("add-timeslot-btn");
+
+        showTooltip(addTimeslotButton, "겹치는 시간대가 있어서 시간슬롯 생성이 불가능 합니다.")
+        resetFixedScheduleForm();
+    }
 }
 
 function renderTimeslots(timeslots) {
+
     const container = document.querySelector('.timeslot-container');
     container.innerHTML = '';
 
@@ -259,9 +275,10 @@ function removeTimeslot(timeslots, index) {
     timeslots.splice(index, 1);
     console.log("삭제", timeslots)
     renderTimeslots(timeslots);
-    toggleFormFields(timeslots.length);
-    validateDuration();
+    toggleFixedFormFields(timeslots.length);
+    validateTimeslotCreation();
 }
+
 
 function initializeInputField() {
     // 처음 렌더링 될 때 내용 초기화, 저장 버튼 비활성화
@@ -281,4 +298,5 @@ function resetFixedScheduleForm() {
         checkbox.checked = true;
         checkbox.disabled = true;
     });
+    document.getElementById('add-timeslot-btn').disabled = true;
 }

@@ -7,23 +7,22 @@ document.addEventListener('DOMContentLoaded', function() {
     startDateInput.addEventListener('change', handleStartDateChange);
     endDateInput.addEventListener('change', handleEndDateChange);
 
-    // 지속 시간 변경 시 검증
-    document.addEventListener('change', function(event) {
-        if (event.target.id === 'schedule-duration-hour' || event.target.id === 'schedule-duration-minute') {
-            validateDuration();
-        }
-    });
+    // title 글자수 제한 검증
+    document.getElementById('schedule-title').addEventListener('input', validateTitleInput);
 
     // 스타일 추가
     const style = document.createElement('style');
     style.innerHTML = `
         .tooltip {
             position: absolute;
-            background-color: #333;
-            color: #fff;
+            background-color: #ffffff;
+            color: #000000;
             padding: 5px 10px;
+            border: 4px;
+            border-style: solid;
+            border-color: #ff69b4;
             border-radius: 4px;
-            width: 20%;
+            width: 15%;
             font-size: 12px;
             opacity: 0;
             transition: opacity 0.3s;
@@ -34,7 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+
 });
+
 
 // 시작 날짜 검증
 function handleStartDateChange() {
@@ -42,10 +44,21 @@ function handleStartDateChange() {
     const endDateInput = document.getElementById('schedule-end-date');
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
+    const form = document.getElementById('schedule-form');
+    const type = form.dataset.type;
 
-    if (startDate > endDate) {
+    console.log(type);
+
+    // Fixed 일정에 대한 추가 검증
+    if (type === 'fixed') {
+        const minEndDate = new Date(startDate.getTime() + (1000 * 3600 * 24)); // 최소 종료 날짜 설정 (시작 날짜 + 1일)
+        if (endDate < minEndDate) {
+            endDateInput.valueAsDate = minEndDate; // 자동으로 종료 날짜 재설정
+            showTooltip(startDateInput, '고정 일정의 시작날짜는 종료날짜보다 빨라야 합니다.');
+        }
+    } else if (startDate > endDate) {
         endDateInput.value = startDateInput.value;
-        showTooltip(endDateInput, '종료 날짜는 시작 날짜와 같거나 더 늦어야 합니다.');
+        showTooltip(startDateInput, '종료 날짜는 시작 날짜와 같거나 더 늦어야 합니다.');
     }
 }
 
@@ -55,8 +68,20 @@ function handleEndDateChange() {
     const endDateInput = document.getElementById('schedule-end-date');
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
+    const form = document.getElementById('schedule-form');
+    const type = form.dataset.type;
 
-    if (endDate < startDate) {
+    console.log(type);
+
+    // Fixed 일정에 대한 추가 검증
+    if (type === 'fixed') {
+        const maxStartDate = new Date(endDate.getTime() - (1000 * 3600 * 24)); // 최소 종료 날짜 설정 (시작 날짜 + 1일)
+        console.log("maxStartDate : ", maxStartDate);
+        if (startDate > maxStartDate) {
+            startDateInput.valueAsDate = maxStartDate; // 자동으로 시작 날짜 재설정
+            showTooltip(startDateInput, '고정 일정의 종료날짜는 시작날짜보다 늦어야 합니다.');
+        }
+    } else if (endDate < startDate) {
         startDateInput.value = endDateInput.value;
         showTooltip(startDateInput, '시작 날짜는 종료 날짜와 같거나 더 빨라야 합니다.');
     }
@@ -124,7 +149,6 @@ function validateVariableScheduleTimes(startDate, endDate, type) {
     const endTime = new Date(`${endDate}T${String(endFullHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}:00`);
 
     if (startTime >= endTime){
-
         if(type === 'start') {
             showTooltip(startTimeInput, '시작 시간이 종료 시간보다 빨라야 합니다.');
             startTimeInput.value = 'AM';
@@ -136,39 +160,6 @@ function validateVariableScheduleTimes(startDate, endDate, type) {
             endHourInput.value = '11';
             endMinuteInput.value = '59';
         }
-    }
-}
-
-// 고정 일정에서 타임 슬롯이 하나라도 있으면 공통 입력인 제목, 설명 시작날짜, 종료날짜 필드의 입력을 막음
-function toggleFormFields(timeslotCount) {
-    const titleInput = document.getElementById('schedule-title');
-    const descriptionInput = document.getElementById('schedule-description');
-    const startDateInput = document.getElementById('schedule-start-date');
-    const endDateInput = document.getElementById('schedule-end-date');
-    const saveBtn = document.getElementById('submit-button');
-    const disableFields = timeslotCount > 0;
-
-    console.log('disableFields', disableFields);
-
-    titleInput.disabled = disableFields;
-    descriptionInput.disabled = disableFields;
-    startDateInput.disabled = disableFields;
-    endDateInput.disabled = disableFields;
-    saveBtn.disabled = (timeslotCount === 0);
-}
-
-// 고정일정에서 지속시간이 0시간 0분이면 추가버튼 비활성화
-function validateDuration() {
-    const addTimeslotBtn = document.getElementById('add-timeslot-btn');
-    const durationHour = document.getElementById('schedule-duration-hour').value;
-    const durationMinute = document.getElementById('schedule-duration-minute').value;
-
-    // 지속 시간이 0시간 0분일 때 추가 버튼 비활성화
-    if (parseInt(durationHour, 10) === 0 && parseInt(durationMinute, 10) === 0) {
-        addTimeslotBtn.disabled = true;
-        showTooltip(addTimeslotBtn, '지속 시간은 최소 1분 이상이어야 합니다.');
-    } else {
-        addTimeslotBtn.disabled = false;
     }
 }
 
@@ -188,8 +179,24 @@ function showTooltip(element, message) {
         tooltip.classList.add('show');
         setTimeout(() => {
             tooltip.remove();
-        }, 3000);
+        }, 4000);
     });
+}
+
+
+// title의 글자 제한을 확인
+function validateTitleInput() {
+    const titleInput = document.getElementById('schedule-title');
+    const titleValue = titleInput.value.trim();
+
+    if (titleValue.length === 0 || titleValue.length > 80) {
+        showTooltip(titleInput, '제목은 1자 이상 80자 이하로 입력해야 합니다.');
+        titleInput.classList.add('invalid-input'); // 입력 필드에 스타일을 적용하여 사용자에게 시각적 피드백을 제공합니다.
+        return false;
+    } else {
+        titleInput.classList.remove('invalid-input'); // 입력이 유효하면 오류 표시를 제거합니다.
+        return true;
+    }
 }
 
 
