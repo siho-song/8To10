@@ -22,6 +22,7 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.dto.board.BoardRequestDto;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -44,13 +45,9 @@ public class Board extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "0")
-    private Long totalLike;
+    private long totalLike;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "0")
-    private Long totalScrap;
+    private long totalScrap;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reply> replies;
