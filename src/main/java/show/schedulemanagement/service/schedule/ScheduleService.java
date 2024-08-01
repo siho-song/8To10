@@ -1,6 +1,7 @@
 package show.schedulemanagement.service.schedule;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
@@ -13,7 +14,7 @@ public interface ScheduleService {
     void deleteById(Long id);
     Schedule findById(Long id);
     Schedule getConflictSchedule(List<ScheduleAble> newSchedule, List<Schedule> allSchedule);
-    List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);
+    List<Schedule> findAllWithinDates(Member member, LocalDate start, LocalDate end);
     List<Schedule> findAll(Member member);
     Result<ScheduleResponseDto> getResult(Member member);
 }

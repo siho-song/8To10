@@ -62,7 +62,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end) {
+    public List<Schedule> findAllWithinDates(Member member, LocalDate start, LocalDate end) {
         return scheduleRepository.findAllBetweenStartAndEnd(
                 member,
                 LocalDateTime.of(start, LocalTime.of(0, 0)),
