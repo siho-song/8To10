@@ -51,4 +51,12 @@ public class Board extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reply> replies;
+
+    public static Board from(Member member , BoardRequestDto dto){
+        return Board.builder()
+                .title(dto.getTitle())
+                .content(dto.getContents())
+                .member(member)
+                .build();
+    }
 }
