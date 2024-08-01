@@ -11,13 +11,4 @@ import show.schedulemanagement.service.MemberService;
 
 @Configuration
 public class TestConfig {
-    @Autowired
-    MemberService memberService;
-
-    @PostConstruct
-    public void init(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.loadUserByEmail("normal@example.com"));
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
 }
