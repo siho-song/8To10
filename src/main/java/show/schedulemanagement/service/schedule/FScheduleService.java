@@ -45,7 +45,7 @@ public class FScheduleService {
         log.debug("addDetailsToFSchedule after newSchedule scheduleAbles : {} ",scheduleAbles);
 
         //기간내 멤버의 모든 일정 불러오기
-        List<Schedule> allSchedule = scheduleService.findAllBetweenStartAndEnd(member, startDate, endDate);
+        List<Schedule> allSchedule = scheduleService.findAllWithinDates(member, startDate, endDate);
         //겹치는 일정이 있는지 검사
         Schedule conflictSchedule = scheduleService.getConflictSchedule(scheduleAbles,allSchedule);
 

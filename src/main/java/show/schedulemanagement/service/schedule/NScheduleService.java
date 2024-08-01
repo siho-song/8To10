@@ -47,7 +47,7 @@ public class NScheduleService {
                 .plusMinutes(dto.getNecessaryTime().getMinute()); //총 필요한 시간
         int performInWeek = dto.getPerformInWeek();
 
-        List<Schedule> allSchedule = scheduleService.findAllBetweenStartAndEnd(member, startDate, endDate);
+        List<Schedule> allSchedule = scheduleService.findAllWithinDates(member, startDate, endDate);
         Map<LocalDate, List<ScheduleAble>> sortedScheduleByDate = new TreeMap<>(filterScheduleByTime(allSchedule));
         Map<LocalDate, List<TimeSlot>> allSlotsForPeriodByDate = timeSlotService.findAllForPeriodByDate(sortedScheduleByDate, startDate, endDate);
         Map<DayOfWeek, List<TimeSlot>> availableTimeSlots = timeSlotService.findCommonRangeSlotsByDay(allSlotsForPeriodByDate, necessaryTime);
