@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.BoardRequestDto;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
@@ -30,6 +31,7 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("Dto 검증에 통과한 게시물 객체는 정상 등록된다.")
+    @Transactional
     void boardAddTest() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
