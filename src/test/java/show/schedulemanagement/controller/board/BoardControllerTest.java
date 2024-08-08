@@ -2,6 +2,7 @@ package show.schedulemanagement.controller.board;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.BoardRequestDto;
+import show.schedulemanagement.dto.board.BoardSearchCond;
+import show.schedulemanagement.dto.board.SearchCond;
+import show.schedulemanagement.dto.board.SortCondition;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -42,5 +46,26 @@ class BoardControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("게시글 페이지 조회 엔트포인트")
+    @Transactional(readOnly = true)
+    void boardPageSearch() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
+        BoardSearchCond searchCond = new BoardSearchCond();
+        searchCond.setSearchCond(SearchCond.WRITER);
+        searchCond.setPageNum(0);
+        searchCond.setPageSize(10);
+        searchCond.setKeyword("Nick");
+        searchCond.setSortCond(SortCondition.LIKE);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/community")
+                        .cookie(jwtCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(searchCond)))
+                .andExpect(status().isOk());
     }
 }

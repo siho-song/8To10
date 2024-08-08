@@ -1,13 +1,18 @@
 package show.schedulemanagement.dto.board;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import show.schedulemanagement.domain.board.Board;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BoardResponseDto {
+    private Long id;
     private String title;
     private String contents;
     private String writer;
@@ -19,6 +24,7 @@ public class BoardResponseDto {
 
     public static BoardResponseDto from(Board board){
         return BoardResponseDto.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .contents(board.getContent())
                 .writer(board.getMember().getEmail())
