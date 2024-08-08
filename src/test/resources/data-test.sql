@@ -237,9 +237,53 @@ VALUES
 -- BOARD 테이블에 데이터 삽입
 INSERT INTO BOARD (member_id, title, content, created_at, updated_at, total_like, total_scrap)
 VALUES
-    (1, 'First Board Post', 'This is the content of the first board post.', NOW(), NOW(), 5, 2),
-    (2, 'Second Board Post', 'This is the content of the second board post.', NOW(), NOW(), 3, 1),
-    (3, 'Third Board Post', 'This is the content of the third board post.', NOW(), NOW(), 4, 0);
+    (1, 'First Board Post 1', 'This is the content of the first board post for member 1.', NOW(), NOW(), 5, 2),
+    (1, 'First Board Post 2', 'This is the content of the second board post for member 1.', NOW(), NOW(), 3, 1),
+    (1, 'First Board Post 3', 'This is the content of the third board post for member 1.', NOW(), NOW(), 4, 0),
+    (1, 'First Board Post 4', 'This is the content of the fourth board post for member 1.', NOW(), NOW(), 2, 3),
+    (1, 'First Board Post 5', 'This is the content of the fifth board post for member 1.', NOW(), NOW(), 6, 1),
+    (1, 'First Board Post 6', 'This is the content of the sixth board post for member 1.', NOW(), NOW(), 1, 0),
+    (1, 'First Board Post 7', 'This is the content of the seventh board post for member 1.', NOW(), NOW(), 0, 0),
+    (1, 'First Board Post 8', 'This is the content of the eighth board post for member 1.', NOW(), NOW(), 7, 2),
+    (1, 'First Board Post 9', 'This is the content of the ninth board post for member 1.', NOW(), NOW(), 2, 1),
+    (1, 'First Board Post 10', 'This is the content of the tenth board post for member 1.', NOW(), NOW(), 5, 3),
+    (1, 'First Board Post 11', 'This is the content of the eleventh board post for member 1.', NOW(), NOW(), 4, 2),
+    (1, 'First Board Post 12', 'This is the content of the twelfth board post for member 1.', NOW(), NOW(), 3, 0),
+    (1, 'First Board Post 13', 'This is the content of the thirteenth board post for member 1.', NOW(), NOW(), 6, 1),
+    (1, 'First Board Post 14', 'This is the content of the fourteenth board post for member 1.', NOW(), NOW(), 2, 2),
+    (1, 'First Board Post 15', 'This is the content of the fifteenth board post for member 1.', NOW(), NOW(), 1, 0),
+
+    (2, 'Second Board Post 1', 'This is the content of the first board post for member 2.', NOW(), NOW(), 5, 2),
+    (2, 'Second Board Post 2', 'This is the content of the second board post for member 2.', NOW(), NOW(), 3, 1),
+    (2, 'Second Board Post 3', 'This is the content of the third board post for member 2.', NOW(), NOW(), 4, 0),
+    (2, 'Second Board Post 4', 'This is the content of the fourth board post for member 2.', NOW(), NOW(), 2, 3),
+    (2, 'Second Board Post 5', 'This is the content of the fifth board post for member 2.', NOW(), NOW(), 6, 1),
+    (2, 'Second Board Post 6', 'This is the content of the sixth board post for member 2.', NOW(), NOW(), 1, 0),
+    (2, 'Second Board Post 7', 'This is the content of the seventh board post for member 2.', NOW(), NOW(), 0, 0),
+    (2, 'Second Board Post 8', 'This is the content of the eighth board post for member 2.', NOW(), NOW(), 7, 2),
+    (2, 'Second Board Post 9', 'This is the content of the ninth board post for member 2.', NOW(), NOW(), 2, 1),
+    (2, 'Second Board Post 10', 'This is the content of the tenth board post for member 2.', NOW(), NOW(), 5, 3),
+    (2, 'Second Board Post 11', 'This is the content of the eleventh board post for member 2.', NOW(), NOW(), 4, 2),
+    (2, 'Second Board Post 12', 'This is the content of the twelfth board post for member 2.', NOW(), NOW(), 3, 0),
+    (2, 'Second Board Post 13', 'This is the content of the thirteenth board post for member 2.', NOW(), NOW(), 6, 1),
+    (2, 'Second Board Post 14', 'This is the content of the fourteenth board post for member 2.', NOW(), NOW(), 2, 2),
+    (2, 'Second Board Post 15', 'This is the content of the fifteenth board post for member 2.', NOW(), NOW(), 1, 0),
+
+    (3, 'Third Board Post 1', 'This is the content of the first board post for member 3.', NOW(), NOW(), 5, 2),
+    (3, 'Third Board Post 2', 'This is the content of the second board post for member 3.', NOW(), NOW(), 3, 1),
+    (3, 'Third Board Post 3', 'This is the content of the third board post for member 3.', NOW(), NOW(), 4, 0),
+    (3, 'Third Board Post 4', 'This is the content of the fourth board post for member 3.', NOW(), NOW(), 2, 3),
+    (3, 'Third Board Post 5', 'This is the content of the fifth board post for member 3.', NOW(), NOW(), 6, 1),
+    (3, 'Third Board Post 6', 'This is the content of the sixth board post for member 3.', NOW(), NOW(), 1, 0),
+    (3, 'Third Board Post 7', 'This is the content of the seventh board post for member 3.', NOW(), NOW(), 0, 0),
+    (3, 'Third Board Post 8', 'This is the content of the eighth board post for member 3.', NOW(), NOW(), 7, 2),
+    (3, 'Third Board Post 9', 'This is the content of the ninth board post for member 3.', NOW(), NOW(), 2, 1),
+    (3, 'Third Board Post 10', 'This is the content of the tenth board post for member 3.', NOW(), NOW(), 5, 3),
+    (3, 'Third Board Post 11', 'This is the content of the eleventh board post for member 3.', NOW(), NOW(), 4, 2),
+    (3, 'Third Board Post 12', 'This is the content of the twelfth board post for member 3.', NOW(), NOW(), 3, 0),
+    (3, 'Third Board Post 13', 'This is the content of the thirteenth board post for member 3.', NOW(), NOW(), 6, 1),
+    (3, 'Third Board Post 14', 'This is the content of the fourteenth board post for member 3.', NOW(), NOW(), 2, 2),
+    (3, 'Third Board Post 15', 'This is the content of the fifteenth board post for member 3.', NOW(), NOW(), 1, 0);
 --
 -- REPLY 테이블에 데이터 삽입
 INSERT INTO REPLY (member_id, board_id, parent_id, content, created_at, updated_at)
