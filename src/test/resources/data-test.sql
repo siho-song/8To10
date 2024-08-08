@@ -111,15 +111,6 @@ CREATE TABLE `REPLY_HEARTS`
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
-CREATE TABLE `BOARD_ATTACHMENT`
-(
-    `board_attachment_id` bigint       NOT NULL AUTO_INCREMENT,
-    `board_id`            bigint       NOT NULL,
-    `file_name`           varchar(255) NOT NULL,
-    PRIMARY KEY (`board_attachment_id`),
-    FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`)
-);
-
 -- 일정
 CREATE TABLE `SCHEDULE`
 (
@@ -312,13 +303,6 @@ VALUES
     (1, 1),
     (2, 2),
     (3, 3);
-
--- BOARD_ATTACHMENT 테이블에 데이터 삽입
-INSERT INTO BOARD_ATTACHMENT (board_id, file_name)
-VALUES
-    (1, 'attachment1.jpg'),
-    (2, 'attachment2.jpg'),
-    (3, 'attachment3.jpg');
 
 -- SCHEDULE 테이블에 데이터 삽입
 INSERT INTO SCHEDULE (member_id, title, common_description, start_date, end_date, created_at, created_by, dtype, updated_at, updated_by)
