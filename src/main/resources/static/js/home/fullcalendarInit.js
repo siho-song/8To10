@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: new Date(),
         initialView: 'dayGridMonth',
-        slotMinTime: '07:00:00',
-        slotMaxTime: '23:59:59',
         nowIndicator: true,
         locale: 'ko',
         headerToolbar: getHeaderToolbarOptions(),
