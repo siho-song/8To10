@@ -70,7 +70,7 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 단건 조회 엔트포인트")
+    @DisplayName("게시글 단건 조회 엔드포인트")
     @Transactional(readOnly = true)
     void boardSearch() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
@@ -81,5 +81,17 @@ class BoardControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 엔드포인트")
+    @Transactional
+    void deleteBoard() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        Long boardId = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/community/{id}", boardId)
+                .cookie(jwtCookie)
+        ).andExpect(status().isOk());
     }
 }
