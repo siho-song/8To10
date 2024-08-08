@@ -8,5 +8,6 @@ import show.schedulemanagement.dto.board.BoardSearchCond;
 
 public interface BoardService {
     void save(Board board);
+    Board findById(Long id);
     Page<BoardResponseDto> searchBoardPage(BoardSearchCond searchCond, Pageable pageable);
 }
