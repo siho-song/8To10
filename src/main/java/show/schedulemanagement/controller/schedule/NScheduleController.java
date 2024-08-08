@@ -14,7 +14,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;

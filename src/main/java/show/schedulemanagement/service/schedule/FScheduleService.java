@@ -19,7 +19,7 @@ import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.FixAddDto;
 import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
 import show.schedulemanagement.dto.schedule.response.FixResponseDto;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 
 @Service
 @Transactional(readOnly = true)

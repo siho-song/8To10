@@ -355,13 +355,6 @@ VALUES
     (2, '2024-01-02', 80, NOW(), NOW(), 'system', 'system'),
     (3, '2024-01-03', 70, NOW(), NOW(), 'system', 'system');
 
--- CAT_UNIT_ACH 테이블에 데이터 삽입
-INSERT INTO CAT_UNIT_ACH (member_id, category_unit, achievement_rate, created_at, updated_at, created_by, updated_by)
-VALUES
-    (1, 'PAGE', 90, NOW(), NOW(), 'system', 'system'),
-    (1, 'CHAPTER', 80, NOW(), NOW(), 'system', 'system'),
-    (1, 'LECTURE', 70, NOW(), NOW(), 'system', 'system');
-
 -- NOTIFICATION 테이블에 데이터 삽입
 INSERT INTO NOTIFICATION (member_id, message, is_read, entity_id, created_at, type)
 VALUES
