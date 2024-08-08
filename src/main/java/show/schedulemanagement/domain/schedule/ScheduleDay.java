@@ -15,8 +15,6 @@ public enum ScheduleDay {
     SUNDAY("su",DayOfWeek.SUNDAY);
 
     final String day;
-
-
     final DayOfWeek value;
 
     ScheduleDay(String day, DayOfWeek value) {
