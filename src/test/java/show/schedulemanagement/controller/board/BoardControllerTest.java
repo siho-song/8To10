@@ -68,4 +68,18 @@ class BoardControllerTest {
                         .content(objectMapper.writeValueAsString(searchCond)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("게시글 단건 조회 엔트포인트")
+    @Transactional(readOnly = true)
+    void boardSearch() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        Long boardId = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.get("/community/{id}", boardId)
+                        .cookie(jwtCookie)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+    }
 }
