@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;

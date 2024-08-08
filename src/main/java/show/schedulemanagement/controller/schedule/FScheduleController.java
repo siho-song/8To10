@@ -14,7 +14,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.dto.schedule.request.FixAddDto;
 import show.schedulemanagement.dto.schedule.response.FixResponseDto;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.FScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;

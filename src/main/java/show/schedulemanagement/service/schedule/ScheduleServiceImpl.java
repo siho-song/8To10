@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
 import show.schedulemanagement.service.MemberService;

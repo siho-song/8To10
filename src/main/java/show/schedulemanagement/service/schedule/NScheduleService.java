@@ -24,7 +24,7 @@ import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
-import show.schedulemanagement.dto.schedule.response.Result;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlotService;
 

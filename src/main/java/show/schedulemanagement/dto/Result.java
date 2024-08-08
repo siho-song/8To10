@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.response;
+package show.schedulemanagement.dto;
 
 import java.util.ArrayList;
 import java.util.List;
