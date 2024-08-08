@@ -1,6 +1,5 @@
 package show.schedulemanagement.service.board;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +51,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = findByIdWithReplies(id);
         String createdBy = board.getMember().getEmail();
         if(member.getEmail().equals(createdBy)){
-            boardHeartsRepository.deleteHeartsByBoardId(board);
+            boardHeartsRepository.deleteHeartsByBoard(board);
             boardScrapRepository.deleteScrapByBoard(board);
             replyHeartsRepository.deleteByReplies(board.getReplies());
             boardRepository.delete(board);
