@@ -22,6 +22,7 @@ import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSaveRequest;
+import show.schedulemanagement.dto.board.BoardUpdateRequest;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -57,5 +58,10 @@ public class Board extends BaseTimeEntity {
                 .content(dto.getContents())
                 .member(member)
                 .build();
+    }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
     }
 }

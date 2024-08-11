@@ -15,4 +15,5 @@ public interface BoardService {
     Board findByIdWithRepliesAndMember(Long id);
     Page<BoardPageResponse> searchBoardPage(BoardPageRequest searchCond, Pageable pageable);
     void deleteById(Member member, Long id);
+    void update(Member member, BoardUpdateRequest updateRequest);
 }

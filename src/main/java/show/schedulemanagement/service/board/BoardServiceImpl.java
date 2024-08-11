@@ -68,4 +68,13 @@ public class BoardServiceImpl implements BoardService {
             boardRepository.delete(board);
         }
     }
+
+    @Override
+    @Transactional
+    public void update(Member member, BoardUpdateRequest updateRequest) {
+        Board board = findByIdWithMember(updateRequest.getId());
+        if(board.getMember().getEmail().equals(member.getEmail())){
+            board.update(updateRequest.getTitle(), updateRequest.getContents());
+        }
+    }
 }
