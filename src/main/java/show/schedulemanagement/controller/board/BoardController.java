@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ import show.schedulemanagement.dto.board.BoardSaveResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
+import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.BoardService;
 
@@ -36,17 +39,6 @@ public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
 
-    @PostMapping(value = "/add" , consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardSaveResponse> save(@RequestBody BoardSaveRequest requestDto){
-        Member member = memberService.getAuthenticatedMember();
-        Board board = Board.from(member,requestDto);
-
-        boardService.save(board);
-        BoardSaveResponse responseDto = BoardSaveResponse.from(board);
-
-        return new ResponseEntity<>(responseDto, CREATED);
-    }
-
     @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<BoardPageResponse>> getBoardPage(@RequestBody BoardPageRequest searchCond) {
         Pageable pageable = PageRequest.of(searchCond.getPageNum(), searchCond.getPageSize());
@@ -54,9 +46,17 @@ public class BoardController {
         return new ResponseEntity<>(result, OK);
     }
 
+    @PatchMapping(consumes = APPLICATION_JSON_VALUE , produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardSaveResponse> updateBoard(@RequestBody BoardUpdateRequest request){
+        Member member = memberService.getAuthenticatedMember();
+        boardService.update(member, request);
+        Board board = boardService.findByIdWithMember(request.getId());
+        return new ResponseEntity<>(BoardSaveResponse.from(board), OK);
+    }
+
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<BoardSearchResponse> getBoard(@PathVariable(name = "id") Long id){
-        Board board = boardService.findByIdWithReplies(id);
+        Board board = boardService.findByIdWithRepliesAndMember(id);
         return new ResponseEntity<>(BoardSearchResponse.from(board), OK);
     }
 
@@ -65,5 +65,16 @@ public class BoardController {
         Member member = memberService.getAuthenticatedMember();
         boardService.deleteById(member, id);
         return new ResponseEntity<>(id, OK);
+    }
+
+    @PostMapping(value = "/add" , consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardSaveResponse> save(@RequestBody @Valid BoardSaveRequest requestDto){
+        Member member = memberService.getAuthenticatedMember();
+        Board board = Board.from(member,requestDto);
+
+        boardService.save(board);
+        BoardSaveResponse responseDto = BoardSaveResponse.from(board);
+
+        return new ResponseEntity<>(responseDto, CREATED);
     }
 }
