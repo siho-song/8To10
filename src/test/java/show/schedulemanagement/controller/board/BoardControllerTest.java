@@ -10,11 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.BoardSaveRequest;
 import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
 import show.schedulemanagement.security.dto.LoginMemberDto;
@@ -22,6 +24,7 @@ import show.schedulemanagement.security.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("게시글 CRUD")
 class BoardControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -91,6 +94,26 @@ class BoardControllerTest {
         Long boardId = 1L;
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/{id}", boardId)
                 .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("게시글 업데이트 엔드포인트")
+    @Transactional
+    void updateBoard() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
+        BoardUpdateRequest request = new BoardUpdateRequest();
+        request.setId(1L);
+        request.setContents("게시글 수정 테스트 내용");
+        request.setTitle("게시글 수정 테스트 제목");
+        String body = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/community")
+                .cookie(jwtCookie)
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
 }
