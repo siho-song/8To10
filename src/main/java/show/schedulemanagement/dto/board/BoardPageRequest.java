@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BoardSearchCond {
+public class BoardPageRequest {
     private String keyword; //제목, 내용으로 검색
     @Size(min = 1)
     private Integer pageNum = 0;

@@ -1,11 +1,9 @@
 package show.schedulemanagement.repository.board;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.dto.board.BoardResponseDto;
-import show.schedulemanagement.dto.board.BoardSearchCond;
+import show.schedulemanagement.dto.board.BoardPageResponse;
+import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
 
@@ -30,7 +28,7 @@ class BoardRepositoryCustomImplTest {
     @Transactional
     @DisplayName("게시글 페이지 조회")
     void searchPage() {
-        BoardSearchCond cond = new BoardSearchCond();
+        BoardPageRequest cond = new BoardPageRequest();
         cond.setSearchCond(SearchCond.WRITER);
         cond.setPageNum(0);
         cond.setPageSize(10);
@@ -38,9 +36,9 @@ class BoardRepositoryCustomImplTest {
         cond.setSortCond(SortCondition.LIKE);
         Pageable pageable = PageRequest.of(cond.getPageNum(), cond.getPageSize());
 
-        Page<BoardResponseDto> page = boardRepository.searchPage(cond, pageable);
-        List<BoardResponseDto> content = page.getContent();
-        for (BoardResponseDto responseDto : content) {
+        Page<BoardPageResponse> page = boardRepository.searchPage(cond, pageable);
+        List<BoardPageResponse> content = page.getContent();
+        for (BoardPageResponse responseDto : content) {
             System.out.println("responseDto = " + responseDto);
         }
 

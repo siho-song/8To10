@@ -11,7 +11,7 @@ import show.schedulemanagement.domain.board.Board;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BoardResponseDto {
+public class BoardPageResponse {
     private Long id;
     private String title;
     private String contents;
@@ -22,8 +22,8 @@ public class BoardResponseDto {
     private long totalLike;
     private long totalScrap;
 
-    public static BoardResponseDto from(Board board){
-        return BoardResponseDto.builder()
+    public static BoardPageResponse from(Board board){
+        return BoardPageResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .contents(board.getContent())
