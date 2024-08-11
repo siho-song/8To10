@@ -51,7 +51,7 @@ class BoardRepositoryCustomImplTest {
     @DisplayName("게시글 단건 조회, 조회시 연관 댓글과 멤버도 함께 불러온다.")
     void search(){
         Long id = 1L;
-        Optional<Board> byIdWithReplies = boardRepository.findByIdWithReplies(id);
+        Optional<Board> byIdWithReplies = boardRepository.findByIdWithRepliesAndMember(id);
         Board board = byIdWithReplies.orElse(null);
         assertThat(board).isNotNull();
     }
