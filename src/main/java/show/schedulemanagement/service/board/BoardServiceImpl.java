@@ -35,6 +35,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Board findById(Long id) {
+        return boardRepository.findById(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
+    }
+
+    @Override
     public Board findByIdWithReplies(Long id) {
         Optional<Board> board = boardRepository.findByIdWithReplies(id);
         return board.orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));

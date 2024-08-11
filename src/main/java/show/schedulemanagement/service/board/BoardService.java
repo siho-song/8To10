@@ -9,6 +9,7 @@ import show.schedulemanagement.dto.board.BoardPageRequest;
 
 public interface BoardService {
     void save(Board board);
+    Board findById(Long id);
     Board findByIdWithReplies(Long id);
     Page<BoardPageResponse> searchBoardPage(BoardPageRequest searchCond, Pageable pageable);
     void deleteById(Member member, Long id);
