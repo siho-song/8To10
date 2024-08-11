@@ -73,6 +73,7 @@ CREATE TABLE `REPLY`
     `board_id`   bigint NOT NULL,
     `parent_id`  bigint NULL,
     `content`    TEXT   NOT NULL,
+    `total_hearts` bigint NOT NULL,
     `created_at`  datetime(6)   NULL,
     `updated_at` datetime(6)    NULL,
     PRIMARY KEY (`reply_id`),
@@ -277,11 +278,11 @@ VALUES
     (3, 'Third Board Post 15', 'This is the content of the fifteenth board post for member 3.', NOW(), NOW(), 1, 0);
 --
 -- REPLY 테이블에 데이터 삽입
-INSERT INTO REPLY (member_id, board_id, parent_id, content, created_at, updated_at)
+INSERT INTO REPLY (member_id, board_id, parent_id, content,total_hearts, created_at, updated_at)
 VALUES
-    (1, 1, NULL, 'This is a comment on the first board post.', NOW(), NOW()),
-    (2, 1, 1, 'This is a reply to the first comment.', NOW(), NOW()),
-    (3, 2, NULL, 'This is a comment on the second board post.', NOW(), NOW());
+    (1, 1, NULL, 'This is a comment on the first board post.', 100,NOW(), NOW()),
+    (2, 1, 1, 'This is a reply to the first comment.', 20, NOW(), NOW()),
+    (3, 2, NULL, 'This is a comment on the second board post.', 30, NOW(), NOW());
 
 -- BOARD_HEARTS 테이블에 데이터 삽입
 INSERT INTO BOARD_HEARTS (board_id, member_id)

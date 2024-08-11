@@ -2,7 +2,6 @@ package show.schedulemanagement.controller.board;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,8 @@ import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.board.BoardRequestDto;
-import show.schedulemanagement.dto.board.BoardSearchCond;
+import show.schedulemanagement.dto.board.BoardSaveRequest;
+import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
 import show.schedulemanagement.security.dto.LoginMemberDto;
@@ -39,7 +38,7 @@ class BoardControllerTest {
     void boardAddTest() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
-        BoardRequestDto dto = new BoardRequestDto("게시판 테스트용", "테스트......................");
+        BoardSaveRequest dto = new BoardSaveRequest("게시판 테스트용", "테스트......................");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/add")
                         .cookie(jwtCookie) // JWT 쿠키 추가
@@ -55,7 +54,7 @@ class BoardControllerTest {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
-        BoardSearchCond searchCond = new BoardSearchCond();
+        BoardPageRequest searchCond = new BoardPageRequest();
         searchCond.setSearchCond(SearchCond.WRITER);
         searchCond.setPageNum(0);
         searchCond.setPageSize(10);

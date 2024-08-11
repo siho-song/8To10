@@ -21,7 +21,7 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardRequestDto;
+import show.schedulemanagement.dto.board.BoardSaveRequest;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -51,7 +51,7 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reply> replies;
 
-    public static Board from(Member member , BoardRequestDto dto){
+    public static Board from(Member member , BoardSaveRequest dto){
         return Board.builder()
                 .title(dto.getTitle())
                 .content(dto.getContents())

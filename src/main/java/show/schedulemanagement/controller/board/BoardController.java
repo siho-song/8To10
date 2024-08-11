@@ -1,7 +1,8 @@
 package show.schedulemanagement.controller.board;
 
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardSearchCond;
-import show.schedulemanagement.dto.board.BoardRequestDto;
-import show.schedulemanagement.dto.board.BoardResponseDto;
+import show.schedulemanagement.dto.board.BoardSaveRequest;
+import show.schedulemanagement.dto.board.BoardSaveResponse;
+import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardPageResponse;
+import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.BoardService;
 
@@ -34,27 +37,27 @@ public class BoardController {
     private final MemberService memberService;
 
     @PostMapping(value = "/add" , consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardResponseDto> save(@RequestBody BoardRequestDto requestDto){
+    public ResponseEntity<BoardSaveResponse> save(@RequestBody BoardSaveRequest requestDto){
         Member member = memberService.getAuthenticatedMember();
         Board board = Board.from(member,requestDto);
 
         boardService.save(board);
-        BoardResponseDto responseDto = BoardResponseDto.from(board);
+        BoardSaveResponse responseDto = BoardSaveResponse.from(board);
 
         return new ResponseEntity<>(responseDto, CREATED);
     }
 
     @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<BoardResponseDto>> getBoardPage(@RequestBody BoardSearchCond searchCond) {
+    public ResponseEntity<Page<BoardPageResponse>> getBoardPage(@RequestBody BoardPageRequest searchCond) {
         Pageable pageable = PageRequest.of(searchCond.getPageNum(), searchCond.getPageSize());
-        Page<BoardResponseDto> result = boardService.searchBoardPage(searchCond, pageable);
+        Page<BoardPageResponse> result = boardService.searchBoardPage(searchCond, pageable);
         return new ResponseEntity<>(result, OK);
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable(name = "id") Long id){
+    public ResponseEntity<BoardSearchResponse> getBoard(@PathVariable(name = "id") Long id){
         Board board = boardService.findByIdWithReplies(id);
-        return new ResponseEntity<>(BoardResponseDto.from(board), OK);
+        return new ResponseEntity<>(BoardSearchResponse.from(board), OK);
     }
 
     @DeleteMapping(value = "/{id}")

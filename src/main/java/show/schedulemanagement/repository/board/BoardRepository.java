@@ -10,7 +10,7 @@ import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.repository.schedule.ScheduleRepositoryCustom;
 
 public interface BoardRepository extends JpaRepository<Board, Long> , BoardRepositoryCustom{
-    @EntityGraph(attributePaths = {"member", "replies"})
+    @EntityGraph(attributePaths = {"member", "replies","replies.member"})
     @Query("select b from Board b where b.id = :id")
     Optional<Board> findByIdWithReplies(@Param(value = "id") Long id);
 }

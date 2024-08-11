@@ -13,10 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import show.schedulemanagement.domain.board.QBoard;
-import show.schedulemanagement.domain.board.reply.QReply;
 import show.schedulemanagement.domain.member.QMember;
-import show.schedulemanagement.dto.board.BoardResponseDto;
-import show.schedulemanagement.dto.board.BoardSearchCond;
+import show.schedulemanagement.dto.board.BoardPageResponse;
+import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
 
@@ -34,12 +33,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
     }
 
     @Override
-    public Page<BoardResponseDto> searchPage(BoardSearchCond cond, Pageable pageable) {
+    public Page<BoardPageResponse> searchPage(BoardPageRequest cond, Pageable pageable) {
         String keyword = cond.getKeyword();
         SearchCond searchCond = cond.getSearchCond();
 
-        List<BoardResponseDto> contents = query
-                .select(Projections.constructor(BoardResponseDto.class,
+        List<BoardPageResponse> contents = query
+                .select(Projections.constructor(BoardPageResponse.class,
                         qBoard.id,
                         qBoard.title,
                         qBoard.content,

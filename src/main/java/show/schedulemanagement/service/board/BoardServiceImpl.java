@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardResponseDto;
-import show.schedulemanagement.dto.board.BoardSearchCond;
+import show.schedulemanagement.dto.board.BoardPageResponse;
+import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.repository.board.BoardHeartsRepository;
 import show.schedulemanagement.repository.board.BoardRepository;
 import show.schedulemanagement.repository.board.BoardScrapRepository;
@@ -41,7 +41,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Page<BoardResponseDto> searchBoardPage(BoardSearchCond searchCond, Pageable pageable) {
+    public Page<BoardPageResponse> searchBoardPage(BoardPageRequest searchCond, Pageable pageable) {
         return boardRepository.searchPage(searchCond, pageable);
     }
 

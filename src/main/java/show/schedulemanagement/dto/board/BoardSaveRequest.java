@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BoardRequestDto {
+public class BoardSaveRequest {
     @NotBlank
     @Size(max = 60)
     private String title;
