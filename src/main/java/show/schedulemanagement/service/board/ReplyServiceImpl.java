@@ -20,4 +20,9 @@ public class ReplyServiceImpl implements ReplyService{
     public Reply findById(Long id) {
         return replyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
     }
+
+    @Override
+    public Reply findByIdWithParent(Long id) {
+        return replyRepository.findByIdWithParent(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+    }
 }
