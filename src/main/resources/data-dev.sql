@@ -74,6 +74,7 @@ CREATE TABLE `REPLY`
     `content`    TEXT   NOT NULL,
     `created_at`  datetime(6)   NULL,
     `updated_at` datetime(6)    NULL,
+    `total_hearts` bigint NOT NULL ,
     PRIMARY KEY (`reply_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`),
     FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
@@ -233,11 +234,32 @@ VALUES
     (3, 'Third Board Post', 'This is the content of the third board post.', NOW(), NOW(), 4, 0);
 
 -- REPLY 테이블에 데이터 삽입
-INSERT INTO REPLY (member_id, board_id, parent_id, content, created_at, updated_at)
+INSERT INTO REPLY (member_id, board_id, parent_id, content,total_hearts, created_at, updated_at)
 VALUES
-    (1, 1, NULL, 'This is a comment on the first board post.', NOW(), NOW()),
-    (2, 1, 1, 'This is a reply to the first comment.', NOW(), NOW()),
-    (3, 2, NULL, 'This is a comment on the second board post.', NOW(), NOW());
+    (1, 1, NULL, '게시글 1 - 댓글 1', 100,NOW(), NOW()),
+    (1, 1, NULL, '게시글 1 - 댓글 2', 100,NOW(), NOW()),
+    (1, 1, NULL, '게시글 1 - 댓글 3', 100,NOW(), NOW()),
+    (2, 1, NULL, '게시글 1 - 댓글 4', 10,NOW(), NOW()),
+    (3, 1, NULL, '게시글 1 - 댓글 5', 9,NOW(), NOW()),
+    (3, 1, NULL, '게시글 1 - 댓글 6', 8,NOW(), NOW()),
+    (1, 2, NULL, '게시글 2 - 댓글 1', 100,NOW(), NOW()),
+    (1, 2, NULL, '게시글 2 - 댓글 2', 20,NOW(), NOW()),
+    (1, 2, NULL, '게시글 2 - 댓글 3', 17,NOW(), NOW()),
+    (2, 2, NULL, '게시글 2 - 댓글 4', 14,NOW(), NOW()),
+    (3, 2, NULL, '게시글 2 - 댓글 5', 13,NOW(), NOW()),
+    (3, 2, NULL, '게시글 2 - 댓글 6', 11,NOW(), NOW()),
+    (2, 1, 1, '게시글 1- 댓글 1 - 대댓글-1', 20, NOW(), NOW()),
+    (1, 1, 1, '게시글 1- 댓글 1 - 대댓글-2', 30, NOW(), NOW()),
+    (3, 1, 2, '게시글 1- 댓글 2 - 대댓글-1', 30, NOW(), NOW()),
+    (1, 1, 2, '게시글 1- 댓글 2 - 대댓글-2', 30, NOW(), NOW()),
+    (2, 1, 3, '게시글 1- 댓글 3 - 대댓글-1', 30, NOW(), NOW()),
+    (3, 1, 3, '게시글 1- 댓글 3 - 대댓글-2', 30, NOW(), NOW()),
+    (1, 2, 1, '게시글 2- 댓글 1 - 대댓글-1', 30, NOW(), NOW()),
+    (2, 2, 3, '게시글 2- 댓글 3 - 대댓글-1', 30, NOW(), NOW()),
+    (3, 2, 2, '게시글 2- 댓글 2 - 대댓글-1', 30, NOW(), NOW()),
+    (1, 2, 1, '게시글 2- 댓글 1 - 대댓글-2', 30, NOW(), NOW()),
+    (2, 2, 3, '게시글 2- 댓글 3 - 대댓글-2', 30, NOW(), NOW()),
+    (3, 2, 2, '게시글 2- 댓글 2 - 대댓글-2', 30, NOW(), NOW());
 
 -- BOARD_HEARTS 테이블에 데이터 삽입
 INSERT INTO BOARD_HEARTS (board_id, member_id)

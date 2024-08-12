@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.dto.board.reply.ReplyResponseDto;
+import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 
 @Data
 @Builder
@@ -19,7 +19,7 @@ public class BoardSearchResponse {
     private LocalDateTime updatedAt;
     private long totalLike;
     private long totalScrap;
-    private List<ReplyResponseDto> replies;
+    private List<ReplySearchResponse> replies;
 
     public static BoardSearchResponse from(Board board){
         return BoardSearchResponse.builder()
@@ -36,7 +36,7 @@ public class BoardSearchResponse {
                 .build();
     }
 
-    private static List<ReplyResponseDto> mapToReplyResponseDto(Board board){
-        return board.getReplies().stream().map(ReplyResponseDto::from).toList();
+    private static List<ReplySearchResponse> mapToReplyResponseDto(Board board){
+        return board.getReplies().stream().map(ReplySearchResponse::from).toList();
     }
 }
