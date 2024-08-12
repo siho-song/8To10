@@ -10,14 +10,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
@@ -28,6 +26,7 @@ import show.schedulemanagement.domain.member.Member;
 @Builder
 @AllArgsConstructor
 @Table(name = "REPLY")
+@ToString(exclude = "parent")
 public class Reply extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_id")
@@ -50,5 +49,13 @@ public class Reply extends BaseTimeEntity {
 
     private long totalHearts;
 
+    public static Reply from(Reply parent, String contents, Member member, Board board) {
+        return Reply.builder()
+                .member(member)
+                .board(board)
+                .parent(parent)
+                .content(contents)
+                .build();
+    }
     //TODO 연관관계 편의 메서드 구현
 }
