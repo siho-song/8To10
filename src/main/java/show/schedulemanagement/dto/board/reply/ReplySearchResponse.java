@@ -7,7 +7,7 @@ import show.schedulemanagement.domain.board.reply.Reply;
 
 @Data
 @Builder
-public class ReplyResponseDto {
+public class ReplySearchResponse {
     private Long id;
     private Long parentId;
     private String content;
@@ -17,8 +17,8 @@ public class ReplyResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static ReplyResponseDto from(Reply reply){
-        return ReplyResponseDto.builder()
+    public static ReplySearchResponse from(Reply reply){
+        return ReplySearchResponse.builder()
                 .id(reply.getId())
                 .parentId(setParentId(reply))
                 .content(reply.getContent())
