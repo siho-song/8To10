@@ -1,6 +1,7 @@
 package show.schedulemanagement.service.board;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,12 @@ public class ReplyServiceImpl implements ReplyService{
         Reply reply = Reply.from(null, request.getContents(), member, board);
         replyRepository.save(reply);
         return reply;
+    }
+
+    @Override
+    public List<Reply> findAllWithBoardAndMemberByEmail(Member member) {
+        String email = member.getEmail();
+        return replyRepository.findAllWithBoardAndMemberByEmail(email);
     }
 
     private boolean checkEqualBoard(Board parentReplyBoard, Board board) {
