@@ -46,6 +46,11 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public List<Reply> findNestedRepliesByParent(Reply reply) {
+        return replyRepository.findNestedRepliesByParent(reply);
+    }
+
+    @Override
     @Transactional
     public Reply save(ReplySaveRequest request, Member member) {
         Board board = boardService.findById(request.getBoardId());
