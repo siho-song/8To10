@@ -32,6 +32,12 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public Reply findByIdWithMemberAndParent(Long id) {
+        return replyRepository.findByIdWithMemberAndParent(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+    }
+
+    @Override
     @Transactional
     public Reply save(ReplySaveRequest request, Member member) {
         Board board = boardService.findById(request.getBoardId());
