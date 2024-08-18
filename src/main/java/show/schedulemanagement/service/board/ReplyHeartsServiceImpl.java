@@ -1,5 +1,6 @@
 package show.schedulemanagement.service.board;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,11 @@ public class ReplyHeartsServiceImpl implements ReplyHeartsService {
     @Transactional
     public void deleteByReply(Reply reply) {
         replyHeartsRepository.deleteByReply(reply);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByReplies(List<Reply> replies) {
+        replyHeartsRepository.deleteByReplies(replies);
     }
 }
