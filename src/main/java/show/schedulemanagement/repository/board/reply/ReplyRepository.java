@@ -20,4 +20,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @EntityGraph(attributePaths = {"member", "board"})
     @Query("select r from Reply  r where r.member.email = :email")
     List<Reply> findAllWithBoardAndMemberByEmail(@Param(value = "email") String email);
+
+    @Query("select r from Reply r where r.parent.id = :parent")
+    List<Reply> findNestedRepliesByParent(@Param(value = "parent") Reply parent);
 }
