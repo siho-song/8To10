@@ -10,7 +10,6 @@ import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
-import show.schedulemanagement.repository.board.reply.ReplyHeartsRepository;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
 
 @Service
@@ -51,6 +50,11 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public void deleteByReplies(List<Reply> replies) {
+        replyRepository.deleteByReplies(replies);
+    }
+
+    @Override
     @Transactional
     public Reply save(ReplySaveRequest request, Member member) {
         Board board = boardService.findById(request.getBoardId());
@@ -68,7 +72,7 @@ public class ReplyServiceImpl implements ReplyService{
         replyRepository.save(reply);
         return reply;
     }
-
+    
     private boolean equalEmail(Member member, Reply reply) {
         if(!member.getEmail().equals(reply.getMember().getEmail())){
             return true;
