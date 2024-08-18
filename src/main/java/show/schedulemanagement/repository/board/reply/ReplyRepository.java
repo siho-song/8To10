@@ -13,6 +13,10 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("select r from Reply r where r.id = :id")
     Optional<Reply> findByIdWithParent(@Param(value = "id") Long id);
 
+    @EntityGraph(attributePaths = {"parent", "member"})
+    @Query("select r from Reply r where r.id = :id")
+    Optional<Reply> findByIdWithMemberAndParent(@Param(value = "id") Long id);
+
     @EntityGraph(attributePaths = {"member", "board"})
     @Query("select r from Reply  r where r.member.email = :email")
     List<Reply> findAllWithBoardAndMemberByEmail(@Param(value = "email") String email);
