@@ -72,9 +72,9 @@ public class ReplyServiceImpl implements ReplyService{
         replyRepository.save(reply);
         return reply;
     }
-    
+
     private boolean equalEmail(Member member, Reply reply) {
-        if(!member.getEmail().equals(reply.getMember().getEmail())){
+        if (member.getEmail().equals(reply.getMember().getEmail())) {
             return true;
         }
         throw new RuntimeException("댓글 작성자와 클라이언트의 이메일이 일치하지 않습니다.");
