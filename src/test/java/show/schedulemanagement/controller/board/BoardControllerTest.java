@@ -55,19 +55,21 @@ class BoardControllerTest {
     @Transactional(readOnly = true)
     void boardPageSearch() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token);
 
-        BoardPageRequest searchCond = new BoardPageRequest();
-        searchCond.setSearchCond(SearchCond.WRITER);
-        searchCond.setPageNum(0);
-        searchCond.setPageSize(10);
-        searchCond.setKeyword("Nick");
-        searchCond.setSortCond(SortCondition.LIKE);
+        String keyword = "Nick";
+        int pageNum = 0;
+        int pageSize = 10;
+        String searchCond = SearchCond.WRITER.name();
+        String sortCond = SortCondition.LIKE.name();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/community")
                         .cookie(jwtCookie)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(searchCond)))
+                        .param("keyword", keyword)
+                        .param("pageNum", String.valueOf(pageNum))
+                        .param("pageSize", String.valueOf(pageSize))
+                        .param("searchCond", searchCond)
+                        .param("sortCond", sortCond))
                 .andExpect(status().isOk());
     }
 
