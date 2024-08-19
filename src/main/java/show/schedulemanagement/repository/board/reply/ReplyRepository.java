@@ -22,10 +22,10 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("select r from Reply  r where r.member.email = :email")
     List<Reply> findAllWithBoardAndMemberByEmail(@Param(value = "email") String email);
 
-    @Query("select r from Reply r where r.parent.id = :parent")
+    @Query("select r from Reply r where r.parent = :parent")
     List<Reply> findNestedRepliesByParent(@Param(value = "parent") Reply parent);
 
     @Modifying
-    @Query("delete from Reply r where r.id in :replies")
+    @Query("delete from Reply r where r in :replies")
     void deleteByReplies(@Param(value = "replies") List<Reply> replies);
 }
