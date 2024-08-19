@@ -13,4 +13,5 @@ public interface ReplyService {
     List<Reply> findNestedRepliesByParent(Reply reply);
     void deleteByReplies(List<Reply> replies);
     Reply save(ReplySaveRequest request, Member member);
+    void delete(Member member, Long id);
 }

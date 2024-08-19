@@ -73,11 +73,29 @@ public class ReplyServiceImpl implements ReplyService{
         return reply;
     }
 
-    private boolean equalEmail(Member member, Reply reply) {
-        if (member.getEmail().equals(reply.getMember().getEmail())) {
-            return true;
+    @Override
+    @Transactional
+    public void delete(Member member, Long id) {
+        Reply reply = findByIdWithMemberAndParent(id);
+        checkEqualEmail(member, reply);
+
+        if (reply.getParent() != null) { // 대댓글 삭제
+            replyHeartsService.deleteByReply(reply);
+            replyRepository.delete(reply);
+            return;
         }
-        throw new RuntimeException("댓글 작성자와 클라이언트의 이메일이 일치하지 않습니다.");
+        // 댓글 삭제
+        List<Reply> nestedReplies = findNestedRepliesByParent(reply);
+        replyHeartsService.deleteByReplies(nestedReplies);
+        deleteByReplies(nestedReplies);
+        replyHeartsService.deleteByReply(reply);
+        replyRepository.delete(reply);
+    }
+
+    private void checkEqualEmail(Member member, Reply reply) {
+        if (!member.getEmail().equals(reply.getMember().getEmail())) {
+            throw new RuntimeException("댓글 작성자와 클라이언트의 이메일이 일치하지 않습니다.");
+        }
     }
 
     private boolean checkEqualBoard(Board parentReplyBoard, Board board) {
