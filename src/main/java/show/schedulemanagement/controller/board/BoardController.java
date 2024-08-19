@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +40,8 @@ public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
 
-    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<BoardPageResponse>> getBoardPage(@RequestBody BoardPageRequest searchCond) {
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<BoardPageResponse>> getBoardPage(@ModelAttribute BoardPageRequest searchCond) {
         Pageable pageable = PageRequest.of(searchCond.getPageNum(), searchCond.getPageSize());
         Page<BoardPageResponse> result = boardService.searchBoardPage(searchCond, pageable);
         return new ResponseEntity<>(result, OK);
