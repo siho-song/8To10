@@ -8,6 +8,10 @@ import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 public interface ReplyService {
     Reply findById(Long id);
     Reply findByIdWithParent(Long id);
-    Reply save(ReplySaveRequest request, Member member);
+    Reply findByIdWithMemberAndParent(Long id);
     List<Reply> findAllWithBoardAndMemberByEmail(Member member);
+    List<Reply> findNestedRepliesByParent(Reply reply);
+    void deleteByReplies(List<Reply> replies);
+    Reply save(ReplySaveRequest request, Member member);
+    void delete(Member member, Long id);
 }

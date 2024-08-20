@@ -113,4 +113,14 @@ class ReplyControllerTest {
                 .content(body)
         ).andExpect(status().is4xxClientError());
     }
+
+    @Test
+    @DisplayName("댓글 삭제")
+    @Transactional
+    void delete() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/reply/{id}", id)
+                .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
 }
