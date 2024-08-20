@@ -57,5 +57,9 @@ public class Reply extends BaseTimeEntity {
                 .content(contents)
                 .build();
     }
+
+    public void updateContent(String content){
+        this.content = content;
+    }
     //TODO 연관관계 편의 메서드 구현
 }
