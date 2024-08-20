@@ -10,6 +10,7 @@ import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
+import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
 
 @Service
@@ -90,6 +91,14 @@ public class ReplyServiceImpl implements ReplyService{
         deleteByReplies(nestedReplies);
         replyHeartsService.deleteByReply(reply);
         replyRepository.delete(reply);
+    }
+
+    @Override
+    @Transactional
+    public void update(Member member, ReplyUpdateRequest updateRequest) {
+        Reply reply = findByIdWithMemberAndParent(updateRequest.getId());
+        checkEqualEmail(member, reply);
+        reply.updateContent(updateRequest.getContents());
     }
 
     private void checkEqualEmail(Member member, Reply reply) {

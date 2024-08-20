@@ -15,12 +15,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
+import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("댓글 CRUD")
+@Transactional
 class ReplyControllerTest {
 
     @Autowired
@@ -44,7 +46,6 @@ class ReplyControllerTest {
 
     @Test
     @DisplayName("댓글 정상 등록")
-    @Transactional
     void save_reply() throws Exception {
         ReplySaveRequest request = new ReplySaveRequest();
         request.setBoardId(1L);
@@ -62,7 +63,6 @@ class ReplyControllerTest {
 
     @Test
     @DisplayName("대댓글 정상 등록")
-    @Transactional
     void save_nested_reply() throws Exception {
         ReplySaveRequest request = new ReplySaveRequest();
         request.setBoardId(1L);
@@ -80,7 +80,6 @@ class ReplyControllerTest {
 
     @Test
     @DisplayName("대댓글 레벨이 1보다 높을 경우 예외 발생")
-    @Transactional
     void save_nested_reply_level() throws Exception {
         ReplySaveRequest request = new ReplySaveRequest();
         request.setBoardId(1L);
@@ -98,7 +97,6 @@ class ReplyControllerTest {
 
     @Test
     @DisplayName("대댓글 게시판과, 부모댓글의 게시판이 다를 경우 예외 발생")
-    @Transactional
     void save_nested_reply_board() throws Exception {
         ReplySaveRequest request = new ReplySaveRequest();
         request.setBoardId(2L);
@@ -116,11 +114,25 @@ class ReplyControllerTest {
 
     @Test
     @DisplayName("댓글 삭제")
-    @Transactional
     void delete() throws Exception {
         Long id = 1L;
         mockMvc.perform(MockMvcRequestBuilders.delete("/reply/{id}", id)
                 .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("댓글 수정")
+    void update() throws Exception {
+        ReplyUpdateRequest request = new ReplyUpdateRequest();
+        request.setId(1L);
+        request.setContents("수정된 댓글입니다.");
+
+        String body = objectMapper.writeValueAsString(request);
+        mockMvc.perform(MockMvcRequestBuilders.patch("/reply")
+                .cookie(jwtCookie)
+                .content(body)
+                .contentType(APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
 }
