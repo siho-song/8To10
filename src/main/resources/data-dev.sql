@@ -7,9 +7,9 @@ DROP TABLE IF EXISTS `F_SCHEDULE_DETAIL`;
 DROP TABLE IF EXISTS `F_SCHEDULE`;
 DROP TABLE IF EXISTS `V_SCHEDULE`;
 DROP TABLE IF EXISTS `SCHEDULE`;
-DROP TABLE IF EXISTS `REPLY_HEARTS`;
+DROP TABLE IF EXISTS `REPLY_HEART`;
 DROP TABLE IF EXISTS `BOARD_SCRAP`;
-DROP TABLE IF EXISTS `BOARD_HEARTS`;
+DROP TABLE IF EXISTS `BOARD_HEART`;
 DROP TABLE IF EXISTS `REPLY`;
 DROP TABLE IF EXISTS `BOARD`;
 DROP TABLE IF EXISTS `MEMBER_ROLE`;
@@ -81,12 +81,12 @@ CREATE TABLE `REPLY`
     FOREIGN KEY (`parent_id`) REFERENCES `REPLY` (`reply_id`)
 );
 
-CREATE TABLE `BOARD_HEARTS`
+CREATE TABLE `BOARD_HEART`
 (
-    `board_hearts_id` bigint NOT NULL AUTO_INCREMENT,
+    `board_heart_id` bigint NOT NULL AUTO_INCREMENT,
     `board_id`        bigint NOT NULL,
     `member_id`       bigint NOT NULL,
-    PRIMARY KEY (`board_hearts_id`),
+    PRIMARY KEY (`board_heart_id`),
     FOREIGN KEY (`board_id`) REFERENCES `BOARD` (`board_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -101,12 +101,12 @@ CREATE TABLE `BOARD_SCRAP`
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
-CREATE TABLE `REPLY_HEARTS`
+CREATE TABLE `REPLY_HEART`
 (
-    `reply_hearts_id` bigint NOT NULL AUTO_INCREMENT,
+    `reply_heart_id` bigint NOT NULL AUTO_INCREMENT,
     `reply_id`        bigint NOT NULL,
     `member_id`       bigint NOT NULL,
-    PRIMARY KEY (`reply_hearts_id`),
+    PRIMARY KEY (`reply_heart_id`),
     FOREIGN KEY (`reply_id`) REFERENCES `REPLY` (`reply_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -262,7 +262,7 @@ VALUES
     (3, 2, 2, '게시글 2- 댓글 2 - 대댓글-2', 30, NOW(), NOW());
 
 -- BOARD_HEARTS 테이블에 데이터 삽입
-INSERT INTO BOARD_HEARTS (board_id, member_id)
+INSERT INTO BOARD_HEART (board_id, member_id)
 VALUES
     (1, 1),
     (1, 2),
@@ -276,7 +276,7 @@ VALUES
     (3, 3);
 
 -- REPLY_HEARTS 테이블에 데이터 삽입
-INSERT INTO REPLY_HEARTS (reply_id, member_id)
+INSERT INTO REPLY_HEART (reply_id, member_id)
 VALUES
     (1, 1),
     (2, 2),

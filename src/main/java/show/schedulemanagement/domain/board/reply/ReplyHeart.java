@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.board;
+package show.schedulemanagement.domain.board.reply;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,15 +21,14 @@ import show.schedulemanagement.domain.member.Member;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "BOARD_HEARTS")
-public class BoardHearts{
+public class ReplyHeart {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "board_hearts_id")
+    @Column(name = "reply_hearts_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
+    @JoinColumn(name = "reply_id", nullable = false)
+    private Reply reply;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)

@@ -21,7 +21,7 @@ public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
     private final BoardService boardService;
-    private final ReplyHeartsService replyHeartsService;
+    private final ReplyHeartService replyHeartService;
 
     @Override
     public Reply findById(Long id) {
@@ -81,15 +81,15 @@ public class ReplyServiceImpl implements ReplyService{
         checkEqualEmail(member, reply);
 
         if (reply.getParent() != null) { // 대댓글 삭제
-            replyHeartsService.deleteByReply(reply);
+            replyHeartService.deleteByReply(reply);
             replyRepository.delete(reply);
             return;
         }
         // 댓글 삭제
         List<Reply> nestedReplies = findNestedRepliesByParent(reply);
-        replyHeartsService.deleteByReplies(nestedReplies);
+        replyHeartService.deleteByReplies(nestedReplies);
         deleteByReplies(nestedReplies);
-        replyHeartsService.deleteByReply(reply);
+        replyHeartService.deleteByReply(reply);
         replyRepository.delete(reply);
     }
 

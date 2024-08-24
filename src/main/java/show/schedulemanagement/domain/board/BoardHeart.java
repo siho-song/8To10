@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.board.reply;
+package show.schedulemanagement.domain.board;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -22,14 +22,15 @@ import show.schedulemanagement.domain.member.Member;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ReplyHearts{
+@Table(name = "BOARD_HEART")
+public class BoardHeart {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "reply_hearts_id")
+    @Column(name = "board_heart_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "reply_id", nullable = false)
-    private Reply reply;
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)

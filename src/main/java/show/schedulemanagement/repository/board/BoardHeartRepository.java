@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.domain.board.BoardHearts;
+import show.schedulemanagement.domain.board.BoardHeart;
 
-public interface BoardHeartsRepository extends JpaRepository<BoardHearts, Long> {
+public interface BoardHeartRepository extends JpaRepository<BoardHeart, Long> {
     @Modifying
-    @Query("delete from BoardHearts h where h.board = :board")
+    @Query("delete from BoardHeart h where h.board = :board")
     void deleteHeartsByBoard(@Param(value = "board") Board board);
 }
