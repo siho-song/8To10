@@ -23,7 +23,7 @@ import show.schedulemanagement.domain.member.Member;
 @AllArgsConstructor
 public class ReplyHeart {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "reply_hearts_id")
+    @Column(name = "reply_heart_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)

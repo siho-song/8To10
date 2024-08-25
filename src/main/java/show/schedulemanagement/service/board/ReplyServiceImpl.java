@@ -98,7 +98,7 @@ public class ReplyServiceImpl implements ReplyService{
     public void update(Member member, ReplyUpdateRequest updateRequest) {
         Reply reply = findByIdWithMemberAndParent(updateRequest.getId());
         checkEqualEmail(member, reply);
-        reply.updateContent(updateRequest.getContents());
+        reply.updateContent(updateRequest.getContent());
     }
 
     private void checkEqualEmail(Member member, Reply reply) {

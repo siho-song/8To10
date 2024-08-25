@@ -64,4 +64,8 @@ public class Board extends BaseTimeEntity {
         this.title = title;
         this.content = content;
     }
+
+    public void addLike(){
+        totalLike++;
+    }
 }

@@ -35,4 +35,11 @@ public class BoardHeart {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public static BoardHeart createBoardHeart(Board board, Member member) {
+        return BoardHeart.builder()
+                .board(board)
+                .member(member)
+                .build();
+    }
 }
