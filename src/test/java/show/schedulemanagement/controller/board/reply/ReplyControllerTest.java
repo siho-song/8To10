@@ -54,7 +54,7 @@ class ReplyControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/reply/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
                 .cookie(jwtCookie)
                 .content(body)
@@ -71,7 +71,7 @@ class ReplyControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/reply/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
                 .cookie(jwtCookie)
                 .content(body)
@@ -88,7 +88,7 @@ class ReplyControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/reply/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
                 .cookie(jwtCookie)
                 .content(body)
@@ -105,7 +105,7 @@ class ReplyControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/reply/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
                 .cookie(jwtCookie)
                 .content(body)
@@ -116,7 +116,7 @@ class ReplyControllerTest {
     @DisplayName("댓글 삭제")
     void delete() throws Exception {
         Long id = 1L;
-        mockMvc.perform(MockMvcRequestBuilders.delete("/reply/{id}", id)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/community/reply/{id}", id)
                 .cookie(jwtCookie)
         ).andExpect(status().isOk());
     }
@@ -129,7 +129,7 @@ class ReplyControllerTest {
         request.setContent("수정된 댓글입니다.");
 
         String body = objectMapper.writeValueAsString(request);
-        mockMvc.perform(MockMvcRequestBuilders.patch("/reply")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/community/reply")
                 .cookie(jwtCookie)
                 .content(body)
                 .contentType(APPLICATION_JSON)

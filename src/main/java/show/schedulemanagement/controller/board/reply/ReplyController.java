@@ -25,7 +25,7 @@ import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.ReplyService;
 
 @RestController
-@RequestMapping("/reply")
+@RequestMapping("/community/reply")
 @RequiredArgsConstructor
 @Slf4j
 public class ReplyController {
