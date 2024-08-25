@@ -23,6 +23,7 @@ import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @DisplayName("게시글 CRUD")
 class BoardControllerTest {
@@ -37,7 +38,6 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("Dto 검증에 통과한 게시물 객체는 정상 등록된다.")
-    @Transactional
     void boardAddTest() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
@@ -52,7 +52,6 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 페이지 조회 엔트포인트")
-    @Transactional(readOnly = true)
     void boardPageSearch() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token);
@@ -75,7 +74,6 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 단건 조회 엔드포인트")
-    @Transactional(readOnly = true)
     void boardSearch() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
@@ -89,7 +87,6 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 삭제 엔드포인트")
-    @Transactional
     void deleteBoard() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
@@ -101,7 +98,6 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 업데이트 엔드포인트")
-    @Transactional
     void updateBoard() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
@@ -117,5 +113,16 @@ class BoardControllerTest {
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 엔드포인트")
+    void addHeart() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("faithful@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/heart/{id}", 1L)
+                .cookie(jwtCookie)
+        ).andExpect(status().isCreated());
     }
 }
