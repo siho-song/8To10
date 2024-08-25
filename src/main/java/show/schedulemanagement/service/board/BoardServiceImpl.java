@@ -12,6 +12,7 @@ import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.repository.board.BoardHeartRepository;
 import show.schedulemanagement.repository.board.BoardRepository;
@@ -54,6 +55,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<BoardPageResponse> searchBoardPage(BoardPageRequest searchCond, Pageable pageable) {
         return boardRepository.searchPage(searchCond, pageable);
+    }
+
+    @Override
+    public BoardSearchResponse searchBoard(Long id, Member member) {
+        return boardRepository.searchBoard(id,member).orElseThrow(()-> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다."));
     }
 
     @Override
