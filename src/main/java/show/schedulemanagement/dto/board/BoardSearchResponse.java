@@ -2,41 +2,28 @@ package show.schedulemanagement.dto.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import show.schedulemanagement.domain.board.Board;
+import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 
 @Data
-@Builder
+@NoArgsConstructor
 public class BoardSearchResponse {
     private Long id;
     private String title;
-    private String contents;
+    private String content;
     private String nickname;
     private String writer;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private long totalLike;
     private long totalScrap;
+    private boolean hasLike;
+    private boolean hasScrap;
+    private List<Long> likedReplyIds;
     private List<ReplySearchResponse> replies;
-
-    public static BoardSearchResponse from(Board board){
-        return BoardSearchResponse.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .contents(board.getContent())
-                .nickname(board.getMember().getNickname())
-                .writer(board.getMember().getEmail())
-                .createdAt(board.getCreatedAt())
-                .updatedAt(board.getUpdatedAt())
-                .totalLike(board.getTotalLike())
-                .totalScrap(board.getTotalScrap())
-                .replies(mapToReplyResponseDto(board))
-                .build();
-    }
-
-    private static List<ReplySearchResponse> mapToReplyResponseDto(Board board){
-        return board.getReplies().stream().map(ReplySearchResponse::from).toList();
-    }
 }
