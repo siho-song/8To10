@@ -12,7 +12,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> , BoardRepos
     @Query("select b from Board b where b.id = :id")
     Optional<Board> findByIdWithMember(@Param(value = "id") Long id);
     
-    @EntityGraph(attributePaths = {"member", "replies","replies.member"})
+    @EntityGraph(attributePaths = {"member", "replies"})
     @Query("select b from Board b where b.id = :id")
     Optional<Board> findByIdWithRepliesAndMember(@Param(value = "id") Long id);
 }
