@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,11 +68,11 @@ class ReplyServiceImplTest {
         Member member = memberService.findByEmail("normal@example.com");
         ReplyUpdateRequest updateRequest = new ReplyUpdateRequest();
         updateRequest.setId(1L);
-        updateRequest.setContents("수정된 댓글");
+        updateRequest.setContent("수정된 댓글");
 
         replyService.update(member,updateRequest);
         Reply updatedReply = replyService.findById(updateRequest.getId());
 
-        assertThat(updatedReply.getContent()).isEqualTo(updateRequest.getContents());
+        assertThat(updatedReply.getContent()).isEqualTo(updateRequest.getContent());
     }
 }
