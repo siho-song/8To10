@@ -29,6 +29,7 @@ import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.board.BoardHeartService;
 import show.schedulemanagement.service.board.BoardService;
 
 @RestController
@@ -38,6 +39,7 @@ import show.schedulemanagement.service.board.BoardService;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardHeartService boardHeartService;
     private final MemberService memberService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -81,4 +83,12 @@ public class BoardController {
 
         return new ResponseEntity<>(responseDto, CREATED);
     }
+
+    @PostMapping(value = "/heart/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
+        Member member = memberService.getAuthenticatedMember();
+        boardHeartService.addHeart(id, member);
+        return new ResponseEntity<>(id, CREATED);
+    }
+
 }
