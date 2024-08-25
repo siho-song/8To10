@@ -57,8 +57,11 @@ public class BoardController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<BoardSearchResponse> getBoard(@PathVariable(name = "id") Long id){
-        Board board = boardService.findByIdWithRepliesAndMember(id);
-        return new ResponseEntity<>(BoardSearchResponse.from(board), OK);
+//        Board board = boardService.findByIdWithRepliesAndMember(id); -- v1
+
+        Member member = memberService.getAuthenticatedMember();
+        BoardSearchResponse board = boardService.searchBoard(id, member);
+        return new ResponseEntity<>(board, OK);
     }
 
     @DeleteMapping(value = "/{id}")
