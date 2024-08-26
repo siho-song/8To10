@@ -43,7 +43,7 @@ class BoardControllerTest {
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
         BoardSaveRequest dto = new BoardSaveRequest("게시판 테스트용", "테스트......................");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/community/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/board/add")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
@@ -62,7 +62,7 @@ class BoardControllerTest {
         String searchCond = SearchCond.WRITER.name();
         String sortCond = SortCondition.LIKE.name();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/community")
+        mockMvc.perform(MockMvcRequestBuilders.get("/community/board")
                         .cookie(jwtCookie)
                         .param("keyword", keyword)
                         .param("pageNum", String.valueOf(pageNum))
@@ -78,7 +78,7 @@ class BoardControllerTest {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
         Long boardId = 1L;
-        mockMvc.perform(MockMvcRequestBuilders.get("/community/{id}", boardId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/community/board/{id}", boardId)
                         .cookie(jwtCookie)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -91,7 +91,7 @@ class BoardControllerTest {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
         Long boardId = 1L;
-        mockMvc.perform(MockMvcRequestBuilders.delete("/community/{id}", boardId)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/community/board/{id}", boardId)
                 .cookie(jwtCookie)
         ).andExpect(status().isOk());
     }
@@ -108,7 +108,7 @@ class BoardControllerTest {
         request.setTitle("게시글 수정 테스트 제목");
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/community")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/community/board")
                 .cookie(jwtCookie)
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ class BoardControllerTest {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("faithful@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/community/heart/{id}", 1L)
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/board/heart/{id}", 1L)
                 .cookie(jwtCookie)
         ).andExpect(status().isCreated());
     }

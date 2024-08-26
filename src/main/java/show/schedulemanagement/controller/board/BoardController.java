@@ -33,7 +33,7 @@ import show.schedulemanagement.service.board.BoardHeartService;
 import show.schedulemanagement.service.board.BoardService;
 
 @RestController
-@RequestMapping("/community")
+@RequestMapping("/community/board")
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
@@ -84,7 +84,7 @@ public class BoardController {
         return new ResponseEntity<>(responseDto, CREATED);
     }
 
-    @PostMapping(value = "/heart/{id}", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
         Member member = memberService.getAuthenticatedMember();
         boardHeartService.addHeart(id, member);
