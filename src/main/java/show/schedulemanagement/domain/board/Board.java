@@ -68,4 +68,5 @@ public class Board extends BaseTimeEntity {
     public void addLike(){
         totalLike++;
     }
+    public void subLike() { totalLike--; }
 }
