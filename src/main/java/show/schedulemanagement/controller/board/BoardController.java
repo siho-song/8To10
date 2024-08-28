@@ -91,4 +91,10 @@ public class BoardController {
         return new ResponseEntity<>(id, CREATED);
     }
 
+    @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id){
+        Member member = memberService.getAuthenticatedMember();
+        boardHeartService.deleteHeart(id, member);
+        return new ResponseEntity<>(id, OK);
+    }
 }
