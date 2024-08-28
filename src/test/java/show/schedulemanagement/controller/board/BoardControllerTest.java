@@ -116,13 +116,24 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 좋아요 엔드포인트")
+    @DisplayName("게시글 좋아요 추가 엔드포인트")
     void addHeart() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("faithful@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/community/board/heart/{id}", 1L)
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/board/{id}/heart", 1L)
                 .cookie(jwtCookie)
         ).andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 삭제 엔드포인트")
+    void deleteHeart() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/community/board/{id}/heart", 1L)
+                .cookie(jwtCookie)
+        ).andExpect(status().isOk());
     }
 }

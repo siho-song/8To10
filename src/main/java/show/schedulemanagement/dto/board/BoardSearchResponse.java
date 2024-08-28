@@ -2,12 +2,8 @@ package show.schedulemanagement.dto.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 
 @Data

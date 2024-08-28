@@ -1,5 +1,7 @@
 package show.schedulemanagement.service.board;
 
+import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,19 @@ public class BoardHeartServiceImpl implements BoardHeartService{
             throw new RuntimeException("이미 좋아요 한 게시글 입니다."); //TODO 추후 커스텀 예외 처리
         }
         BoardHeart boardHeart = BoardHeart.createBoardHeart(board, member);
-        boardHeartRepository.save(boardHeart);
         board.addLike();
+        boardHeartRepository.save(boardHeart);
+    }
+
+    @Override
+    @Transactional
+    public void deleteHeart(Long boardId, Member member) {
+        Board board = boardService.findById(boardId);
+
+        BoardHeart boardHeart = boardHeartRepository.findByMemberAndBoard(member,board).orElseThrow(
+                () -> new EntityNotFoundException("삭제할 좋아요가 존재하지 않습니다."));
+
+        board.subLike();
+        boardHeartRepository.delete(boardHeart);
     }
 }
