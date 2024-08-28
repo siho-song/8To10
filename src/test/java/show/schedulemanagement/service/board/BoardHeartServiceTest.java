@@ -1,10 +1,9 @@
 package show.schedulemanagement.service.board;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,5 +58,27 @@ class BoardHeartServiceTest {
         Member member = memberService.getAuthenticatedMember();
 
         assertThatThrownBy(() -> boardHeartService.addHeart(boardId, member)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 삭제")
+    void deleteHeart(){
+        Long boardId = 1L;
+        Member member = memberService.getAuthenticatedMember();
+
+        boardHeartService.deleteHeart(boardId, member);
+
+        Board board = boardService.findById(boardId);
+        assertThat(board.getTotalLike()).isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 삭제 - 삭제할 좋아요가 없는 경우 예외발생")
+    void deleteHeart_not_exist(){
+        Long boardId = 3L;
+        Member member = memberService.getAuthenticatedMember();
+
+        assertThatThrownBy(() -> boardHeartService.deleteHeart(boardId, member)).isInstanceOf(
+                EntityNotFoundException.class);
     }
 }
