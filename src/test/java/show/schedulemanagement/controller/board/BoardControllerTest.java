@@ -108,7 +108,7 @@ class BoardControllerTest {
         request.setTitle("게시글 수정 테스트 제목");
         String body = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/community/board")
+        mockMvc.perform(MockMvcRequestBuilders.put("/community/board")
                 .cookie(jwtCookie)
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON)
