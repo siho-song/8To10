@@ -47,7 +47,7 @@ public class Reply extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private long totalHearts;
+    private long totalLike;
 
     public static Reply from(Reply parent, String contents, Member member, Board board) {
         return Reply.builder()
@@ -63,6 +63,10 @@ public class Reply extends BaseTimeEntity {
     }
 
     public void addLike() {
-        totalHearts++;
+        totalLike++;
+    }
+
+    public void subLike() {
+        totalLike--;
     }
 }
