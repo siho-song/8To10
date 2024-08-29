@@ -129,7 +129,7 @@ class ReplyControllerTest {
         request.setContent("수정된 댓글입니다.");
 
         String body = objectMapper.writeValueAsString(request);
-        mockMvc.perform(MockMvcRequestBuilders.patch("/community/reply")
+        mockMvc.perform(MockMvcRequestBuilders.put("/community/reply")
                 .cookie(jwtCookie)
                 .content(body)
                 .contentType(APPLICATION_JSON)
