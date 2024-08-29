@@ -35,4 +35,11 @@ public class BoardScrap{
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public static BoardScrap from(Board board, Member member) {
+        return BoardScrap.builder()
+                .board(board)
+                .member(member)
+                .build();
+    }
 }
