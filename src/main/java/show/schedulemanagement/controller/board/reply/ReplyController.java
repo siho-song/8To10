@@ -63,7 +63,15 @@ public class ReplyController {
     public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
         Member member = memberService.getAuthenticatedMember();
         Reply reply = replyService.findById(id);
-        replyHeartService.addHeart(reply, member);
+        replyHeartService.add(reply, member);
         return new ResponseEntity<>(id, CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id){
+        Member member = memberService.getAuthenticatedMember();
+        Reply reply = replyService.findById(id);
+        replyHeartService.delete(reply, member);
+        return new ResponseEntity<>(id, OK);
     }
 }
