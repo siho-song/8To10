@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardHeartService boardHeartService;
     private final BoardScrapRepository boardScrapRepository;
-    private final ReplyHeartRepository replyHeartRepository;
+    private final ReplyHeartService replyHeartService;
 
     @Override
     @Transactional
@@ -70,7 +70,7 @@ public class BoardServiceImpl implements BoardService {
         if(member.getEmail().equals(createdBy)){
             boardHeartService.deleteHeartsByBoard(board);
             boardScrapRepository.deleteScrapByBoard(board);
-            replyHeartRepository.deleteByReplies(board.getReplies());
+            replyHeartService.deleteByReplies(board.getReplies());
             boardRepository.delete(board);
         }
     }
