@@ -135,4 +135,13 @@ class ReplyControllerTest {
                 .contentType(APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("댓글 좋아요 추가")
+    void addHeart() throws Exception {
+        Long id = 2L;
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/{id}/heart", id)
+                .cookie(jwtCookie)
+        ).andExpect(status().isCreated());
+    }
 }
