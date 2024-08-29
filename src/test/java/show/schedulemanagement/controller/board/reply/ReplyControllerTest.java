@@ -144,4 +144,13 @@ class ReplyControllerTest {
                 .cookie(jwtCookie)
         ).andExpect(status().isCreated());
     }
+
+    @Test
+    @DisplayName("댓글 좋아요 삭제")
+    void deleteHeart() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/community/reply/{id}/heart", id)
+                .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
 }
