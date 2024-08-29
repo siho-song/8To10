@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
+import show.schedulemanagement.domain.member.Member;
 
 public interface BoardScrapRepository extends JpaRepository<BoardScrap, Long> {
     @Modifying
     @Query("delete from BoardScrap s where s.board = :board")
     void deleteScrapByBoard(@Param(value = "board") Board board);
+
+    boolean existsByMemberAndBoard(Member member, Board board);
 }
