@@ -22,6 +22,7 @@ import show.schedulemanagement.dto.board.reply.ReplySaveResponse;
 import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.board.ReplyHeartService;
 import show.schedulemanagement.service.board.ReplyService;
 
 @RestController
@@ -31,6 +32,7 @@ import show.schedulemanagement.service.board.ReplyService;
 public class ReplyController {
 
     private final ReplyService replyService;
+    private final ReplyHeartService replyHeartService;
     private final MemberService memberService;
 
     @PatchMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -55,5 +57,13 @@ public class ReplyController {
         Reply reply = replyService.save(request, member);
         ReplySaveResponse responseDto = ReplySaveResponse.from(reply);
         return new ResponseEntity<>(responseDto, CREATED);
+    }
+
+    @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
+        Member member = memberService.getAuthenticatedMember();
+        Reply reply = replyService.findById(id);
+        replyHeartService.addHeart(reply, member);
+        return new ResponseEntity<>(id, CREATED);
     }
 }
