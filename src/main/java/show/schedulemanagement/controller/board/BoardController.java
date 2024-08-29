@@ -31,6 +31,7 @@ import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.BoardHeartService;
+import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 
 @RestController
@@ -41,6 +42,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final BoardHeartService boardHeartService;
+    private final BoardScrapService boardScrapService;
     private final MemberService memberService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -99,5 +101,13 @@ public class BoardController {
         Board board = boardService.findById(id);
         boardHeartService.delete(board, member);
         return new ResponseEntity<>(id, OK);
+    }
+
+    @PostMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> addScrap(@PathVariable(value = "id") Long id) {
+        Member member = memberService.getAuthenticatedMember();
+        Board board = boardService.findById(id);
+        boardScrapService.add(member, board);
+        return new ResponseEntity<>(id, CREATED);
     }
 }
