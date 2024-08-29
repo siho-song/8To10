@@ -17,7 +17,7 @@ import show.schedulemanagement.service.MemberService;
 @SpringBootTest
 @DisplayName("댓글 CRUD")
 @Transactional
-class ReplyServiceImplTest {
+class ReplyServiceTest {
 
     @Autowired
     ReplyService replyService;
