@@ -13,7 +13,7 @@ public class ReplySearchResponse {
     private String content;
     private String nickname; // 닉네임
     private String writer; // 이메일
-    private long totalHearts;
+    private long totalLike;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -24,7 +24,7 @@ public class ReplySearchResponse {
                 .content(reply.getContent())
                 .nickname(reply.getMember().getNickname())
                 .writer(reply.getMember().getEmail())
-                .totalHearts(reply.getTotalHearts())
+                .totalLike(reply.getTotalLike())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt())
                 .build();

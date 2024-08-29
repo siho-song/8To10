@@ -73,7 +73,7 @@ CREATE TABLE `REPLY`
     `board_id`   bigint NOT NULL,
     `parent_id`  bigint NULL,
     `content`    TEXT   NOT NULL,
-    `total_hearts` bigint NOT NULL,
+    `total_like` bigint NOT NULL,
     `created_at`  datetime(6)   NULL,
     `updated_at` datetime(6)    NULL,
     PRIMARY KEY (`reply_id`),
@@ -278,7 +278,7 @@ VALUES
     (3, 'Third Board Post 15', 'This is the content of the fifteenth board post for member 3.', NOW(), NOW(), 1, 0);
 --
 -- REPLY 테이블에 데이터 삽입
-INSERT INTO REPLY (member_id, board_id, parent_id, content,total_hearts, created_at, updated_at)
+INSERT INTO REPLY (member_id, board_id, parent_id, content, total_like, created_at, updated_at)
 VALUES
     (1, 1, NULL, '게시글 1 - 댓글 1', 100,NOW(), NOW()),
     (1, 1, NULL, '게시글 1 - 댓글 2', 100,NOW(), NOW()),
