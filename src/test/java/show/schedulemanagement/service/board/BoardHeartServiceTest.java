@@ -41,44 +41,46 @@ class BoardHeartServiceTest {
 
     @Test
     @DisplayName("게시글 좋아요 정상 등록")
-    void addHeart(){
-        Long boardId = 1L;
+    void add(){
         Member member = memberService.findByEmail("faithful@example.com");
-
-        boardHeartService.addHeart(boardId, member);
-
+        Long boardId = 1L;
         Board board = boardService.findById(boardId);
+
+        boardHeartService.add(board, member);
+
         assertThat(board.getTotalLike()).isEqualTo(6);
     }
 
     @Test
     @DisplayName("게시글 좋아요 등록 오류 - 이미 좋아요한 게시글")
-    void addHeart_liked(){
-        Long boardId = 1L;
+    void add_liked(){
         Member member = memberService.getAuthenticatedMember();
+        Long boardId = 1L;
+        Board board = boardService.findById(boardId);
 
-        assertThatThrownBy(() -> boardHeartService.addHeart(boardId, member)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> boardHeartService.add(board, member)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
     @DisplayName("게시글 좋아요 삭제")
-    void deleteHeart(){
+    void delete(){
         Long boardId = 1L;
         Member member = memberService.getAuthenticatedMember();
-
-        boardHeartService.deleteHeart(boardId, member);
-
         Board board = boardService.findById(boardId);
+
+        boardHeartService.delete(board, member);
+
         assertThat(board.getTotalLike()).isEqualTo(4);
     }
 
     @Test
     @DisplayName("게시글 좋아요 삭제 - 삭제할 좋아요가 없는 경우 예외발생")
-    void deleteHeart_not_exist(){
+    void delete_not_exist(){
         Long boardId = 3L;
+        Board board = boardService.findById(boardId);
         Member member = memberService.getAuthenticatedMember();
 
-        assertThatThrownBy(() -> boardHeartService.deleteHeart(boardId, member)).isInstanceOf(
+        assertThatThrownBy(() -> boardHeartService.delete(board, member)).isInstanceOf(
                 EntityNotFoundException.class);
     }
 }

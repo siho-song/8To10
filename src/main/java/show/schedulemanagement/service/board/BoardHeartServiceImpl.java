@@ -15,13 +15,11 @@ import show.schedulemanagement.repository.board.BoardHeartRepository;
 @Transactional(readOnly = true)
 public class BoardHeartServiceImpl implements BoardHeartService{
 
-    private final BoardService boardService;
     private final BoardHeartRepository boardHeartRepository;
 
     @Override
     @Transactional
-    public void addHeart(Long boardId, Member member) {
-        Board board = boardService.findById(boardId);
+    public void add(Board board, Member member) {
         boolean hasLiked = boardHeartRepository.existsBoardHeartByMemberAndBoard(member, board);
 
         if(hasLiked){
@@ -34,13 +32,16 @@ public class BoardHeartServiceImpl implements BoardHeartService{
 
     @Override
     @Transactional
-    public void deleteHeart(Long boardId, Member member) {
-        Board board = boardService.findById(boardId);
-
+    public void delete(Board board, Member member) {
         BoardHeart boardHeart = boardHeartRepository.findByMemberAndBoard(member,board).orElseThrow(
                 () -> new EntityNotFoundException("삭제할 좋아요가 존재하지 않습니다."));
 
         board.subLike();
         boardHeartRepository.delete(boardHeart);
+    }
+
+    @Override
+    public void deleteHeartsByBoard(Board board) {
+        boardHeartRepository.deleteHeartsByBoard(board);
     }
 }

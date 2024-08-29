@@ -26,7 +26,7 @@ import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final BoardHeartRepository boardHeartRepository;
+    private final BoardHeartService boardHeartService;
     private final BoardScrapRepository boardScrapRepository;
     private final ReplyHeartRepository replyHeartRepository;
 
@@ -68,7 +68,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = findByIdWithRepliesAndMember(id);
         String createdBy = board.getMember().getEmail();
         if(member.getEmail().equals(createdBy)){
-            boardHeartRepository.deleteHeartsByBoard(board);
+            boardHeartService.deleteHeartsByBoard(board);
             boardScrapRepository.deleteScrapByBoard(board);
             replyHeartRepository.deleteByReplies(board.getReplies());
             boardRepository.delete(board);

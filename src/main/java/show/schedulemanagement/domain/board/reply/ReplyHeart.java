@@ -33,4 +33,11 @@ public class ReplyHeart {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public static ReplyHeart createReplyHeart(Reply reply, Member member) {
+        return ReplyHeart.builder()
+                .reply(reply)
+                .member(member)
+                .build();
+    }
 }

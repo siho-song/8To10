@@ -87,14 +87,16 @@ public class BoardController {
     @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
         Member member = memberService.getAuthenticatedMember();
-        boardHeartService.addHeart(id, member);
+        Board board = boardService.findById(id);
+        boardHeartService.add(board, member);
         return new ResponseEntity<>(id, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id){
         Member member = memberService.getAuthenticatedMember();
-        boardHeartService.deleteHeart(id, member);
+        Board board = boardService.findById(id);
+        boardHeartService.delete(board, member);
         return new ResponseEntity<>(id, OK);
     }
 }

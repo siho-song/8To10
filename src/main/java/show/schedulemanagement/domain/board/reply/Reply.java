@@ -61,5 +61,8 @@ public class Reply extends BaseTimeEntity {
     public void updateContent(String content){
         this.content = content;
     }
-    //TODO 연관관계 편의 메서드 구현
+
+    public void addLike() {
+        totalHearts++;
+    }
 }
