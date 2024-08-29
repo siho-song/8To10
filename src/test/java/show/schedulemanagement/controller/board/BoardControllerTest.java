@@ -136,4 +136,15 @@ class BoardControllerTest {
                 .cookie(jwtCookie)
         ).andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("게시글 스크랩 등록 엔드포인트")
+    void addScrap() throws Exception {
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/community/board/{id}/scrap", 2L)
+                .cookie(jwtCookie)
+        ).andExpect(status().isCreated());
+    }
 }
