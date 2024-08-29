@@ -52,7 +52,7 @@ class BoardHeartServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 좋아요 등록 오류 - 이미 좋아요한 게시글")
+    @DisplayName("게시글 좋아요 등록 - 이미 좋아요한 게시글인 경우 예외 발생")
     void add_liked(){
         Member member = memberService.getAuthenticatedMember();
         Long boardId = 1L;
