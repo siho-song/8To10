@@ -1,3 +1,14 @@
+// TODO 마이페이지, 성취도 페이지가 구현되면 해당 뷰를 담는 container도 비활성화하는 코드 추가 필요
+function showBoardPage() {
+    const mainContainer = document.getElementById('main-container');
+    const boardContainer = document.getElementById('board-container');
+
+    mainContainer.innerHTML = '';
+    boardContainer.style.display = 'flex';
+
+    boardContainer.innerHTML = boardView;
+}
+
 boardView = `
     <!-- 왼쪽 사이드바 -->    
     <div class="sidebar" id="left-sidebar">
