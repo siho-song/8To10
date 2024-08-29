@@ -95,7 +95,7 @@ button:disabled {
 
 .container {
     display: flex;
-    flex: 1;
+    flex-direction: row;
     width: 100%; /* 컨테이너의 너비를 전체로 설정 */
     transition: all 0.3s ease; /* 부드러운 전환 효과 */
     overflow: hidden; /* 넘치는 내용 숨기기 */
