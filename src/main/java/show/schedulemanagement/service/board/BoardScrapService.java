@@ -5,4 +5,5 @@ import show.schedulemanagement.domain.member.Member;
 
 public interface BoardScrapService {
     boolean existsByMemberAndBoard(Member member, Board board);
+    void add(Member member, Board board);
 }
