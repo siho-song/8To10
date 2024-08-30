@@ -1,5 +1,6 @@
 package show.schedulemanagement.service.board;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,12 @@ import show.schedulemanagement.repository.board.BoardScrapRepository;
 public class BoardScrapServiceImpl implements BoardScrapService{
 
     private final BoardScrapRepository boardScrapRepository;
+
+    @Override
+    public BoardScrap findByMemberAndBoard(Member member, Board board) {
+        return boardScrapRepository.findByMemberAndBoard(member, board)
+                .orElseThrow(() -> new EntityNotFoundException("해당 스크랩이 존재하지 않습니다."));
+    }
 
     @Override
     public boolean existsByMemberAndBoard(Member member, Board board) {
