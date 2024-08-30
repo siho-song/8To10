@@ -40,4 +40,10 @@ public class BoardScrapServiceImpl implements BoardScrapService{
         boardScrapRepository.save(boardScrap);
     }
 
+    @Override
+    public void delete(Member member, Board board) {
+        BoardScrap boardScrap = findByMemberAndBoard(member, board);
+        board.subScrap();
+        boardScrapRepository.delete(boardScrap);
+    }
 }
