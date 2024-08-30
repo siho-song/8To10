@@ -52,8 +52,8 @@ public class BoardController {
         return new ResponseEntity<>(result, OK);
     }
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE , produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardSaveResponse> updateBoard(@RequestBody BoardUpdateRequest request){
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardSaveResponse> updateBoard(@RequestBody BoardUpdateRequest request) {
         Member member = memberService.getAuthenticatedMember();
         boardService.update(member, request);
         Board board = boardService.findByIdWithMember(request.getId());
@@ -61,7 +61,7 @@ public class BoardController {
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardSearchResponse> getBoard(@PathVariable(name = "id") Long id){
+    public ResponseEntity<BoardSearchResponse> getBoard(@PathVariable(name = "id") Long id) {
 //        Board board = boardService.findByIdWithRepliesAndMember(id); -- v1
 
         Member member = memberService.getAuthenticatedMember();
@@ -70,16 +70,16 @@ public class BoardController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Long> deleteBoard(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Long> deleteBoard(@PathVariable(name = "id") Long id) {
         Member member = memberService.getAuthenticatedMember();
         boardService.deleteById(member, id);
         return new ResponseEntity<>(id, OK);
     }
 
-    @PostMapping(value = "/add" , consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardSaveResponse> save(@RequestBody @Valid BoardSaveRequest requestDto){
+    @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardSaveResponse> save(@RequestBody @Valid BoardSaveRequest requestDto) {
         Member member = memberService.getAuthenticatedMember();
-        Board board = Board.from(member,requestDto);
+        Board board = Board.from(member, requestDto);
 
         boardService.save(board);
         BoardSaveResponse responseDto = BoardSaveResponse.from(board);
@@ -88,7 +88,7 @@ public class BoardController {
     }
 
     @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id) {
         Member member = memberService.getAuthenticatedMember();
         Board board = boardService.findById(id);
         boardHeartService.add(board, member);
@@ -96,7 +96,7 @@ public class BoardController {
     }
 
     @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id) {
         Member member = memberService.getAuthenticatedMember();
         Board board = boardService.findById(id);
         boardHeartService.delete(board, member);
@@ -109,5 +109,13 @@ public class BoardController {
         Board board = boardService.findById(id);
         boardScrapService.add(member, board);
         return new ResponseEntity<>(id, CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> deleteScrap(@PathVariable(value = "id") Long id) {
+        Member member = memberService.getAuthenticatedMember();
+        Board board = boardService.findById(id);
+        boardScrapService.delete(member, board);
+        return new ResponseEntity<>(id, OK);
     }
 }
