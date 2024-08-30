@@ -3,6 +3,7 @@ package show.schedulemanagement.service.board;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,5 +49,21 @@ class BoardScrapServiceTest {
     void add_scraped(){
         Board board = boardService.findById(1L);
         assertThatThrownBy(() -> boardScrapService.add(normalMember, board)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩 정상 삭제")
+    void delete(){
+        Board board = boardService.findById(1L);
+        boardScrapService.delete(normalMember, board);
+        assertThat(board.getTotalScrap()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩 삭제 실패 - 삭제할 스크랩이 없는 경우 예외발생")
+    void delete_not_exist(){
+        Board board = boardService.findById(2L);
+        assertThatThrownBy(() -> boardScrapService.delete(normalMember, board)).isInstanceOf(
+                EntityNotFoundException.class);
     }
 }
