@@ -9,6 +9,11 @@ function showBoardPage() {
     boardContainer.innerHTML = boardView;
 }
 
+function showCreatePostPage() {
+    const createPostPage = document.getElementById('board-container');
+    createPostPage.innerHTML = createPostView;
+}
+
 boardView = `
     <!-- 왼쪽 사이드바 -->    
     <div class="sidebar" id="left-sidebar">
