@@ -30,8 +30,6 @@ public class VScheduleController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponseDto> addSchedule(@RequestBody @Valid VariableAddDto dto){
-
-        //TODO 일정이 있으면 해당일정을 삭제하고 덮는다 .
         log.debug("VScheduleController addSchedule call VariableAddDto : {}", dto);
         Member member = memberService.getAuthenticatedMember();
         VSchedule schedule = VSchedule.createVSchedule(member, dto);
@@ -39,9 +37,4 @@ public class VScheduleController {
         return new ResponseEntity<>(new VariableResponseDto(schedule), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) throws Exception {
-        scheduleService.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
-    }
 }
