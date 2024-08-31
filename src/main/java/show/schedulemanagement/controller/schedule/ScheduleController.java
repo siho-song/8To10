@@ -32,8 +32,9 @@ public class ScheduleController {
     }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) throws Exception {
-        scheduleService.deleteById(id);
+    public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) {
+        Member member = memberService.getAuthenticatedMember();
+        scheduleService.deleteById(member, id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

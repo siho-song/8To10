@@ -23,7 +23,6 @@ import show.schedulemanagement.service.MemberService;
 public class ScheduleServiceImpl implements ScheduleService{
 
     private final ScheduleRepository scheduleRepository;
-    private final MemberService memberService;
 
     @Override
     @Transactional
@@ -33,8 +32,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     @Transactional
-    public void deleteById(Long id){
-        Member member = memberService.getAuthenticatedMember();
+    public void deleteById(Member member, Long id){
         Schedule schedule = findById(id);
         String createdBy = schedule.getCreatedBy();
         if(member.getEmail().equals(createdBy)) {
@@ -50,19 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedule getConflictSchedule(List<ScheduleAble> newSchedule, List<Schedule> allSchedule) {
-        for (Schedule schedule : allSchedule) {
-            for (ScheduleAble scheduleAble : newSchedule) {
-                if(schedule.isConflict(scheduleAble)){
-                    return schedule;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<Schedule> findAllWithinDates(Member member, LocalDate start, LocalDate end) {
+    public List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end) {
         return scheduleRepository.findAllBetweenStartAndEnd(
                 member,
                 LocalDateTime.of(start, LocalTime.of(0, 0)),
