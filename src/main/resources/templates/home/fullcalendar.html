@@ -25,12 +25,12 @@
         <nav>
             <ul>
                 <div class="image-container" data-alt="마이페이지">
-                    <a href="/mypage" class="image-link">
+                    <a href="javascript:void(0);" class="image-link" onclick="">
                         <img th:src="@{/images/mypage.png}" src="/images/mypage.png" alt="마이페이지">
                     </a>
                 </div>
                 <div class="image-container" data-alt="커뮤니티">
-                    <a href="/community" class="image-link">
+                    <a href="javascript:void(0);" class="image-link" onclick="showBoardPage()">
                         <img th:src="@{/images/community.png}" src="images/community.png" alt="커뮤니티">
                     </a>
                 </div>
@@ -44,7 +44,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" id="main-container">
     <!--    왼쪽 사이드바 -->
     <div class="sidebar" id="left-sidebar">
         왼쪽 사이드바
@@ -139,16 +139,22 @@
         </div>
     </div>
 
+    <!-- 일정 상세보기 팝업 -->
+    <div id="event-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-button">&times;</span>
+            <h2>일정 상세</h2>
+            <div id="event-details"></div>
+        </div>
+    </div>
+
 </div>
 
-<!-- 일정 상세보기 팝업 -->
-<div id="event-details-modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close-button">&times;</span>
-        <h2>일정 상세</h2>
-        <div id="event-details"></div>
-    </div>
-</div>
+<div class="container" id="board-container"></div>
+
+
+<script th:src="@{/js/viewChanger.js}"
+            src="/js/viewChanger.js"></script>
 
 <script th:src="@{/js/home/form/validation/validateFixedScheduleForm.js}"
         src="/js/home/form/validation/validateFixedScheduleForm.js"></script>

@@ -95,15 +95,16 @@ button:disabled {
 
 .container {
     display: flex;
-    flex: 1;
+    flex-direction: row;
     width: 100%; /* 컨테이너의 너비를 전체로 설정 */
     transition: all 0.3s ease; /* 부드러운 전환 효과 */
     overflow: hidden; /* 넘치는 내용 숨기기 */
 }
 
 .sidebar {
-    overflow-y: auto; /* 세로 스크롤 활성화 */
     width: 20%; /* 사이드바의 너비 설정 */
+    height: 93vh;
+    overflow-y: auto; /* 세로 스크롤 활성화 */
     background-color: #f5faf5; /* 사이드바 색상 변경 */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 사이드바에 그림자 추가 */
