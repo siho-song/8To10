@@ -16,16 +16,15 @@ import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 @Builder
 @ToString
 public class FixDetailAddDto {
-    @NotNull
     @ZeroSeconds
     private LocalTime startTime;
 
-    @NotNull
     @ZeroSeconds
     @PerformInDay
     private LocalTime duration;
 
     @Frequency
+    @NotNull
     private String frequency;
 
     @NotNull
