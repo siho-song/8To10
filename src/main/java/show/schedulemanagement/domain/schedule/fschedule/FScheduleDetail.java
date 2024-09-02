@@ -48,10 +48,9 @@ public class FScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    public static FScheduleDetail createFscheduleDetail(String detailDescription, LocalDateTime startDate, LocalDateTime endDate){
+    public static FScheduleDetail createFscheduleDetail(LocalDateTime startDate, LocalDateTime endDate){
         FScheduleDetail fScheduleDetail = new FScheduleDetail();
         fScheduleDetail.completeStatus = false;
-        fScheduleDetail.detailDescription = detailDescription;
         fScheduleDetail.startDate = startDate;
         fScheduleDetail.endDate = endDate;
         return fScheduleDetail;
