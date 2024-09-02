@@ -29,7 +29,7 @@ public class ScheduleController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<ScheduleResponseDto>> getAllSchedule(){
         Member member = memberService.getAuthenticatedMember();
-        List<Schedule> schedules = scheduleService.findAllByMemberAndDetail(member);
+        List<Schedule> schedules = scheduleService.findAllWithDetailByMember(member);
 
         Result<ScheduleResponseDto> result = new Result<>();
         schedules.forEach(schedule -> scheduleService.setResultFromSchedule(result, schedule));

@@ -54,8 +54,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedule> findAllByMemberAndDetail(Member member) {
-        return scheduleRepository.findAllWithMemberAndDetail(member);
+    public List<Schedule> findAllWithDetailByMember(Member member) {
+        return scheduleRepository.findAllWithDetailByMember(member);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
     }
 
     @Override
-    public List<Schedule> findAllWithMemberAndDetail(Member member) {
+    public List<Schedule> findAllWithDetailByMember(Member member) {
         List<Schedule> schedules = new ArrayList<>();
 
         //변동일정 불러오기

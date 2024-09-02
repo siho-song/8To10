@@ -12,6 +12,6 @@ public interface ScheduleService {
     void deleteById(Member member, Long id);
     Schedule findById(Long id);
     List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);
-    List<Schedule> findAllByMemberAndDetail(Member member);
+    List<Schedule> findAllWithDetailByMember(Member member);
     void setResultFromSchedule(Result<ScheduleResponseDto> result, Schedule schedule);
 }
