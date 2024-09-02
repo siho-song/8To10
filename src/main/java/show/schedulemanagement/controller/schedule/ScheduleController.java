@@ -1,5 +1,6 @@
 package show.schedulemanagement.controller.schedule;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.service.MemberService;
@@ -27,7 +29,11 @@ public class ScheduleController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<ScheduleResponseDto>> getAllSchedule(){
         Member member = memberService.getAuthenticatedMember();
-        Result<ScheduleResponseDto> result = scheduleService.getResult(member);
+        List<Schedule> schedules = scheduleService.findAllByMemberAndDetail(member);
+
+        Result<ScheduleResponseDto> result = new Result<>();
+        schedules.forEach(schedule -> scheduleService.setResultFromSchedule(result, schedule));
+
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
