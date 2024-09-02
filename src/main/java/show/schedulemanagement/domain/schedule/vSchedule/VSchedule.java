@@ -40,15 +40,6 @@ public class VSchedule extends Schedule implements ScheduleAble {
     }
 
     @Override
-    public boolean isConflict(ScheduleAble schedule) {
-        LocalDateTime start = schedule.getStartDate();
-        LocalDateTime end = schedule.getEndDate();
-        LocalDateTime scheduleStart = super.startDate;
-        LocalDateTime scheduleEnd = super.endDate;
-        return end.isAfter(scheduleStart) || start.isBefore(scheduleEnd);
-    }
-
-    @Override
     public List<ScheduleAble> getScheduleAbles() {
         return List.of(this);
     }
