@@ -20,15 +20,14 @@ import show.schedulemanagement.service.MemberService;
 @Service
 @Slf4j
 public class ScheduleDetailServiceImpl implements ScheduleDetailService{
-    private final MemberService memberService;
+
     private final ScheduleService scheduleService;
     private final FScheduleDetailRepository fScheduleDetailRepository;
     private final NScheduleDetailRepository nScheduleDetailRepository;
 
     @Override
     @Transactional
-    public void deleteFdById(Long id) {
-        Member member = memberService.getAuthenticatedMember();
+    public void deleteFdById(Member member, Long id) {
         FScheduleDetail fScheduleDetail = findFdById(id);
         FSchedule fSchedule = fScheduleDetail.getFSchedule();
         List<FScheduleDetail> fScheduleDetails = fSchedule.getFScheduleDetails();
@@ -38,14 +37,13 @@ public class ScheduleDetailServiceImpl implements ScheduleDetailService{
         }
 
         if(fScheduleDetails.isEmpty()){
-            scheduleService.deleteById(fSchedule.getId());
+            scheduleService.deleteById(member, fSchedule.getId());
         }
     }
 
     @Override
     @Transactional
-    public void deleteNdById(Long id) {
-        Member member = memberService.getAuthenticatedMember();
+    public void deleteNdById(Member member, Long id) {
         NScheduleDetail nScheduleDetail = findNdById(id);
         NSchedule nSchedule = nScheduleDetail.getNSchedule();
         List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
@@ -55,7 +53,7 @@ public class ScheduleDetailServiceImpl implements ScheduleDetailService{
         }
 
         if (nScheduleDetails.isEmpty()) {
-            scheduleService.deleteById(nSchedule.getId());
+            scheduleService.deleteById(member, nSchedule.getId());
         }
     }
 
