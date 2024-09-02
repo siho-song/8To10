@@ -11,4 +11,8 @@ import lombok.ToString;
 @ToString
 public class Result<T> {
     List<T> events = new ArrayList<>();
+
+    public void addEvent(T event){
+        events.add(event);
+    }
 }
