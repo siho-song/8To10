@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ZeroSeconds {
-    String message() default "초단위의 값은 반드시 0 이어야 합니다.";
+    String message() default "{schedule.zeroSecond.message}";
 
     Class<?>[] groups() default {};
 
