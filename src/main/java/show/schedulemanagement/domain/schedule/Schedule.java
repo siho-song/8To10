@@ -48,6 +48,5 @@ public abstract class Schedule extends BaseEntity {
     @Column(nullable = false)
     protected LocalDateTime endDate;
 
-    public abstract boolean isConflict(ScheduleAble scheduleAble);
     public abstract List<ScheduleAble> getScheduleAbles();
 }

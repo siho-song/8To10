@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.dto.schedule.request.FixAddDto;
-import show.schedulemanagement.dto.schedule.response.FixResponseDto;
 import show.schedulemanagement.dto.Result;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.FScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
@@ -29,14 +29,16 @@ public class FScheduleController {
     private final MemberService memberService;
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<FixResponseDto>> addFSchedule(@RequestBody @Valid FixAddDto dto) {
-        log.debug("FScheduleController addSchedule call FixAddDto : {}", dto);
+    public ResponseEntity<Result<ScheduleResponseDto>> add(@RequestBody @Valid FixAddDto dto) {
         Member member = memberService.getAuthenticatedMember();
-        FSchedule schedule = fScheduleService.addDetailsToFSchedule(member, dto);
+        FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
 
-        scheduleService.save(schedule);
-        log.debug("FScheduleController addSchedule call fschedule : {}", schedule);
+        fScheduleService.addDetailsForEachEvent(fSchedule, dto.getEvents());
+        scheduleService.save(fSchedule);
 
-        return new ResponseEntity<>(fScheduleService.getResult(schedule), HttpStatus.CREATED);
+        Result<ScheduleResponseDto> result = new Result<>();
+        scheduleService.setResultFromSchedule(result, fSchedule);
+
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 }

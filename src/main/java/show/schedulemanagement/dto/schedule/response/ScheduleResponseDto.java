@@ -1,6 +1,8 @@
 package show.schedulemanagement.dto.schedule.response;
 
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,6 +19,7 @@ import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 @ToString
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ScheduleResponseDto {
     private Long id;
     private String title;
@@ -26,27 +29,6 @@ public abstract class ScheduleResponseDto {
     private String type; // "normal","fixed","variable"
     private String color;
     private Boolean completeStatue;
-
-    protected ScheduleResponseDto(
-            Long id,
-            String title,
-            String commonDescription,
-            LocalDateTime start,
-            LocalDateTime end,
-            String type,
-            String color,
-            Boolean completeStatue
-    ) {
-
-        this.id = id;
-        this.title = title;
-        this.commonDescription = commonDescription;
-        this.start = start;
-        this.end = end;
-        this.type = type;
-        this.color = color;
-        this.completeStatue = completeStatue;
-    }
 
     public static ScheduleResponseDto from(Schedule schedule, ScheduleAble scheduleAble) {
         if (schedule instanceof NSchedule) {

@@ -50,18 +50,6 @@ public class NSchedule extends Schedule{
     }
 
     @Override
-    public boolean isConflict(ScheduleAble schedule) {
-        LocalDateTime start = schedule.getStartDate();
-        LocalDateTime end = schedule.getEndDate();
-        for (NScheduleDetail nScheduleDetail : nScheduleDetails) {
-            if(!end.isAfter(nScheduleDetail.getStartDate()) || start.isBefore(nScheduleDetail.getEndDate())){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
     public List<ScheduleAble> getScheduleAbles() {
         return nScheduleDetails.stream().map(nScheduleDetail -> (ScheduleAble) nScheduleDetail).toList();
     }

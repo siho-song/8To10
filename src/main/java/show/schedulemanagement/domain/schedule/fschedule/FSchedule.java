@@ -40,18 +40,6 @@ public class FSchedule extends Schedule{
     }
 
     @Override
-    public boolean isConflict(ScheduleAble schedule) {
-        LocalDateTime start = schedule.getStartDate();
-        LocalDateTime end = schedule.getEndDate();
-        for (FScheduleDetail fScheduleDetail : fScheduleDetails) {
-            if(!end.isAfter(fScheduleDetail.getStartDate()) || start.isBefore(fScheduleDetail.getEndDate())){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
     public List<ScheduleAble> getScheduleAbles() {
         return fScheduleDetails.stream().map(fScheduleDetail -> (ScheduleAble) fScheduleDetail).toList();
     }

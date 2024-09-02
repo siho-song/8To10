@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
-import show.schedulemanagement.service.MemberService;
 
 @Service
 @RequiredArgsConstructor
@@ -56,21 +54,12 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<Schedule> findAll(Member member) {
-        return scheduleRepository.findAll(member);
+    public List<Schedule> findAllByMemberAndDetail(Member member) {
+        return scheduleRepository.findAllWithMemberAndDetail(member);
     }
 
     @Override
-    public Result<ScheduleResponseDto> getResult(Member member){
-        List<Schedule> all = findAll(member);
-        Result<ScheduleResponseDto> result = new Result<>();
-        List<ScheduleResponseDto> events = result.getEvents();
-        for (Schedule schedule : all) {
-            List<ScheduleAble> scheduleAbles = schedule.getScheduleAbles();
-            for (ScheduleAble scheduleAble : scheduleAbles) {
-                events.add(ScheduleResponseDto.from(schedule, scheduleAble));
-            }
-        }
-        return result;
+    public void setResultFromSchedule(Result<ScheduleResponseDto> result, Schedule schedule) {
+        schedule.getScheduleAbles().forEach(e -> result.addEvent(ScheduleResponseDto.from(schedule, e)));
     }
 }
