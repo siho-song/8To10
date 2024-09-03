@@ -9,6 +9,11 @@ function showBoardPage() {
     boardContainer.innerHTML = boardView;
 }
 
+function showCreatePostPage() {
+    const createPostPage = document.getElementById('board-container');
+    createPostPage.innerHTML = createPostView;
+}
+
 boardView = `
     <!-- 왼쪽 사이드바 -->    
     <div class="sidebar" id="left-sidebar">
@@ -43,5 +48,35 @@ boardView = `
         <div id="board-content"></div>
         <div id="pagination" class="pagination"></div>
 
+    </div>
+`;
+
+
+createPostView = `
+    <div class="create-post-container">
+        <div class="create-post-header">
+            <h2>글쓰기</h2>
+            <button class="view-list-btn" onclick="window.location.href='/community'">목록보기</button>
+        </div>
+        <hr>
+        <div class="post-form">
+            <div class="post-form-group">
+                <label for="post-title">글 제목</label>
+                <input type="text" id="post-title" placeholder="글 제목을 입력하세요">
+                <span class="error-message" id="title-error"></span>
+            </div>
+
+            <div class="post-form-group">
+                <label for="post-content">글 내용</label>
+                <textarea id="post-content" rows="10" placeholder="내용을 입력하세요"></textarea>
+                <span class="post-error-message" id="content-error"></span>
+            </div>
+
+            <div class="post-form-group">
+                <label for="post-file">첨부 파일</label>
+                <input type="file" id="post-file">
+            </div>
+            <button class="post-submit-btn" onclick="submitPost()">등록</button>
+        </div>
     </div>
 `;
