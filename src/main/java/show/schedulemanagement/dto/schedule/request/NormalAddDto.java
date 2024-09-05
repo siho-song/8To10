@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
 import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objectError.PerformInWeek;
-import show.schedulemanagement.validator.schedule.objectError.StartEqualBeforeEnd;
+import show.schedulemanagement.validator.schedule.objectError.StartDateBeforeEqEndDate;
 
 @SuperBuilder
 @Getter
@@ -23,7 +23,7 @@ import show.schedulemanagement.validator.schedule.objectError.StartEqualBeforeEn
 @NoArgsConstructor
 @Slf4j
 @PerformInWeek
-@StartEqualBeforeEnd
+@StartDateBeforeEqEndDate
 public class NormalAddDto extends ScheduleAddDto implements DateRangeValidatable{
     @NotNull
     private LocalDate startDate;

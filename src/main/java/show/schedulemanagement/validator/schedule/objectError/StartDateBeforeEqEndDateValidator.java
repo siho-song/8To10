@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 
-public class StartEqualBeforeEndValidator implements ConstraintValidator<StartEqualBeforeEnd, DateRangeValidatable> {
+public class StartDateBeforeEqEndDateValidator implements ConstraintValidator<StartDateBeforeEqEndDate, DateRangeValidatable> {
     @Override
     public boolean isValid(DateRangeValidatable dateRangeValidatable,
                            ConstraintValidatorContext constraintValidatorContext) {
