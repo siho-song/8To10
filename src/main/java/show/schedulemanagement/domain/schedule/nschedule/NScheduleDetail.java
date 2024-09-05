@@ -20,6 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
@@ -31,7 +32,7 @@ import show.schedulemanagement.domain.schedule.ScheduleAble;
 @NoArgsConstructor(access = PROTECTED)
 @DynamicInsert
 @ToString(exclude = "nSchedule")
-public class NScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
+public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "n_schedule_detail_id")
     private Long id;
