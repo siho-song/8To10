@@ -1,11 +1,8 @@
 package show.schedulemanagement.service.schedule;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +17,7 @@ import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.schedule.vSchedule.VScheduleService;
 
 @SpringBootTest
 @DisplayName("변동일정 서비스 테스트")
