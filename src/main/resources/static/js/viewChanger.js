@@ -14,6 +14,12 @@ function showCreatePostPage() {
     createPostPage.innerHTML = createPostView;
 }
 
+function showPostDetailPage() {
+    const postDetailPage = document.getElementById('board-container');
+    postDetailPage.innerHTML = postDetailView;
+}
+
+
 boardView = `
     <!-- 왼쪽 사이드바 -->    
     <div class="sidebar" id="left-sidebar">
