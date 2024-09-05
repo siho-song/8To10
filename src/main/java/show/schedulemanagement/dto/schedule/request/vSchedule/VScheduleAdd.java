@@ -1,10 +1,12 @@
-package show.schedulemanagement.dto.schedule.request;
+package show.schedulemanagement.dto.schedule.request.vSchedule;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
+import show.schedulemanagement.dto.schedule.request.ScheduleAddDto;
 import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 
@@ -13,7 +15,7 @@ import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 @Getter
 @StartBeforeEnd
 @NoArgsConstructor
-public class VariableAddDto extends ScheduleAddDto implements DateRangeValidatable{
+public class VScheduleAdd extends ScheduleAddDto implements DateRangeValidatable {
 
     @ZeroSeconds
     private LocalDateTime start;
