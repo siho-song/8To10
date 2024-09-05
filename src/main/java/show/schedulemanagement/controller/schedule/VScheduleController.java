@@ -21,7 +21,7 @@ import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
-import show.schedulemanagement.service.schedule.VScheduleService;
+import show.schedulemanagement.service.schedule.vSchedule.VScheduleService;
 
 @RestController
 @RequiredArgsConstructor

@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 
@@ -26,7 +27,7 @@ import show.schedulemanagement.domain.schedule.ScheduleAble;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @ToString(exclude = {"fSchedule"})
-public class FScheduleDetail extends BaseUpdatedEntity implements ScheduleAble {
+public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "f_schedule_detail_id")
     private Long id;

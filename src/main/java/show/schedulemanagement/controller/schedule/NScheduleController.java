@@ -16,7 +16,7 @@ import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.NScheduleService;
+import show.schedulemanagement.service.schedule.nSchedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @RestController

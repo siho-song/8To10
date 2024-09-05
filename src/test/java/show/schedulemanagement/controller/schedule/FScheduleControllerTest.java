@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.FixAddDto;
 import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
 import show.schedulemanagement.security.dto.LoginMemberDto;
@@ -29,6 +30,7 @@ import show.schedulemanagement.security.utils.TokenUtils;
 @AutoConfigureMockMvc
 @Slf4j
 @DisplayName("고정일정 엔드포인트")
+@Transactional
 class FScheduleControllerTest {
 
     @Autowired

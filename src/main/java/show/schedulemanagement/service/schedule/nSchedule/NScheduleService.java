@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule;
+package show.schedulemanagement.service.schedule.nSchedule;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -25,6 +25,7 @@ import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
 import show.schedulemanagement.dto.Result;
+import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlotService;
 

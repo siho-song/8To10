@@ -11,12 +11,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("일정 공통 컨트롤러 테스트")
+@Transactional
 class ScheduleControllerTest {
 
     @Autowired
