@@ -16,7 +16,7 @@ import show.schedulemanagement.dto.schedule.request.FixAddDto;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.FScheduleService;
+import show.schedulemanagement.service.schedule.fSchedule.FScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @RestController

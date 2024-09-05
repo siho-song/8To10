@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule;
+package show.schedulemanagement.service.schedule.fSchedule;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.FixAddDto;
 import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
 
 @Service
