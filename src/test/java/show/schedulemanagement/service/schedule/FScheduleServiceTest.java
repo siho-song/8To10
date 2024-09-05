@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
@@ -21,9 +22,11 @@ import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.schedule.fSchedule.FScheduleService;
 
 @DisplayName("고정일정 서비스 테스트")
 @SpringBootTest
+@Transactional
 class FScheduleServiceTest {
 
     @Autowired

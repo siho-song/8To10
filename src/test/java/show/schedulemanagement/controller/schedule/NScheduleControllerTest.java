@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.NormalAddDto;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
@@ -22,6 +23,7 @@ import show.schedulemanagement.security.utils.TokenUtils;
 @AutoConfigureMockMvc
 @SpringBootTest
 @Slf4j
+@Transactional
 public class NScheduleControllerTest {
 
     @Autowired
