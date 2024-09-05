@@ -80,3 +80,19 @@ createPostView = `
         </div>
     </div>
 `;
+
+postDetailView = `
+        <div class="post-container">
+            <div class="post-main-content">
+
+                <div id="post-content"></div>
+
+                <div class="comment-section">
+                    <input type="text" id="comment-input" placeholder="댓글을 입력하세요">
+                    <button id="submit-comment">댓글 등록</button>
+                </div>
+
+                <div id="comments-container"></div>
+            </div>
+        </div>
+`;
