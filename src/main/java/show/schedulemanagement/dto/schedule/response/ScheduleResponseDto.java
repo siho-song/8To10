@@ -36,7 +36,7 @@ public abstract class ScheduleResponseDto {
         } else if (schedule instanceof FSchedule) {
             return new FScheduleResponse((FSchedule) schedule,(FScheduleDetail) scheduleAble);
         } else if (schedule instanceof VSchedule) {
-            return new VariableResponseDto((VSchedule) schedule);
+            return new VScheduleResponse((VSchedule) schedule);
         } else {
             throw new IllegalArgumentException("Unknown schedule type");
         }
