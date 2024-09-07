@@ -32,7 +32,7 @@ public abstract class ScheduleResponseDto {
 
     public static ScheduleResponseDto from(Schedule schedule, ScheduleAble scheduleAble) {
         if (schedule instanceof NSchedule) {
-            return new NormalResponseDto((NSchedule) schedule, (NScheduleDetail) scheduleAble);
+            return new NScheduleResponse((NSchedule) schedule, (NScheduleDetail) scheduleAble);
         } else if (schedule instanceof FSchedule) {
             return new FScheduleResponse((FSchedule) schedule,(FScheduleDetail) scheduleAble);
         } else if (schedule instanceof VSchedule) {

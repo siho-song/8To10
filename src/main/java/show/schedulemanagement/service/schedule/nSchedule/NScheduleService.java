@@ -23,7 +23,7 @@ import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
-import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
+import show.schedulemanagement.dto.schedule.response.NScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;
@@ -63,12 +63,12 @@ public class NScheduleService {
         return nSchedule;
     }
 
-    public Result<NormalResponseDto> getResult(NSchedule nSchedule) {
-        Result<NormalResponseDto> result = new Result<>();
+    public Result<NScheduleResponse> getResult(NSchedule nSchedule) {
+        Result<NScheduleResponse> result = new Result<>();
         List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
-        List<NormalResponseDto> events = result.getEvents();
+        List<NScheduleResponse> events = result.getEvents();
         for (NScheduleDetail nScheduleDetail : nScheduleDetails) {
-            NormalResponseDto dto = new NormalResponseDto(nSchedule, nScheduleDetail);
+            NScheduleResponse dto = new NScheduleResponse(nSchedule, nScheduleDetail);
             events.add(dto);
         }
         return result;
