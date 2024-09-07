@@ -326,7 +326,7 @@ function showBoard() {
 
 function renderPosts(data) {
     return data.map(post => `
-        <div class="post" onclick="viewPost(${post.board_id})">
+        <div class="post" id="post">
             <h3 class="post-title">${post.title}</h3>
             <div class="post-info">
                 <span class="post-author">${post.created_by}</span>
