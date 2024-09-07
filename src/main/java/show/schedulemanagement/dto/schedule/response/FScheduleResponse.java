@@ -12,9 +12,9 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class FixResponseDto extends ScheduleResponseDto {
+public class FScheduleResponse extends ScheduleResponseDto {
     private Long parentId;
-    public FixResponseDto(FSchedule fSchedule, FScheduleDetail fScheduleDetail) {
+    public FScheduleResponse(FSchedule fSchedule, FScheduleDetail fScheduleDetail) {
         super(fScheduleDetail.getId(),
                 fSchedule.getTitle(),
                 fSchedule.getCommonDescription(),

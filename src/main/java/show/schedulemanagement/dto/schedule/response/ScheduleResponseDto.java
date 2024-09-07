@@ -34,7 +34,7 @@ public abstract class ScheduleResponseDto {
         if (schedule instanceof NSchedule) {
             return new NormalResponseDto((NSchedule) schedule, (NScheduleDetail) scheduleAble);
         } else if (schedule instanceof FSchedule) {
-            return new FixResponseDto((FSchedule) schedule,(FScheduleDetail) scheduleAble);
+            return new FScheduleResponse((FSchedule) schedule,(FScheduleDetail) scheduleAble);
         } else if (schedule instanceof VSchedule) {
             return new VariableResponseDto((VSchedule) schedule);
         } else {
