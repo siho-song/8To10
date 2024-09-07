@@ -11,9 +11,8 @@ import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
-import show.schedulemanagement.repository.schedule.detail.FScheduleDetailRepository;
+import show.schedulemanagement.repository.schedule.fSchedule.FScheduleDetailRepository;
 import show.schedulemanagement.repository.schedule.detail.NScheduleDetailRepository;
-import show.schedulemanagement.service.MemberService;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,24 +21,7 @@ import show.schedulemanagement.service.MemberService;
 public class ScheduleDetailServiceImpl implements ScheduleDetailService{
 
     private final ScheduleService scheduleService;
-    private final FScheduleDetailRepository fScheduleDetailRepository;
     private final NScheduleDetailRepository nScheduleDetailRepository;
-
-    @Override
-    @Transactional
-    public void deleteFdById(Member member, Long id) {
-        FScheduleDetail fScheduleDetail = findFdById(id);
-        FSchedule fSchedule = fScheduleDetail.getFSchedule();
-        List<FScheduleDetail> fScheduleDetails = fSchedule.getFScheduleDetails();
-
-        if(member.getEmail().equals(fSchedule.getCreatedBy())){
-            fScheduleDetails.remove(fScheduleDetail);
-        }
-
-        if(fScheduleDetails.isEmpty()){
-            scheduleService.deleteById(member, fSchedule.getId());
-        }
-    }
 
     @Override
     @Transactional
@@ -55,12 +37,6 @@ public class ScheduleDetailServiceImpl implements ScheduleDetailService{
         if (nScheduleDetails.isEmpty()) {
             scheduleService.deleteById(member, nSchedule.getId());
         }
-    }
-
-    @Override
-    public FScheduleDetail findFdById(Long id) {
-        //TODO 예외처리
-        return fScheduleDetailRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 고정일정 세부사항을 찾을 수 없습니다."));
     }
 
     @Override
