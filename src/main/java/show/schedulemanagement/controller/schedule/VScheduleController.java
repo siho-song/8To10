@@ -40,7 +40,7 @@ public class VScheduleController {
         return new ResponseEntity<>(ScheduleResponseDto.from(schedule, null), OK);
     }
 
-    @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponseDto> add(@RequestBody @Valid VScheduleAdd dto) {
         Member member = memberService.getAuthenticatedMember();
         VSchedule schedule = VSchedule.createVSchedule(member, dto);

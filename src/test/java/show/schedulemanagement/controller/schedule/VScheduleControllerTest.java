@@ -56,7 +56,7 @@ class VScheduleControllerTest {
                 .end(LocalDateTime.of(2024, 9, 1, 12, 0))
                 .build();
 
-        mockMvc.perform(post("/schedule/variable/add")
+        mockMvc.perform(post("/schedule/variable")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
