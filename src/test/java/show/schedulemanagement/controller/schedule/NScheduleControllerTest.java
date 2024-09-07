@@ -1,5 +1,6 @@
 package show.schedulemanagement.controller.schedule;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -8,11 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import show.schedulemanagement.security.utils.TokenUtils;
 @SpringBootTest
 @Slf4j
 @Transactional
+@DisplayName("일반일정 CRUD")
 public class NScheduleControllerTest {
 
     @Autowired
@@ -54,14 +56,15 @@ public class NScheduleControllerTest {
     }
 
     @Test
-    public void testAddSchedule() throws Exception {
+    @DisplayName("일반일정 정상 등록")
+    public void add() throws Exception {
         log.debug("testAddSchedule called normal Add dto : {}", normalAddDto);
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
-        mockMvc.perform(post("/schedule/normal/add")
+        mockMvc.perform(post("/schedule/normal")
                         .cookie(jwtCookie) // JWT 쿠키 추가
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(normalAddDto)))
                 .andExpect(status().isCreated());
     }

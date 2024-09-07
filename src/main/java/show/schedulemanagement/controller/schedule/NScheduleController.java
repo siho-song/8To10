@@ -29,7 +29,7 @@ public class NScheduleController {
     private final MemberService memberService;
     private final NScheduleService nScheduleService;
 
-    @PostMapping(path = "/add",consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<NormalResponseDto>> addSchedule(@RequestBody @Valid NormalAddDto dto) throws RuntimeException{
         Member member = memberService.getAuthenticatedMember();
         NSchedule nSchedule = nScheduleService.addNSchedule(member, dto);
