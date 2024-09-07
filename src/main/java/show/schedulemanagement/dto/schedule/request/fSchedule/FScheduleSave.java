@@ -1,6 +1,5 @@
-package show.schedulemanagement.dto.schedule.request;
+package show.schedulemanagement.dto.schedule.request.fSchedule;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,7 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import show.schedulemanagement.validator.schedule.filedError.UniqueDayList;
+import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
+import show.schedulemanagement.dto.schedule.request.ScheduleAddDto;
 import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 
 @SuperBuilder
@@ -19,14 +19,14 @@ import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @Slf4j
-public class FixAddDto extends ScheduleAddDto implements DateRangeValidatable{
+public class FScheduleSave extends ScheduleAddDto implements DateRangeValidatable {
     @NotNull
     private LocalDate startDate;
     @NotNull
     private LocalDate endDate;
 
     @NotNull
-    private List<FixDetailAddDto> events;
+    private List<FScheduleDetailSave> events;
 
     @Override
     public LocalDateTime takeStartDateTime() {
