@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.member.MemberRole;
 import show.schedulemanagement.domain.member.Role;
-import show.schedulemanagement.dto.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequest;
 import show.schedulemanagement.repository.member.MemberRepository;
 
 @Service
@@ -22,10 +22,10 @@ public class SignUpServiceImpl implements SignUpService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public void signUp(SignUpRequestDto signUpRequestDto){
-        if (signUpValidationService.isValidSignUp(signUpRequestDto)){
-            encodePassword(signUpRequestDto);
-            Member member = Member.of(signUpRequestDto);
+    public void signUp(SignUpRequest signUpRequest){
+        if (signUpValidationService.isValidSignUp(signUpRequest)){
+            encodePassword(signUpRequest);
+            Member member = Member.of(signUpRequest);
             MemberRole.createMemberRoleInfo(member, Role.NORMAL_USER);
             Member save = memberRepository.save(member);
             log.info("save member : {}", save);
@@ -36,8 +36,8 @@ public class SignUpServiceImpl implements SignUpService{
         throw new IllegalArgumentException("회원가입 실패");
     }
 
-    private void encodePassword(SignUpRequestDto signUpRequestDto) {
-        String password = signUpRequestDto.getPassword();
-        signUpRequestDto.setPassword(bCryptPasswordEncoder.encode(password));
+    private void encodePassword(SignUpRequest signUpRequest) {
+        String password = signUpRequest.getPassword();
+        signUpRequest.setPassword(bCryptPasswordEncoder.encode(password));
     }
 }

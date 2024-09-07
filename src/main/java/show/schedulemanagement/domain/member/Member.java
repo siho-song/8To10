@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
-import show.schedulemanagement.dto.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequest;
 
 @Entity
 @Getter
@@ -87,17 +86,17 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public static Member of(SignUpRequestDto signUpRequestDto){
+    public static Member of(SignUpRequest signUpRequest){
         return Member.builder()
-                .username(signUpRequestDto.getUsername())
-                .nickname(signUpRequestDto.getNickname())
-                .email(signUpRequestDto.getEmail())
-                .password(signUpRequestDto.getPassword())
-                .phoneNumber(signUpRequestDto.getPhoneNumber())
-                .gender(signUpRequestDto.getGender())
-                .mode(signUpRequestDto.getMode())
-                .authEmail(signUpRequestDto.getAuthEmail())
-                .authPhone(signUpRequestDto.getAuthPhone())
+                .username(signUpRequest.getUsername())
+                .nickname(signUpRequest.getNickname())
+                .email(signUpRequest.getEmail())
+                .password(signUpRequest.getPassword())
+                .phoneNumber(signUpRequest.getPhoneNumber())
+                .gender(signUpRequest.getGender())
+                .mode(signUpRequest.getMode())
+                .authEmail(signUpRequest.getAuthEmail())
+                .authPhone(signUpRequest.getAuthPhone())
                 .build();
     }
 

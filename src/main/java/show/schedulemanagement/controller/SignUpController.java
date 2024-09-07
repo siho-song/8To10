@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import show.schedulemanagement.dto.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequest;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.signup.SignUpService;
 import show.schedulemanagement.service.signup.SignUpValidationService;
@@ -29,7 +29,7 @@ public class SignUpController {
     private final MemberService memberService;
 
     @GetMapping
-    public String getSignUp(@ModelAttribute("dto") SignUpRequestDto signUpRequestDto){
+    public String getSignUp(@ModelAttribute("dto") SignUpRequest signUpRequest){
         return "signup/signup";
     }
 
@@ -56,9 +56,9 @@ public class SignUpController {
     }
 
     @PostMapping
-    public String signUp(@ModelAttribute("dto") @Valid SignUpRequestDto signUpRequestDto, RedirectAttributes redirectAttributes){
-        signUpService.signUp(signUpRequestDto);
-        String username = memberService.findByEmail(signUpRequestDto.getEmail()).getUsername();
+    public String signUp(@ModelAttribute("dto") @Valid SignUpRequest signUpRequest, RedirectAttributes redirectAttributes){
+        signUpService.signUp(signUpRequest);
+        String username = memberService.findByEmail(signUpRequest.getEmail()).getUsername();
         redirectAttributes.addAttribute("username",username);
         return "redirect:/signup/complete"; //redirect 해야함
     }
