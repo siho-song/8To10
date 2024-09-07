@@ -351,21 +351,21 @@ VALUES
 -- N_SCHEDULE_DETAIL 테이블에 데이터 삽입
 INSERT INTO N_SCHEDULE_DETAIL (schedule_id, start_date, end_date, complete_status, detail_description, created_by,created_at,updated_by, updated_at, daily_amount)
 VALUES
-    (4, '2024-05-01 09:00:00', '2024-05-01 10:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),20),
-    (4, '2024-05-02 10:00:00', '2024-05-02 11:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),20),
-    (4, '2024-05-03 11:00:00', '2024-05-03 12:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),20),
-    (4, '2024-05-04 12:00:00', '2024-05-04 13:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),20),
-    (4, '2024-05-05 13:00:00', '2024-05-05 14:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),20),
-    (5, '2024-06-01 09:00:00', '2024-06-01 10:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),40),
-    (5, '2024-06-02 10:00:00', '2024-06-02 11:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),40),
-    (5, '2024-06-03 11:00:00', '2024-06-03 12:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),40),
-    (5, '2024-06-04 12:00:00', '2024-06-04 13:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),40),
-    (5, '2024-06-05 13:00:00', '2024-06-05 14:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),40),
-    (6, '2024-07-01 09:00:00', '2024-07-01 10:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),60),
-    (6, '2024-07-02 10:00:00', '2024-07-02 11:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),60),
-    (6, '2024-07-03 11:00:00', '2024-07-03 12:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),60),
-    (6, '2024-07-04 12:00:00', '2024-07-04 13:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),60),
-    (6, '2024-07-05 13:00:00', '2024-07-05 14:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),60);
+    (4, '2024-05-01 09:00:00', '2024-05-01 10:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com', '2024-04-30 09:00:00',20),
+    (4, '2024-05-02 10:00:00', '2024-05-02 11:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',20),
+    (4, '2024-05-03 11:00:00', '2024-05-03 12:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',20),
+    (4, '2024-05-04 12:00:00', '2024-05-04 13:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',20),
+    (4, '2024-05-05 13:00:00', '2024-05-05 14:00:00', false, 'Detail of the first N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',20),
+    (5, '2024-06-01 09:00:00', '2024-06-01 10:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',40),
+    (5, '2024-06-02 10:00:00', '2024-06-02 11:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',40),
+    (5, '2024-06-03 11:00:00', '2024-06-03 12:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',40),
+    (5, '2024-06-04 12:00:00', '2024-06-04 13:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',40),
+    (5, '2024-06-05 13:00:00', '2024-06-05 14:00:00', false, 'Detail of the second N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',40),
+    (6, '2024-07-01 09:00:00', '2024-07-01 10:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',60),
+    (6, '2024-07-02 10:00:00', '2024-07-02 11:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',60),
+    (6, '2024-07-03 11:00:00', '2024-07-03 12:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',60),
+    (6, '2024-07-04 12:00:00', '2024-07-04 13:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',60),
+    (6, '2024-07-05 13:00:00', '2024-07-05 14:00:00', false, 'Detail of the third N_SCHEDULE.','normal@example.com', '2024-04-30 09:00:00', 'normal@example.com','2024-04-30 09:00:00',60);
 
 -- F_SCHEDULE 테이블에 데이터 삽입
 INSERT INTO F_SCHEDULE (schedule_id)
@@ -377,21 +377,21 @@ VALUES
 -- F_SCHEDULE_DETAIL 테이블에 데이터 삽입
 INSERT INTO F_SCHEDULE_DETAIL (schedule_id, complete_status, detail_description, created_by,created_at,updated_by, updated_at,start_date,end_date)
 VALUES
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-01 10:00:00','2024-01-01 14:00:00'),
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-01 17:30:00','2024-01-01 18:00:00'),
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-01 21:30:00','2024-01-01 22:00:00'),
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-03 10:00:00','2024-01-03 14:00:00'),
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-04 10:00:00','2024-01-04 14:00:00'),
-    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-01-05 10:00:00','2024-01-05 14:00:00'),
-    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-02-01 10:00:00','2024-02-01 14:00:00'),
-    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-02-08 10:00:00','2024-02-08 14:00:00'),
-    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-02-14 10:00:00','2024-02-14 14:00:00'),
-    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-02-03 10:00:00','2024-02-03 14:00:00'),
-    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-02-10 10:00:00','2024-02-10 14:00:00'),
-    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-03-01 10:00:00','2024-03-01 14:00:00'),
-    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-03-08 10:00:00','2024-03-08 14:00:00'),
-    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-03-14 10:00:00','2024-03-14 14:00:00'),
-    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com', NOW(), 'normal@example.com', NOW(),'2024-03-21 10:00:00','2024-03-21 14:00:00');
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com', '2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-01 10:00:00','2024-01-01 14:00:00'),
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com','2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-01 17:30:00','2024-01-01 18:00:00'),
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com','2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-01 21:30:00','2024-01-01 22:00:00'),
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com','2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-03 10:00:00','2024-01-03 14:00:00'),
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com','2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-04 10:00:00','2024-01-04 14:00:00'),
+    (1, false, 'Detail of the first F_SCHEDULE.','normal@example.com','2024-01-01 09:00:00', 'normal@example.com', '2024-01-01 09:00:00','2024-01-05 10:00:00','2024-01-05 14:00:00'),
+    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', '2024-02-01 09:00:00', 'normal@example.com', '2024-02-01 09:00:00','2024-02-01 10:00:00','2024-02-01 14:00:00'),
+    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', '2024-02-01 09:00:00', 'normal@example.com', '2024-02-01 09:00:00','2024-02-08 10:00:00','2024-02-08 14:00:00'),
+    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', '2024-02-01 09:00:00', 'normal@example.com', '2024-02-01 09:00:00','2024-02-14 10:00:00','2024-02-14 14:00:00'),
+    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', '2024-02-01 09:00:00', 'normal@example.com', '2024-02-01 09:00:00','2024-02-03 10:00:00','2024-02-03 14:00:00'),
+    (2, false, 'Detail of the second F_SCHEDULE.','normal@example.com', '2024-02-01 09:00:00', 'normal@example.com', '2024-02-01 09:00:00','2024-02-10 10:00:00','2024-02-10 14:00:00'),
+    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com','2024-03-01 09:00:00', 'normal@example.com','2024-03-01 09:00:00','2024-03-01 10:00:00','2024-03-01 14:00:00'),
+    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com','2024-03-01 09:00:00', 'normal@example.com','2024-03-01 09:00:00','2024-03-08 10:00:00','2024-03-08 14:00:00'),
+    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com','2024-03-01 09:00:00', 'normal@example.com','2024-03-01 09:00:00','2024-03-14 10:00:00','2024-03-14 14:00:00'),
+    (3, false, 'Detail of the third F_SCHEDULE.','normal@example.com','2024-03-01 09:00:00', 'normal@example.com','2024-03-01 09:00:00','2024-03-21 10:00:00','2024-03-21 14:00:00');
 
 
 -- V_SCHEDULE 테이블에 데이터 삽입
