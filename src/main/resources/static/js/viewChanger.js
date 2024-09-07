@@ -1,3 +1,10 @@
+document.addEventListener("click", function (event) {
+    if(event.target.id === "board-link" || event.target.id === "board-link-img") {
+        event.preventDefault();
+        showBoardPage();
+    }
+
+});
 // TODO 마이페이지, 성취도 페이지가 구현되면 해당 뷰를 담는 container도 비활성화하는 코드 추가 필요
 function showBoardPage() {
     const mainContainer = document.getElementById('main-container');
