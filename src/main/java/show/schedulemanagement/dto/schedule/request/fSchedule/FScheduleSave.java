@@ -10,7 +10,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
-import show.schedulemanagement.dto.schedule.request.ScheduleAddDto;
+import show.schedulemanagement.dto.schedule.request.ScheduleSave;
 import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 
 @SuperBuilder
@@ -19,7 +19,7 @@ import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @Slf4j
-public class FScheduleSave extends ScheduleAddDto implements DateRangeValidatable {
+public class FScheduleSave extends ScheduleSave implements DateRangeValidatable {
     @NotNull
     private LocalDate startDate;
     @NotNull

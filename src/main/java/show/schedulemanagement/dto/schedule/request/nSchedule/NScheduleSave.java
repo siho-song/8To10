@@ -13,7 +13,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
-import show.schedulemanagement.dto.schedule.request.ScheduleAddDto;
+import show.schedulemanagement.dto.schedule.request.ScheduleSave;
 import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
 import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objectError.PerformInWeek;
@@ -26,7 +26,7 @@ import show.schedulemanagement.validator.schedule.objectError.StartDateBeforeEqE
 @Slf4j
 @PerformInWeek
 @StartDateBeforeEqEndDate
-public class NScheduleSave extends ScheduleAddDto implements DateRangeValidatable {
+public class NScheduleSave extends ScheduleSave implements DateRangeValidatable {
     @NotNull
     private LocalDate startDate;
     @NotNull
