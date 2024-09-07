@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dayMaxEvents: false,
         allDaySlot : false,
         firstDay: 1,
-        // events: loadInitialEvents(),
         events: {},
         eventLimit: 3,
         titleRangeSeparator: ' - ',
@@ -191,81 +190,4 @@ function getHeaderToolbarOptions() {
 
 function handleDateClick(calendar, info) {
     calendar.changeView('timeGridWeek', info.dateStr);
-}
-
-function loadInitialEvents() {
-    return [
-        { title: 'Business Lunch', start: '2023-01-03T13:00:00', constraint: 'businessHours' },
-        { title: 'Business Lunch', start: '2023-01-03T14:00:00', constraint: 'businessHours' },
-        { title: 'Business Lunch', start: '2023-01-03T15:00:00', constraint: 'businessHours' },
-        { title: 'Business Lunch', start: '2023-01-03T16:00:00', constraint: 'businessHours' },
-        { title: 'Business Lunch', start: '2023-01-03T17:00:00', constraint: 'businessHours' },
-        { title: 'Business Lunch', start: '2023-01-03T18:00:00', constraint: 'businessHours' },
-        {
-            title: 'Biweekly Check-in',
-            rrule: {
-                freq: 'weekly',
-                // 반복 주기 ('daily', 'weekly', 'monthly', 'yearly' 등)
-                interval: 1,
-                // 반복 간격 (예: 매일, 매주, 매월)
-                byweekday: 'mo',
-                // 'mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'
-                dtstart: '2023-01-02T10:00:00',
-                //시작 날짜 및 시간
-                until: '2023-12-31'
-                //반복 종료 날짜
-            },
-            duration: '01:00'
-            // duration: 이벤트 지속 시간
-        },
-        {
-            title: 'Biweekly Check-in',
-            rrule: {
-                freq: 'WEEKLY',
-                interval: 2, // 2주마다
-                byweekday: 'FR', // 격주 금요일
-                dtstart: '2023-01-06T10:00:00',
-                until: '2023-12-31T23:59:59'
-            }
-        },
-        {
-            id: '1',
-            title: '알바 출근',
-            duration: '01:30', // 지속 시간 1시간 30분
-            rrule: {
-                freq: 'weekly',
-                interval: 1,
-                byweekday: ['mo'], // 월요일
-                dtstart: '2024-05-17T13:00:00', // 시작 시간
-                until: '2024-06-30T14:30:00' // 종료 날짜
-            },
-            description: "asdfaskldnfalksndf"
-        },
-        {
-            id: '2',
-            title: '알바 출근',
-            duration: '01:30', // 지속 시간 1시간 30분
-            rrule: {
-                freq: 'weekly',
-                interval: 1,
-                byweekday: ['th'], // 목요일
-                dtstart: '2024-05-17T15:00:00', // 시작 시간
-                until: '2024-06-30T16:30:00' // 종료 날짜
-            },
-            description: "asdfaskldnfalksndf"
-
-        },
-        {
-            id: 27,
-            title : "aefwa",
-            start: "2024-07-13T07:00:00",
-            end: "2024-07-13T22:00:00",
-            commonDescription: "awfewe",
-            color: "FIXED",
-            parentId: 10,
-            type: "fixed",
-            completeStatue: false
-        }
-    ];
-
 }
