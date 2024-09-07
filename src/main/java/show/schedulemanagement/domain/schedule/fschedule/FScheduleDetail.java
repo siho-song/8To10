@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 
 @Entity
