@@ -1,5 +1,6 @@
 package show.schedulemanagement.service.schedule.fSchedule;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailSave;
+import show.schedulemanagement.repository.schedule.fSchedule.FScheduleRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,12 +22,18 @@ import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
 @Slf4j
 public class FScheduleService {
 
+    private final FScheduleRepository fScheduleRepository;
+
+    public FSchedule findById(Long id){
+        return fScheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 고정일정은 존재하지 않습니다."));
+    }
+
     @Transactional
-    public void addDetailsForEachEvent(FSchedule fSchedule, List<FixDetailAddDto> events) {
+    public void addDetailsForEachEvent(FSchedule fSchedule, List<FScheduleDetailSave> events) {
         events.forEach(event -> addDetails(fSchedule, event));
     }
 
-    private void addDetails(FSchedule schedule, FixDetailAddDto event) {
+    private void addDetails(FSchedule schedule, FScheduleDetailSave event) {
 
         LocalDate currentDate = schedule.getStartDate().toLocalDate();
         LocalDate endDate = schedule.getEndDate().toLocalDate();
