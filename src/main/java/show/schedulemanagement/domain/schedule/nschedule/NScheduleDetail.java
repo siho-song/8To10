@@ -2,7 +2,7 @@ package show.schedulemanagement.domain.schedule.nSchedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,8 +21,6 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseUpdatedEntity;
-import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 
 @Entity

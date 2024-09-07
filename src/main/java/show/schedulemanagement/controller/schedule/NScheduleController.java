@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.dto.schedule.request.NormalAddDto;
+import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
@@ -30,7 +30,7 @@ public class NScheduleController {
     private final NScheduleService nScheduleService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<NormalResponseDto>> addSchedule(@RequestBody @Valid NormalAddDto dto) throws RuntimeException{
+    public ResponseEntity<Result<NormalResponseDto>> addSchedule(@RequestBody @Valid NScheduleSave dto) throws RuntimeException{
         Member member = memberService.getAuthenticatedMember();
         NSchedule nSchedule = nScheduleService.addNSchedule(member, dto);
         scheduleService.save(nSchedule);

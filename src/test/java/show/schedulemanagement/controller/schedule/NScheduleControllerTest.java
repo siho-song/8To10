@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.schedule.request.NormalAddDto;
+import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -34,14 +34,14 @@ public class NScheduleControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private NormalAddDto normalAddDto;
+    private NScheduleSave NScheduleSave;
 
     @Autowired
     TokenUtils tokenUtils;  // TokenUtils 주입받기
 
     @BeforeEach
     public void setup() {
-        normalAddDto = NormalAddDto.builder()
+        NScheduleSave = NScheduleSave.builder()
                 .title("Test Schedule")
                 .commonDescription("Test Description")
                 .startDate(LocalDate.of(2024, 1, 1))
@@ -58,14 +58,14 @@ public class NScheduleControllerTest {
     @Test
     @DisplayName("일반일정 정상 등록")
     public void add() throws Exception {
-        log.debug("testAddSchedule called normal Add dto : {}", normalAddDto);
+        log.debug("testAddSchedule called normal Add dto : {}", NScheduleSave);
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         mockMvc.perform(post("/schedule/normal")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(normalAddDto)))
+                        .content(objectMapper.writeValueAsString(NScheduleSave)))
                 .andExpect(status().isCreated());
     }
 }

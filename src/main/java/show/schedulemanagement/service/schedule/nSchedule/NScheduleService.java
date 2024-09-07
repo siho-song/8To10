@@ -22,7 +22,7 @@ import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.NormalAddDto;
+import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.response.NormalResponseDto;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.schedule.ScheduleService;
@@ -40,7 +40,7 @@ public class NScheduleService {
     private final Random random = new Random();
 
     @Transactional
-    public NSchedule addNSchedule(Member member, NormalAddDto dto) {
+    public NSchedule addNSchedule(Member member, NScheduleSave dto) {
         LocalDate startDate = dto.getStartDate();
         LocalDate endDate = dto.getEndDate();
         List<DayOfWeek> candidateDays = dto.getCandidateDays();

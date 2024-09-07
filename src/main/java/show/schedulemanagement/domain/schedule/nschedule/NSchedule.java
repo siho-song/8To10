@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.request.NormalAddDto;
+import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 
 @Entity
 @Getter
@@ -37,15 +37,15 @@ public class NSchedule extends Schedule{
     @OneToMany(mappedBy = "nSchedule", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<NScheduleDetail> nScheduleDetails = new ArrayList<>();
 
-    public static NSchedule createNSchedule(Member member, NormalAddDto normalAddDto){
+    public static NSchedule createNSchedule(Member member, NScheduleSave NScheduleSave){
         NSchedule nSchedule = new NSchedule();
         nSchedule.member = member;
-        nSchedule.title = normalAddDto.getTitle();
-        nSchedule.commonDescription = normalAddDto.getCommonDescription();
-        nSchedule.startDate = LocalDateTime.of(normalAddDto.getStartDate(),LocalTime.of(0,0));
-        nSchedule.endDate = LocalDateTime.of(normalAddDto.getEndDate(),LocalTime.of(0,0));
-        nSchedule.bufferTime = normalAddDto.getBufferTime();
-        nSchedule.totalAmount = normalAddDto.getTotalAmount();
+        nSchedule.title = NScheduleSave.getTitle();
+        nSchedule.commonDescription = NScheduleSave.getCommonDescription();
+        nSchedule.startDate = LocalDateTime.of(NScheduleSave.getStartDate(),LocalTime.of(0,0));
+        nSchedule.endDate = LocalDateTime.of(NScheduleSave.getEndDate(),LocalTime.of(0,0));
+        nSchedule.bufferTime = NScheduleSave.getBufferTime();
+        nSchedule.totalAmount = NScheduleSave.getTotalAmount();
         return nSchedule;
     }
 
