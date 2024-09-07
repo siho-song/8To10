@@ -13,7 +13,7 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VScheduleResponse extends ScheduleResponseDto {
+public class VScheduleResponse extends ScheduleResponse {
 
     public VScheduleResponse(VSchedule schedule) {
         super(

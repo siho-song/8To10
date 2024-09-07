@@ -13,7 +13,7 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class NScheduleResponse extends ScheduleResponseDto {
+public class NScheduleResponse extends ScheduleResponse {
     private Long parentId;
     private String detailDescription;
     private Double dailyAmount;

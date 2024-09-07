@@ -20,7 +20,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.fSchedule.FScheduleDetailService;
@@ -37,14 +37,14 @@ public class FScheduleController {
     private final MemberService memberService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponseDto>> add(@RequestBody @Valid FScheduleSave dto) {
+    public ResponseEntity<Result<ScheduleResponse>> add(@RequestBody @Valid FScheduleSave dto) {
         Member member = memberService.getAuthenticatedMember();
         FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
 
         fScheduleService.addDetailsForEachEvent(fSchedule, dto.getEvents());
         scheduleService.save(fSchedule);
 
-        Result<ScheduleResponseDto> result = new Result<>();
+        Result<ScheduleResponse> result = new Result<>();
         scheduleService.setResultFromSchedule(result, fSchedule);
 
         return new ResponseEntity<>(result, CREATED);

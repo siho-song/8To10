@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
 
 @Service
@@ -59,7 +59,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void setResultFromSchedule(Result<ScheduleResponseDto> result, Schedule schedule) {
-        schedule.getScheduleAbles().forEach(e -> result.addEvent(ScheduleResponseDto.from(schedule, e)));
+    public void setResultFromSchedule(Result<ScheduleResponse> result, Schedule schedule) {
+        schedule.getScheduleAbles().forEach(e -> result.addEvent(ScheduleResponse.from(schedule, e)));
     }
 }

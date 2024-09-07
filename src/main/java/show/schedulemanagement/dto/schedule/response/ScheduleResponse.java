@@ -20,7 +20,7 @@ import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ScheduleResponseDto {
+public abstract class ScheduleResponse {
     private Long id;
     private String title;
     private String commonDescription;
@@ -30,7 +30,7 @@ public abstract class ScheduleResponseDto {
     private String color;
     private Boolean completeStatue;
 
-    public static ScheduleResponseDto from(Schedule schedule, ScheduleAble scheduleAble) {
+    public static ScheduleResponse from(Schedule schedule, ScheduleAble scheduleAble) {
         if (schedule instanceof NSchedule) {
             return new NScheduleResponse((NSchedule) schedule, (NScheduleDetail) scheduleAble);
         } else if (schedule instanceof FSchedule) {
