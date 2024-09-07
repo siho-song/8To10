@@ -55,20 +55,26 @@ button:disabled {
     margin-right: 10px; /* 각 버튼 간의 간격 */
     position: relative; /* 텍스트 위치 설정을 위해 position 추가 */
 }
+
 .image-container {
     position: relative; /* 텍스트 위치 설정을 위해 relative */
     display: inline-block;
+    margin-right: 20px;
 }
 
 .image-link {
     display: inline-block;
+    width: 40px;
+    height: auto;
     text-decoration: none; /* 링크 밑줄 제거 */
+    background: none;
+    border: none;
 }
 
 .image-link img {
     display: block;
-    width: 40px; /* 버튼의 너비 */
-    height: auto; /* 이미지 비율 유지 */
+    width: auto; /* 버튼의 너비 */
+    height: 40px; /* 이미지 비율 유지 */
     margin-left: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
