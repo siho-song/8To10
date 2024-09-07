@@ -1,7 +1,6 @@
-package show.schedulemanagement.service.board;
+package show.schedulemanagement.service.board.reply;
 
 import java.util.List;
-import java.util.Optional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.domain.member.Member;

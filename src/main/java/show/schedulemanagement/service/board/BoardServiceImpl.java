@@ -14,10 +14,9 @@ import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
-import show.schedulemanagement.repository.board.BoardHeartRepository;
 import show.schedulemanagement.repository.board.BoardRepository;
 import show.schedulemanagement.repository.board.BoardScrapRepository;
-import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
+import show.schedulemanagement.service.board.reply.ReplyHeartService;
 
 @Service
 @Transactional(readOnly = true)
