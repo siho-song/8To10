@@ -26,7 +26,8 @@ public class FScheduleDetailService {
         return fScheduleDetailRepository.findByStartDateGEAndEmailAndParent(start, email , parent);
     }
 
-    int deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
+    @Transactional
+    public int deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
         return fScheduleDetailRepository.deleteByFScheduleDetails(fScheduleDetails);
     }
 
