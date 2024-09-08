@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 import show.schedulemanagement.repository.schedule.fSchedule.FScheduleRepository;
 
 @Service
@@ -28,18 +28,12 @@ public class FScheduleService {
         return fScheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 고정일정은 존재하지 않습니다."));
     }
 
-    @Transactional
-    public void addDetailsForEachEvent(FSchedule fSchedule, List<FScheduleDetailSave> events) {
-        events.forEach(event -> addDetails(fSchedule, event));
-    }
-
-    private void addDetails(FSchedule schedule, FScheduleDetailSave event) {
-
+    public void addDetails(FSchedule schedule, FScheduleSave dto) {
         LocalDate currentDate = schedule.getStartDate().toLocalDate();
         LocalDate endDate = schedule.getEndDate().toLocalDate();
-        List<String> days = event.getDays();
-        LocalTime duration = event.getDuration();
-        LocalTime startTime = event.getStartTime();
+        List<String> days = dto.getDays();
+        LocalTime duration = dto.getDuration();
+        LocalTime startTime = dto.getStartTime();
 
         while (!currentDate.isAfter(endDate)) {
             DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();

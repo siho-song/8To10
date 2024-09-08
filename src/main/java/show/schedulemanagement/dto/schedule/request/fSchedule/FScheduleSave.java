@@ -3,6 +3,7 @@ package show.schedulemanagement.dto.schedule.request.fSchedule;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,11 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 import show.schedulemanagement.dto.schedule.request.ScheduleSave;
+import show.schedulemanagement.validator.schedule.filedError.Day;
+import show.schedulemanagement.validator.schedule.filedError.Frequency;
+import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
+import show.schedulemanagement.validator.schedule.filedError.UniqueDayList;
+import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 
 @SuperBuilder
@@ -25,8 +31,20 @@ public class FScheduleSave extends ScheduleSave implements DateRangeValidatable 
     @NotNull
     private LocalDate endDate;
 
+    @ZeroSeconds
+    private LocalTime startTime;
+
+    @ZeroSeconds
+    @PerformInDay
+    private LocalTime duration;
+
+    @Frequency
     @NotNull
-    private List<FScheduleDetailSave> events;
+    private String frequency;
+
+    @NotNull
+    @UniqueDayList
+    private List<@Day String> days;
 
     @Override
     public LocalDateTime takeStartDateTime() {

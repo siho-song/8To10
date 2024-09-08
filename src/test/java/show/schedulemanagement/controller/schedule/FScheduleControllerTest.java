@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailSave;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
@@ -51,23 +50,41 @@ class FScheduleControllerTest {
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
 
-
     @Test
-    @DisplayName("고정일정 정상 생성 - weekly, daily")
+    @DisplayName("고정일정 정상 생성 - weekly")
     void add_weekly() throws Exception {
-
-        List<FScheduleDetailSave> events = new ArrayList<>();
-        events.add(createFScheduleDetailSave(LocalTime.now(), LocalTime.of(2, 0), "weekly",
-                new ArrayList<>(List.of("mo", "we", "fr"))));
-        events.add(createFScheduleDetailSave(LocalTime.now().plusHours(3), LocalTime.of(2, 0), "daily",
-                new ArrayList<>(List.of("mo","tu", "we","th","fr","sa","su"))));
-
         FScheduleSave fScheduleSave = FScheduleSave.builder()
                 .title("테스트 title ")
                 .commonDescription("테스트 commonDescription")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusMonths(2))
-                .events(events)
+                .frequency("weekly")
+                .startTime(LocalTime.of(8,0))
+                .duration(LocalTime.of(2, 0))
+                .days(new ArrayList<>(List.of("mo", "we","fr")))
+                .build();
+
+        String dto = objectMapper.writeValueAsString(fScheduleSave);
+
+        mockMvc.perform(post("/schedule/fixed")
+                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .content(dto)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("고정일정 정상 생성 - daily")
+    void add_daily() throws Exception {
+        FScheduleSave fScheduleSave = FScheduleSave.builder()
+                .title("테스트 title ")
+                .commonDescription("테스트 commonDescription")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusMonths(2))
+                .frequency("daily")
+                .startTime(LocalTime.of(8,0))
+                .duration(LocalTime.of(2, 0))
+                .days(new ArrayList<>(List.of("mo","tu","we","th","fr","sa","su")))
                 .build();
 
         String dto = objectMapper.writeValueAsString(fScheduleSave);
@@ -100,14 +117,5 @@ class FScheduleControllerTest {
         mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
                 .cookie(jwtCookie)
         ).andExpect(status().isOk());
-    }
-
-    private FScheduleDetailSave createFScheduleDetailSave(LocalTime startTime, LocalTime duration, String frequency, List<String> days) {
-        return FScheduleDetailSave.builder()
-                .startTime(startTime)
-                .duration(duration)
-                .frequency(frequency)
-                .days(days)
-                .build();
     }
 }
