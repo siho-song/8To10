@@ -17,6 +17,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -41,5 +42,10 @@ public class FSchedule extends Schedule{
     @Override
     public List<ScheduleAble> getScheduleAbles() {
         return fScheduleDetails.stream().map(fScheduleDetail -> (ScheduleAble) fScheduleDetail).toList();
+    }
+
+    public void update(FScheduleUpdate dto){
+        super.title = dto.getTitle();
+        super.commonDescription = dto.getCommonDescription();
     }
 }
