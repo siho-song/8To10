@@ -10,10 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
 import show.schedulemanagement.repository.schedule.fSchedule.FScheduleRepository;
 
 @Service
@@ -28,6 +30,7 @@ public class FScheduleService {
         return fScheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 고정일정은 존재하지 않습니다."));
     }
 
+    @Transactional
     public void addDetails(FSchedule schedule, FScheduleSave dto) {
         LocalDate currentDate = schedule.getStartDate().toLocalDate();
         LocalDate endDate = schedule.getEndDate().toLocalDate();
@@ -49,5 +52,14 @@ public class FScheduleService {
             }
             currentDate = currentDate.plusDays(1);
         }
+    }
+
+    @Transactional
+    public void update(Member member, FScheduleUpdate fScheduleUpdate) {
+        FSchedule fSchedule = findById(fScheduleUpdate.getId());
+        if (!member.getEmail().equals(fSchedule.getCreatedBy())) {
+            throw new RuntimeException("작성자가 일치하지 않습니다.");
+        }
+        fSchedule.update(fScheduleUpdate);
     }
 }

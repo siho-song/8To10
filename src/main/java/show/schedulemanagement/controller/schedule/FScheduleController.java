@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,8 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
+import show.schedulemanagement.dto.schedule.response.FScheduleUpdateResponse;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
@@ -48,6 +51,14 @@ public class FScheduleController {
         scheduleService.setResultFromSchedule(result, fSchedule);
 
         return new ResponseEntity<>(result, CREATED);
+    }
+
+    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FScheduleUpdateResponse> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate){
+        Member member = memberService.getAuthenticatedMember();
+        fScheduleService.update(member, fScheduleUpdate);
+        FSchedule fSchedule = fScheduleService.findById(fScheduleUpdate.getId());
+        return new ResponseEntity<>(FScheduleUpdateResponse.from(fSchedule), OK);
     }
 
     @DeleteMapping(value = "/detail")
