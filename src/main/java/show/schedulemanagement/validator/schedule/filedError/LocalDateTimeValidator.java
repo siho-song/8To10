@@ -13,6 +13,6 @@ public class LocalDateTimeValidator implements ConstraintValidator<ZeroSeconds ,
                     .addConstraintViolation();
             return false;
         }
-        return value.getSecond() == 0 && value.getNano() == 0;
+        return value.getSecond() == 0;
     }
 }
