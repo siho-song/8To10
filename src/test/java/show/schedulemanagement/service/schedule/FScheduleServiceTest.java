@@ -19,6 +19,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
@@ -65,5 +66,27 @@ class FScheduleServiceTest {
         fScheduleService.addDetails(fSchedule, fScheduleSave);
         List<ScheduleAble> scheduleAbles = fSchedule.getScheduleAbles();
         assertThat(scheduleAbles.size()).isEqualTo(8);
+    }
+
+    @Test
+    @DisplayName("부모 고정일정 수정")
+    void update(){
+        Long id = 1L;
+        String title = "고정일정 제목 수정";
+        String commonDescription = "고정일정 메모 수정";
+        FScheduleUpdate fScheduleUpdate = FScheduleUpdate.builder()
+                .id(id)
+                .title(title)
+                .commonDescription(commonDescription)
+                .build();
+
+        Member member = memberService.getAuthenticatedMember();
+
+        fScheduleService.update(member,fScheduleUpdate);
+
+        FSchedule fSchedule = fScheduleService.findById(id);
+
+        assertThat(fSchedule.getTitle()).isEqualTo(title);
+        assertThat(fSchedule.getCommonDescription()).isEqualTo(commonDescription);
     }
 }
