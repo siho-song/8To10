@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request;
+package show.schedulemanagement.dto.schedule.request.fSchedule;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
@@ -15,7 +15,7 @@ import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 @Getter
 @Builder
 @ToString
-public class FixDetailAddDto {
+public class FScheduleDetailSave {
     @ZeroSeconds
     private LocalTime startTime;
 

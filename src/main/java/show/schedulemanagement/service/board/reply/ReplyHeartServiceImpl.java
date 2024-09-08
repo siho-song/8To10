@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.board;
+package show.schedulemanagement.service.board.reply;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.domain.board.BoardHeart;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.domain.member.Member;

@@ -1,6 +1,5 @@
 package show.schedulemanagement.dto.schedule.response;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +13,9 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VariableResponseDto extends ScheduleResponseDto {
+public class VScheduleResponse extends ScheduleResponse {
 
-    public VariableResponseDto(VSchedule schedule) {
+    public VScheduleResponse(VSchedule schedule) {
         super(
                 schedule.getId(),
                 schedule.getTitle(),

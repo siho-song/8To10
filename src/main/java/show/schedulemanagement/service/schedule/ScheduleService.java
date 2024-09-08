@@ -5,7 +5,7 @@ import java.util.List;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.response.ScheduleResponseDto;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 
 public interface ScheduleService {
     void save(Schedule Schedule);
@@ -13,5 +13,5 @@ public interface ScheduleService {
     Schedule findById(Long id);
     List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);
     List<Schedule> findAllWithDetailByMember(Member member);
-    void setResultFromSchedule(Result<ScheduleResponseDto> result, Schedule schedule);
+    void setResultFromSchedule(Result<ScheduleResponse> result, Schedule schedule);
 }

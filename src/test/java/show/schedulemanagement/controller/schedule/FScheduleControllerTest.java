@@ -1,13 +1,13 @@
 package show.schedulemanagement.controller.schedule;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +18,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.schedule.request.FixAddDto;
-import show.schedulemanagement.dto.schedule.request.FixDetailAddDto;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -58,13 +56,13 @@ class FScheduleControllerTest {
     @DisplayName("고정일정 정상 생성 - weekly, daily")
     void add_weekly() throws Exception {
 
-        List<FixDetailAddDto> events = new ArrayList<>();
-        events.add(createFixDetailAddDto(LocalTime.now(), LocalTime.of(2, 0), "weekly",
+        List<FScheduleDetailSave> events = new ArrayList<>();
+        events.add(createFScheduleDetailSave(LocalTime.now(), LocalTime.of(2, 0), "weekly",
                 new ArrayList<>(List.of("mo", "we", "fr"))));
-        events.add(createFixDetailAddDto(LocalTime.now().plusHours(3), LocalTime.of(2, 0), "daily",
+        events.add(createFScheduleDetailSave(LocalTime.now().plusHours(3), LocalTime.of(2, 0), "daily",
                 new ArrayList<>(List.of("mo","tu", "we","th","fr","sa","su"))));
 
-        FixAddDto fixAddDto = FixAddDto.builder()
+        FScheduleSave fScheduleSave = FScheduleSave.builder()
                 .title("테스트 title ")
                 .commonDescription("테스트 commonDescription")
                 .startDate(LocalDate.now())
@@ -72,9 +70,9 @@ class FScheduleControllerTest {
                 .events(events)
                 .build();
 
-        String dto = objectMapper.writeValueAsString(fixAddDto);
+        String dto = objectMapper.writeValueAsString(fScheduleSave);
 
-        mockMvc.perform(post("/schedule/fixed/add")
+        mockMvc.perform(post("/schedule/fixed")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .content(dto)
                         .contentType(APPLICATION_JSON))
@@ -82,17 +80,30 @@ class FScheduleControllerTest {
     }
 
     @Test
-    @DisplayName("고정일정 자식일정 단건 삭제")
-    public void delete_detail() throws Exception {
-        Long id = 1L;
+    @DisplayName("특정 날짜 이후의 고정일정 자식일정 벌크 삭제")
+    public void delete_detail_greater_than_equal_start() throws Exception {
+        String parentId = "1";
+        String startDate = LocalDateTime.of(2024, 1, 1, 15, 30).toString();
 
-        mockMvc.perform(delete("/schedule/fixed/{id}",id)
+        mockMvc.perform(delete("/schedule/fixed/detail")
+                .param("parentId", parentId)
+                .param("startDate", startDate)
                 .cookie(jwtCookie)
         ).andExpect(status().isOk());
     }
 
-    private FixDetailAddDto createFixDetailAddDto(LocalTime startTime, LocalTime duration, String frequency, List<String> days) {
-        return FixDetailAddDto.builder()
+    @Test
+    @DisplayName("고정일정 자식일정 단건 삭제")
+    public void delete_detail() throws Exception {
+        Long id = 1L;
+
+        mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
+                .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
+
+    private FScheduleDetailSave createFScheduleDetailSave(LocalTime startTime, LocalTime duration, String frequency, List<String> days) {
+        return FScheduleDetailSave.builder()
                 .startTime(startTime)
                 .duration(duration)
                 .frequency(frequency)

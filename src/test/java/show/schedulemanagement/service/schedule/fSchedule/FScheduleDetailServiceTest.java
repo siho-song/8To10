@@ -1,9 +1,11 @@
 package show.schedulemanagement.service.schedule.fSchedule;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.ScheduleService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,7 +33,7 @@ class FScheduleDetailServiceTest {
     FScheduleDetailService fScheduleDetailService;
 
     @Autowired
-    ScheduleService scheduleService;
+    FScheduleService fScheduleService;
 
     @Autowired
     MemberService memberService;
@@ -48,12 +50,23 @@ class FScheduleDetailServiceTest {
 
     @Test
     @DisplayName(value = "고정일정의 자식일정 단건삭제 정상작동")
-    @Transactional
     void deleteById() {
         Member member = memberService.getAuthenticatedMember();
         Long id = 1L;
         fScheduleDetailService.deleteById(member,id);
 
         assertThatThrownBy(() -> fScheduleDetailService.findById(1L)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName(value = "특정날짜 이후의 자식일정 모두 삭제 정상작동")
+    void deleteByStartDateGE(){
+        Member member = memberService.getAuthenticatedMember();
+        Long parentId = 1L;
+        FSchedule parent = fScheduleService.findById(parentId);
+        LocalDateTime start = LocalDateTime.of(2024, 1, 1, 15, 30);
+
+        int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(start, member, parent);
+        assertThat(deletedCount).isEqualTo(5L);
     }
 }

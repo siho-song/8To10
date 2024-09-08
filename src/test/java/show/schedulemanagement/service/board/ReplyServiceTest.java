@@ -13,6 +13,7 @@ import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.board.reply.ReplyService;
 
 @SpringBootTest
 @DisplayName("댓글 CRUD")

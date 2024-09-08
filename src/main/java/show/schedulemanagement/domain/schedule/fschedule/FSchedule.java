@@ -3,7 +3,6 @@ package show.schedulemanagement.domain.schedule.fSchedule;
 import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -17,7 +16,7 @@ import lombok.ToString;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.request.FixAddDto;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -29,7 +28,7 @@ public class FSchedule extends Schedule{
     @OneToMany(mappedBy = "fSchedule" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<FScheduleDetail> fScheduleDetails = new ArrayList<>();
 
-    public static FSchedule createFSchedule(Member member, FixAddDto fixRequestDto){
+    public static FSchedule createFSchedule(Member member, FScheduleSave fixRequestDto){
         FSchedule fSchedule = new FSchedule();
         fSchedule.member = member;
         fSchedule.title = fixRequestDto.getTitle();

@@ -1,13 +1,10 @@
 package show.schedulemanagement.dto.schedule.response;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
@@ -16,13 +13,13 @@ import show.schedulemanagement.dto.schedule.ScheduleColor;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class NormalResponseDto extends ScheduleResponseDto {
+public class NScheduleResponse extends ScheduleResponse {
     private Long parentId;
     private String detailDescription;
     private Double dailyAmount;
     private LocalTime bufferTime;
 
-    public NormalResponseDto(NSchedule nSchedule, NScheduleDetail nScheduleDetail) {
+    public NScheduleResponse(NSchedule nSchedule, NScheduleDetail nScheduleDetail) {
         super(nScheduleDetail.getId(),
                 nSchedule.getTitle(),
                 nSchedule.getCommonDescription(),

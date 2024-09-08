@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
-import show.schedulemanagement.dto.schedule.request.ScheduleAddDto;
+import show.schedulemanagement.dto.schedule.request.ScheduleSave;
 import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 
@@ -15,7 +15,7 @@ import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
 @Getter
 @StartBeforeEnd
 @NoArgsConstructor
-public class VScheduleAdd extends ScheduleAddDto implements DateRangeValidatable {
+public class VScheduleAdd extends ScheduleSave implements DateRangeValidatable {
 
     @ZeroSeconds
     private LocalDateTime start;

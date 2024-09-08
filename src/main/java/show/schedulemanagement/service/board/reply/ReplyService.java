@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.board;
+package show.schedulemanagement.service.board.reply;
 
 import java.util.List;
 import show.schedulemanagement.domain.board.reply.Reply;

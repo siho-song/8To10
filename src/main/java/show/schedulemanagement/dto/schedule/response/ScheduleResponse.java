@@ -20,7 +20,7 @@ import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ScheduleResponseDto {
+public abstract class ScheduleResponse {
     private Long id;
     private String title;
     private String commonDescription;
@@ -30,13 +30,13 @@ public abstract class ScheduleResponseDto {
     private String color;
     private Boolean completeStatue;
 
-    public static ScheduleResponseDto from(Schedule schedule, ScheduleAble scheduleAble) {
+    public static ScheduleResponse from(Schedule schedule, ScheduleAble scheduleAble) {
         if (schedule instanceof NSchedule) {
-            return new NormalResponseDto((NSchedule) schedule, (NScheduleDetail) scheduleAble);
+            return new NScheduleResponse((NSchedule) schedule, (NScheduleDetail) scheduleAble);
         } else if (schedule instanceof FSchedule) {
-            return new FixResponseDto((FSchedule) schedule,(FScheduleDetail) scheduleAble);
+            return new FScheduleResponse((FSchedule) schedule,(FScheduleDetail) scheduleAble);
         } else if (schedule instanceof VSchedule) {
-            return new VariableResponseDto((VSchedule) schedule);
+            return new VScheduleResponse((VSchedule) schedule);
         } else {
             throw new IllegalArgumentException("Unknown schedule type");
         }

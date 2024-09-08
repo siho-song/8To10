@@ -3,15 +3,15 @@ package show.schedulemanagement.validator.schedule.objectError;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.temporal.ChronoUnit;
-import show.schedulemanagement.dto.schedule.request.NormalAddDto;
+import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 
-public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NormalAddDto> {
+public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSave> {
     @Override
-    public boolean isValid(NormalAddDto normalAddDto, ConstraintValidatorContext constraintValidatorContext) {
-        int performInWeek = normalAddDto.getPerformInWeek();
-        Boolean isIncludeSaturday = normalAddDto.getIsIncludeSaturday();
-        Boolean isIncludeSunday = normalAddDto.getIsIncludeSunday();
-        long between = ChronoUnit.DAYS.between(normalAddDto.getStartDate(), normalAddDto.getEndDate()) + 1;
+    public boolean isValid(NScheduleSave NScheduleSave, ConstraintValidatorContext constraintValidatorContext) {
+        int performInWeek = NScheduleSave.getPerformInWeek();
+        Boolean isIncludeSaturday = NScheduleSave.getIsIncludeSaturday();
+        Boolean isIncludeSunday = NScheduleSave.getIsIncludeSunday();
+        long between = ChronoUnit.DAYS.between(NScheduleSave.getStartDate(), NScheduleSave.getEndDate()) + 1;
 
         if(performInWeek >= 6 && areNotIncludeWeekend(isIncludeSaturday,isIncludeSunday)){
             if (performInWeek > 7) {

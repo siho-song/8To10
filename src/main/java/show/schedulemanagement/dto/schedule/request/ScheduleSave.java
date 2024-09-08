@@ -11,14 +11,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @ToString
 @NoArgsConstructor
-public abstract class ScheduleAddDto {
+public abstract class ScheduleSave {
     @NotBlank
     @Size(min = 1,max = 80)
     private String title;
     
     private String commonDescription;
 
-    protected ScheduleAddDto(String title, String commonDescription) {
+    protected ScheduleSave(String title, String commonDescription) {
         this.title = title;
         this.commonDescription = commonDescription;
     }

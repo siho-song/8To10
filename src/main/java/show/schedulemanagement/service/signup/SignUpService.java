@@ -1,7 +1,7 @@
 package show.schedulemanagement.service.signup;
 
-import show.schedulemanagement.dto.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequest;
 
 public interface SignUpService {
-    void signUp(SignUpRequestDto signUpRequestDto);
+    void signUp(SignUpRequest signUpRequest);
 }

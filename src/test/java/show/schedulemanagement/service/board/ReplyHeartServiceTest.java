@@ -17,6 +17,8 @@ import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.board.reply.ReplyHeartService;
+import show.schedulemanagement.service.board.reply.ReplyService;
 
 @SpringBootTest
 @Transactional

@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.board;
+package show.schedulemanagement.service.board.reply;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -12,6 +12,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
+import show.schedulemanagement.service.board.BoardService;
 
 @Service
 @RequiredArgsConstructor

@@ -14,13 +14,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import show.schedulemanagement.dto.signup.SignUpRequestDto;
+import show.schedulemanagement.dto.signup.SignUpRequest;
 
 
 @SpringBootTest
-class SignUpRequestDtoTest {
+class SignUpRequestTest {
 
-    Logger logger = LoggerFactory.getLogger(SignUpRequestDtoTest.class);
+    Logger logger = LoggerFactory.getLogger(SignUpRequestTest.class);
     private static Validator validator;
 
     @BeforeAll
@@ -31,14 +31,14 @@ class SignUpRequestDtoTest {
     @Test
     public void 사용자_이름_DTO_NotNull_체크(){
         //given
-        SignUpRequestDto signUp = SignUpRequestDto.builder()
+        SignUpRequest signUp = SignUpRequest.builder()
                 .username(null)
                 .nickname("asadf")
                 .password("asdfg123!!")
                 .email("asdf@naver.com")
                 .build();
         //when
-        Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(signUp);
+        Set<ConstraintViolation<SignUpRequest>> violations = validator.validate(signUp);
 
         //then
         assertThat(violations.size()).isNotEqualTo(0);
@@ -48,7 +48,7 @@ class SignUpRequestDtoTest {
     @ValueSource(strings = {"두자","세글자","네글자아","다섯글자다","여섯글자아아"})
     public void 사용자_이름_DTO_한글_2자에서_6자_유효성_통과(String username){
         //given
-        SignUpRequestDto signUp = SignUpRequestDto.builder()
+        SignUpRequest signUp = SignUpRequest.builder()
                 .username(username)
                 .nickname("asadf")
                 .password("asdfg123!!")
@@ -56,8 +56,8 @@ class SignUpRequestDtoTest {
                 .email("asdf@naver.com")
                 .build();
         //when
-        Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(signUp);
-        for (ConstraintViolation<SignUpRequestDto> violation : violations) {
+        Set<ConstraintViolation<SignUpRequest>> violations = validator.validate(signUp);
+        for (ConstraintViolation<SignUpRequest> violation : violations) {
             System.out.println("violation = " + violation);
         }
 
@@ -69,7 +69,7 @@ class SignUpRequestDtoTest {
     @ValueSource(strings = {"asdf","아!","네글 자아","123"})
     public void 사용자_이름_DTO_유효성_통과_실패(String username){
         //given
-        SignUpRequestDto signUp = SignUpRequestDto.builder()
+        SignUpRequest signUp = SignUpRequest.builder()
                 .username(username)
                 .nickname("asadf")
                 .password("asdfg123!!")
@@ -77,7 +77,7 @@ class SignUpRequestDtoTest {
                 .email("asdf@naver.com")
                 .build();
         //when
-        Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(signUp);
+        Set<ConstraintViolation<SignUpRequest>> violations = validator.validate(signUp);
 
         //then
         Assertions.assertThat(violations.size()).isNotEqualTo(0);

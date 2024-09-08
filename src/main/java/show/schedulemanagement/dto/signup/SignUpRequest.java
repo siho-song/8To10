@@ -2,7 +2,6 @@ package show.schedulemanagement.dto.signup;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.time.LocalTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +15,7 @@ import show.schedulemanagement.validator.signup.fieldError.Username;
 @Getter
 @Setter
 @Builder
-public class SignUpRequestDto {
+public class SignUpRequest {
     @NotBlank
     @Username
     private String username;
