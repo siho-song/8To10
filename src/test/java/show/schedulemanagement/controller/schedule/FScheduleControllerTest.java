@@ -3,6 +3,7 @@ package show.schedulemanagement.controller.schedule;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -116,6 +118,27 @@ class FScheduleControllerTest {
 
         mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
                 .cookie(jwtCookie)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("고정일정 부모일정 수정")
+    public void update() throws Exception {
+        Long id = 1L;
+        String title = "고정일정 제목 수정";
+        String commonDescription = "고정일정 메모 수정";
+        FScheduleUpdate fScheduleUpdate = FScheduleUpdate.builder()
+                .id(id)
+                .title(title)
+                .commonDescription(commonDescription)
+                .build();
+
+        String dto = objectMapper.writeValueAsString(fScheduleUpdate);
+
+        mockMvc.perform(put("/schedule/fixed")
+                .cookie(jwtCookie)
+                .contentType(APPLICATION_JSON)
+                .content(dto)
         ).andExpect(status().isOk());
     }
 }
