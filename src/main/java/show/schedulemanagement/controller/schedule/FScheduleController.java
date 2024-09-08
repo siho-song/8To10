@@ -41,7 +41,7 @@ public class FScheduleController {
         Member member = memberService.getAuthenticatedMember();
         FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
 
-        fScheduleService.addDetailsForEachEvent(fSchedule, dto.getEvents());
+        fScheduleService.addDetails(fSchedule, dto);
         scheduleService.save(fSchedule);
 
         Result<ScheduleResponse> result = new Result<>();
