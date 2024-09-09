@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.fSchedule;
+package show.schedulemanagement.domain.schedule.fschedule;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -16,8 +16,8 @@ import lombok.ToString;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)

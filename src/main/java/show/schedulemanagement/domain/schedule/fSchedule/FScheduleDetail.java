@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.fSchedule;
+package show.schedulemanagement.domain.schedule.fschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -17,9 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 
 @Entity
 @Getter

@@ -1,9 +1,9 @@
-package show.schedulemanagement.dto.schedule.response.fSchedule;
+package show.schedulemanagement.dto.schedule.response.fschedule;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 
 @Data
 @Builder

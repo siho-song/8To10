@@ -1,4 +1,4 @@
-package show.schedulemanagement.validator.schedule.objectError;
+package show.schedulemanagement.validator.schedule.objecterror;
 
 
 import jakarta.validation.Constraint;

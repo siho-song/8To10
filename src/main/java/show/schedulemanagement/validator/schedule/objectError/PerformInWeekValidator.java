@@ -1,9 +1,9 @@
-package show.schedulemanagement.validator.schedule.objectError;
+package show.schedulemanagement.validator.schedule.objecterror;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.temporal.ChronoUnit;
-import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 
 public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSave> {
     @Override

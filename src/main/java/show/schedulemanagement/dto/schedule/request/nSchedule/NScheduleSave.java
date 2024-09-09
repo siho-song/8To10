@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request.nSchedule;
+package show.schedulemanagement.dto.schedule.request.nschedule;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
@@ -15,10 +15,10 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 import show.schedulemanagement.dto.schedule.request.ScheduleSave;
-import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
-import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
-import show.schedulemanagement.validator.schedule.objectError.PerformInWeek;
-import show.schedulemanagement.validator.schedule.objectError.StartDateBeforeEqEndDate;
+import show.schedulemanagement.validator.schedule.fielderror.PerformInDay;
+import show.schedulemanagement.validator.schedule.fielderror.ZeroSeconds;
+import show.schedulemanagement.validator.schedule.objecterror.PerformInWeek;
+import show.schedulemanagement.validator.schedule.objecterror.StartDateBeforeEqEndDate;
 
 @SuperBuilder
 @Getter

@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request.fSchedule;
+package show.schedulemanagement.dto.schedule.request.fschedule;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package show.schedulemanagement.validator.schedule.filedError;
+package show.schedulemanagement.validator.schedule.fielderror;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -7,11 +7,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueDayListValidator.class)
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
+@Constraint(validatedBy = {LocalDateTimeValidator.class, LocalTimeValidator.class})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueDayList {
-    String message() default "{schedule.dayList.message}";
+public @interface ZeroSeconds {
+    String message() default "{schedule.zeroSecond.message}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

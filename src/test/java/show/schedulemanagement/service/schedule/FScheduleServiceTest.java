@@ -17,13 +17,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.fSchedule.FScheduleService;
+import show.schedulemanagement.service.schedule.fschedule.FScheduleService;
 
 @DisplayName("고정일정 서비스 테스트")
 @SpringBootTest

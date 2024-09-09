@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import show.schedulemanagement.domain.member.Gender;
 import show.schedulemanagement.domain.member.Mode;
-import show.schedulemanagement.validator.signup.fieldError.Nickname;
-import show.schedulemanagement.validator.signup.fieldError.Password;
-import show.schedulemanagement.validator.signup.fieldError.PhoneNumber;
-import show.schedulemanagement.validator.signup.fieldError.Username;
+import show.schedulemanagement.validator.signup.fielderror.Nickname;
+import show.schedulemanagement.validator.signup.fielderror.Password;
+import show.schedulemanagement.validator.signup.fielderror.PhoneNumber;
+import show.schedulemanagement.validator.signup.fielderror.Username;
 
 @Getter
 @Setter

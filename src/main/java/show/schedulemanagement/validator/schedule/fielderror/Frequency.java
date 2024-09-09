@@ -1,19 +1,18 @@
-package show.schedulemanagement.validator.schedule.filedError;
+package show.schedulemanagement.validator.schedule.fielderror;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE_USE, FIELD})
+@Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {DayValidator.class})
-public @interface Day {
-    String message() default "{schedule.day.message}";
+@Constraint(validatedBy = {FrequencyValidator.class})
+public @interface Frequency {
+    String message() default "{schedule.frequency.message}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }

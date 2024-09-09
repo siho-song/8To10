@@ -1,11 +1,11 @@
-package show.schedulemanagement.service.schedule.vSchedule;
+package show.schedulemanagement.service.schedule.vschedule;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
+import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @Service

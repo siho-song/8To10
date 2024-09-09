@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule.fSchedule;
+package show.schedulemanagement.service.schedule.fschedule;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
-import show.schedulemanagement.repository.schedule.fSchedule.FScheduleDetailRepository;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
+import show.schedulemanagement.repository.schedule.fschedule.FScheduleDetailRepository;
 
 @Service
 @RequiredArgsConstructor

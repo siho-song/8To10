@@ -1,11 +1,11 @@
-package show.schedulemanagement.dto.schedule.response.fSchedule;
+package show.schedulemanagement.dto.schedule.response.fschedule;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 

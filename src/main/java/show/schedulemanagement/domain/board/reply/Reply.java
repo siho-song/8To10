@@ -16,7 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 

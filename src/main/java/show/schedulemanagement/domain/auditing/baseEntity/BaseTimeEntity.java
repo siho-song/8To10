@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.auditing.baseEntity;
+package show.schedulemanagement.domain.auditing.baseentity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

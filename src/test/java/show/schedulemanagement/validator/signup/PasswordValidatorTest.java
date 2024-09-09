@@ -1,7 +1,7 @@
 package show.schedulemanagement.validator.signup;
 
 import org.junit.jupiter.api.Test;
-import show.schedulemanagement.validator.signup.fieldError.PasswordValidator;
+import show.schedulemanagement.validator.signup.fielderror.PasswordValidator;
 
 class PasswordValidatorTest {
     @Test

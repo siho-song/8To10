@@ -1,4 +1,4 @@
-package show.schedulemanagement.validator.signup.fieldError;
+package show.schedulemanagement.validator.signup.fielderror;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

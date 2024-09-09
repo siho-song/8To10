@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.nSchedule;
+package show.schedulemanagement.domain.schedule.nschedule;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 
 @Entity
 @Getter

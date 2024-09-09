@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleAdd;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
+import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
-import show.schedulemanagement.service.schedule.vSchedule.VScheduleService;
+import show.schedulemanagement.service.schedule.vschedule.VScheduleService;
 
 @RestController
 @RequiredArgsConstructor
