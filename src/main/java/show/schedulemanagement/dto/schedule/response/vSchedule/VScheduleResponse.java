@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.response;
+package show.schedulemanagement.dto.schedule.response.vSchedule;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 
 @SuperBuilder
 @ToString(callSuper = true)

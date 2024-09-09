@@ -14,6 +14,9 @@ import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
+import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.nSchedule.NScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.vSchedule.VScheduleResponse;
 
 @SuperBuilder
 @ToString

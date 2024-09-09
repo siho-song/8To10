@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.response;
+package show.schedulemanagement.dto.schedule.response.fSchedule;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
