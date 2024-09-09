@@ -2,6 +2,7 @@ package show.schedulemanagement.dto.schedule.request.nSchedule;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,9 +33,11 @@ public class NScheduleSave extends ScheduleSave implements DateRangeValidatable 
     @NotNull
     private LocalDate endDate;
     @ZeroSeconds
+    @NotNull
     private LocalTime bufferTime;
     @PerformInDay
     @ZeroSeconds
+    @NotNull
     private LocalTime performInDay;
     @NotNull
     private Boolean isIncludeSaturday;
@@ -43,22 +46,28 @@ public class NScheduleSave extends ScheduleSave implements DateRangeValidatable 
     private int totalAmount;
     private int performInWeek;
 
-    public List<DayOfWeek> getCandidateDays() {
-        List<DayOfWeek> candidateDays = new ArrayList<>(
+    public List<DayOfWeek> getDays() {
+        List<DayOfWeek> days = new ArrayList<>(
                 List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY,
                         DayOfWeek.FRIDAY));
 
         if(isIncludeSaturday) {
-            candidateDays.add(DayOfWeek.SATURDAY);
+            days.add(DayOfWeek.SATURDAY);
         }
         if (isIncludeSunday) {
-            candidateDays.add(DayOfWeek.SUNDAY);
+            days.add(DayOfWeek.SUNDAY);
         }
-        return candidateDays;
+        return days;
     }
 
-    public LocalTime getNecessaryTime() {
-        return bufferTime.plusHours(performInDay.getHour()).plusMinutes(performInDay.getMinute());
+    public Duration getNecessaryTime() {
+        long hour = bufferTime.getHour() + performInDay.getHour();
+        long minute = bufferTime.getMinute() + performInDay.getMinute();
+        if(minute >= 60) {
+            hour += minute / 60;
+            minute = minute % 60;
+        }
+        return Duration.ofHours(hour).plusMinutes(minute);
     }
 
     @Override
