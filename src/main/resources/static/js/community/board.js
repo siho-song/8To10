@@ -43,7 +43,30 @@ function createPaginationButton(pageCount) {
     }
 }
 
+function renderBoard(data) {
+    const boardContent = document.getElementById('board-content');
+    boardContent.innerHTML = '';
 
+    data.content.forEach(post => {
+        const postItem = document.createElement('div');
+        console.log("data on renderBoard() : ", post)
+
+        postItem.innerHTML= `
+            <div class="post" id="post" data-post-id="${post.id}">
+                <h3 class="post-title">${post.title}</h3>
+                <div class="post-info">
+                    <span class="post-author">${post.nickname}</span>
+                </div>
+                <div class="post-stats-preview">
+                    <span class="post-likes">좋아요: ${post.totalLike}</span>
+                    <span class="post-replies">스크랩 수: ${post.totalScrap}</span>
+                    <span class="post-date">${new Date(post.createdAt).toLocaleDateString()}</span>
+                </div>
+            </div>
+        `;
+        boardContent.appendChild(postItem);
+    });
+}
 
 function loadBoardData(pageNum= 0, currentTotalPage) {
     var totalPages;
