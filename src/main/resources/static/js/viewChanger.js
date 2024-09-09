@@ -53,7 +53,9 @@ boardView = `
     <!-- 중앙 컨텐츠 -->
     <div class="board-main-content">
         <div class="board-header">
-            <h2 id="board-title">게시판을 선택하세요</h2>
+            <h2 id="board-title">자유게시판</h2>
+            <button id="write-post">글쓰기</button>
+            
             <div class="board-controls">
                 <div class="board-control-left">
                     페이지 당 글 개수:
