@@ -37,15 +37,15 @@ public class NSchedule extends Schedule{
     @OneToMany(mappedBy = "nSchedule", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<NScheduleDetail> nScheduleDetails = new ArrayList<>();
 
-    public static NSchedule createNSchedule(Member member, NScheduleSave NScheduleSave){
+    public static NSchedule createNSchedule(Member member, NScheduleSave nScheduleSave){
         NSchedule nSchedule = new NSchedule();
         nSchedule.member = member;
-        nSchedule.title = NScheduleSave.getTitle();
-        nSchedule.commonDescription = NScheduleSave.getCommonDescription();
-        nSchedule.startDate = LocalDateTime.of(NScheduleSave.getStartDate(),LocalTime.of(0,0));
-        nSchedule.endDate = LocalDateTime.of(NScheduleSave.getEndDate(),LocalTime.of(0,0));
-        nSchedule.bufferTime = NScheduleSave.getBufferTime();
-        nSchedule.totalAmount = NScheduleSave.getTotalAmount();
+        nSchedule.title = nScheduleSave.getTitle();
+        nSchedule.commonDescription = nScheduleSave.getCommonDescription();
+        nSchedule.startDate = LocalDateTime.of(nScheduleSave.getStartDate(),LocalTime.of(0,0));
+        nSchedule.endDate = LocalDateTime.of(nScheduleSave.getEndDate(),LocalTime.of(0,0));
+        nSchedule.bufferTime = nScheduleSave.getBufferTime();
+        nSchedule.totalAmount = nScheduleSave.getTotalAmount();
         return nSchedule;
     }
 

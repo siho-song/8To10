@@ -34,14 +34,14 @@ public class NScheduleControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private NScheduleSave NScheduleSave;
+    private NScheduleSave nScheduleSave;
 
     @Autowired
     TokenUtils tokenUtils;  // TokenUtils 주입받기
 
     @BeforeEach
     public void setup() {
-        NScheduleSave = NScheduleSave.builder()
+        nScheduleSave = NScheduleSave.builder()
                 .title("Test Schedule")
                 .commonDescription("Test Description")
                 .startDate(LocalDate.of(2024, 1, 1))
@@ -58,14 +58,14 @@ public class NScheduleControllerTest {
     @Test
     @DisplayName("일반일정 정상 등록")
     public void add() throws Exception {
-        log.debug("testAddSchedule called normal Add dto : {}", NScheduleSave);
+        log.debug("testAddSchedule called normal Add dto : {}", nScheduleSave);
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         mockMvc.perform(post("/schedule/normal")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(NScheduleSave)))
+                        .content(objectMapper.writeValueAsString(nScheduleSave)))
                 .andExpect(status().isCreated());
     }
 }
