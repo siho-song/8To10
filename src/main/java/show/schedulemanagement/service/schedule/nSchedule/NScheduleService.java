@@ -23,7 +23,7 @@ import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
-import show.schedulemanagement.dto.schedule.response.NScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.nSchedule.NScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;

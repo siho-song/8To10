@@ -19,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
@@ -68,5 +70,48 @@ class FScheduleDetailServiceTest {
 
         int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(start, member, parent);
         assertThat(deletedCount).isEqualTo(5L);
+    }
+
+    @Test
+    @DisplayName(value = "자식일정 단건 업데이트")
+    void update(){
+        Member member = memberService.getAuthenticatedMember();
+        Long id = 1L;
+        LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
+        LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
+        String detailDescription = "수정된 메모";
+        FScheduleDetailUpdate fScheduleDetailUpdate = FScheduleDetailUpdate.builder()
+                .id(id)
+                .detailDescription(detailDescription)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        fScheduleDetailService.update(member,fScheduleDetailUpdate);
+
+        FScheduleDetail fScheduleDetail = fScheduleDetailService.findById(id);
+
+        assertThat(fScheduleDetail.getDetailDescription()).isEqualTo(detailDescription);
+        assertThat(fScheduleDetail.getStartDate()).isEqualTo(startDate);
+        assertThat(fScheduleDetail.getEndDate()).isEqualTo(endDate);
+    }
+
+    @Test
+    @DisplayName(value = "자식일정 단건 업데이트 예외발생- 작성자가 불일치")
+    void update_not_equal_createdBy(){
+        Member member = memberService.getAuthenticatedMember();
+        Long id = 7L;
+        LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
+        LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
+        String detailDescription = "수정된 메모";
+        FScheduleDetailUpdate fScheduleDetailUpdate = FScheduleDetailUpdate.builder()
+                .id(id)
+                .detailDescription(detailDescription)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        assertThatThrownBy(() -> fScheduleDetailService.update(member, fScheduleDetailUpdate)).isInstanceOf(
+                RuntimeException.class);
     }
 }

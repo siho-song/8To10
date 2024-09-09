@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
 import show.schedulemanagement.repository.schedule.fSchedule.FScheduleDetailRepository;
 
 @Service
@@ -38,6 +39,16 @@ public class FScheduleDetailService {
             throw new RuntimeException("작성자와 일치하지 않습니다.");
         }
         fScheduleDetailRepository.delete(fScheduleDetail);
+    }
+
+    @Transactional
+    public void update(Member member, FScheduleDetailUpdate fScheduleDetailUpdate){
+        Long id = fScheduleDetailUpdate.getId();
+        FScheduleDetail fScheduleDetail = findById(id);
+        if(!member.getEmail().equals(fScheduleDetail.getCreatedBy())){
+            throw new RuntimeException("작성자가 일치하지 않습니다.");
+        }
+        fScheduleDetail.update(fScheduleDetailUpdate);
     }
 
     @Transactional

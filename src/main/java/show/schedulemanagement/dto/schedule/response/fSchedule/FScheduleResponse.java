@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.response;
+package show.schedulemanagement.dto.schedule.response.fSchedule;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 
 @SuperBuilder
 @Getter

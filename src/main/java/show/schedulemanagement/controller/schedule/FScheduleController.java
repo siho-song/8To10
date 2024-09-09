@@ -8,8 +8,10 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
 import show.schedulemanagement.dto.Result;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
-import show.schedulemanagement.dto.schedule.response.FScheduleUpdateResponse;
+import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleDetailUpdateResponse;
+import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleUpdateResponse;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
@@ -54,7 +59,7 @@ public class FScheduleController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FScheduleUpdateResponse> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate){
+    public ResponseEntity<FScheduleUpdateResponse> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate) {
         Member member = memberService.getAuthenticatedMember();
         fScheduleService.update(member, fScheduleUpdate);
         FSchedule fSchedule = fScheduleService.findById(fScheduleUpdate.getId());
@@ -63,17 +68,25 @@ public class FScheduleController {
 
     @DeleteMapping(value = "/detail")
     public ResponseEntity<Integer> deleteDetailsGEStartDate(@RequestParam(value = "parentId") Long parentId,
-                                                         @RequestParam(value = "startDate") LocalDateTime startDate) {
+                                                            @RequestParam(value = "startDate") LocalDateTime startDate) {
         Member member = memberService.getAuthenticatedMember();
         FSchedule parent = fScheduleService.findById(parentId);
         int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(startDate, member, parent);
         return new ResponseEntity<>(deletedCount, OK);
     }
 
-    @DeleteMapping(value = "/detail/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteDetail(@PathVariable(value = "id") Long id){
+    @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FScheduleDetailUpdateResponse> updateDetail(@RequestBody @Valid FScheduleDetailUpdate dto){
         Member member = memberService.getAuthenticatedMember();
-        fScheduleDetailService.deleteById(member,id);
+        fScheduleDetailService.update(member, dto);
+        FScheduleDetail fScheduleDetail = fScheduleDetailService.findById(dto.getId());
+        return new ResponseEntity<>(FScheduleDetailUpdateResponse.from(fScheduleDetail), OK);
+    }
+
+    @DeleteMapping(value = "/detail/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> deleteDetail(@PathVariable(value = "id") Long id) {
+        Member member = memberService.getAuthenticatedMember();
+        fScheduleDetailService.deleteById(member, id);
         return new ResponseEntity<>(id, OK);
     }
 }

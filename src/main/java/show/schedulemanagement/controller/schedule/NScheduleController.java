@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
-import show.schedulemanagement.dto.schedule.response.NScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.nSchedule.NScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.nSchedule.NScheduleService;

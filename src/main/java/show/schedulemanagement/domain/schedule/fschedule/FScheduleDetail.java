@@ -19,6 +19,7 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
 
 @Entity
 @Getter
@@ -59,5 +60,11 @@ public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     public void setFSchedule(FSchedule fSchedule) {
         this.fSchedule = fSchedule;
         fSchedule.getFScheduleDetails().add(this);
+    }
+
+    public void update(FScheduleDetailUpdate fScheduleDetailUpdate){
+        detailDescription = fScheduleDetailUpdate.getDetailDescription();
+        startDate = fScheduleDetailUpdate.getStartDate();
+        endDate = fScheduleDetailUpdate.getEndDate();
     }
 }

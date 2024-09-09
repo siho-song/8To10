@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.response;
+package show.schedulemanagement.dto.schedule.response.nSchedule;
 
 import java.time.LocalTime;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 
 @SuperBuilder
 @Getter
