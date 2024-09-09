@@ -1,4 +1,4 @@
-package show.schedulemanagement.repository.schedule.fSchedule;
+package show.schedulemanagement.repository.schedule.fschedule;
 
 import java.time.LocalDateTime;
 import java.util.List;

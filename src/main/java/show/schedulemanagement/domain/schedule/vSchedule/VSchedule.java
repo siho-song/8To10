@@ -14,8 +14,8 @@ import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleAdd;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 
 @Entity
 @Getter

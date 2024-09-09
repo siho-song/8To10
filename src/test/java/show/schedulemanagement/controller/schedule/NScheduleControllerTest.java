@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 

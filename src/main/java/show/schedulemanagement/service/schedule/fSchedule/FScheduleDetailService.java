@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
-import show.schedulemanagement.repository.schedule.fSchedule.FScheduleDetailRepository;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
+import show.schedulemanagement.repository.schedule.fschedule.FScheduleDetailRepository;
 
 @Service
 @RequiredArgsConstructor

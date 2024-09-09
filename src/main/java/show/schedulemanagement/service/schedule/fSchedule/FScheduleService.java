@@ -14,9 +14,9 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleDay;
 import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
-import show.schedulemanagement.repository.schedule.fSchedule.FScheduleRepository;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
+import show.schedulemanagement.repository.schedule.fschedule.FScheduleRepository;
 
 @Service
 @Transactional(readOnly = true)

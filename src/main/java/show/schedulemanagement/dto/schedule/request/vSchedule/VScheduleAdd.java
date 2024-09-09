@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request.vSchedule;
+package show.schedulemanagement.dto.schedule.request.vschedule;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 import show.schedulemanagement.dto.schedule.request.ScheduleSave;
-import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
-import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
+import show.schedulemanagement.validator.schedule.filederror.ZeroSeconds;
+import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @SuperBuilder
 @ToString(callSuper = true)

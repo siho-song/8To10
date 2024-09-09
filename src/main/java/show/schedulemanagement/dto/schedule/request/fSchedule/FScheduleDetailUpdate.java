@@ -1,14 +1,12 @@
-package show.schedulemanagement.dto.schedule.request.fSchedule;
+package show.schedulemanagement.dto.schedule.request.fschedule;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
-import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
-import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
+import show.schedulemanagement.validator.schedule.filederror.ZeroSeconds;
+import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @Data
 @Builder

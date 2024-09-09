@@ -24,10 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
