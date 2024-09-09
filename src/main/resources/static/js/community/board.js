@@ -66,27 +66,37 @@ function updatePagination(totalPosts, postsPerPage) {
     }
 }
 
-function updatePostsPerPage() {
-    postsPerPage = parseInt(document.getElementById('posts-per-page').value);
-    showBoard();
-}
 
-function filterPosts() {
-    const searchInput = document.getElementById('search-input').value.toLowerCase();
-    filteredData = exampleData.filter(post =>
-        post.title.toLowerCase().includes(searchInput) ||
-        post.content.toLowerCase().includes(searchInput) ||
-        post.created_by.toLowerCase().includes(searchInput)
-    );
-    showBoard();
-}
+function loadBoardData(pageNum= 0, currentTotalPage) {
+    var totalPages;
+    var totalPosts;
 
-function writePost() {
-    window.location.href = '/community/post';
-}
+    const keyword = document.getElementById("search-input").value;
+    const pageSize = document.getElementById("posts-per-page").value;
+    const searchCond = document.getElementById("searchCond").value;
+    const sortCond = document.getElementById("sortCond").value;
 
-function viewPost(postId) {
-    // 여기서 실제로 상세 페이지로 이동하는 코드를 구현합니다.
-    // 예를 들어, window.location.href = `/post/${postId}`; 와 같은 형태로 구현할 수 있습니다.
-    window.location.href = `/community/post&${postId}`;
+    const params = new URLSearchParams({
+        keyword: keyword,
+        pageNum: pageNum,
+        pageSize: pageSize,
+        searchCond: searchCond,
+        sortCond: sortCond
+    });
+
+    console.log(params.toString());
+
+    fetch(`/community/board?${params.toString()}`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            renderBoard(data);
+            totalPages = data.totalPages;
+            totalPosts = data.totalElements;
+            createPaginationButton(totalPages);
+            console.log(data);
+        })
+        .catch(error => console.error('Error:', error));
+
 }
