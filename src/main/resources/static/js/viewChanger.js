@@ -2,6 +2,7 @@ document.addEventListener("click", function (event) {
     if(event.target.id === "board-link" || event.target.id === "board-link-img") {
         event.preventDefault();
         showBoardPage();
+        loadBoardData();
     }
 
     else if (event.target.id === "write-post") {
