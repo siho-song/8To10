@@ -1,7 +1,9 @@
 package show.schedulemanagement.controller.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.LoginMemberDto;
@@ -138,6 +142,29 @@ class FScheduleControllerTest {
         mockMvc.perform(put("/schedule/fixed")
                 .cookie(jwtCookie)
                 .contentType(APPLICATION_JSON)
+                .content(dto)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("고정일정 자식일정 단건 수정")
+    void updateDetail() throws Exception {
+        Long id = 1L;
+        LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
+        LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
+        String detailDescription = "수정된 메모";
+        FScheduleDetailUpdate fScheduleDetailUpdate = FScheduleDetailUpdate.builder()
+                .id(id)
+                .detailDescription(detailDescription)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        String dto = objectMapper.writeValueAsString(fScheduleDetailUpdate);
+
+        mockMvc.perform(patch("/schedule/fixed/detail")
+                .cookie(jwtCookie)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(dto)
         ).andExpect(status().isOk());
     }
