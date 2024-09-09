@@ -1,92 +1,103 @@
-document.addEventListener('DOMContentLoaded', () => {
-    showBoard();
-});
+function createPaginationButton(pageCount) {
 
-function showBoard() {
-    const boardContent = document.getElementById('board-content');
-    const boardTitle = document.getElementById('board-title');
-
-    // '게시판을 선택하세요' 메시지 제거
-    boardTitle.textContent = '자유게시판';
-
-    // 게시글 렌더링
-    boardContent.innerHTML = renderPosts(filteredData.slice(0, postsPerPage));
-    updatePagination(filteredData.length, postsPerPage);
-}
-
-function renderPosts(data) {
-    return data.map(post => `
-        <div class="post" id="post">
-            <h3 class="post-title">${post.title}</h3>
-            <div class="post-info">
-                <span class="post-author">${post.created_by}</span>
-            </div>
-            <p class="post-content-preview">${post.content}</p>
-            <div class="post-stats-preview">
-                <span class="post-likes">좋아요: ${post.total_like}</span>
-                <span class="post-replies">댓글: ${post.total_reply}</span>
-                <span class="post-date">${new Date(post.created_at).toLocaleDateString()}</span>
-            </div>
-        </div>
-    `).join('');
-}
-
-function updatePagination(totalPosts, postsPerPage) {
     const pagination = document.getElementById('pagination');
-    const pageCount = Math.ceil(totalPosts / postsPerPage);
+    let currentPageCount = parseInt(pagination.dataset.pageCount);
+    var isNewPagination = true;
 
+    if (currentPageCount) {
+        isNewPagination = false;
+        if (currentPageCount === pageCount) {
+            return;
+        }
+    }
+
+    pagination.dataset.pageCount = pageCount;
     pagination.innerHTML = '';
+
     for (let i = 1; i <= pageCount; i++) {
+
         const pageLink = document.createElement('a');
+
         pageLink.className = 'pagination-button';
+        pageLink.id = 'pagination-btn-' + i;
         pageLink.href = '#';
         pageLink.textContent = i;
         pageLink.onclick = (e) => {
             e.preventDefault();
-            const start = (i - 1) * postsPerPage;
-            const end = start + postsPerPage;
-            document.getElementById('board-content').innerHTML = renderPosts(filteredData.slice(start, end));
 
-            // 현재 페이지 표시
+            loadBoardData(i - 1);
+
             const currentPage = document.querySelector('.pagination-button.active');
             if (currentPage) {
                 currentPage.classList.remove('active');
             }
+
             pageLink.classList.add('active');
         };
         pagination.appendChild(pageLink);
     }
 
-    // 첫 번째 페이지를 기본으로 활성화
-    if (pageCount > 0) {
-        pagination.firstChild.classList.add('active');
-        const start = 0;
-        const end = postsPerPage;
-        document.getElementById('board-content').innerHTML = renderPosts(filteredData.slice(start, end));
+    if (isNewPagination) {
+        let firstPage = document.getElementById('pagination-btn-1');
+        firstPage.classList.add('active');
     }
 }
 
-function updatePostsPerPage() {
-    postsPerPage = parseInt(document.getElementById('posts-per-page').value);
-    showBoard();
+function renderBoard(data) {
+    const boardContent = document.getElementById('board-content');
+    boardContent.innerHTML = '';
+
+    data.content.forEach(post => {
+        const postItem = document.createElement('div');
+        console.log("data on renderBoard() : ", post)
+
+        postItem.innerHTML= `
+            <div class="post" id="post" data-post-id="${post.id}">
+                <h3 class="post-title">${post.title}</h3>
+                <div class="post-info">
+                    <span class="post-author">${post.nickname}</span>
+                </div>
+                <div class="post-stats-preview">
+                    <span class="post-likes">좋아요: ${post.totalLike}</span>
+                    <span class="post-replies">스크랩 수: ${post.totalScrap}</span>
+                    <span class="post-date">${new Date(post.createdAt).toLocaleDateString()}</span>
+                </div>
+            </div>
+        `;
+        boardContent.appendChild(postItem);
+    });
 }
 
-function filterPosts() {
-    const searchInput = document.getElementById('search-input').value.toLowerCase();
-    filteredData = exampleData.filter(post =>
-        post.title.toLowerCase().includes(searchInput) ||
-        post.content.toLowerCase().includes(searchInput) ||
-        post.created_by.toLowerCase().includes(searchInput)
-    );
-    showBoard();
-}
+function loadBoardData(pageNum= 0, currentTotalPage) {
+    var totalPages;
+    var totalPosts;
 
-function writePost() {
-    window.location.href = '/community/post';
-}
+    const keyword = document.getElementById("search-input").value;
+    const pageSize = document.getElementById("posts-per-page").value;
+    const searchCond = document.getElementById("searchCond").value;
+    const sortCond = document.getElementById("sortCond").value;
 
-function viewPost(postId) {
-    // 여기서 실제로 상세 페이지로 이동하는 코드를 구현합니다.
-    // 예를 들어, window.location.href = `/post/${postId}`; 와 같은 형태로 구현할 수 있습니다.
-    window.location.href = `/community/post&${postId}`;
+    const params = new URLSearchParams({
+        keyword: keyword,
+        pageNum: pageNum,
+        pageSize: pageSize,
+        searchCond: searchCond,
+        sortCond: sortCond
+    });
+
+    console.log(params.toString());
+
+    fetch(`/community/board?${params.toString()}`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            renderBoard(data);
+            totalPages = data.totalPages;
+            totalPosts = data.totalElements;
+            createPaginationButton(totalPages);
+            console.log(data);
+        })
+        .catch(error => console.error('Error:', error));
+
 }
