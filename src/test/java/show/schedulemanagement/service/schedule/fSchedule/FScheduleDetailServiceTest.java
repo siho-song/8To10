@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule.fSchedule;
+package show.schedulemanagement.service.schedule.fschedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -18,9 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 

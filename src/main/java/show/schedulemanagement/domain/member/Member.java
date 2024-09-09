@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.dto.signup.SignUpRequest;
 
 @Entity

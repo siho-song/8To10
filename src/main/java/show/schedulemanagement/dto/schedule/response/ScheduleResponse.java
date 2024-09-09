@@ -9,14 +9,14 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
-import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
-import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleResponse;
-import show.schedulemanagement.dto.schedule.response.nSchedule.NScheduleResponse;
-import show.schedulemanagement.dto.schedule.response.vSchedule.VScheduleResponse;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
+import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
+import show.schedulemanagement.dto.schedule.response.fschedule.FScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.vschedule.VScheduleResponse;
 
 @SuperBuilder
 @ToString

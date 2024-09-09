@@ -1,4 +1,4 @@
-package show.schedulemanagement.domain.schedule.nSchedule;
+package show.schedulemanagement.domain.schedule.nschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -20,7 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 
 @Entity

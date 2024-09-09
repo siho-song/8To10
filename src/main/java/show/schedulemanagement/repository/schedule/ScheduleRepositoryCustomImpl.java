@@ -5,18 +5,17 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.QFSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.QFScheduleDetail;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.QNSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.QNScheduleDetail;
-import show.schedulemanagement.domain.schedule.vSchedule.QVSchedule;
-import show.schedulemanagement.domain.schedule.vSchedule.VSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.QFSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.QFScheduleDetail;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.QNSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.QNScheduleDetail;
+import show.schedulemanagement.domain.schedule.vschedule.QVSchedule;
+import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
 
 
 @Slf4j

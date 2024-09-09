@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 
 @Entity
 @Getter

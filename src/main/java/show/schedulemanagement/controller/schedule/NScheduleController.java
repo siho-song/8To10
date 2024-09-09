@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.nSchedule.NScheduleService;
+import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @RestController

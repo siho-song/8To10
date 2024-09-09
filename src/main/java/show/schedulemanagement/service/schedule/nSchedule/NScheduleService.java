@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule.nSchedule;
+package show.schedulemanagement.service.schedule.nschedule;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
-import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlotService;

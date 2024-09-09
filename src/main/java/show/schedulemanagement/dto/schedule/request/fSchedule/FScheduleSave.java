@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request.fSchedule;
+package show.schedulemanagement.dto.schedule.request.fschedule;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -12,12 +12,12 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 import show.schedulemanagement.dto.schedule.request.ScheduleSave;
-import show.schedulemanagement.validator.schedule.filedError.Day;
-import show.schedulemanagement.validator.schedule.filedError.Frequency;
-import show.schedulemanagement.validator.schedule.filedError.PerformInDay;
-import show.schedulemanagement.validator.schedule.filedError.UniqueDayList;
-import show.schedulemanagement.validator.schedule.filedError.ZeroSeconds;
-import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
+import show.schedulemanagement.validator.schedule.fielderror.Day;
+import show.schedulemanagement.validator.schedule.fielderror.Frequency;
+import show.schedulemanagement.validator.schedule.fielderror.PerformInDay;
+import show.schedulemanagement.validator.schedule.fielderror.UniqueDayList;
+import show.schedulemanagement.validator.schedule.fielderror.ZeroSeconds;
+import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @SuperBuilder
 @Getter

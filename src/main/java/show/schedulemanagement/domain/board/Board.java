@@ -18,11 +18,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
-import show.schedulemanagement.domain.auditing.baseEntity.BaseTimeEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSaveRequest;
-import show.schedulemanagement.dto.board.BoardUpdateRequest;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)

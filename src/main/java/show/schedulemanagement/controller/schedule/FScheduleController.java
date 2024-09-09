@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,19 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.fSchedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fSchedule.FScheduleDetail;
+import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
+import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleDetailUpdate;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleSave;
-import show.schedulemanagement.dto.schedule.request.fSchedule.FScheduleUpdate;
-import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleDetailUpdateResponse;
-import show.schedulemanagement.dto.schedule.response.fSchedule.FScheduleUpdateResponse;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
+import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
+import show.schedulemanagement.dto.schedule.response.fschedule.FScheduleDetailUpdateResponse;
+import show.schedulemanagement.dto.schedule.response.fschedule.FScheduleUpdateResponse;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
-import show.schedulemanagement.service.schedule.fSchedule.FScheduleDetailService;
-import show.schedulemanagement.service.schedule.fSchedule.FScheduleService;
+import show.schedulemanagement.service.schedule.fschedule.FScheduleDetailService;
+import show.schedulemanagement.service.schedule.fschedule.FScheduleService;
 
 @RestController
 @RequiredArgsConstructor

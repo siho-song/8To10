@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
-import show.schedulemanagement.repository.schedule.nSchedule.NScheduleDetailRepository;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
+import show.schedulemanagement.repository.schedule.nschedule.NScheduleDetailRepository;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

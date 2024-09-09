@@ -14,10 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.dto.schedule.request.vSchedule.VScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.vSchedule.VScheduleService;
+import show.schedulemanagement.service.schedule.vschedule.VScheduleService;
 
 @SpringBootTest
 @DisplayName("변동일정 서비스 테스트")

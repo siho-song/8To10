@@ -1,12 +1,12 @@
-package show.schedulemanagement.dto.schedule.response.nSchedule;
+package show.schedulemanagement.dto.schedule.response.nschedule;
 
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
-import show.schedulemanagement.domain.schedule.nSchedule.NScheduleDetail;
+import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.ScheduleColor;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 

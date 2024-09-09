@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.schedule.request.vSchedule;
+package show.schedulemanagement.dto.schedule.request.vschedule;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Data;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
-import show.schedulemanagement.validator.schedule.objectError.StartBeforeEnd;
+import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @Data
 @StartBeforeEnd
