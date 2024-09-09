@@ -7,11 +7,11 @@ import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
 
 public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSave> {
     @Override
-    public boolean isValid(NScheduleSave NScheduleSave, ConstraintValidatorContext constraintValidatorContext) {
-        int performInWeek = NScheduleSave.getPerformInWeek();
-        Boolean isIncludeSaturday = NScheduleSave.getIsIncludeSaturday();
-        Boolean isIncludeSunday = NScheduleSave.getIsIncludeSunday();
-        long between = ChronoUnit.DAYS.between(NScheduleSave.getStartDate(), NScheduleSave.getEndDate()) + 1;
+    public boolean isValid(NScheduleSave nScheduleSave, ConstraintValidatorContext constraintValidatorContext) {
+        int performInWeek = nScheduleSave.getPerformInWeek();
+        Boolean isIncludeSaturday = nScheduleSave.getIsIncludeSaturday();
+        Boolean isIncludeSunday = nScheduleSave.getIsIncludeSunday();
+        long between = ChronoUnit.DAYS.between(nScheduleSave.getStartDate(), nScheduleSave.getEndDate()) + 1;
 
         if(performInWeek >= 6 && areNotIncludeWeekend(isIncludeSaturday,isIncludeSunday)){
             if (performInWeek > 7) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
+import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
@@ -61,5 +62,10 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public void setResultFromSchedule(Result<ScheduleResponse> result, Schedule schedule) {
         schedule.getScheduleAbles().forEach(e -> result.addEvent(ScheduleResponse.from(schedule, e)));
+    }
+
+    @Override
+    public List<ScheduleAble> getAllScheduleAbles(List<Schedule> schedules) {
+        return schedules.stream().flatMap(schedule -> schedule.getScheduleAbles().stream()).toList();
     }
 }

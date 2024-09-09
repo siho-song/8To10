@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nSchedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nSchedule.NScheduleSave;
-import show.schedulemanagement.dto.schedule.response.nSchedule.NScheduleResponse;
+import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.nSchedule.NScheduleService;
@@ -30,11 +30,13 @@ public class NScheduleController {
     private final NScheduleService nScheduleService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<NScheduleResponse>> addSchedule(@RequestBody @Valid NScheduleSave dto) throws RuntimeException{
+    public ResponseEntity<Result<ScheduleResponse>> addSchedule(@RequestBody @Valid NScheduleSave dto) throws RuntimeException{
         Member member = memberService.getAuthenticatedMember();
         NSchedule nSchedule = nScheduleService.addNSchedule(member, dto);
         scheduleService.save(nSchedule);
-        Result<NScheduleResponse> result = nScheduleService.getResult(nSchedule);
+
+        Result<ScheduleResponse> result = new Result<>();
+        scheduleService.setResultFromSchedule(result,nSchedule);
         log.debug("result : {} " , result);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
