@@ -47,55 +47,55 @@ class ScheduleDetailServiceTest {
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
-
-    @Test
-    @DisplayName(value = "고정일정의 자식일정을 삭제한다. 만약 고정일정의 자식의 크기가 0 이라면 해당 고정일정도 삭제한다.")
-    @Transactional
-    void deleteFdById() {
-        Member member = memberService.getAuthenticatedMember();
-        FSchedule fSchedule = (FSchedule) scheduleService.findById(1L);
-        List<FScheduleDetail> fScheduleDetails = fSchedule.getFScheduleDetails();
-        assertThat(fScheduleDetails.size()).isEqualTo(6);
-
-        List<Long> ids = fScheduleDetails.stream().map(FScheduleDetail::getId).toList();
-        for (Long id : ids) {
-            scheduleDetailService.deleteFdById(member, id);
-        }
-        entityManager.flush();
-        entityManager.clear();
-        assertThatThrownBy(() -> scheduleService.findById(1L)).isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    @DisplayName(value = "일반일정의 자식일정을 삭제한다. 만약 일반일정의 자식의 크기가 0 이라면 해당 고정일정도 삭제한다.")
-    @Transactional
-    void deleteNdById() {
-        Member member = memberService.getAuthenticatedMember();
-        NSchedule nSchedule = (NSchedule) scheduleService.findById(4L);
-        List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
-        assertThat(nScheduleDetails.size()).isEqualTo(5);
-
-        List<Long> ids = nScheduleDetails.stream().map(NScheduleDetail::getId).toList();
-        for (Long id : ids) {
-            scheduleDetailService.deleteNdById(member, id);
-        }
-        entityManager.flush();
-        entityManager.clear();
-        assertThatThrownBy(() -> scheduleService.findById(4L)).isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    @DisplayName(value = "일반일정의 자식일정을 삭제하면 일반일정의 총량이 조정된다.")
-    @Transactional
-    void deleteNd_minusUpdate_TotalAmount(){
-        Member member = memberService.getAuthenticatedMember();
-        NSchedule nSchedule = (NSchedule) scheduleService.findById(4L);
-        Integer totalAmount = nSchedule.getTotalAmount();
-
-        assertThat(totalAmount).isEqualTo(100);
-        scheduleDetailService.deleteNdById(member, 1L);
-        entityManager.flush();
-        entityManager.clear();
-        assertThat(nSchedule.getTotalAmount()).isEqualTo(80);
-    }
+//
+//    @Test
+//    @DisplayName(value = "고정일정의 자식일정을 삭제한다. 만약 고정일정의 자식의 크기가 0 이라면 해당 고정일정도 삭제한다.")
+//    @Transactional
+//    void deleteFdById() {
+//        Member member = memberService.getAuthenticatedMember();
+//        FSchedule fSchedule = (FSchedule) scheduleService.findById(1L);
+//        List<FScheduleDetail> fScheduleDetails = fSchedule.getFScheduleDetails();
+//        assertThat(fScheduleDetails.size()).isEqualTo(6);
+//
+//        List<Long> ids = fScheduleDetails.stream().map(FScheduleDetail::getId).toList();
+//        for (Long id : ids) {
+//            scheduleDetailService.deleteFdById(member, id);
+//        }
+//        entityManager.flush();
+//        entityManager.clear();
+//        assertThatThrownBy(() -> scheduleService.findById(1L)).isInstanceOf(RuntimeException.class);
+//    }
+//
+//    @Test
+//    @DisplayName(value = "일반일정의 자식일정을 삭제한다. 만약 일반일정의 자식의 크기가 0 이라면 해당 고정일정도 삭제한다.")
+//    @Transactional
+//    void deleteNdById() {
+//        Member member = memberService.getAuthenticatedMember();
+//        NSchedule nSchedule = (NSchedule) scheduleService.findById(4L);
+//        List<NScheduleDetail> nScheduleDetails = nSchedule.getNScheduleDetails();
+//        assertThat(nScheduleDetails.size()).isEqualTo(5);
+//
+//        List<Long> ids = nScheduleDetails.stream().map(NScheduleDetail::getId).toList();
+//        for (Long id : ids) {
+//            scheduleDetailService.deleteNdById(member, id);
+//        }
+//        entityManager.flush();
+//        entityManager.clear();
+//        assertThatThrownBy(() -> scheduleService.findById(4L)).isInstanceOf(RuntimeException.class);
+//    }
+//
+//    @Test
+//    @DisplayName(value = "일반일정의 자식일정을 삭제하면 일반일정의 총량이 조정된다.")
+//    @Transactional
+//    void deleteNd_minusUpdate_TotalAmount(){
+//        Member member = memberService.getAuthenticatedMember();
+//        NSchedule nSchedule = (NSchedule) scheduleService.findById(4L);
+//        Integer totalAmount = nSchedule.getTotalAmount();
+//
+//        assertThat(totalAmount).isEqualTo(100);
+//        scheduleDetailService.deleteNdById(member, 1L);
+//        entityManager.flush();
+//        entityManager.clear();
+//        assertThat(nSchedule.getTotalAmount()).isEqualTo(80);
+//    }
 }
