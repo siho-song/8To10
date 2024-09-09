@@ -57,18 +57,36 @@ boardView = `
             <div class="board-controls">
                 <div class="board-control-left">
                     페이지 당 글 개수:
-                    <select id="posts-per-page" onchange="updatePostsPerPage()">
+                    <select id="posts-per-page">
                         <option value="10">10</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
                     </select>
                 </div>
-                <!-- 검색창 추가 -->
-                <div class="search-bar">
-                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" oninput="filterPosts()">
-                    <button id="search-button" onclick="filterPosts()">검색</button>
+                
+                <div class="search-window">
+                    <div class="search-condition">
+                        <select name="searchCond" id="searchCond">
+                            <option value="TITLE">제목</option>
+                            <option value="CONTENTS">내용</option>
+                            <option value="WRITER">닉네임</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 검색창 추가 -->
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+                        <button id="search-button">검색</button>
+                    </div>
                 </div>
-                <button id="write-post" onclick="writePost()">글쓰기</button>
+                
+                <div class="sort-condition">
+                    <select name="sortCond" id="sortCond">
+                        <option value="DATE">날짜 순</option>
+                        <option value="LIKE">좋아요 순</option>
+                        <option value="SCRAP">스크랩 순</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div id="board-content"></div>
