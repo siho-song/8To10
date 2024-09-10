@@ -1398,6 +1398,20 @@ select {
 
 /*!* START 0521 글상세페이지 댓글->덧글 *!*/
 
+.no-result-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.no-result-message h3 {
+    color: #555;
+    font-size: 1.5em;
+}
+
+.no-result-message p {
+    color: #888;
+    font-size: 1em;
+}
 
 
 /* 전반적인 레이아웃 및 스타일 */
