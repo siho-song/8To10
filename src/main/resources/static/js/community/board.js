@@ -1,3 +1,9 @@
+document.addEventListener('change', function (event) {
+    if (event.target.id === 'sortCond') {
+        loadBoardData();
+    }
+});
+
 document.addEventListener('click', function (event) {
     if (event.target.id === 'search-button') {
         loadBoardData();
