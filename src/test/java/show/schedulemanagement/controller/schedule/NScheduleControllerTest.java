@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.security.dto.LoginMemberDto;
@@ -40,10 +42,16 @@ public class NScheduleControllerTest {
     private NScheduleUpdate nScheduleUpdate;
 
     @Autowired
-    TokenUtils tokenUtils;  // TokenUtils 주입받기
+    TokenUtils tokenUtils;
+
+    String token;
+    MockCookie jwtCookie;
 
     @BeforeEach
     public void setup() {
+        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+
         nScheduleSave = NScheduleSave.builder()
                 .title("Test Schedule")
                 .commonDescription("Test Description")
@@ -80,13 +88,25 @@ public class NScheduleControllerTest {
     @Test
     @DisplayName("일반일정 정상 수정")
     public void update() throws Exception {
-        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
-
         mockMvc.perform(put("/schedule/normal")
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nScheduleUpdate)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("일반일정 자식일정 단건 수정")
+    public void updateDetail() throws Exception {
+        NScheduleDetailUpdate nScheduleDetailUpdate = NScheduleDetailUpdate.builder()
+                .id(1L)
+                .detailDescription("수정된 메모")
+                .build();
+
+        mockMvc.perform(put("/schedule/normal/detail")
+                .cookie(jwtCookie)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(nScheduleDetailUpdate))
+        ).andExpect(status().isNoContent());
     }
 }
