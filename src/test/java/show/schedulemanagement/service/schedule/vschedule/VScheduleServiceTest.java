@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule;
+package show.schedulemanagement.service.schedule.vschedule;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -17,7 +17,7 @@ import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.vschedule.VScheduleService;
+import show.schedulemanagement.service.schedule.ScheduleService;
 
 @SpringBootTest
 @DisplayName("변동일정 서비스 테스트")
