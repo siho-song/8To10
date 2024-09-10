@@ -1,3 +1,9 @@
+document.addEventListener('click', function (event) {
+    if (event.target.id === 'search-button') {
+        loadBoardData();
+    }
+});
+
 function createPaginationButton(pageCount) {
 
     const pagination = document.getElementById('pagination');
