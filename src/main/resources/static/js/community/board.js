@@ -1,3 +1,15 @@
+document.addEventListener('change', function (event) {
+    if (event.target.id === 'sortCond') {
+        loadBoardData();
+    }
+});
+
+document.addEventListener('click', function (event) {
+    if (event.target.id === 'search-button') {
+        loadBoardData();
+    }
+});
+
 function createPaginationButton(pageCount) {
 
     const pagination = document.getElementById('pagination');
@@ -47,6 +59,19 @@ function renderBoard(data) {
     const boardContent = document.getElementById('board-content');
     boardContent.innerHTML = '';
 
+    if (data.content.length === 0) {
+        const noResultMessage = document.createElement('div');
+        noResultMessage.className = 'no-result-message';
+        noResultMessage.innerHTML = `
+            <div class="no-posts">
+                <h3>검색 결과가 없습니다.</h3>
+                <p>다른 검색어를 시도해 주세요.</p>
+            </div>
+        `;
+        boardContent.appendChild(noResultMessage);
+        return;
+    }
+
     data.content.forEach(post => {
         const postItem = document.createElement('div');
         console.log("data on renderBoard() : ", post)
@@ -94,9 +119,9 @@ function loadBoardData(pageNum= 0, currentTotalPage) {
         .then(data => {
             renderBoard(data);
             totalPages = data.totalPages;
-            totalPosts = data.totalElements;
             createPaginationButton(totalPages);
             console.log(data);
+
         })
         .catch(error => console.error('Error:', error));
 
