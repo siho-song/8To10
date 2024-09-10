@@ -20,6 +20,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 
 @Entity
 @Getter
@@ -55,6 +56,11 @@ public class NSchedule extends Schedule{
     }
 
     public void minusUpdateTotalAmount(int updateAmount) {
-        this.totalAmount -= updateAmount;
+        totalAmount -= updateAmount;
+    }
+
+    public void update(NScheduleUpdate nScheduleUpdate){
+        title = nScheduleUpdate.getTitle();
+        commonDescription = nScheduleUpdate.getCommonDescription();
     }
 }
