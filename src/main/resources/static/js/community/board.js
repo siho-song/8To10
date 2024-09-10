@@ -104,11 +104,18 @@ function loadBoardData(pageNum= 0, currentTotalPage) {
     })
         .then(response => response.json())
         .then(data => {
-            renderBoard(data);
-            totalPages = data.totalPages;
-            totalPosts = data.totalElements;
-            createPaginationButton(totalPages);
-            console.log(data);
+
+            if (data.content.length > 0) {
+                renderBoard(data);
+                totalPages = data.totalPages;
+                totalPosts = data.totalElements;
+                createPaginationButton(totalPages);
+                console.log(data);
+            }
+
+            else {
+                alert("해당 게시글을 찾을 수 없습니다. 검색어를 확인해주세요");
+            }
         })
         .catch(error => console.error('Error:', error));
 
