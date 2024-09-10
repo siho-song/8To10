@@ -22,6 +22,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
 
 @Entity
 @Getter
@@ -74,5 +76,9 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     public LocalDateTime getStartDate(){
         LocalTime bufferTime = nSchedule.getBufferTime();
         return this.startDate.minusHours(bufferTime.getHour()).minusMinutes(bufferTime.getMinute());
+    }
+
+    public void update(NScheduleDetailUpdate nScheduleDetailUpdate){
+        detailDescription = nScheduleDetailUpdate.getDetailDescription();
     }
 }
