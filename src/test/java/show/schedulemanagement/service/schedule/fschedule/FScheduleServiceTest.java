@@ -1,4 +1,4 @@
-package show.schedulemanagement.service.schedule;
+package show.schedulemanagement.service.schedule.fschedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,6 @@ import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
-import show.schedulemanagement.service.schedule.fschedule.FScheduleService;
 
 @DisplayName("고정일정 서비스 테스트")
 @SpringBootTest
