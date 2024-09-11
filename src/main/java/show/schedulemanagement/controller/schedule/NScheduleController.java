@@ -50,15 +50,14 @@ public class NScheduleController {
         return new ResponseEntity<>(result, CREATED);
     }
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<NScheduleUpdateResponse> update(@RequestBody @Valid NScheduleUpdate dto){
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@RequestBody @Valid NScheduleUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         nScheduleService.update(member, dto);
-        NSchedule nSchedule = nScheduleService.findById(dto.getId());
-        return new ResponseEntity<>(NScheduleUpdateResponse.from(nSchedule), OK);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateDetail(@RequestBody @Valid NScheduleDetailUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         nScheduleDetailService.update(member,dto);

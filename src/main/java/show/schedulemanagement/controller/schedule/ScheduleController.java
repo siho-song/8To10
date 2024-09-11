@@ -39,9 +39,9 @@ public class ScheduleController {
     }
 
     @DeleteMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteSchedule(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id) {
         Member member = memberService.getAuthenticatedMember();
         scheduleService.deleteById(member, id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 }
