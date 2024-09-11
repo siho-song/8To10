@@ -19,6 +19,7 @@ public class NScheduleResponse extends ScheduleResponse {
     private String detailDescription;
     private Double dailyAmount;
     private LocalTime bufferTime;
+    private boolean completeStatus;
 
     public NScheduleResponse(NSchedule nSchedule, NScheduleDetail nScheduleDetail) {
         super(nScheduleDetail.getId(),
@@ -28,9 +29,9 @@ public class NScheduleResponse extends ScheduleResponse {
                         .plusMinutes(nSchedule.getBufferTime().getMinute()),
                 nScheduleDetail.getEndDate(),
                 "normal",
-                ScheduleColor.NORMAL.hexCode,
-                nScheduleDetail.isCompleteStatus());
+                ScheduleColor.NORMAL.hexCode);
 
+        this.completeStatus = nScheduleDetail.isCompleteStatus();
         this.parentId = nSchedule.getId();
         this.dailyAmount = nScheduleDetail.getDailyAmount();
         this.detailDescription = nSchedule.getCommonDescription();

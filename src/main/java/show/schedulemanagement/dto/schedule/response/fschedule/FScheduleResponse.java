@@ -22,8 +22,7 @@ public class FScheduleResponse extends ScheduleResponse {
                 fScheduleDetail.getStartDate(),
                 fScheduleDetail.getEndDate(),
                 "fixed",
-                ScheduleColor.FIXED.hexCode,
-                fScheduleDetail.isCompleteStatus());
+                ScheduleColor.FIXED.hexCode);
 
         this.parentId = fSchedule.getId();
     }
