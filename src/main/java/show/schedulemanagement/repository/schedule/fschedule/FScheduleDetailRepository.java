@@ -16,5 +16,5 @@ public interface FScheduleDetailRepository extends JpaRepository<FScheduleDetail
 
     @Modifying
     @Query("delete from FScheduleDetail fd where fd in :fScheduleDetails")
-    int deleteByFScheduleDetails(@Param(value = "fScheduleDetails") List<FScheduleDetail> fScheduleDetails);
+    void deleteByFScheduleDetails(@Param(value = "fScheduleDetails") List<FScheduleDetail> fScheduleDetails);
 }

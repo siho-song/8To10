@@ -27,8 +27,8 @@ public class FScheduleDetailService {
     }
 
     @Transactional
-    public int deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
-        return fScheduleDetailRepository.deleteByFScheduleDetails(fScheduleDetails);
+    public void deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
+        fScheduleDetailRepository.deleteByFScheduleDetails(fScheduleDetails);
     }
 
     @Transactional
