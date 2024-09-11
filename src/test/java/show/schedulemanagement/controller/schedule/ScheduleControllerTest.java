@@ -41,7 +41,7 @@ class ScheduleControllerTest {
     void delete_FSchedule() throws Exception {
         mockMvc.perform(delete("/schedule/{id}", 1)
                         .cookie(jwtCookie))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -49,7 +49,7 @@ class ScheduleControllerTest {
     void delete_NSchedule() throws Exception {
         mockMvc.perform(delete("/schedule/{id}", 4)
                         .cookie(jwtCookie))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -57,6 +57,6 @@ class ScheduleControllerTest {
     void delete_VSchedule() throws Exception {
         mockMvc.perform(delete("/schedule/{id}", 7)
                         .cookie(jwtCookie))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

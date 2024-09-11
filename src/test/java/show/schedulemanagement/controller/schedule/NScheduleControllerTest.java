@@ -93,7 +93,7 @@ public class NScheduleControllerTest {
                         .cookie(jwtCookie) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nScheduleUpdate)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
