@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,6 +109,19 @@ public class NScheduleControllerTest {
                 .cookie(jwtCookie)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nScheduleDetailUpdate))
+        ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("특정 날짜 이후의 일반일정 자식일정 벌크 삭제")
+    public void delete_detail_greater_than_equal_start() throws Exception {
+        String parentId = "4";
+        String startDate = LocalDateTime.of(2024, 5, 2, 10, 0).toString();
+
+        mockMvc.perform(delete("/schedule/normal/detail")
+                .param("parentId", parentId)
+                .param("startDate", startDate)
+                .cookie(jwtCookie)
         ).andExpect(status().isNoContent());
     }
 
