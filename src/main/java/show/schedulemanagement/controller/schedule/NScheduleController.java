@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
 import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.schedule.nschedule.NScheduleDetailService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
@@ -33,6 +35,7 @@ public class NScheduleController {
     private final ScheduleService scheduleService;
     private final MemberService memberService;
     private final NScheduleService nScheduleService;
+    private final NScheduleDetailService nScheduleDetailService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<ScheduleResponse>> add(@RequestBody @Valid NScheduleSave dto) {
@@ -51,5 +54,12 @@ public class NScheduleController {
         nScheduleService.update(member, dto);
         NSchedule nSchedule = nScheduleService.findById(dto.getId());
         return new ResponseEntity<>(NScheduleUpdateResponse.from(nSchedule), OK);
+    }
+
+    @PutMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateDetail(@RequestBody @Valid NScheduleDetailUpdate dto){
+        Member member = memberService.getAuthenticatedMember();
+        nScheduleDetailService.update(member,dto);
+        return ResponseEntity.noContent().build();
     }
 }
