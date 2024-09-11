@@ -69,9 +69,8 @@ public class FScheduleController {
     public ResponseEntity<Integer> deleteDetailsGEStartDate(@RequestParam(value = "parentId") Long parentId,
                                                             @RequestParam(value = "startDate") LocalDateTime startDate) {
         Member member = memberService.getAuthenticatedMember();
-        FSchedule parent = fScheduleService.findById(parentId);
-        int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(startDate, member, parent);
-        return new ResponseEntity<>(deletedCount, OK);
+        fScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(startDate, member, parentId);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
