@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class NScheduleDetailServiceTest {
 
     @Autowired
     NScheduleDetailService nScheduleDetailService;
+
+    @Autowired
+    NScheduleService nScheduleService;
 
     @Autowired
     MemberService memberService;
@@ -69,5 +73,19 @@ class NScheduleDetailServiceTest {
 
         assertThatThrownBy(() -> nScheduleDetailService.findById(id)).isInstanceOf(EntityNotFoundException.class);
         assertThat(parent.getTotalAmount()).isEqualTo(80);
+    }
+
+    @Test
+    @DisplayName("특정 날짜 이후의 일반일정 자식일정 삭제")
+    void deleteByStartDateGE(){
+        LocalDateTime startDate = LocalDateTime.of(2024, 5, 2, 10, 0);
+        Member member = memberService.getAuthenticatedMember();
+        Long parentId = 4L;
+
+        nScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(startDate, member, parentId);
+        NSchedule nSchedule = nScheduleService.findById(parentId);
+
+        assertThat(nSchedule.getNScheduleDetails().size()).isEqualTo(1);
+        assertThat(nSchedule.getTotalAmount()).isEqualTo(20);
     }
 }
