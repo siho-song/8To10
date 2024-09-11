@@ -24,11 +24,6 @@ import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 @DiscriminatorValue(value = "V")
 @ToString(callSuper = true)
 public class VSchedule extends Schedule implements ScheduleAble {
-
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
-    private boolean completeStatus;
-
     public static VSchedule createVSchedule(Member member, VScheduleAdd variableRequestDto){
         VSchedule vSchedule = new VSchedule();
         vSchedule.member = member;

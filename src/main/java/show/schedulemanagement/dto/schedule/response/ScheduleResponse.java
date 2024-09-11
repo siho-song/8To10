@@ -31,7 +31,6 @@ public abstract class ScheduleResponse {
     private LocalDateTime end; // 2023-01-02T11:00:00
     private String type; // "normal","fixed","variable"
     private String color;
-    private Boolean completeStatue;
 
     public static ScheduleResponse from(Schedule schedule, ScheduleAble scheduleAble) {
         if (schedule instanceof NSchedule) {

@@ -24,8 +24,7 @@ public class VScheduleResponse extends ScheduleResponse {
                 schedule.getStartDate(),
                 schedule.getEndDate(),
                 "variable",
-                ScheduleColor.VARIABLE.hexCode,
-                schedule.isCompleteStatus()
+                ScheduleColor.VARIABLE.hexCode
         );
     }
 }

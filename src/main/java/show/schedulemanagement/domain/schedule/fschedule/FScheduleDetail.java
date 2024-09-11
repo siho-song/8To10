@@ -36,10 +36,6 @@ public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     @JoinColumn(name = "schedule_id", nullable = false)
     private FSchedule fSchedule;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
-    private boolean completeStatus;
-
     @Column(columnDefinition = "TEXT")
     private String detailDescription;
 
@@ -51,7 +47,6 @@ public class FScheduleDetail extends BaseEntity implements ScheduleAble {
 
     public static FScheduleDetail createFscheduleDetail(LocalDateTime startDate, LocalDateTime endDate){
         FScheduleDetail fScheduleDetail = new FScheduleDetail();
-        fScheduleDetail.completeStatus = false;
         fScheduleDetail.startDate = startDate;
         fScheduleDetail.endDate = endDate;
         return fScheduleDetail;
