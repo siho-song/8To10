@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,11 +66,12 @@ class FScheduleDetailServiceTest {
     void deleteByStartDateGE(){
         Member member = memberService.getAuthenticatedMember();
         Long parentId = 1L;
-        FSchedule parent = fScheduleService.findById(parentId);
         LocalDateTime start = LocalDateTime.of(2024, 1, 1, 15, 30);
 
-        int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(start, member, parent);
-        assertThat(deletedCount).isEqualTo(5L);
+        fScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(start, member, parentId);
+        FSchedule fSchedule = fScheduleService.findById(1L);
+        List<FScheduleDetail> fScheduleDetails = fSchedule.getFScheduleDetails();
+        assertThat(fScheduleDetails.size()).isEqualTo(1L);
     }
 
     @Test
