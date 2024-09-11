@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,6 +62,13 @@ public class NScheduleController {
     public ResponseEntity<Void> updateDetail(@RequestBody @Valid NScheduleDetailUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         nScheduleDetailService.update(member,dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/detail/{id}")
+    public ResponseEntity<Void> deleteDetail(@PathVariable(value = "id") Long id){
+        Member member = memberService.getAuthenticatedMember();
+        nScheduleDetailService.deleteById(member, id);
         return ResponseEntity.noContent().build();
     }
 }
