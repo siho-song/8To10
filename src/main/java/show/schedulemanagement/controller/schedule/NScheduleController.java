@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
 
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
@@ -61,6 +63,18 @@ public class NScheduleController {
     public ResponseEntity<Void> updateDetail(@RequestBody @Valid NScheduleDetailUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         nScheduleDetailService.update(member,dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/detail")
+    public ResponseEntity<Void> deleteDetailsGEStartDate(
+            @RequestParam(value = "startDate") LocalDateTime startDate,
+            @RequestParam(value = "parentId") Long parentId)
+    {
+        Member member = memberService.getAuthenticatedMember();
+        nScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(
+                startDate, member, parentId);
+
         return ResponseEntity.noContent().build();
     }
 
