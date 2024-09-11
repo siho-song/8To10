@@ -55,7 +55,7 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     private String detailDescription;
 
     @Setter
-    private Double dailyAmount;
+    private double dailyAmount;
 
     public static NScheduleDetail createNscheduleDetail(String commonDescription, LocalDateTime startDate,
                                                         LocalDateTime endDate) {
