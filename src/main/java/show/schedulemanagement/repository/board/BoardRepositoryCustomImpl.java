@@ -108,7 +108,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                                 qBoard.title,
                                 qBoard.content,
                                 qMember.nickname,
-                                qMember.email,
+                                qMember.email.as("writer"),
                                 qBoard.createdAt,
                                 qBoard.updatedAt,
                                 qBoard.totalLike,

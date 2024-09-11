@@ -55,12 +55,24 @@ public class NSchedule extends Schedule{
         return nScheduleDetails.stream().map(nScheduleDetail -> (ScheduleAble) nScheduleDetail).toList();
     }
 
-    public void minusUpdateTotalAmount(int updateAmount) {
-        totalAmount -= updateAmount;
-    }
-
     public void update(NScheduleUpdate nScheduleUpdate){
         title = nScheduleUpdate.getTitle();
         commonDescription = nScheduleUpdate.getCommonDescription();
+    }
+
+    public void updateTotalAmount(boolean isMinus, double dailyAmount) {
+        if (isAmountValid(dailyAmount)) {
+            int adjustedAmount = (int) Math.round(dailyAmount);
+            if (isMinus) {
+                totalAmount -= adjustedAmount;
+            } else {
+                totalAmount += adjustedAmount;
+            }
+        }
+    }
+
+    private boolean isAmountValid(double amount) {
+        final double EPSILON = 1e-10;
+        return totalAmount != 0 && Math.abs(amount) > EPSILON;
     }
 }

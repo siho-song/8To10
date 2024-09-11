@@ -1,6 +1,7 @@
 package show.schedulemanagement.controller.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,6 +108,16 @@ public class NScheduleControllerTest {
                 .cookie(jwtCookie)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nScheduleDetailUpdate))
+        ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("일반일정 자식일정 단건 삭제")
+    public void deleteDetailById() throws Exception {
+        Long id = 1L;
+
+        mockMvc.perform(delete("/schedule/normal/detail/{id}", id)
+                .cookie(jwtCookie)
         ).andExpect(status().isNoContent());
     }
 }
