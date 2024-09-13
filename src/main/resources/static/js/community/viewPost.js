@@ -14,55 +14,49 @@ function loadPostData(postId) {
 }
 
 // 게시글 보기 -> 서버랑 통신할 수 있게 바꿔야 하는 함수
-function showPostDetail(postId) {
+function renderPost(post) {
     const postContent = document.getElementById('post-content');
-
-    const defaultProfileImageUrl = "https://via.placeholder.com/100"; // 기본 이미지 URL
-
-    console.log(typeof postId);
-
+    let hasLike = post.hasLike ? "like-button active": "like-button";
+    console.log("hasLike : ", hasLike);
+    let hasScrap = post.hasScrap ? "scrap-button active": "scrap-button";
     // 해당 게시글 데이터 가져오기 (예제 데이터 사용)
-    const post = exampleData.find(post => post.board_id === Number(postId));
-
-    console.log(exampleData);
-
     if (post) {
         postContent.innerHTML = `
             <div class="post-detail">
-                <div class="post-header">
-                    <h3 class="post-title">${post.title}</h3>
-                    <div class="post-header-button">
-                        <button onclick="editPost(${postId})">수정</button>
-                        <button onclick="history.back()">글 목록</button>
+                <div class="post-header-button">
+                    <div id="edit-delete-controls" class="edit-delete-controls">
+                        <button onclick="editPost(${post.id})">수정</button>
                         <button class="delete-button" onclick="deletePost(this)">삭제</button>
                     </div>
+                    <button onclick="history.back()">글 목록</button>
+                </div>
+                <div class="post-header">
+                    <h3 class="post-title">${post.title}</h3>
                 </div>
                 <div class="post-info">
-                    <img src="${defaultProfileImageUrl}" alt="프로필 사진" class="post-profile-image">
                     <div class="post-author-date">
-                        <span class="post-author">${post.member_nickname}</span>
-                        <span class="post-date">${new Date(post.created_at).toLocaleDateString()}</span>
+                        <span class="post-author">${post.nickname}</span>
+                        <span class="post-date">${formatDateTime(post.createdAt)}</span>
                     </div>
                 </div>
+                <hr>
                 <p class="post-body">${post.content}</p>
                 <div class="post-stats">
                     <div class="post-likes">
-                        <button id="like-button" class="like-button">
-                            <span class="heart">좋아요</span> 
-                            <span id="like-count">${post.total_like}</span>
+                        <button id="like-button" class="${hasLike}" data-liked="${post.hasLike}">
+                            <span class="heart"}>좋아요</span> 
+                            <span id="like-count">${post.totalLike}</span>
                         </button>
                     </div>
                     <div class="post-scraps">
-                        <button id="scrap-button" onclick="toggleScrap(${postId})">스크랩</button>
-                        <span id="scrap-count">${post.total_scrap}</span>
+                        <button id="scrap-button" class="${hasScrap}" data-scraped="${post.hasScrap}" onclick="toggleScrap(${post.id})">
+                            <span class="scrap">스크랩</span> 
+                            <span id="scrap-count">${post.totalScrap}</span>
+                        </button>
                     </div>
                 </div>
             </div>
         `;
-        // Like button functionality
-        document.getElementById('like-button').addEventListener('click', function() {
-            toggleLike(this);
-        });
     } else {
         postContent.innerHTML = '<p>게시글을 찾을 수 없습니다.</p>';
     }
