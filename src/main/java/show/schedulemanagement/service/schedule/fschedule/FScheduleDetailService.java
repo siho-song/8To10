@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.repository.schedule.fschedule.FScheduleDetailRepository;
@@ -23,13 +22,13 @@ public class FScheduleDetailService {
         return fScheduleDetailRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 고정일정 세부사항을 찾을 수 없습니다."));
     }
 
-    public List<FScheduleDetail> findByStartDateGEAndEmailAndParent(LocalDateTime start, String email, FSchedule parent){
-        return fScheduleDetailRepository.findByStartDateGEAndEmailAndParent(start, email , parent);
+    public List<FScheduleDetail> findByStartDateGEAndEmailAndParentId(LocalDateTime start, String email, Long parentId){
+        return fScheduleDetailRepository.findByStartDateGEAndEmailAndParentId(start, email , parentId);
     }
 
     @Transactional
-    public int deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
-        return fScheduleDetailRepository.deleteByFScheduleDetails(fScheduleDetails);
+    public void deleteByFScheduleDetails(List<FScheduleDetail> fScheduleDetails){
+        fScheduleDetailRepository.deleteByFScheduleDetails(fScheduleDetails);
     }
 
     @Transactional
@@ -52,8 +51,8 @@ public class FScheduleDetailService {
     }
 
     @Transactional
-    public int deleteByStartDateGEAndMemberAndParent(LocalDateTime start, Member member, FSchedule fSchedule) {
-        List<FScheduleDetail> fScheduleDetails = findByStartDateGEAndEmailAndParent(start, member.getEmail(), fSchedule);
-        return deleteByFScheduleDetails(fScheduleDetails);
+    public void deleteByStartDateGEAndMemberAndParentId(LocalDateTime start, Member member, Long parentId) {
+        List<FScheduleDetail> fScheduleDetails = findByStartDateGEAndEmailAndParentId(start, member.getEmail(), parentId);
+        deleteByFScheduleDetails(fScheduleDetails);
     }
 }

@@ -111,7 +111,7 @@ class FScheduleControllerTest {
                 .param("parentId", parentId)
                 .param("startDate", startDate)
                 .cookie(jwtCookie)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isNoContent());
     }
 
     @Test
@@ -121,7 +121,7 @@ class FScheduleControllerTest {
 
         mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
                 .cookie(jwtCookie)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isNoContent());
     }
 
     @Test
@@ -142,7 +142,7 @@ class FScheduleControllerTest {
                 .cookie(jwtCookie)
                 .contentType(APPLICATION_JSON)
                 .content(dto)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isNoContent());
     }
 
     @Test
@@ -165,6 +165,6 @@ class FScheduleControllerTest {
                 .cookie(jwtCookie)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(dto)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isNoContent());
     }
 }

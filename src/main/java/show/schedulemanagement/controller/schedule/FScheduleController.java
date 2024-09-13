@@ -57,35 +57,32 @@ public class FScheduleController {
         return new ResponseEntity<>(result, CREATED);
     }
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FScheduleUpdateResponse> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate) {
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate) {
         Member member = memberService.getAuthenticatedMember();
         fScheduleService.update(member, fScheduleUpdate);
-        FSchedule fSchedule = fScheduleService.findById(fScheduleUpdate.getId());
-        return new ResponseEntity<>(FScheduleUpdateResponse.from(fSchedule), OK);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/detail")
-    public ResponseEntity<Integer> deleteDetailsGEStartDate(@RequestParam(value = "parentId") Long parentId,
+    public ResponseEntity<Void> deleteDetailsGEStartDate(@RequestParam(value = "parentId") Long parentId,
                                                             @RequestParam(value = "startDate") LocalDateTime startDate) {
         Member member = memberService.getAuthenticatedMember();
-        FSchedule parent = fScheduleService.findById(parentId);
-        int deletedCount = fScheduleDetailService.deleteByStartDateGEAndMemberAndParent(startDate, member, parent);
-        return new ResponseEntity<>(deletedCount, OK);
+        fScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(startDate, member, parentId);
+        return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FScheduleDetailUpdateResponse> updateDetail(@RequestBody @Valid FScheduleDetailUpdate dto){
+    @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateDetail(@RequestBody @Valid FScheduleDetailUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         fScheduleDetailService.update(member, dto);
-        FScheduleDetail fScheduleDetail = fScheduleDetailService.findById(dto.getId());
-        return new ResponseEntity<>(FScheduleDetailUpdateResponse.from(fScheduleDetail), OK);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/detail/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteDetail(@PathVariable(value = "id") Long id) {
+    @DeleteMapping(value = "/detail/{id}")
+    public ResponseEntity<Void> deleteDetail(@PathVariable(value = "id") Long id) {
         Member member = memberService.getAuthenticatedMember();
         fScheduleDetailService.deleteById(member, id);
-        return new ResponseEntity<>(id, OK);
+        return ResponseEntity.noContent().build();
     }
 }

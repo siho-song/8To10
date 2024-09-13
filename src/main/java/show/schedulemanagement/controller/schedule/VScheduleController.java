@@ -32,19 +32,18 @@ public class VScheduleController {
     private final VScheduleService vScheduleService;
     private final MemberService memberService;
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ScheduleResponse> update(@RequestBody @Valid VScheduleUpdate dto){
-        Member member = memberService.getAuthenticatedMember();
-        vScheduleService.update(member, dto);
-        Schedule schedule = scheduleService.findById(dto.getId());
-        return new ResponseEntity<>(ScheduleResponse.from(schedule, null), OK);
-    }
-
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponse> add(@RequestBody @Valid VScheduleAdd dto) {
         Member member = memberService.getAuthenticatedMember();
         VSchedule schedule = VSchedule.createVSchedule(member, dto);
         scheduleService.save(schedule);
         return new ResponseEntity<>(ScheduleResponse.from(schedule,null), CREATED);
+    }
+
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@RequestBody @Valid VScheduleUpdate dto){
+        Member member = memberService.getAuthenticatedMember();
+        vScheduleService.update(member, dto);
+        return ResponseEntity.noContent().build();
     }
 }

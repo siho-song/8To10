@@ -80,6 +80,7 @@ public class NScheduleService {
         return nSchedule;
     }
 
+    @Transactional
     public void update(Member member, NScheduleUpdate nScheduleUpdate){
 
         NSchedule nSchedule = findById(nScheduleUpdate.getId());
