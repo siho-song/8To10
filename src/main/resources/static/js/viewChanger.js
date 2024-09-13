@@ -13,8 +13,10 @@ document.addEventListener("click", function (event) {
     // TODO 게시글 상세 뷰 기능이 구현되면 post 프래그먼트의 게시글 id값을 확인하여 게시글 페이지의 세부 사항을 넣어주는 함수를 실행 시켜야 함
     else if (event.target.id === "post") {
         event.preventDefault();
+
         showPostDetailPage();
         // TODO 게시글 세부사항을 채워주는 함수 실행
+        loadPostData(event.target.dataset.postId);
     }
 });
 

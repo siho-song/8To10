@@ -1,17 +1,17 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const path = window.location.pathname;
-    const postId = path.split('&').pop();
-    showPostDetail(postId);
+function loadPostData(postId) {
+    let replies;
 
-    document.getElementById('submit-comment').addEventListener('click', function() {
-        const commentInput = document.getElementById('comment-input');
-        const commentText = commentInput.value.trim();
-        if (commentText) {
-            addComment('사용자닉네임', commentText);
-            commentInput.value = ''; // 입력 필드 비우기
-        }
-    });
-});
+    fetch(`/community/board/${postId}`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("data : ", data);
+            renderPost(data);
+            renderReplies(data.replies, data.likedReplyIds);
+        })
+        .catch(error => console.error('Error: ', error));
+}
 
 // 게시글 보기 -> 서버랑 통신할 수 있게 바꿔야 하는 함수
 function showPostDetail(postId) {
