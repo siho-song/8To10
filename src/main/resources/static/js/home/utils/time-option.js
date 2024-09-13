@@ -54,3 +54,18 @@ function convertTo24HourFormat(date, hour, minute) {
     return `${date}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
 }
 
+function formatDateTime(dateTime) {
+    const date = new Date(dateTime);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, '0');
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const ampm = hours >= 12 ? '오후' : '오전'; // AM/PM 결정
+    hours = hours % 12; // 12시간제로 변환
+    hours = hours ? String(hours).padStart(2, '0') : '12'; // 0일 경우 12로 표시
+
+    return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`;
+}
