@@ -62,9 +62,94 @@ function renderPost(post) {
     }
 }
 
+
+// 댓글과 대댓글 렌더링 함수
+function renderReplies(replies, likedReplyIds) {
+    const commentsContainer = document.getElementById('comments-container');
+    commentsContainer.innerHTML = '';
+
+    replies.forEach(reply => {
+        const commentElement = document.createElement('div');
+        let hasLike = false;
+
+        if (likedReplyIds.includes(reply.id)) {
+            hasLike = true;
+        }
+
+        if (!reply.parentId) {
+            commentElement.classList.add('comment');
+            commentElement.innerHTML = `
+                <div class="comment-header">
+                    <div class="comment-profile">
+                        <span class="comment-author">${reply.nickname}</span>
+                        <div id="edit-delete-controls" class="edit-delete-controls">
+                            <button class="comment-edit-button">수정</button>
+                            <button class="comment-delete-button" onclick="deleteComment(this)">삭제</button>                    
+                        </div>                       
+                    </div>  
+                    <span class="post-date">${formatDateTime(reply.createdAt)}</span>
+                    
+                    <span class="comment-text">${reply.content}</span>
+                    
+                    <div class="comment-actions">
+                        <button class="reply-button" onclick="showReplySection(this)">덧글 달기</button>
+                        <button class="${hasLike ? "comment-like-button active" : "comment-like-button"}" data-liked="${hasLike}" onclick="toggleLike(this)">
+                            <span class="heart">좋아요</span>
+                            <span id="like-count">${reply.totalLike}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="reply-section">
+                    <input type="text" class="reply-input" placeholder="덧글을 입력하세요">
+                    <button class="reply-submit" onclick="submitReply(this)">덧글 등록</button>
+                    <button class="hide-reply-section">취소</button>
+                </div>
+                <div class="replies-container"></div>
+            `;
+
+            commentElement.id = `comment-${reply.id}`;
+            commentsContainer.appendChild(commentElement);
+        } else {
+            commentElement.classList.add('reply');
+            commentElement.innerHTML = `
+                <div class="reply-group">
+                    <div class="reply-header">
+                        <span class="comment-author">${reply.nickname}</span>
+                        <div class="reply-actions">
+                            <button class="comment-edit-button">수정</button>
+                            <button class="comment-delete-button" onclick="deleteReply(this)">삭제</button>
+                        </div>                
+                    </div>
+                    <span class="post-date">${formatDateTime(reply.createdAt)}</span>                  
+                    <span class="comment-text">${reply.content}</span>
+                    <div class="comment-actions">
+                        <button class="${hasLike ? "comment-like-button active" : "comment-like-button"}" data-liked="${hasLike}" onclick="toggleLike(this)">
+                            <span class="heart">좋아요</span>
+                            <span id="like-count">${reply.totalLike}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const parentComment = document.querySelector(`#comment-${reply.parentId} .replies-container`);
+            parentComment.appendChild(commentElement);
+        }
+
+    });
+}
+
+function getCookie(name) {
+    console.log("cookies : ", document.cookie);
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+
 // 좋아요 버튼 이벤트 반영해주는 함수
 function toggleLike(button) {
-    const heartIcon = button.querySelector('.heart');
+    const heartIcon = button.querySelector('.like-button');
     const likeCount = button.querySelector('#like-count');
     let currentCount = parseInt(likeCount.textContent);
 
@@ -96,47 +181,15 @@ function toggleScrap(postId) {
     }
 }
 
-
-// 댓글 달기 기능
-function addComment(author, text) {
-    const commentsContainer = document.getElementById('comments-container');
-    const commentElement = document.createElement('div');
-    commentElement.classList.add('comment');
-    commentElement.innerHTML = `
-        <div class="comment-header">
-            <div class="comment-profile">
-                <img src="https://via.placeholder.com/40" alt="프로필 사진" class="comment-profile-image">
-                <span class="comment-author">${author}</span>님
-            </div>  
-            
-            <span class="comment-text">${text}</span>
-            
-            <div class="comment-actions">
-                <button class="reply-button" onclick="showReplySection(this)">덧글 달기</button>
-                <button class="like-button" onclick="toggleLike(this)">
-                    <span class="heart">좋아요</span>
-                    <span id="like-count">0</span>
-                </button>
-                <button class="delete-button" onclick="deleteComment(this)">삭제</button>
-            </div>
-        </div>
-        <div class="reply-section">
-            <input type="text" class="reply-input" placeholder="덧글을 입력하세요">
-            <button class="reply-submit" onclick="submitReply(this)">덧글 등록</button>
-        </div>
-        <div class="replies-container"></div>
-    `;
-    commentsContainer.appendChild(commentElement);
-}
-
-// 덧글 입력하는 기능 추가해주는 함수
+// 대댓글 입력하는 기능 추가해주는 함수
 function showReplySection(button) {
     const replySection = button.parentElement.parentElement.nextElementSibling;
     replySection.style.display = 'flex'; // 덧글 입력 영역 표시
 }
 
 
-// 덧글 등록 시 호출되는 함수
+// 대댓글 등록 시 호출되는 함수
+// TODO 덧글 등록 시에
 function submitReply(button) {
     const replySection = button.parentElement;
     const replyInput = replySection.querySelector('.reply-input');
