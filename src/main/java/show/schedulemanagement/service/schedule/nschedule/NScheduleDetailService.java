@@ -10,6 +10,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
 import show.schedulemanagement.repository.schedule.nschedule.NScheduleDetailRepository;
 
 @Service
@@ -29,18 +30,6 @@ public class NScheduleDetailService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
     }
 
-    public List<NScheduleDetail> findByStartDateGEAndEmailAndParentId(
-            LocalDateTime startDate,
-            String email,
-            Long parentId)
-    {
-        return nScheduleDetailRepository.findByStartDateGEAndEmailAndParentId(startDate, email, parentId); }
-
-    @Transactional
-    public void deleteByNScheduleDetails(List<NScheduleDetail> nScheduleDetails){
-        nScheduleDetailRepository.deleteByNScheduleDetails(nScheduleDetails);
-    }
-
     @Transactional
     public void update(Member member, NScheduleDetailUpdate nScheduleDetailUpdate){
         NScheduleDetail nScheduleDetail = findById(nScheduleDetailUpdate.getId());
@@ -48,12 +37,6 @@ public class NScheduleDetailService {
             throw new RuntimeException("작성자가 일치하지 않습니다.");
         }
         nScheduleDetail.update(nScheduleDetailUpdate);
-    }
-
-    @Transactional
-    public void delete(NScheduleDetail nScheduleDetail){
-        nScheduleDetailRepository.delete(nScheduleDetail);
-
     }
 
     @Transactional
@@ -66,7 +49,7 @@ public class NScheduleDetailService {
         NSchedule parent = nScheduleDetail.getNSchedule();
         parent.updateTotalAmount(true, nScheduleDetail.getDailyAmount());
 
-        delete(nScheduleDetail);
+        nScheduleDetailRepository.delete(nScheduleDetail);
     }
 
     @Transactional
@@ -75,12 +58,28 @@ public class NScheduleDetailService {
             Member member,
             Long parentId)
     {
-        List<NScheduleDetail> nScheduleDetails = findByStartDateGEAndEmailAndParentId(
-                startDate, member.getEmail(), parentId);
+        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findByStartDateGEAndEmailAndParentId(
+                startDate,
+                member.getEmail(),
+                parentId);
 
         NSchedule parent = nScheduleService.findById(parentId);
         parent.updateTotalAmount(true, getDailyAmountSum(nScheduleDetails));
-        deleteByNScheduleDetails(nScheduleDetails);
+        nScheduleDetailRepository.deleteByNScheduleDetails(nScheduleDetails);
+    }
+
+    @Transactional
+    public void updateCompleteStatuses(Member member, List<ToDoUpdate> toDoUpdates){
+        List<Long> ids = toDoUpdates.stream().map(ToDoUpdate::getId).toList();
+        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByIds(ids);
+
+        nScheduleDetails.stream().filter(nScheduleDetail -> nScheduleDetail.isWriter(member.getEmail()))
+                .forEach(nScheduleDetail -> toDoUpdates
+                        .stream()
+                        .filter(toDoUpdate -> toDoUpdate.isSameId(nScheduleDetail.getId()))
+                        .findFirst()
+                        .ifPresent(toDoUpdate -> nScheduleDetail.updateCompleteStatus(
+                                toDoUpdate.isComplete())));
     }
 
     private double getDailyAmountSum(List<NScheduleDetail> nScheduleDetails) {
