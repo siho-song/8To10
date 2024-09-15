@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.*;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
@@ -56,6 +58,13 @@ public class NScheduleController {
     public ResponseEntity<Void> update(@RequestBody @Valid NScheduleUpdate dto){
         Member member = memberService.getAuthenticatedMember();
         nScheduleService.update(member, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/todo" , consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateTodo(@RequestBody List<ToDoUpdate> toDoUpdates){
+        Member member = memberService.getAuthenticatedMember();
+        nScheduleDetailService.updateCompleteStatuses(member, toDoUpdates);
         return ResponseEntity.noContent().build();
     }
 
