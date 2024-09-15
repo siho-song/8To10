@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -133,5 +136,30 @@ public class NScheduleControllerTest {
         mockMvc.perform(delete("/schedule/normal/detail/{id}", id)
                 .cookie(jwtCookie)
         ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("일반일정 자식일정 todo 업데이트")
+    public void updateToDo() throws Exception {
+        List<ToDoUpdate> toDoUpdates = createToDoUpdates(true, 1L, 2L, 3L);
+        String dto = objectMapper.writeValueAsString(toDoUpdates);
+
+        mockMvc.perform(put("/schedule/normal/todo")
+                .cookie(jwtCookie)
+                .content(dto)
+                .contentType(APPLICATION_JSON)
+        ).andExpect(status().isNoContent());
+    }
+
+
+    private List<ToDoUpdate> createToDoUpdates(boolean completeStatus, Long... ids) {
+        List<ToDoUpdate> toDoUpdates = new ArrayList<>();
+        for (Long id : ids) {
+            toDoUpdates.add(ToDoUpdate.builder()
+                    .id(id)
+                    .isComplete(completeStatus)
+                    .build());
+        }
+        return toDoUpdates;
     }
 }
