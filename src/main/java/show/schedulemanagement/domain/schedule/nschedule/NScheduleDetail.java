@@ -21,6 +21,7 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
+import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
@@ -80,5 +81,13 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
 
     public void update(NScheduleDetailUpdate nScheduleDetailUpdate){
         detailDescription = nScheduleDetailUpdate.getDetailDescription();
+    }
+
+    public void updateCompleteStatus(boolean completeStatus){
+        this.completeStatus = completeStatus;
+    }
+
+    public boolean isWriter(String email){
+        return this.createdBy.equals(email);
     }
 }

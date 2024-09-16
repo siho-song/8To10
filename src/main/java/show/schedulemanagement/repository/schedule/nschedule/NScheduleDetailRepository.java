@@ -20,6 +20,9 @@ public interface NScheduleDetailRepository extends JpaRepository<NScheduleDetail
                                                                @Param(value = "email") String email,
                                                                @Param(value = "parentId") Long parentId);
 
+    @Query("select nd from NScheduleDetail nd where nd.id in :ids")
+    List<NScheduleDetail> findAllByIds(@Param(value = "ids") List<Long> ids);
+
     @Modifying
     @Query("delete from NScheduleDetail nd where nd in :nScheduleDetails")
     void deleteByNScheduleDetails(@Param(value = "nScheduleDetails") List<NScheduleDetail> nScheduleDetails);

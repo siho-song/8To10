@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
 import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
@@ -87,5 +90,29 @@ class NScheduleDetailServiceTest {
 
         assertThat(nSchedule.getNScheduleDetails().size()).isEqualTo(1);
         assertThat(nSchedule.getTotalAmount()).isEqualTo(20);
+    }
+
+    @Test
+    @DisplayName("일반 자식일정 ToDo 상태 수정")
+    void updateToDoList(){
+        Member member = memberService.getAuthenticatedMember();
+        List<ToDoUpdate> toDoUpdates = createToDoUpdates(true,1L, 2L, 3L);
+
+        nScheduleDetailService.updateCompleteStatuses(member, toDoUpdates);
+
+        assertThat(nScheduleDetailService.findById(1L).isCompleteStatus()).isTrue();
+        assertThat(nScheduleDetailService.findById(2L).isCompleteStatus()).isTrue();
+        assertThat(nScheduleDetailService.findById(3L).isCompleteStatus()).isTrue();
+    }
+
+    private List<ToDoUpdate> createToDoUpdates(boolean completeStatus, Long... ids) {
+        List<ToDoUpdate> toDoUpdates = new ArrayList<>();
+        for (Long id : ids) {
+            toDoUpdates.add(ToDoUpdate.builder()
+                    .id(id)
+                    .isComplete(completeStatus)
+                    .build());
+        }
+        return toDoUpdates;
     }
 }
