@@ -40,21 +40,41 @@ function submitAddScheduleForm(calendar) {
 
     else if (type === 'fixed') {
 
-        const events = timeslots.map(slot => {
-            return {
-                startTime: slot.startTime,
-                duration: `${slot.duration}:00`,
-                frequency: slot.frequency,
-                days: slot.days
-            };
-        });
+        const startTimePeriod = document.getElementById("schedule-start-time").value;
+        const startHour = document.getElementById("schedule-start-hour").value;
+        const startMinute = document.getElementById("schedule-start-minute").value;
+        const durationHour = document.getElementById("schedule-duration-hour").value;
+        const durationMinute = document.getElementById("schedule-duration-minute").value;
+        const frequency = document.getElementById("schedule-frequency").value;
+        const weekdays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(checkbox => checkbox.value);
+
+        let submitButton = document.getElementById("submit-button");
+
+        if (!isValidTitle()) {
+            showTooltip(submitButton, "일정제목은 비어있으면 안됩니다.");
+            return;
+        } else if (!isValidDurationTime()) {
+            showTooltip(submitButton, "지속시간은 0시간 이상이어야 합니다.");
+            return;
+        } else if (!isValidWeekDays(weekdays)) {
+            showTooltip(submitButton, "최소 하나의 요일은 선택되어야 합니다.");
+            return;
+        }
+
+        let startTime = convertTo24HourLocalTimeFormat(startTimePeriod, startHour, startMinute);
+        let durationTime = `${durationHour}:${durationMinute}:00`;
+
         const fixedEvents = {
             title:title,
             commonDescription:commonDescription,
             startDate:startDate,
             endDate:endDate,
-            events:events
+            startTime: startTime,
+            duration: durationTime,
+            frequency: frequency,
+            days: weekdays
         }
+
         console.log(fixedEvents);
 
 

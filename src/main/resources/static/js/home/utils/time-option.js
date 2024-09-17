@@ -54,6 +54,23 @@ function convertTo24HourFormat(date, hour, minute) {
     return `${date}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
 }
 
+function convertTo24HourLocalTimeFormat(period, hour, minute) {
+
+    let startTime = `${hour}:${minute}:00`;
+
+    if (period === 'AM') {
+        if(hour === '12') {
+            startTime = `00:${minute}:00`;
+        }
+    } else {
+        if (startHour !== '12') {
+            startTime = `${parseInt(startTime) + 12}:${minute}:00`;
+        }
+    }
+
+    return startTime;
+}
+
 function formatDateTime(dateTime) {
     const date = new Date(dateTime);
 
