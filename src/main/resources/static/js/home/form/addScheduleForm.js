@@ -20,7 +20,7 @@ function submitAddScheduleForm(timeslots, calendar) {
 
         console.log(event);
         // 서버로 이벤트 객체 전송
-        fetch('http://localhost:8080/schedule/variable/add', {
+        fetch('http://localhost:8080/schedule/variable', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function submitAddScheduleForm(timeslots, calendar) {
 
 
         // 서버로 이벤트 객체 전송
-        fetch('http://localhost:8080/schedule/fixed/add', {
+        fetch('http://localhost:8080/schedule/fixed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ function submitAddScheduleForm(timeslots, calendar) {
         console.log(event);
 
         // 서버로 이벤트 객체 전송
-        fetch('http://localhost:8080/schedule/normal/add', {
+        fetch('http://localhost:8080/schedule/normal', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
