@@ -1,76 +1,155 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const path = window.location.pathname;
-    const postId = path.split('&').pop();
-    showPostDetail(postId);
+function loadPostData(postId) {
+    let replies;
 
-    document.getElementById('submit-comment').addEventListener('click', function() {
-        const commentInput = document.getElementById('comment-input');
-        const commentText = commentInput.value.trim();
-        if (commentText) {
-            addComment('사용자닉네임', commentText);
-            commentInput.value = ''; // 입력 필드 비우기
-        }
-    });
-});
+    fetch(`/community/board/${postId}`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("data : ", data);
+            renderPost(data);
+            renderReplies(data.replies, data.likedReplyIds);
+        })
+        .catch(error => console.error('Error: ', error));
+}
 
 // 게시글 보기 -> 서버랑 통신할 수 있게 바꿔야 하는 함수
-function showPostDetail(postId) {
+function renderPost(post) {
     const postContent = document.getElementById('post-content');
-
-    const defaultProfileImageUrl = "https://via.placeholder.com/100"; // 기본 이미지 URL
-
-    console.log(typeof postId);
-
+    let hasLike = post.hasLike ? "like-button active": "like-button";
+    console.log("hasLike : ", hasLike);
+    let hasScrap = post.hasScrap ? "scrap-button active": "scrap-button";
     // 해당 게시글 데이터 가져오기 (예제 데이터 사용)
-    const post = exampleData.find(post => post.board_id === Number(postId));
-
-    console.log(exampleData);
-
     if (post) {
         postContent.innerHTML = `
             <div class="post-detail">
-                <div class="post-header">
-                    <h3 class="post-title">${post.title}</h3>
-                    <div class="post-header-button">
-                        <button onclick="editPost(${postId})">수정</button>
-                        <button onclick="history.back()">글 목록</button>
+                <div class="post-header-button">
+                    <div id="edit-delete-controls" class="edit-delete-controls">
+                        <button onclick="editPost(${post.id})">수정</button>
                         <button class="delete-button" onclick="deletePost(this)">삭제</button>
                     </div>
+                    <button onclick="history.back()">글 목록</button>
+                </div>
+                <div class="post-header">
+                    <h3 class="post-title">${post.title}</h3>
                 </div>
                 <div class="post-info">
-                    <img src="${defaultProfileImageUrl}" alt="프로필 사진" class="post-profile-image">
                     <div class="post-author-date">
-                        <span class="post-author">${post.member_nickname}</span>
-                        <span class="post-date">${new Date(post.created_at).toLocaleDateString()}</span>
+                        <span class="post-author">${post.nickname}</span>
+                        <span class="post-date">${formatDateTime(post.createdAt)}</span>
                     </div>
                 </div>
+                <hr>
                 <p class="post-body">${post.content}</p>
                 <div class="post-stats">
                     <div class="post-likes">
-                        <button id="like-button" class="like-button">
-                            <span class="heart">좋아요</span> 
-                            <span id="like-count">${post.total_like}</span>
+                        <button id="like-button" class="${hasLike}" data-liked="${post.hasLike}">
+                            <span class="heart"}>좋아요</span> 
+                            <span id="like-count">${post.totalLike}</span>
                         </button>
                     </div>
                     <div class="post-scraps">
-                        <button id="scrap-button" onclick="toggleScrap(${postId})">스크랩</button>
-                        <span id="scrap-count">${post.total_scrap}</span>
+                        <button id="scrap-button" class="${hasScrap}" data-scraped="${post.hasScrap}" onclick="toggleScrap(${post.id})">
+                            <span class="scrap">스크랩</span> 
+                            <span id="scrap-count">${post.totalScrap}</span>
+                        </button>
                     </div>
                 </div>
             </div>
         `;
-        // Like button functionality
-        document.getElementById('like-button').addEventListener('click', function() {
-            toggleLike(this);
-        });
     } else {
         postContent.innerHTML = '<p>게시글을 찾을 수 없습니다.</p>';
     }
 }
 
+
+// 댓글과 대댓글 렌더링 함수
+function renderReplies(replies, likedReplyIds) {
+    const commentsContainer = document.getElementById('comments-container');
+    commentsContainer.innerHTML = '';
+
+    replies.forEach(reply => {
+        const commentElement = document.createElement('div');
+        let hasLike = false;
+
+        if (likedReplyIds.includes(reply.id)) {
+            hasLike = true;
+        }
+
+        if (!reply.parentId) {
+            commentElement.classList.add('comment');
+            commentElement.innerHTML = `
+                <div class="comment-header">
+                    <div class="comment-profile">
+                        <span class="comment-author">${reply.nickname}</span>
+                        <div id="edit-delete-controls" class="edit-delete-controls">
+                            <button class="comment-edit-button">수정</button>
+                            <button class="comment-delete-button" onclick="deleteComment(this)">삭제</button>                    
+                        </div>                       
+                    </div>  
+                    <span class="post-date">${formatDateTime(reply.createdAt)}</span>
+                    
+                    <span class="comment-text">${reply.content}</span>
+                    
+                    <div class="comment-actions">
+                        <button class="reply-button" onclick="showReplySection(this)">덧글 달기</button>
+                        <button class="${hasLike ? "comment-like-button active" : "comment-like-button"}" data-liked="${hasLike}" onclick="toggleLike(this)">
+                            <span class="heart">좋아요</span>
+                            <span id="like-count">${reply.totalLike}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="reply-section">
+                    <input type="text" class="reply-input" placeholder="덧글을 입력하세요">
+                    <button class="reply-submit" onclick="submitReply(this)">덧글 등록</button>
+                    <button class="hide-reply-section">취소</button>
+                </div>
+                <div class="replies-container"></div>
+            `;
+
+            commentElement.id = `comment-${reply.id}`;
+            commentsContainer.appendChild(commentElement);
+        } else {
+            commentElement.classList.add('reply');
+            commentElement.innerHTML = `
+                <div class="reply-group">
+                    <div class="reply-header">
+                        <span class="comment-author">${reply.nickname}</span>
+                        <div class="reply-actions">
+                            <button class="comment-edit-button">수정</button>
+                            <button class="comment-delete-button" onclick="deleteReply(this)">삭제</button>
+                        </div>                
+                    </div>
+                    <span class="post-date">${formatDateTime(reply.createdAt)}</span>                  
+                    <span class="comment-text">${reply.content}</span>
+                    <div class="comment-actions">
+                        <button class="${hasLike ? "comment-like-button active" : "comment-like-button"}" data-liked="${hasLike}" onclick="toggleLike(this)">
+                            <span class="heart">좋아요</span>
+                            <span id="like-count">${reply.totalLike}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const parentComment = document.querySelector(`#comment-${reply.parentId} .replies-container`);
+            parentComment.appendChild(commentElement);
+        }
+
+    });
+}
+
+function getCookie(name) {
+    console.log("cookies : ", document.cookie);
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+
 // 좋아요 버튼 이벤트 반영해주는 함수
 function toggleLike(button) {
-    const heartIcon = button.querySelector('.heart');
+    const heartIcon = button.querySelector('.like-button');
     const likeCount = button.querySelector('#like-count');
     let currentCount = parseInt(likeCount.textContent);
 
@@ -102,47 +181,15 @@ function toggleScrap(postId) {
     }
 }
 
-
-// 댓글 달기 기능
-function addComment(author, text) {
-    const commentsContainer = document.getElementById('comments-container');
-    const commentElement = document.createElement('div');
-    commentElement.classList.add('comment');
-    commentElement.innerHTML = `
-        <div class="comment-header">
-            <div class="comment-profile">
-                <img src="https://via.placeholder.com/40" alt="프로필 사진" class="comment-profile-image">
-                <span class="comment-author">${author}</span>님
-            </div>  
-            
-            <span class="comment-text">${text}</span>
-            
-            <div class="comment-actions">
-                <button class="reply-button" onclick="showReplySection(this)">덧글 달기</button>
-                <button class="like-button" onclick="toggleLike(this)">
-                    <span class="heart">좋아요</span>
-                    <span id="like-count">0</span>
-                </button>
-                <button class="delete-button" onclick="deleteComment(this)">삭제</button>
-            </div>
-        </div>
-        <div class="reply-section">
-            <input type="text" class="reply-input" placeholder="덧글을 입력하세요">
-            <button class="reply-submit" onclick="submitReply(this)">덧글 등록</button>
-        </div>
-        <div class="replies-container"></div>
-    `;
-    commentsContainer.appendChild(commentElement);
-}
-
-// 덧글 입력하는 기능 추가해주는 함수
+// 대댓글 입력하는 기능 추가해주는 함수
 function showReplySection(button) {
     const replySection = button.parentElement.parentElement.nextElementSibling;
     replySection.style.display = 'flex'; // 덧글 입력 영역 표시
 }
 
 
-// 덧글 등록 시 호출되는 함수
+// 대댓글 등록 시 호출되는 함수
+// TODO 덧글 등록 시에
 function submitReply(button) {
     const replySection = button.parentElement;
     const replyInput = replySection.querySelector('.reply-input');
