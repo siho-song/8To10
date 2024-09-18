@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    let timeslots = [];
-
     const calendarEl = document.getElementById('calendar');
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: new Date(),
@@ -19,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dateClick: (info) => handleDateClick(calendar, info),
         eventClick: (info) => displayEventDetailsInSidebar(info.event),
         eventDidMount: function(info) {
-            // displayEventDetails(info.event);  // 이벤트가 렌더링될 때 To-Do 리스트에 추가
+            // displayEventDetails(info.event);
         }
     });
     calendar.render();
@@ -38,23 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 일정 생성 폼 제출
     document.getElementById('schedule-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        submitAddScheduleForm(timeslots, calendar);
-        toggleFixedFormFields(timeslots.length);
+        submitAddScheduleForm(calendar);
     });
 
-    // 시간슬롯 추가 이벤트
-    document.getElementById('add-timeslot-btn').addEventListener('click', function() {
-
-        createTimeSlot(timeslots); // timeslots 배열을 매개변수로 전달
-        renderTimeslots(timeslots);
-
-        console.log(calendar.events);
-    });
 
     const titleInput = document.getElementById('schedule-title');
     const saveBtn = document.getElementById('submit-button');
 
-    // 이름 글자 수 제한 검증
     titleInput.addEventListener('input', function () {
         const titleLength = titleInput.value.length;
 
@@ -64,8 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if(document.getElementById('schedule-form').dataset.type === 'fixed') {
-            saveBtn.disabled = (titleLength === 0) || timeslots.length === 0;
-        } else {
             saveBtn.disabled = (titleLength === 0);
         }
     });
@@ -103,12 +89,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('prev-date-btn').addEventListener('click', () => {
         handleDateClick(calendar, info);
-        // calendar.prev();
         updateDate();
     });
     document.getElementById('next-date-btn').addEventListener('click', () => {
         handleDateClick(calendar, info);
-        // calendar.next();
         updateDate();
     });
     updateDate();
@@ -126,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         fetch('http://localhost:8080/schedule/todo', {
-            method: 'PUT', // PUT 메서드로 변경
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(todoItems)
         })
@@ -158,8 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('#cancel-btn').addEventListener('click', () => {
         hideScheduleForm();
-        timeslots = [];
-        toggleFixedFormFields(timeslots.length);
     });
 
     window.addEventListener('click', (event) => {

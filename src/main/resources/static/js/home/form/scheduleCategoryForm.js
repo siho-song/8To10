@@ -1,5 +1,3 @@
-// 일정 추가를 눌렀을 떄 나오는 (고정,일반,변동) 일정 유형 팝업 표시 관련 기능
-
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('toggle-add-schedule-btn').addEventListener('click', function() {
         togglePanel('schedule-type-popup');
@@ -19,7 +17,6 @@ function createScheduleForm(type) {
 
     if (type === 'fixed') {  <!-- 고정 일정-->
         document.getElementById('schedule-form-header').textContent = "고정 일정";
-        document.getElementById('add-timeslot-btn').style.display = 'block';
 
         additionalFields.innerHTML = `
             <div class="form-group">
@@ -53,7 +50,6 @@ function createScheduleForm(type) {
                 <select id="schedule-frequency" name="frequency" onchange="handleFrequencyChange()">
                     <option value="daily">매일</option>
                     <option value="weekly">매주</option>
-                    <option value="biweekly">격주</option>
                 </select>
             </div>
             <div class="form-group">
@@ -68,18 +64,12 @@ function createScheduleForm(type) {
                     <label for="weekday-su"><input type="checkbox" id="weekday-su" name="days" value="su">일</label>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="timeslot-container">
-                    <!-- 타임 슬롯을 임시로 저장해두기 위한 컨테이너-->
-                </div>
-            </div>
         `;
         initializeFixedTimeOptions();
-        handleFrequencyChange(); // 초기 빈도 값 설정
+        handleFrequencyChange();
     }
-    else if (type === 'normal') {   <!-- 일반 일정-->
+    else if (type === 'normal') {
         document.getElementById('schedule-form-header').textContent = "일반 일정";
-        document.getElementById('add-timeslot-btn').style.display = 'none';
         additionalFields.innerHTML = `
             <div class="form-group">
                 <label for="schedule-buffer-time">희망 여유 시간</label>
@@ -122,9 +112,8 @@ function createScheduleForm(type) {
         initializeNormalTimeOptions();
     }
 
-    else if (type === 'variable') {   <!-- 변동 일정-->
+    else if (type === 'variable') {
         document.getElementById('schedule-form-header').textContent = "변동 일정";
-        document.getElementById('add-timeslot-btn').style.display = 'none';
         additionalFields.innerHTML = `
             <div class="form-group">
                     <label for="schedule-start-time">시작 시간</label>
@@ -167,7 +156,6 @@ function createScheduleForm(type) {
     setDefaultDate();
 }
 
-// 요일 선택 시에 '매일' 옵션이 들어가면 체크박스 비활성화
 function handleFrequencyChange() {
     const frequency = document.getElementById('schedule-frequency').value;
     const weekdayCheckboxes = document.querySelectorAll('input[name="days"]');
@@ -188,115 +176,9 @@ function handleFrequencyChange() {
 }
 
 
-function  createTimeSlot(timeslots) {
-    const startPeriod = document.getElementById('schedule-start-time').value;
-    const startHour = document.getElementById('schedule-start-hour').value;
-    const startMinute = document.getElementById('schedule-start-minute').value;
-    const durationHour = document.getElementById('schedule-duration-hour').value;
-    const durationMinute = document.getElementById('schedule-duration-minute').value;
-    const frequency = document.getElementById('schedule-frequency').value;
-    const weekdays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(checkbox => checkbox.value);
-
-    const dayCheckboxes = document.querySelectorAll('input[name="days"]:checked');
-    const isDaySelected = dayCheckboxes.length > 0; // 요일이 하나 이상 선택되었는지 확인
-
-    if (!isDaySelected) {
-        // 요일이 하나도 선택되지 않았을 경우
-        showTooltip(document.getElementById('add-timeslot-btn'), '적어도 하나의 요일을 선택해야 합니다.');
-        return; // 함수 실행 중단
-    }
-
-    // 시작 시간 계산
-    let startTime = `${startHour}:${startMinute}:00`;
-
-    if (startPeriod === 'AM') {
-        if(startHour === '12') {
-            startTime = `00:${startMinute}:00`;
-        }
-    } else {
-        if (startHour !== '12') {
-            startTime = `${parseInt(startTime) + 12}:${startMinute}:00`;
-        }
-    }
-
-    const timeslot = {
-        startTime: startTime,
-        duration:`${durationHour}:${durationMinute}`,
-        frequency: frequency,
-        days: weekdays,
-    };
-
-    if (validateTimeSlotOverlap(timeslots, timeslot)) {
-        timeslots.push(timeslot);
-
-        resetFixedScheduleForm();
-        toggleFixedFormFields(timeslots.length);
-        console.log("timeslots.length", timeslots.length);
-    } else {
-        const addTimeslotButton = document.getElementById("add-timeslot-btn");
-
-        showTooltip(addTimeslotButton, "겹치는 시간대가 있어서 시간슬롯 생성이 불가능 합니다.")
-        resetFixedScheduleForm();
-    }
-}
-
-function renderTimeslots(timeslots) {
-
-    const container = document.querySelector('.timeslot-container');
-    container.innerHTML = '';
-
-    timeslots.forEach((slot, index) => {
-        const item = document.createElement('div');
-        item.className = 'timeslot-item';
-        const buttonId = `delete-btn-${index}`;
-        item.innerHTML = `
-            <div class="slot-box">
-                <div class="slot-info">
-                    <p>빈도 : ${slot.frequency}</p>
-                    <p>요일 : ${slot.days.join(', ')}</p> 
-                    <p>시작 시간 :${slot.startTime.substring(0, 6)}</p>
-                    <p>지속 시간 : ${slot.duration}</p>
-                </div>
-                <button type="button" class="slot-delete-btn" id="${buttonId}">삭제</button>
-            </div>
-        `;
-
-        container.appendChild(item);
-
-        const deleteButton = document.getElementById(buttonId);
-        deleteButton.addEventListener('click', () => {
-            removeTimeslot(timeslots, index);
-        });
-    });
-
-}
-
-function removeTimeslot(timeslots, index) {
-    timeslots.splice(index, 1);
-    console.log("삭제", timeslots)
-    renderTimeslots(timeslots);
-    toggleFixedFormFields(timeslots.length);
-    validateTimeslotCreation();
-}
-
 
 function initializeInputField() {
-    // 처음 렌더링 될 때 내용 초기화, 저장 버튼 비활성화
     document.getElementById('schedule-title').value ="";
     document.getElementById('schedule-description').value ="";
     document.getElementById('submit-button').disabled = true;
-}
-
-function resetFixedScheduleForm() {
-    document.getElementById('schedule-start-time').value = "AM";
-    document.getElementById('schedule-start-hour').value = "01";
-    document.getElementById('schedule-start-minute').value = "00";
-    document.getElementById('schedule-duration-hour').value = "00";
-    document.getElementById('schedule-duration-minute').value = "00";
-    document.getElementById('schedule-frequency').value = "daily";
-    document.querySelectorAll('input[name="days"]').forEach(checkbox => {
-        checkbox.checked = true;
-        checkbox.disabled = true;
-    });
-    document.getElementById('add-timeslot-btn').disabled = true;
 }
