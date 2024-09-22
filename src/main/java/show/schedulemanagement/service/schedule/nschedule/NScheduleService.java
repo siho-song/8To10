@@ -149,31 +149,22 @@ public class NScheduleService {
             }
             current = current.plusDays(1L);
         }
-        setNScheduleDailyAmount(nSchedule.getNScheduleDetails(),nSchedule.getTotalAmount());
+        setScheduleDailyAmount(nSchedule.getNScheduleDetails(),nSchedule.getTotalAmount());
     }
 
-    private void setNScheduleDailyAmount(
+    private void setScheduleDailyAmount(
             List<NScheduleDetail> nScheduleDetails,
-            Integer totalAmount) {
+            int totalAmount) {
 
         int size = nScheduleDetails.size();
-        double div = (double) totalAmount / size;
-
-        double roundedDiv = Math.round(div * 100.0) / 100.0;
-
-        double totalRoundedAmount = roundedDiv * size;
-        double difference = totalAmount - totalRoundedAmount;
+        int div = totalAmount / size;
+        int mod = totalAmount % size;
 
         for (int i = 0; i < size; i++) {
-            if (i == size - 1){
-                if(!Double.isNaN((roundedDiv + difference / roundedDiv))){
-                    nScheduleDetails.get(i).setDailyAmount(roundedDiv + difference / roundedDiv);
-                }
-                else {
-                    nScheduleDetails.get(i).setDailyAmount(roundedDiv);
-                }
+            if (i < mod){
+                nScheduleDetails.get(i).setDailyAmount(div + 1);
             } else {
-                nScheduleDetails.get(i).setDailyAmount(roundedDiv);
+                nScheduleDetails.get(i).setDailyAmount(div);
             }
         }
     }
