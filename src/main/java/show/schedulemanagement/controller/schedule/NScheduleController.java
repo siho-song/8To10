@@ -5,12 +5,11 @@ import static org.springframework.http.MediaType.*;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,10 +22,9 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
-import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleDetailService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
@@ -61,10 +59,10 @@ public class NScheduleController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/todo" , consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTodo(@RequestBody List<ToDoUpdate> toDoUpdates){
+    @PatchMapping(value = "/progress", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateTodo(@RequestBody @Valid ProgressUpdateRequest progressUpdateRequest){
         Member member = memberService.getAuthenticatedMember();
-        nScheduleDetailService.updateCompleteStatuses(member, toDoUpdates);
+        nScheduleDetailService.updateProgress(member, progressUpdateRequest);
         return ResponseEntity.noContent().build();
     }
 
