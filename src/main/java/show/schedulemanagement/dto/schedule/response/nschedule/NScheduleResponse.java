@@ -17,7 +17,7 @@ import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 public class NScheduleResponse extends ScheduleResponse {
     private Long parentId;
     private String detailDescription;
-    private Double dailyAmount;
+    private int dailyAmount;
     private LocalTime bufferTime;
     private boolean completeStatus;
 
