@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
@@ -56,7 +57,9 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     private String detailDescription;
 
     @Setter
-    private double dailyAmount;
+    private int dailyAmount;
+
+    private int achievedAmount;
 
     public static NScheduleDetail createNscheduleDetail(String commonDescription, LocalDateTime startDate,
                                                         LocalDateTime endDate) {
@@ -87,7 +90,14 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
         this.completeStatus = completeStatus;
     }
 
-    public boolean isWriter(String email){
-        return this.createdBy.equals(email);
+    public void updateAchievedAmount(int achievedAmount){
+        this.achievedAmount = achievedAmount;
+    }
+
+    public double getAchievementRate(){
+        if(completeStatus){
+            return 1;
+        }
+        return (double) achievedAmount / dailyAmount;
     }
 }
