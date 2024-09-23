@@ -1,25 +1,35 @@
 package show.schedulemanagement.service.schedule.nschedule;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
-import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.repository.schedule.nschedule.NScheduleDetailRepository;
+import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.service.event.ProgressUpdatedEvent;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class NScheduleDetailService {
 
     private final NScheduleDetailRepository nScheduleDetailRepository;
     private final NScheduleService nScheduleService;
+    private final ApplicationEventPublisher publisher;
 
     public NScheduleDetail findById(Long id){
         return nScheduleDetailRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 일정입니다."));
@@ -62,24 +72,34 @@ public class NScheduleDetailService {
                 startDate,
                 member.getEmail(),
                 parentId);
-
         NSchedule parent = nScheduleService.findById(parentId);
         parent.updateTotalAmount(true, getDailyAmountSum(nScheduleDetails));
         nScheduleDetailRepository.deleteByNScheduleDetails(nScheduleDetails);
     }
 
     @Transactional
-    public void updateCompleteStatuses(Member member, List<ToDoUpdate> toDoUpdates){
-        List<Long> ids = toDoUpdates.stream().map(ToDoUpdate::getId).toList();
-        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByIds(ids);
+    public void updateProgress(Member member, ProgressUpdateRequest progressUpdateRequest) {
+        LocalDate date = progressUpdateRequest.getDate();
+        NScheduleDetail nScheduleDetail = findById(progressUpdateRequest.getScheduleDetailId());
 
-        nScheduleDetails.stream().filter(nScheduleDetail -> nScheduleDetail.isWriter(member.getEmail()))
-                .forEach(nScheduleDetail -> toDoUpdates
-                        .stream()
-                        .filter(toDoUpdate -> toDoUpdate.isSameId(nScheduleDetail.getId()))
-                        .findFirst()
-                        .ifPresent(toDoUpdate -> nScheduleDetail.updateCompleteStatus(
-                                toDoUpdate.isComplete())));
+        int dailyAmount = nScheduleDetail.getDailyAmount();
+        int newAchievementAmount = progressUpdateRequest.getAchievedAmount();
+
+        if (dailyAmount == 0) {
+            nScheduleDetail.updateCompleteStatus(progressUpdateRequest.isComplete());
+            return;
+        }
+
+        if (isValidAchievementAmount(newAchievementAmount, dailyAmount)) {
+            nScheduleDetail.updateAchievedAmount(newAchievementAmount);
+            nScheduleDetail.updateCompleteStatus(nScheduleDetail.getAchievedAmount() == dailyAmount);
+        }
+
+        publisher.publishEvent(ProgressUpdatedEvent.createdEvent(member,date));
+    }
+
+    private boolean isValidAchievementAmount(int newAchievementAmount, int dailyAmount) {
+        return newAchievementAmount >= 0 && newAchievementAmount <= dailyAmount;
     }
 
     private double getDailyAmountSum(List<NScheduleDetail> nScheduleDetails) {

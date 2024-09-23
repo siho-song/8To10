@@ -2,17 +2,15 @@ package show.schedulemanagement.controller.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,12 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockCookie;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
-import show.schedulemanagement.dto.schedule.request.nschedule.ToDoUpdate;
+import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.security.dto.LoginMemberDto;
 import show.schedulemanagement.security.utils.TokenUtils;
 
@@ -79,6 +78,7 @@ public class NScheduleControllerTest {
 
     @Test
     @DisplayName("일반일정 정상 등록")
+    @Rollback(value = false)
     public void add() throws Exception {
         String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
@@ -139,27 +139,21 @@ public class NScheduleControllerTest {
     }
 
     @Test
-    @DisplayName("일반일정 자식일정 todo 업데이트")
-    public void updateToDo() throws Exception {
-        List<ToDoUpdate> toDoUpdates = createToDoUpdates(true, 1L, 2L, 3L);
-        String dto = objectMapper.writeValueAsString(toDoUpdates);
+    @DisplayName("일반일정 자식일정 일정 진행상태 업데이트")
+    public void updateProgress() throws Exception {
+        ProgressUpdateRequest progressUpdateRequest = ProgressUpdateRequest.builder()
+                .date(LocalDate.of(2024,5,1))
+                .scheduleDetailId(1L)
+                .isComplete(true)
+                .achievedAmount(10)
+                .build();
 
-        mockMvc.perform(put("/schedule/normal/todo")
+        String dto = objectMapper.writeValueAsString(progressUpdateRequest);
+
+        mockMvc.perform(patch("/schedule/normal/progress")
                 .cookie(jwtCookie)
                 .content(dto)
                 .contentType(APPLICATION_JSON)
         ).andExpect(status().isNoContent());
-    }
-
-
-    private List<ToDoUpdate> createToDoUpdates(boolean completeStatus, Long... ids) {
-        List<ToDoUpdate> toDoUpdates = new ArrayList<>();
-        for (Long id : ids) {
-            toDoUpdates.add(ToDoUpdate.builder()
-                    .id(id)
-                    .isComplete(completeStatus)
-                    .build());
-        }
-        return toDoUpdates;
     }
 }

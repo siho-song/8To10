@@ -33,7 +33,7 @@ public class NSchedule extends Schedule{
     @ColumnDefault(value = "'00:00:00'")
     private LocalTime bufferTime;
 
-    private Integer totalAmount;
+    private int totalAmount;
 
     @OneToMany(mappedBy = "nSchedule", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<NScheduleDetail> nScheduleDetails = new ArrayList<>();

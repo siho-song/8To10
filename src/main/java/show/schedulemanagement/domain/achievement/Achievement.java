@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.domain.member.Member;
 
@@ -25,6 +26,7 @@ import show.schedulemanagement.domain.member.Member;
 @Builder
 @AllArgsConstructor
 @Table(name = "ACHIEVEMENT")
+@ToString(exclude = "member")
 public class Achievement extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "achievement_id")
@@ -38,5 +40,17 @@ public class Achievement extends BaseEntity {
     private LocalDate achievementDate;
 
     @Column(nullable = false)
-    private Double achievementRate;
+    private double achievementRate;
+
+    public static Achievement createAchievement(
+            Member member,
+            LocalDate achievementDate,
+            double achievementRate)
+    {
+        return Achievement.builder()
+                .member(member)
+                .achievementDate(achievementDate)
+                .achievementRate(achievementRate)
+                .build();
+    }
 }

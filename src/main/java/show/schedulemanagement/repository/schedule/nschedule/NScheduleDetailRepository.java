@@ -1,5 +1,6 @@
 package show.schedulemanagement.repository.schedule.nschedule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,9 @@ public interface NScheduleDetailRepository extends JpaRepository<NScheduleDetail
                                                                @Param(value = "email") String email,
                                                                @Param(value = "parentId") Long parentId);
 
-    @Query("select nd from NScheduleDetail nd where nd.id in :ids")
-    List<NScheduleDetail> findAllByIds(@Param(value = "ids") List<Long> ids);
+    @Query("select  nd from NScheduleDetail nd where DATE(nd.startDate) = :date and nd.createdBy = :email")
+    List<NScheduleDetail> findAllByDateAndEmail(@Param(value = "date") LocalDate date,
+                                                @Param(value = "email") String email);
 
     @Modifying
     @Query("delete from NScheduleDetail nd where nd in :nScheduleDetails")
