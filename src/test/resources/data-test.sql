@@ -219,7 +219,9 @@ CREATE TABLE `NOTIFICATION`
 INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
 VALUES
     ('일반테스트회원1', 'nick1', 'normal@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
-    ('일반테스트회원2', 'nick2', 'normal2@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345671', true, false),
+    ('일반테스트회원2', 'nick2', 'normal2@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 11, '01012345671', true, false),
+    ('일반테스트회원3', 'nick3', 'normal3@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 12, '01012345673', true, false),
+    ('일반테스트회원4', 'nick4', 'normal4@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 13, '01012345675', true, false),
     ('관리자테스트회원2', 'nick2', 'admin@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
     ('성실테스트회원3', 'nick3', 'faithful@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
 --
@@ -405,8 +407,35 @@ VALUES
 INSERT INTO ACHIEVEMENT (member_id, achievement_date, achievement_rate, created_at, updated_at, created_by, updated_by)
 VALUES
     (1, '2024-01-01', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
-    (2, '2024-01-02', 80, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
-    (3, '2024-01-03', 70, NOW(), NOW(), 'normal@example.com', 'normal@example.com');
+    (1, '2024-01-02', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-03', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-04', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-05', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-06', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-07', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-08', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-09', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-01-10', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (2, '2024-01-02', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-03', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-04', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-05', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-06', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-07', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-08', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-09', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-10', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (2, '2024-01-11', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+    (3, '2024-01-03', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-04', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-05', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-06', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-07', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-08', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-09', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-10', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-11', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com'),
+    (3, '2024-01-12', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com');
 
 -- NOTIFICATION 테이블에 데이터 삽입
 INSERT INTO NOTIFICATION (member_id, message, is_read, entity_id, created_at, type)

@@ -32,10 +32,15 @@ public class ScheduleController {
         Member member = memberService.getAuthenticatedMember();
         List<Schedule> schedules = scheduleService.findAllWithDetailByMember(member);
 
-        Result<ScheduleResponse> result = new Result<>();
-        schedules.forEach(schedule -> scheduleService.setResultFromSchedule(result, schedule));
+        Result<ScheduleResponse> result = Result.fromElementsGroup(
+                schedules,
+                schedule -> Result.fromElements(
+                        schedule.getScheduleAbles(),
+                        e -> ScheduleResponse.from(schedule, e)
+                ).getItems()
+        );
 
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)

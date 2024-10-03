@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
@@ -25,8 +23,12 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final NScheduleDetailRepository nScheduleDetailRepository;
 
-    //해당일의 성취도 조회
-    //public void get() 없으면 응답에 reponse = null;
+    public List<Achievement> findAllBetweenYearAndMonth(Member member, int year, int month){
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = LocalDate.of(year, month, start.lengthOfMonth());
+
+        return achievementRepository.findAllBetweenStartAndEnd(member, start, end);
+    }
 
     @EventListener
     public void handleProgressUpdate(ProgressUpdatedEvent event) {

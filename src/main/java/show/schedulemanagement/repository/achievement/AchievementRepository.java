@@ -1,15 +1,17 @@
 package show.schedulemanagement.repository.achievement;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import show.schedulemanagement.domain.achievement.Achievement;
+import show.schedulemanagement.domain.member.Member;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
 
-    //일 기준으로 유저의 성취도 조회
     Optional<Achievement> findByAchievementDate(LocalDate achievementDate);
 
-    //달 기준으로 유저의 성취도 조회
-
+    @Query("select a from Achievement a where a.member = :member and a.achievementDate between :start and :end")
+    List<Achievement> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);
 }
