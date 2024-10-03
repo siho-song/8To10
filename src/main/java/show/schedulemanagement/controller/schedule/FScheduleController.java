@@ -51,8 +51,10 @@ public class FScheduleController {
         fScheduleService.addDetails(fSchedule, dto);
         scheduleService.save(fSchedule);
 
-        Result<ScheduleResponse> result = new Result<>();
-        scheduleService.setResultFromSchedule(result, fSchedule);
+        Result<ScheduleResponse> result = Result.fromElements(
+                fSchedule.getScheduleAbles(),
+                e -> ScheduleResponse.from(fSchedule, e)
+        );
 
         return new ResponseEntity<>(result, CREATED);
     }

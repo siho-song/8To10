@@ -47,8 +47,11 @@ public class NScheduleController {
         NSchedule nSchedule = nScheduleService.create(member, dto);
         scheduleService.save(nSchedule);
 
-        Result<ScheduleResponse> result = new Result<>();
-        scheduleService.setResultFromSchedule(result, nSchedule);
+        Result<ScheduleResponse> result = Result.fromElements(
+                nSchedule.getScheduleAbles(),
+                e -> ScheduleResponse.from(nSchedule, e)
+        );
+
         return new ResponseEntity<>(result, CREATED);
     }
 
