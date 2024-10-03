@@ -14,6 +14,5 @@ public interface ScheduleService {
     Schedule findById(Long id);
     List<Schedule> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);
     List<Schedule> findAllWithDetailByMember(Member member);
-    void setResultFromSchedule(Result<ScheduleResponse> result, Schedule schedule);
     List<ScheduleAble> getAllScheduleAbles(List<Schedule> schedules);
 }
