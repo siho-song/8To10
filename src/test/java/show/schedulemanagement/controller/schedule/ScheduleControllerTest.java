@@ -1,6 +1,7 @@
 package show.schedulemanagement.controller.schedule;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,14 @@ class ScheduleControllerTest {
     void init(){
         token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+    }
+
+    @Test
+    @DisplayName("모든일정 조회")
+    void getAllSchedule() throws Exception {
+        mockMvc.perform(get("/schedule")
+                        .cookie(jwtCookie))
+                .andExpect(status().isOk());
     }
 
     @Test
