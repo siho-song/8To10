@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

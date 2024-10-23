@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.reply.ReplyHeartService;
 import show.schedulemanagement.service.board.reply.ReplyService;

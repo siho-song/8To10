@@ -1,11 +1,11 @@
-package show.schedulemanagement.security.utils;
+package show.schedulemanagement.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import show.schedulemanagement.security.dto.LoginMemberDto;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

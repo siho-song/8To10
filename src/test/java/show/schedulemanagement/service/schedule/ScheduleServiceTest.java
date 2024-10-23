@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

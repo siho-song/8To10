@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.config;
+package show.schedulemanagement.domain.auth;
 
 import lombok.Getter;
 import lombok.Setter;

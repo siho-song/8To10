@@ -26,8 +26,8 @@ import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpd
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
-import show.schedulemanagement.security.dto.LoginMemberDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
+import show.schedulemanagement.utils.TokenUtils;
 
 @AutoConfigureMockMvc
 @SpringBootTest

@@ -3,7 +3,6 @@ package show.schedulemanagement.service.board;
 import static org.assertj.core.api.Assertions.*;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

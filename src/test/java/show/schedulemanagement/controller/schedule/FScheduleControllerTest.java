@@ -27,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
-import show.schedulemanagement.security.dto.LoginMemberDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
+import show.schedulemanagement.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc

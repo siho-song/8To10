@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.service;
+package show.schedulemanagement.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @Service

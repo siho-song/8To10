@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.provider;
+package show.schedulemanagement.provider;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,9 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
-import show.schedulemanagement.security.service.MemberDetailsService;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.service.auth.MemberDetailsService;
 
 @Component
 @RequiredArgsConstructor

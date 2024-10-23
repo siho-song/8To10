@@ -18,8 +18,8 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

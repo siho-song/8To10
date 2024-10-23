@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
-import show.schedulemanagement.security.dto.LoginMemberDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
+import show.schedulemanagement.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -1,23 +1,15 @@
 package show.schedulemanagement.service.achievement;
 
 import java.util.List;
-import lombok.With;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.member.Role;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

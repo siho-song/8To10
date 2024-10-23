@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,8 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.utils.TokenUtils;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

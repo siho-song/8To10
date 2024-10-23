@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.config;
+package show.schedulemanagement.config.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +24,16 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import show.schedulemanagement.security.filter.CustomAuthenticationFilter;
-import show.schedulemanagement.security.filter.JwtAuthorizationFilter;
-import show.schedulemanagement.security.handler.CustomAuthFailureHandler;
-import show.schedulemanagement.security.handler.CustomAuthSuccessHandler;
-import show.schedulemanagement.security.provider.CustomAuthenticationProvider;
-import show.schedulemanagement.security.service.MemberDetailsService;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.filter.CustomAuthenticationFilter;
+import show.schedulemanagement.filter.JwtAuthorizationFilter;
+import show.schedulemanagement.handler.CustomAuthFailureHandler;
+import show.schedulemanagement.handler.CustomAuthSuccessHandler;
+import show.schedulemanagement.provider.CustomAuthenticationProvider;
+import show.schedulemanagement.service.auth.MemberDetailsService;
+import show.schedulemanagement.utils.TokenUtils;
 
 import java.util.Collections;
 import java.util.function.Supplier;
-import show.schedulemanagement.service.MemberService;
 
 @Configuration
 @EnableWebSecurity

@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.filter;
+package show.schedulemanagement.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -17,8 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import show.schedulemanagement.security.service.MemberDetailsService;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.service.auth.MemberDetailsService;
+import show.schedulemanagement.utils.TokenUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
