@@ -22,7 +22,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
+import show.schedulemanagement.dto.auth.MemberDetailsDto;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest

@@ -1,14 +1,13 @@
-package show.schedulemanagement.config;
+package show.schedulemanagement.config.common;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import show.schedulemanagement.security.interceptor.JwtTokenInterceptor;
+import show.schedulemanagement.interceptor.JwtTokenInterceptor;
 
 @RequiredArgsConstructor
 @Slf4j

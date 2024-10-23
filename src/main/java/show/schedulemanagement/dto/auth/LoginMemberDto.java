@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.dto;
+package show.schedulemanagement.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

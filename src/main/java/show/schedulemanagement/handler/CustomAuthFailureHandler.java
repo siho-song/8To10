@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.handler;
+package show.schedulemanagement.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

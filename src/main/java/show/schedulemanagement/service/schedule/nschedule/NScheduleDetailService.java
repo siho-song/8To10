@@ -7,9 +7,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
@@ -18,7 +15,6 @@ import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.repository.schedule.nschedule.NScheduleDetailRepository;
-import show.schedulemanagement.security.dto.MemberDetailsDto;
 import show.schedulemanagement.service.event.ProgressUpdatedEvent;
 
 @Service

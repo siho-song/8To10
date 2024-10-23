@@ -1,4 +1,4 @@
-package show.schedulemanagement.security.handler;
+package show.schedulemanagement.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -9,8 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import show.schedulemanagement.security.service.MemberDetailsService;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
+import show.schedulemanagement.service.auth.MemberDetailsService;
+import show.schedulemanagement.utils.TokenUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String email = authentication.getName();
-        String token = tokenUtils.generateJwtToken(new show.schedulemanagement.security.dto.LoginMemberDto(email));
+        String token = tokenUtils.generateJwtToken(new LoginMemberDto(email));
 
         Cookie jwtCookie = new Cookie("jwt", token);
         jwtCookie.setHttpOnly(true);

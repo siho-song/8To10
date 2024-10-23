@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
-import show.schedulemanagement.security.dto.LoginMemberDto;
-import show.schedulemanagement.security.utils.TokenUtils;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
+import show.schedulemanagement.utils.TokenUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc

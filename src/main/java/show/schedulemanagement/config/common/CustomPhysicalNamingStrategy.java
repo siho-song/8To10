@@ -1,4 +1,4 @@
-package show.schedulemanagement.config;
+package show.schedulemanagement.config.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.Identifier;
