@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,7 +29,7 @@ class ReplyControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -39,7 +39,7 @@ class ReplyControllerTest {
 
     @BeforeEach
     void init(){
-        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
 

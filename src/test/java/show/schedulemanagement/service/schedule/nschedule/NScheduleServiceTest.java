@@ -19,7 +19,7 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.auth.MemberDetailsDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -28,7 +28,7 @@ import show.schedulemanagement.service.MemberService;
 class NScheduleServiceTest {
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     @Autowired
     NScheduleService nScheduleService;

@@ -19,7 +19,7 @@ import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @SpringBootTest
 @Transactional
@@ -30,7 +30,7 @@ class BoardControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -40,7 +40,7 @@ class BoardControllerTest {
 
     @BeforeEach
     void setAuthenticationToken(){
-        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
 

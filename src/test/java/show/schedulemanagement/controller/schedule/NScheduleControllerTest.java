@@ -27,7 +27,7 @@ import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -46,14 +46,14 @@ public class NScheduleControllerTest {
     private NScheduleUpdate nScheduleUpdate;
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     String token;
     MockCookie jwtCookie;
 
     @BeforeEach
     public void setup() {
-        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         nScheduleSave = NScheduleSave.builder()
@@ -80,7 +80,7 @@ public class NScheduleControllerTest {
     @DisplayName("일반일정 정상 등록")
     @Rollback(value = false)
     public void add() throws Exception {
-        String token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        String token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
 
         mockMvc.perform(post("/schedule/normal")

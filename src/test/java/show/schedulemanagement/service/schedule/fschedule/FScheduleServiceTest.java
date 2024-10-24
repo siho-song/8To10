@@ -21,7 +21,7 @@ import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.dto.auth.MemberDetailsDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
 @DisplayName("고정일정 서비스 테스트")
@@ -30,7 +30,7 @@ import show.schedulemanagement.service.MemberService;
 class FScheduleServiceTest {
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     @Autowired
     FScheduleService fScheduleService;
