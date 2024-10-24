@@ -21,7 +21,7 @@ import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.dto.auth.MemberDetailsDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -30,7 +30,7 @@ import show.schedulemanagement.service.MemberService;
 class NScheduleDetailServiceTest {
 
     @Autowired
-    TokenUtils tokenUtils;
+    TokenProvider tokenProvider;
 
     @Autowired
     NScheduleDetailService nScheduleDetailService;

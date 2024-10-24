@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,7 +28,7 @@ import show.schedulemanagement.utils.TokenUtils;
 class VScheduleControllerTest {
 
     @Autowired
-    TokenUtils tokenUtils;  // TokenUtils 주입받기
+    TokenProvider tokenProvider;  // TokenProvider 주입받기
 
     @Autowired
     ObjectMapper objectMapper;
@@ -41,7 +41,7 @@ class VScheduleControllerTest {
 
     @BeforeEach
     void setToken(){
-        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
 

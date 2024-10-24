@@ -28,7 +28,7 @@ import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpd
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,14 +44,14 @@ class FScheduleControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    TokenUtils tokenUtils;  // TokenUtils 주입받기
+    TokenProvider tokenProvider;  // TokenProvider 주입받기
 
     String token;
     MockCookie jwtCookie;
 
     @BeforeEach
     void setToken(){
-        token = tokenUtils.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
+        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
 

@@ -17,27 +17,30 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class TokenUtils {
+public class TokenProvider {
+
+    private static final String ISSUER = "8to10_Server";
 
     private final Key key;
     private final long tokenValidityInMilliseconds;
 
-    public TokenUtils(@Value("${jwt.secret}") String secret, @Value("${jwt.access-token-validity-in-seconds}") long tokenValidityInSeconds) {
+    public TokenProvider(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.access-token-validity-in-seconds}") long tokenValidityInSeconds)
+    {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
     public String generateJwtToken(LoginMemberDto loginMemberDto) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(loginMemberDto))
-                .setSubject(loginMemberDto.getEmail())
-                .setIssuer("schedulemanagement")
+                .setClaims(createClaims(loginMemberDto)) // 비공개 클레임
+                .setSubject(loginMemberDto.getEmail()) //등록된 클레임
+                .setIssuer(ISSUER) //등록된 클레임
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setExpiration(createExpirationDate())
+                .setExpiration(createExpirationDate()) //등록된 클레임
                 .compact();
-        log.debug("Generated Token: {}", token);
-        return token;
     }
 
     public boolean isValidToken(String token) {

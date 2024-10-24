@@ -11,19 +11,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import show.schedulemanagement.dto.auth.LoginMemberDto;
 import show.schedulemanagement.service.auth.MemberDetailsService;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
+public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final TokenUtils tokenUtils;
-    private final MemberDetailsService memberDetailsService;
+    private final TokenProvider tokenProvider;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication) throws IOException
+    {
         String email = authentication.getName();
-        String token = tokenUtils.generateJwtToken(new LoginMemberDto(email));
+        String token = tokenProvider.generateJwtToken(new LoginMemberDto(email));
 
         Cookie jwtCookie = new Cookie("jwt", token);
         jwtCookie.setHttpOnly(true);
