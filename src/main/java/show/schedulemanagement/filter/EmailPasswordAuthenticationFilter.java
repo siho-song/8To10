@@ -10,9 +10,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
-public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public EmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
         setFilterProcessesUrl("/login");
     }
@@ -20,7 +20,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-        log.info("Attempting authentication for URL: {}", request.getRequestURI());
         UsernamePasswordAuthenticationToken authRequest;
         try {
             authRequest = getAuthRequest(request);
@@ -35,8 +34,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private UsernamePasswordAuthenticationToken getAuthRequest(HttpServletRequest request) {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
-        log.debug("LoginRequestDto: email={}, password={}", email, password);
 
         return new UsernamePasswordAuthenticationToken(email, password);
     }
