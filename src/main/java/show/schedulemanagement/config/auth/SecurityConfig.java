@@ -1,39 +1,31 @@
 package show.schedulemanagement.config.auth;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import show.schedulemanagement.filter.CustomAuthenticationFilter;
+import show.schedulemanagement.filter.EmailPasswordAuthenticationFilter;
 import show.schedulemanagement.filter.JwtAuthorizationFilter;
-import show.schedulemanagement.handler.CustomAuthFailureHandler;
-import show.schedulemanagement.handler.CustomAuthSuccessHandler;
+import show.schedulemanagement.handler.AuthFailureHandler;
+import show.schedulemanagement.handler.AuthSuccessHandler;
 import show.schedulemanagement.provider.CustomAuthenticationProvider;
 import show.schedulemanagement.service.auth.MemberDetailsService;
-import show.schedulemanagement.utils.TokenUtils;
-
-import java.util.Collections;
-import java.util.function.Supplier;
+import show.schedulemanagement.utils.TokenProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -41,12 +33,18 @@ import java.util.function.Supplier;
 @Slf4j
 public class SecurityConfig {
 
-    private final TokenUtils tokenUtils;
+    private static final String[] STATIC_RESOURCES_LOCATION = new String[]{
+            "/css/**", "/resources/**",
+            "/static/**", "/images/**",
+            "/js/**", "/favicons/**"
+    };
+
+    private final TokenProvider tokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
-            CustomAuthenticationFilter customAuthenticationFilter,
+            EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter,
             JwtAuthorizationFilter jwtAuthorizationFilter
     ) throws Exception {
         log.debug("[+] WebSecurityConfig Start !!! ");
@@ -54,25 +52,27 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/signup/**", "/", "/error").permitAll()
-                        .requestMatchers("/css/**", "/resources/**", "/static/**", "/images/**", "/js/**").permitAll()
+                        .requestMatchers("/signup/**", "/", "/error")
+                        .permitAll()
+                        .requestMatchers(STATIC_RESOURCES_LOCATION)
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/")
-                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/home"))
-                        .permitAll()
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .logout(logout->
+                        logout.logoutUrl("/logout")
+                                .logoutSuccessUrl("/")
+                                .deleteCookies("jwt")
                 )
-                .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(emailPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return web -> web.ignoring().requestMatchers(STATIC_RESOURCES_LOCATION);
     }
 
     @Bean
@@ -90,17 +90,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomAuthenticationFilter customAuthenticationFilter(
+    public EmailPasswordAuthenticationFilter customAuthenticationFilter(
             AuthenticationManager authenticationManager,
-            CustomAuthSuccessHandler customAuthSuccessHandler,
-            CustomAuthFailureHandler customAuthFailureHandler
+            AuthSuccessHandler authSuccessHandler,
+            AuthFailureHandler authFailureHandler
     ) {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager);
-        customAuthenticationFilter.setFilterProcessesUrl("/login");
-        customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthSuccessHandler);
-        customAuthenticationFilter.setAuthenticationFailureHandler(customAuthFailureHandler);
-        customAuthenticationFilter.afterPropertiesSet();
-        return customAuthenticationFilter;
+        EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter = new EmailPasswordAuthenticationFilter(authenticationManager);
+        emailPasswordAuthenticationFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        emailPasswordAuthenticationFilter.setAuthenticationFailureHandler(authFailureHandler);
+        emailPasswordAuthenticationFilter.afterPropertiesSet();
+        return emailPasswordAuthenticationFilter;
     }
 
     @Bean
@@ -117,29 +116,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomAuthSuccessHandler customAuthSuccessHandler(MemberDetailsService memberDetailsService) {
-        return new CustomAuthSuccessHandler(tokenUtils,memberDetailsService);
+    public AuthSuccessHandler customAuthSuccessHandler() {
+        return new AuthSuccessHandler(tokenProvider);
     }
 
     @Bean
-    public CustomAuthFailureHandler customAuthFailureHandler() {
-        return new CustomAuthFailureHandler();
+    public AuthFailureHandler customAuthFailureHandler() {
+        return new AuthFailureHandler();
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter(MemberDetailsService memberDetailsService) {
-        return new JwtAuthorizationFilter(memberDetailsService, tokenUtils);
-    }
-
-    private AuthorizationDecision isAdmin(
-            Supplier<Authentication> authenticationSupplier,
-            RequestAuthorizationContext requestAuthorizationContext
-    ) {
-        return new AuthorizationDecision(
-                authenticationSupplier.get()
-                        .getAuthorities()
-                        .contains(new SimpleGrantedAuthority("ADMIN"))
-        );
+        return new JwtAuthorizationFilter(memberDetailsService, tokenProvider);
     }
 
     @Bean
