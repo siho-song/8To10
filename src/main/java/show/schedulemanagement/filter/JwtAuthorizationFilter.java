@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import show.schedulemanagement.service.auth.MemberDetailsService;
-import show.schedulemanagement.utils.TokenUtils;
+import show.schedulemanagement.utils.TokenProvider;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,7 +32,7 @@ import org.json.JSONObject;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final MemberDetailsService memberDetailsService;
-    private final TokenUtils tokenUtils;
+    private final TokenProvider tokenProvider;
 
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
             "/",
@@ -44,7 +44,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/css/**",
             "/templates/**",
             "/images/**",
-            "/signup/**"
+            "/signup/**",
+            "/favicon**"
     );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -59,28 +60,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         log.info("request.getRequestURI() : {}", requestURI);
 
-        if (shouldExclude(requestURI)) {
+        if (isExcludeUrl(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         Cookie[] cookies = request.getCookies();
-        String token = null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String jwtToken = findJwtToken(cookies);
 
         try {
-            if (token != null && !token.isEmpty()) {
-                log.debug("Token found: {}", token);
-                if (tokenUtils.isValidToken(token)) {
-                    String loginId = tokenUtils.getUserIdFromToken(token);
-                    log.debug("[+] loginId Check: {}", loginId);
+            if (jwtToken != null && !jwtToken.isEmpty()) {
+                log.debug("Token found: {}", jwtToken);
+                if (tokenProvider.isValidToken(jwtToken)) {
+                    String loginId = tokenProvider.getUserIdFromToken(jwtToken);
+                    log.debug("loginId : {}", loginId);
 
                     if (loginId != null && !loginId.isEmpty()) {
                         UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
@@ -101,7 +94,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean shouldExclude(String uri) {
+    private String findJwtToken(Cookie[] cookies) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isExcludeUrl(String uri) {
         return EXCLUDE_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, uri));
     }
 
