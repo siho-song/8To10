@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
@@ -33,16 +34,14 @@ public class VScheduleController {
     private final MemberService memberService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ScheduleResponse> add(@RequestBody @Valid VScheduleAdd dto) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<ScheduleResponse> add(@CurrentMember Member member, @RequestBody @Valid VScheduleAdd dto) {
         VSchedule schedule = VSchedule.createVSchedule(member, dto);
         scheduleService.save(schedule);
         return new ResponseEntity<>(ScheduleResponse.from(schedule,null), CREATED);
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody @Valid VScheduleUpdate dto){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> update(@CurrentMember Member member, @RequestBody @Valid VScheduleUpdate dto){
         vScheduleService.update(member, dto);
         return ResponseEntity.noContent().build();
     }
