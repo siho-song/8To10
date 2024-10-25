@@ -18,7 +18,7 @@ public class VScheduleService {
     public void update(Member member, VScheduleUpdate vScheduleUpdate){
 
         VSchedule schedule = (VSchedule) scheduleService.findById(vScheduleUpdate.getId());
-        if(!schedule.getCreatedBy().equals(member.getEmail())){
+        if(!member.isSameEmail(schedule.getCreatedBy())){
             throw new RuntimeException("작성자와 일치하지 않습니다.");
         }
         schedule.update(vScheduleUpdate);

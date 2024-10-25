@@ -79,33 +79,34 @@ public class ReplyServiceImpl implements ReplyService{
     @Transactional
     public void delete(Member member, Long id) {
         Reply reply = findByIdWithMemberAndParent(id);
-        checkEqualEmail(member, reply);
+        String createdBy = reply.getMember().getEmail();
 
+        if(!member.isSameEmail(createdBy)){
+            throw new RuntimeException();
+        }
+            // 댓글 삭제
         if (reply.getParent() != null) { // 대댓글 삭제
             replyHeartService.deleteByReply(reply);
             replyRepository.delete(reply);
             return;
         }
-        // 댓글 삭제
         List<Reply> nestedReplies = findNestedRepliesByParent(reply);
-        replyHeartService.deleteByReplies(nestedReplies);
-        deleteByReplies(nestedReplies);
-        replyHeartService.deleteByReply(reply);
-        replyRepository.delete(reply);
+            replyHeartService.deleteByReplies(nestedReplies);
+            deleteByReplies(nestedReplies);
+            replyHeartService.deleteByReply(reply);
+            replyRepository.delete(reply);
+
     }
 
     @Override
     @Transactional
     public void update(Member member, ReplyUpdateRequest updateRequest) {
         Reply reply = findByIdWithMemberAndParent(updateRequest.getId());
-        checkEqualEmail(member, reply);
-        reply.updateContent(updateRequest.getContent());
-    }
-
-    private void checkEqualEmail(Member member, Reply reply) {
-        if (!member.getEmail().equals(reply.getMember().getEmail())) {
-            throw new RuntimeException("댓글 작성자와 클라이언트의 이메일이 일치하지 않습니다.");
+        String createdBy = reply.getMember().getEmail();
+        if(!member.isSameEmail(createdBy)){
+            throw new RuntimeException();
         }
+        reply.updateContent(updateRequest.getContent());
     }
 
     private boolean checkEqualBoard(Board parentReplyBoard, Board board) {

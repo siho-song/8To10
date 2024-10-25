@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
@@ -23,16 +24,14 @@ import show.schedulemanagement.service.achievement.AchievementService;
 @Slf4j
 public class AchievementController {
 
-    private final MemberService memberService;
     private final AchievementService achievementService;
 
     @GetMapping(value = "/{year}/{month}" , produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<AchievementResponse>> getMonthAchievement(
+            @CurrentMember Member member,
             @PathVariable(value = "year") int year,
             @PathVariable(value = "month") int month)
     {
-        Member member = memberService.getAuthenticatedMember();
-
         List<Achievement> achievements = achievementService.findAllBetweenYearAndMonth(
                 member,
                 year,

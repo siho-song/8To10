@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
@@ -33,11 +34,12 @@ public class ReplyController {
 
     private final ReplyService replyService;
     private final ReplyHeartService replyHeartService;
-    private final MemberService memberService;
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReplySearchResponse> update(@RequestBody @Valid ReplyUpdateRequest request){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<ReplySearchResponse> update(
+            @CurrentMember Member member,
+            @RequestBody @Valid ReplyUpdateRequest request)
+    {
         replyService.update(member, request);
         Reply reply = replyService.findByIdWithMemberAndParent(request.getId());
         ReplySearchResponse responseDto = ReplySearchResponse.from(reply);
@@ -45,31 +47,39 @@ public class ReplyController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Long> delete(@PathVariable(value = "id") Long id){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Long> delete(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id)
+    {
         replyService.delete(member,id);
         return new ResponseEntity<>(id, OK);
     }
 
     @PostMapping(value = "/add", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReplySaveResponse> save(@RequestBody @Valid ReplySaveRequest request) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<ReplySaveResponse> save(
+            @CurrentMember Member member,
+            @RequestBody @Valid ReplySaveRequest request)
+    {
         Reply reply = replyService.save(request, member);
         ReplySaveResponse responseDto = ReplySaveResponse.from(reply);
         return new ResponseEntity<>(responseDto, CREATED);
     }
 
     @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> addHeart(@PathVariable(value = "id") Long id){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Long> addHeart(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id)
+    {
         Reply reply = replyService.findById(id);
         replyHeartService.add(reply, member);
         return new ResponseEntity<>(id, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteHeart(@PathVariable(value = "id") Long id){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Long> deleteHeart(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id)
+    {
         Reply reply = replyService.findById(id);
         replyHeartService.delete(reply, member);
         return new ResponseEntity<>(id, OK);

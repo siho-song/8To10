@@ -84,7 +84,7 @@ public class NScheduleService {
     public void update(Member member, NScheduleUpdate nScheduleUpdate){
 
         NSchedule nSchedule = findById(nScheduleUpdate.getId());
-        if(!nSchedule.getCreatedBy().equals(member.getEmail())){
+        if(!member.isSameEmail(nSchedule.getCreatedBy())){
             throw new RuntimeException("작성자가 일치하지 않습니다.");
         }
         nSchedule.update(nScheduleUpdate);

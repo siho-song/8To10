@@ -106,6 +106,10 @@ public class Member extends BaseEntity {
         this.updatedBy = "ADMIN"; // 또는 다른 값
     }
 
+    public boolean isSameEmail(String email) {
+        return this.email.equals(email);
+    }
+
     public List<Role> getRoles(){
         return memberRoles.stream()
                 .map(MemberRole::getRole)

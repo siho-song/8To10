@@ -39,7 +39,7 @@ public class NScheduleDetailService {
     @Transactional
     public void update(Member member, NScheduleDetailUpdate nScheduleDetailUpdate){
         NScheduleDetail nScheduleDetail = findById(nScheduleDetailUpdate.getId());
-        if(!member.getEmail().equals(nScheduleDetail.getCreatedBy())){
+        if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
             throw new RuntimeException("작성자가 일치하지 않습니다.");
         }
         nScheduleDetail.update(nScheduleDetailUpdate);
@@ -48,7 +48,7 @@ public class NScheduleDetailService {
     @Transactional
     public void deleteById(Member member, Long id) {
         NScheduleDetail nScheduleDetail = findByIdWithParent(id);
-        if(!member.getEmail().equals(nScheduleDetail.getCreatedBy())){
+        if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
             throw new RuntimeException("작성자가 일치하지 않습니다.");
         }
 

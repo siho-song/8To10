@@ -57,7 +57,7 @@ public class FScheduleService {
     @Transactional
     public void update(Member member, FScheduleUpdate fScheduleUpdate) {
         FSchedule fSchedule = findById(fScheduleUpdate.getId());
-        if (!member.getEmail().equals(fSchedule.getCreatedBy())) {
+        if (!member.isSameEmail(fSchedule.getCreatedBy())) {
             throw new RuntimeException("작성자가 일치하지 않습니다.");
         }
         fSchedule.update(fScheduleUpdate);

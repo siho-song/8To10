@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
@@ -41,11 +42,12 @@ public class FScheduleController {
     private final ScheduleService scheduleService;
     private final FScheduleService fScheduleService;
     private final FScheduleDetailService fScheduleDetailService;
-    private final MemberService memberService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponse>> add(@RequestBody @Valid FScheduleSave dto) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Result<ScheduleResponse>> add(
+            @CurrentMember Member member,
+            @RequestBody @Valid FScheduleSave dto) {
+
         FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
 
         fScheduleService.addDetails(fSchedule, dto);
@@ -60,30 +62,38 @@ public class FScheduleController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody @Valid FScheduleUpdate fScheduleUpdate) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> update(
+            @CurrentMember Member member,
+            @RequestBody @Valid FScheduleUpdate fScheduleUpdate) {
+
         fScheduleService.update(member, fScheduleUpdate);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/detail")
-    public ResponseEntity<Void> deleteDetailsGEStartDate(@RequestParam(value = "parentId") Long parentId,
-                                                            @RequestParam(value = "startDate") LocalDateTime startDate) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> deleteDetailsGEStartDate(
+            @CurrentMember Member member,
+            @RequestParam(value = "parentId") Long parentId,
+            @RequestParam(value = "startDate") LocalDateTime startDate) {
+
         fScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(startDate, member, parentId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateDetail(@RequestBody @Valid FScheduleDetailUpdate dto){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> updateDetail(
+            @CurrentMember Member member,
+            @RequestBody @Valid FScheduleDetailUpdate dto){
+
         fScheduleDetailService.update(member, dto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/detail/{id}")
-    public ResponseEntity<Void> deleteDetail(@PathVariable(value = "id") Long id) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> deleteDetail(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id) {
+
         fScheduleDetailService.deleteById(member, id);
         return ResponseEntity.noContent().build();
     }

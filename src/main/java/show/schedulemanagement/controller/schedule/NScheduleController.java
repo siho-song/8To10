@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
@@ -37,13 +38,14 @@ import show.schedulemanagement.service.schedule.ScheduleService;
 public class NScheduleController {
 
     private final ScheduleService scheduleService;
-    private final MemberService memberService;
     private final NScheduleService nScheduleService;
     private final NScheduleDetailService nScheduleDetailService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponse>> add(@RequestBody @Valid NScheduleSave dto) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Result<ScheduleResponse>> add(
+            @CurrentMember Member member,
+            @RequestBody @Valid NScheduleSave dto)
+    {
         NSchedule nSchedule = nScheduleService.create(member, dto);
         scheduleService.save(nSchedule);
 
@@ -56,32 +58,38 @@ public class NScheduleController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@RequestBody @Valid NScheduleUpdate dto){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> update(
+            @CurrentMember Member member,
+            @RequestBody @Valid NScheduleUpdate dto)
+    {
         nScheduleService.update(member, dto);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/progress", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTodo(@RequestBody @Valid ProgressUpdateRequest progressUpdateRequest){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> updateTodo(
+            @CurrentMember Member member,
+            @RequestBody @Valid ProgressUpdateRequest progressUpdateRequest)
+    {
         nScheduleDetailService.updateProgress(member, progressUpdateRequest);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateDetail(@RequestBody @Valid NScheduleDetailUpdate dto){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> updateDetail(
+            @CurrentMember Member member,
+            @RequestBody @Valid NScheduleDetailUpdate dto)
+    {
         nScheduleDetailService.update(member,dto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/detail")
     public ResponseEntity<Void> deleteDetailsGEStartDate(
+            @CurrentMember Member member,
             @RequestParam(value = "startDate") LocalDateTime startDate,
             @RequestParam(value = "parentId") Long parentId)
     {
-        Member member = memberService.getAuthenticatedMember();
         nScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(
                 startDate, member, parentId);
 
@@ -89,8 +97,9 @@ public class NScheduleController {
     }
 
     @DeleteMapping(value = "/detail/{id}")
-    public ResponseEntity<Void> deleteDetail(@PathVariable(value = "id") Long id){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> deleteDetail(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id){
         nScheduleDetailService.deleteById(member, id);
         return ResponseEntity.noContent().build();
     }

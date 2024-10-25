@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.Result;
@@ -25,11 +26,9 @@ import show.schedulemanagement.service.schedule.ScheduleService;
 @RequestMapping("/schedule")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-    private final MemberService memberService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponse>> getAllSchedule(){
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Result<ScheduleResponse>> getAllSchedule(@CurrentMember Member member){
         List<Schedule> schedules = scheduleService.findAllWithDetailByMember(member);
 
         Result<ScheduleResponse> result = Result.fromElementsGroup(
@@ -44,8 +43,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id) {
-        Member member = memberService.getAuthenticatedMember();
+    public ResponseEntity<Void> deleteSchedule(@CurrentMember Member member, @PathVariable("id") Long id) {
         scheduleService.deleteById(member, id);
         return ResponseEntity.noContent().build();
     }

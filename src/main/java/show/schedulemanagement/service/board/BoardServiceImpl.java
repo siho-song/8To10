@@ -66,7 +66,7 @@ public class BoardServiceImpl implements BoardService {
     public void deleteById(Member member, Long id) {
         Board board = findByIdWithRepliesAndMember(id);
         String createdBy = board.getMember().getEmail();
-        if(member.getEmail().equals(createdBy)){
+        if(member.isSameEmail(createdBy)){
             boardHeartService.deleteHeartsByBoard(board);
             boardScrapRepository.deleteScrapByBoard(board);
             replyHeartService.deleteByReplies(board.getReplies());
@@ -78,7 +78,8 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void update(Member member, BoardUpdateRequest updateRequest) {
         Board board = findByIdWithMember(updateRequest.getId());
-        if(board.getMember().getEmail().equals(member.getEmail())){
+        String createdBy = board.getMember().getEmail();
+        if(member.isSameEmail(createdBy)){
             board.update(updateRequest.getTitle(), updateRequest.getContents());
         }
     }

@@ -34,7 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void deleteById(Member member, Long id){
         Schedule schedule = findById(id);
         String createdBy = schedule.getCreatedBy();
-        if(member.getEmail().equals(createdBy)) {
+        if(member.isSameEmail(createdBy)) {
             scheduleRepository.deleteById(id);
             return;
         }
