@@ -69,11 +69,11 @@ class ReplyServiceTest {
         Member member = memberService.findByEmail("normal@example.com");
         ReplyUpdateRequest updateRequest = new ReplyUpdateRequest();
         updateRequest.setId(1L);
-        updateRequest.setContent("수정된 댓글");
+        updateRequest.setContents("수정된 댓글");
 
         replyService.update(member,updateRequest);
         Reply updatedReply = replyService.findById(updateRequest.getId());
 
-        assertThat(updatedReply.getContent()).isEqualTo(updateRequest.getContent());
+        assertThat(updatedReply.getContents()).isEqualTo(updateRequest.getContents());
     }
 }

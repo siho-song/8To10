@@ -11,7 +11,7 @@ import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 public class BoardSearchResponse {
     private Long id;
     private String title;
-    private String content;
+    private String contents;
     private String nickname;
     private String writer;
     private LocalDateTime createdAt;

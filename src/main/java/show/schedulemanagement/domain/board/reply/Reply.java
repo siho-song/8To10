@@ -45,7 +45,7 @@ public class Reply extends BaseTimeEntity {
     private Reply parent;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    private String contents;
 
     private long totalLike;
 
@@ -54,12 +54,12 @@ public class Reply extends BaseTimeEntity {
                 .member(member)
                 .board(board)
                 .parent(parent)
-                .content(contents)
+                .contents(contents)
                 .build();
     }
 
-    public void updateContent(String content){
-        this.content = content;
+    public void updateContents(String contents){
+        this.contents = contents;
     }
 
     public void addLike() {

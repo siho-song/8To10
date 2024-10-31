@@ -106,7 +106,7 @@ public class ReplyServiceImpl implements ReplyService{
         if(!member.isSameEmail(createdBy)){
             throw new RuntimeException();
         }
-        reply.updateContent(updateRequest.getContent());
+        reply.updateContents(updateRequest.getContents());
     }
 
     private boolean checkEqualBoard(Board parentReplyBoard, Board board) {

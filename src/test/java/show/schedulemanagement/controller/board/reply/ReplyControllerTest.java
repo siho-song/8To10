@@ -126,7 +126,7 @@ class ReplyControllerTest {
     void update() throws Exception {
         ReplyUpdateRequest request = new ReplyUpdateRequest();
         request.setId(1L);
-        request.setContent("수정된 댓글입니다.");
+        request.setContents("수정된 댓글입니다.");
 
         String body = objectMapper.writeValueAsString(request);
         mockMvc.perform(MockMvcRequestBuilders.put("/community/reply")

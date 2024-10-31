@@ -42,7 +42,7 @@ public class Board extends BaseTimeEntity {
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    private String contents;
 
     private long totalLike;
 
@@ -54,14 +54,14 @@ public class Board extends BaseTimeEntity {
     public static Board from(Member member , BoardSaveRequest dto){
         return Board.builder()
                 .title(dto.getTitle())
-                .content(dto.getContents())
+                .contents(dto.getContents())
                 .member(member)
                 .build();
     }
 
     public void update(String title, String content){
         this.title = title;
-        this.content = content;
+        this.contents = content;
     }
 
     public void addLike(){
