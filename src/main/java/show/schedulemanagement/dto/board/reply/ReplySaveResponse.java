@@ -22,7 +22,7 @@ public class ReplySaveResponse {
                 .replyId(reply.getId())
                 .parentId(setParentId(reply))
                 .boardId(reply.getBoard().getId())
-                .contents(reply.getContent())
+                .contents(reply.getContents())
                 .nickname(reply.getMember().getNickname())
                 .writer(reply.getMember().getEmail())
                 .createdAt(reply.getCreatedAt())

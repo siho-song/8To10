@@ -111,7 +111,7 @@ public class ReplyServiceImpl implements ReplyService{
         if(!member.isSameEmail(createdBy)){
             throw new RuntimeException();
         }
-        reply.updateContent(updateRequest.getContent());
+        reply.updateContents(updateRequest.getContents());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)

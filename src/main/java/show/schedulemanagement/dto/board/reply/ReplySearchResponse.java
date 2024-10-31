@@ -10,7 +10,7 @@ import show.schedulemanagement.domain.board.reply.Reply;
 public class ReplySearchResponse {
     private Long id;
     private Long parentId;
-    private String content;
+    private String contents;
     private String nickname; // 닉네임
     private String writer; // 이메일
     private long totalLike;
@@ -21,7 +21,7 @@ public class ReplySearchResponse {
         return ReplySearchResponse.builder()
                 .id(reply.getId())
                 .parentId(setParentId(reply))
-                .content(reply.getContent())
+                .contents(reply.getContents())
                 .nickname(reply.getMember().getNickname())
                 .writer(reply.getMember().getEmail())
                 .totalLike(reply.getTotalLike())

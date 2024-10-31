@@ -12,5 +12,5 @@ public class ReplyUpdateRequest {
 
     @NotBlank
     @Size(min = 2)
-    String content;
+    String contents;
 }

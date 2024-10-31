@@ -57,7 +57,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                 .select(Projections.constructor(BoardPageResponse.class,
                         qBoard.id,
                         qBoard.title,
-                        qBoard.content,
+                        qBoard.contents,
                         qBoard.member.createdBy,
                         qBoard.member.nickname,
                         qBoard.createdAt,
@@ -106,7 +106,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                         Projections.fields(BoardSearchResponse.class,
                                 qBoard.id,
                                 qBoard.title,
-                                qBoard.content,
+                                qBoard.contents,
                                 qMember.nickname,
                                 qMember.email.as("writer"),
                                 qBoard.createdAt,
@@ -167,7 +167,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
 
     private BooleanExpression containContents(SearchCond cond, String contents){
         if(cond.equals(SearchCond.CONTENTS)){
-            return qBoard.content.contains(contents);
+            return qBoard.contents.contains(contents);
         }
         return null;
     }

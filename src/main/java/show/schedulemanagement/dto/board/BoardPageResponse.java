@@ -26,7 +26,7 @@ public class BoardPageResponse {
         return BoardPageResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
-                .contents(board.getContent())
+                .contents(board.getContents())
                 .writer(board.getMember().getEmail())
                 .nickname(board.getMember().getNickname())
                 .createdAt(board.getCreatedAt())
