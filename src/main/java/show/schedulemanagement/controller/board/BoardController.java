@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -96,40 +97,36 @@ public class BoardController {
     @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addHeart(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardHeartService.add(board, member);
-        return new ResponseEntity<>(id, CREATED);
+        boardHeartService.add(boardId, member);
+        return new ResponseEntity<>(boardId, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteHeart(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardHeartService.delete(board, member);
-        return new ResponseEntity<>(id, OK);
+        boardHeartService.delete(boardId, member);
+        return new ResponseEntity<>(boardId, OK);
     }
 
     @PostMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addScrap(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardScrapService.add(member, board);
-        return new ResponseEntity<>(id, CREATED);
+        boardScrapService.add(member, boardId);
+        return new ResponseEntity<>(boardId, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteScrap(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardScrapService.delete(member, board);
-        return new ResponseEntity<>(id, OK);
+        boardScrapService.delete(member, boardId);
+        return new ResponseEntity<>(boardId, OK);
     }
 }

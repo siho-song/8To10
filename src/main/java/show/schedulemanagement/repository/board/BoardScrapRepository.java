@@ -11,11 +11,11 @@ import show.schedulemanagement.domain.member.Member;
 
 public interface BoardScrapRepository extends JpaRepository<BoardScrap, Long> {
 
-    Optional<BoardScrap> findByMemberAndBoard(Member member, Board board);
+    Optional<BoardScrap> findByMemberAndBoardId(Member member, Long boardId);
 
     @Modifying
-    @Query("delete from BoardScrap s where s.board = :board")
-    void deleteScrapByBoard(@Param(value = "board") Board board);
+    @Query("delete from BoardScrap s where s.board.id = :boardId")
+    void deleteScrapByBoardId(@Param(value = "boardId") Long boardId);
 
-    boolean existsByMemberAndBoard(Member member, Board board);
+    boolean existsByMemberAndBoardId(Member member, Long boardId);
 }
