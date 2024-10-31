@@ -6,13 +6,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
+import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
 import show.schedulemanagement.service.board.BoardService;
+import show.schedulemanagement.service.event.reply.ReplyEvent;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +27,7 @@ public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
     private final BoardService boardService;
-    private final ReplyHeartService replyHeartService;
+    private final ReplyHeartRepository replyHeartRepository;
 
     @Override
     public Reply findById(Long id) {
@@ -86,14 +91,14 @@ public class ReplyServiceImpl implements ReplyService{
         }
             // 댓글 삭제
         if (reply.getParent() != null) { // 대댓글 삭제
-            replyHeartService.deleteByReply(reply);
+            replyHeartRepository.deleteByReplyId(id);
             replyRepository.delete(reply);
             return;
         }
         List<Reply> nestedReplies = findNestedRepliesByParent(reply);
-            replyHeartService.deleteByReplies(nestedReplies);
+            replyHeartRepository.deleteByReplies(nestedReplies);
             deleteByReplies(nestedReplies);
-            replyHeartService.deleteByReply(reply);
+            replyHeartRepository.deleteByReplyId(id);
             replyRepository.delete(reply);
 
     }
@@ -107,6 +112,12 @@ public class ReplyServiceImpl implements ReplyService{
             throw new RuntimeException();
         }
         reply.updateContent(updateRequest.getContent());
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void handleEvent(ReplyEvent event){
+        Reply reply = findById(event.getReplyId());
+        event.execute(reply);
     }
 
     private boolean checkEqualBoard(Board parentReplyBoard, Board board) {
