@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
@@ -21,7 +22,6 @@ import show.schedulemanagement.service.board.reply.ReplyHeartService;
 import show.schedulemanagement.service.board.reply.ReplyService;
 
 @SpringBootTest
-@Transactional
 @DisplayName("댓글 좋아요 서비스")
 class ReplyHeartServiceTest {
 
@@ -34,54 +34,53 @@ class ReplyHeartServiceTest {
     @Autowired
     ReplyService replyService;
 
-    @BeforeEach
-    void setAuthentication(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.loadUserByEmail("normal@example.com"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
     @Test
     @DisplayName("댓글 좋아요 정상 등록")
+    @WithUserDetails(value = "normal@example.com")
     void add() {
         Member member = memberService.getAuthenticatedMember();
         Long replyId = 2L;
+
+        replyHeartService.add(replyId, member);
         Reply reply = replyService.findById(replyId);
 
-        replyHeartService.add(reply, member);
-
         assertThat(reply.getTotalLike()).isEqualTo(101);
+        replyHeartService.delete(replyId,member);
     }
 
     @Test
     @DisplayName("댓글 좋아요 등록 - 이미 좋아요한 댓글 경우 예외 발생")
+    @Transactional
+    @WithUserDetails(value = "normal@example.com")
     void add_liked() {
         Member member = memberService.getAuthenticatedMember();
         Long replyId = 1L;
-        Reply reply = replyService.findById(replyId);
 
-        assertThatThrownBy(() -> replyHeartService.add(reply, member)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> replyHeartService.add(replyId, member)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
     @DisplayName("댓글 좋아요 정상 삭제")
+    @WithUserDetails(value = "normal@example.com")
     void delete(){
         Long replyId = 1L;
         Member member = memberService.getAuthenticatedMember();
+
+        replyHeartService.delete(replyId, member);
         Reply reply = replyService.findById(replyId);
 
-        replyHeartService.delete(reply, member);
-
         assertThat(reply.getTotalLike()).isEqualTo(99);
+        replyHeartService.add(replyId, member);
     }
 
     @Test
     @DisplayName("댓글 좋아요 삭제 - 삭제할 좋아요가 없는 경우 예외 발생")
+    @Transactional
+    @WithUserDetails(value = "normal@example.com")
     void delete_not_exist(){
         Long replyId = 2L;
         Member member = memberService.getAuthenticatedMember();
-        Reply reply = replyService.findById(replyId);
 
-        assertThatThrownBy(() -> replyHeartService.delete(reply, member)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> replyHeartService.delete(replyId, member)).isInstanceOf(EntityNotFoundException.class);
     }
 }
