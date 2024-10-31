@@ -14,11 +14,11 @@ import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import show.schedulemanagement.dto.auth.LoginMemberDto;
 import show.schedulemanagement.dto.board.BoardSaveRequest;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
 import show.schedulemanagement.utils.TokenProvider;
 
 @SpringBootTest
@@ -43,7 +43,6 @@ class BoardControllerTest {
         token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
         jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
     }
-
 
     @Test
     @DisplayName("게시글 등록 엔드포인트")

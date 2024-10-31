@@ -16,7 +16,8 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentMember.class);
+        return parameter.hasParameterAnnotation(CurrentMember.class) &&
+                Member.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override

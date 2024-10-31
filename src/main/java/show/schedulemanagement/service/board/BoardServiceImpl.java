@@ -8,15 +8,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
+import show.schedulemanagement.repository.board.BoardHeartRepository;
 import show.schedulemanagement.repository.board.BoardRepository;
 import show.schedulemanagement.repository.board.BoardScrapRepository;
-import show.schedulemanagement.service.board.reply.ReplyHeartService;
+import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
+import show.schedulemanagement.service.event.board.BoardEvent;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,9 +30,9 @@ import show.schedulemanagement.service.board.reply.ReplyHeartService;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final BoardHeartService boardHeartService;
+    private final BoardHeartRepository boardHeartRepository;
     private final BoardScrapRepository boardScrapRepository;
-    private final ReplyHeartService replyHeartService;
+    private final ReplyHeartRepository replyHeartRepository;
 
     @Override
     @Transactional
@@ -37,6 +42,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board findById(Long id) {
+        log.info("currentTransactionName findById: {}", TransactionSynchronizationManager.getCurrentTransactionName());
         return boardRepository.findById(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
     }
 
@@ -58,7 +64,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardSearchResponse searchBoard(Long id, Member member) {
-        return boardRepository.searchBoard(id,member).orElseThrow(()-> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다."));
+        return boardRepository.searchBoard(id,member)
+                .orElseThrow(()-> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다."));
     }
 
     @Override
@@ -67,10 +74,10 @@ public class BoardServiceImpl implements BoardService {
         Board board = findByIdWithRepliesAndMember(id);
         String createdBy = board.getMember().getEmail();
         if(member.isSameEmail(createdBy)){
-            boardHeartService.deleteHeartsByBoard(board);
-            boardScrapRepository.deleteScrapByBoard(board);
-            replyHeartService.deleteByReplies(board.getReplies());
-            boardRepository.delete(board);
+            boardHeartRepository.deleteHeartsByBoardId(id);
+            boardScrapRepository.deleteScrapByBoardId(id);
+            replyHeartRepository.deleteByReplies(board.getReplies());
+            boardRepository.deleteById(id);
         }
     }
 
@@ -82,5 +89,11 @@ public class BoardServiceImpl implements BoardService {
         if(member.isSameEmail(createdBy)){
             board.update(updateRequest.getTitle(), updateRequest.getContents());
         }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void handleEvent(BoardEvent event){
+        Board board = findById(event.getBoardId());
+        event.execute(board);
     }
 }

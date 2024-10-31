@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import show.schedulemanagement.domain.board.Board;
-import show.schedulemanagement.domain.board.BoardHeart;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.domain.member.Member;
@@ -19,9 +17,9 @@ public interface ReplyHeartRepository extends JpaRepository<ReplyHeart, Long> {
     void deleteByReplies(@Param(value = "replies") List<Reply> replies);
 
     @Modifying
-    @Query("delete from ReplyHeart rh where rh.reply = :reply")
-    void deleteByReply(@Param(value = "reply") Reply reply);
+    @Query("delete from ReplyHeart rh where rh.reply.id = :replyId")
+    void deleteByReplyId(@Param(value = "replyId") Long replyId);
 
-    boolean existsReplyHeartByMemberAndReply(Member member, Reply reply);
-    Optional<ReplyHeart> findByMemberAndReply(Member member, Reply reply);
+    boolean existsReplyHeartByMemberAndReplyId(Member member, Long replyId);
+    Optional<ReplyHeart> findByMemberAndReplyId(Member member, Long replyId);
 }

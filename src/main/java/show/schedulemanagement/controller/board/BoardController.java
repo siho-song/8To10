@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,13 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardSaveRequest;
-import show.schedulemanagement.dto.board.BoardSaveResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.BoardPageResponse;
+import show.schedulemanagement.dto.board.BoardSaveRequest;
+import show.schedulemanagement.dto.board.BoardSaveResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.BoardHeartService;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
@@ -96,40 +94,36 @@ public class BoardController {
     @PostMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addHeart(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardHeartService.add(board, member);
-        return new ResponseEntity<>(id, CREATED);
+        boardHeartService.add(boardId, member);
+        return new ResponseEntity<>(boardId, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/heart", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteHeart(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardHeartService.delete(board, member);
-        return new ResponseEntity<>(id, OK);
+        boardHeartService.delete(boardId, member);
+        return new ResponseEntity<>(boardId, OK);
     }
 
     @PostMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> addScrap(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardScrapService.add(member, board);
-        return new ResponseEntity<>(id, CREATED);
+        boardScrapService.add(member, boardId);
+        return new ResponseEntity<>(boardId, CREATED);
     }
 
     @DeleteMapping(value = "/{id}/scrap", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteScrap(
             @CurrentMember Member member,
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") Long boardId) {
 
-        Board board = boardService.findById(id);
-        boardScrapService.delete(member, board);
-        return new ResponseEntity<>(id, OK);
+        boardScrapService.delete(member, boardId);
+        return new ResponseEntity<>(boardId, OK);
     }
 }

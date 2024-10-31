@@ -70,8 +70,7 @@ public class ReplyController {
             @CurrentMember Member member,
             @PathVariable(value = "id") Long id)
     {
-        Reply reply = replyService.findById(id);
-        replyHeartService.add(reply, member);
+        replyHeartService.add(id, member);
         return new ResponseEntity<>(id, CREATED);
     }
 
@@ -80,8 +79,7 @@ public class ReplyController {
             @CurrentMember Member member,
             @PathVariable(value = "id") Long id)
     {
-        Reply reply = replyService.findById(id);
-        replyHeartService.delete(reply, member);
+        replyHeartService.delete(id, member);
         return new ResponseEntity<>(id, OK);
     }
 }
