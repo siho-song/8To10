@@ -1,13 +1,11 @@
 package show.schedulemanagement.dto.auth;
 
+import java.util.Collection;
+import java.util.Collections;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.member.MemberRole;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Getter
 public class MemberDetailsDto implements UserDetails {
@@ -20,10 +18,7 @@ public class MemberDetailsDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return member.getMemberRoles().stream()
-                .map(MemberRole::getRole)
-                .map(role -> (GrantedAuthority) role::toString)
-                .collect(Collectors.toList());
+        return Collections.singletonList((GrantedAuthority) () -> member.getRole().toString());
     }
 
     @Override

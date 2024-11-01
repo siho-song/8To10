@@ -35,7 +35,7 @@ class ScheduleServiceTest {
 
     @BeforeEach
     void setAuthentication(){
-        MemberDetailsDto memberDetailsDto = new MemberDetailsDto(memberService.loadUserByEmail("normal@example.com"));
+        MemberDetailsDto memberDetailsDto = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetailsDto, null,
                 memberDetailsDto.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

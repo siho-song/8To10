@@ -29,7 +29,7 @@ class BoardServiceTest {
 
     @BeforeEach
     public void setAuthentication(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.loadUserByEmail("normal@example.com"));
+        MemberDetailsDto user = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

@@ -21,6 +21,7 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Collate;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
@@ -60,6 +61,10 @@ public class Member extends BaseEntity {
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
+    private Role role;
+
+    @Enumerated(value = STRING)
+    @Column(nullable = false)
     private Mode mode;
 
     @Column(nullable = false)
@@ -78,10 +83,6 @@ public class Member extends BaseEntity {
     @ColumnDefault(value = "false")
     private boolean authPhone;
 
-    @Default
-    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberRole> memberRoles = new ArrayList<>();
-
     public void changeNickname(String nickname){
         this.nickname = nickname;
     }
@@ -95,6 +96,7 @@ public class Member extends BaseEntity {
                 .phoneNumber(signUpRequest.getPhoneNumber())
                 .gender(signUpRequest.getGender())
                 .mode(signUpRequest.getMode())
+                .role(Role.NORMAL_USER)
                 .authEmail(signUpRequest.getAuthEmail())
                 .authPhone(signUpRequest.getAuthPhone())
                 .build();
@@ -108,11 +110,5 @@ public class Member extends BaseEntity {
 
     public boolean isSameEmail(String email) {
         return this.email.equals(email);
-    }
-
-    public List<Role> getRoles(){
-        return memberRoles.stream()
-                .map(MemberRole::getRole)
-                .toList();
     }
 }
