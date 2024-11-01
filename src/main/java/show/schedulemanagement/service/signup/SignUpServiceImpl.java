@@ -6,8 +6,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.member.MemberRole;
-import show.schedulemanagement.domain.member.Role;
 import show.schedulemanagement.dto.signup.SignUpRequest;
 import show.schedulemanagement.repository.member.MemberRepository;
 
@@ -26,7 +24,6 @@ public class SignUpServiceImpl implements SignUpService{
         if (signUpValidationService.isValidSignUp(signUpRequest)){
             encodePassword(signUpRequest);
             Member member = Member.of(signUpRequest);
-            MemberRole.createMemberRoleInfo(member, Role.NORMAL_USER);
             Member save = memberRepository.save(member);
             log.info("save member : {}", save);
             return;
