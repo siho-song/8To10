@@ -40,7 +40,7 @@ class FScheduleServiceTest {
 
     @BeforeEach
     void setAuthentication(){
-        MemberDetailsDto member = new MemberDetailsDto(memberService.loadUserByEmail("normal@example.com"));
+        MemberDetailsDto member = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

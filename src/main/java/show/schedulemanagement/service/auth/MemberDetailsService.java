@@ -19,7 +19,7 @@ public class MemberDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberService.loadUserByEmail(email);
+        Member member = memberService.findByEmail(email);
 
         log.debug("MemberDetailsService call loadUserByUsername : {}",member);
         if (member == null) {
