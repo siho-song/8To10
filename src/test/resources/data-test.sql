@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `BOARD_SCRAP`;
 DROP TABLE IF EXISTS `BOARD_HEART`;
 DROP TABLE IF EXISTS `REPLY`;
 DROP TABLE IF EXISTS `BOARD`;
-DROP TABLE IF EXISTS `MEMBER_ROLE`;
+DROP TABLE IF EXISTS `AUTH`;
 DROP TABLE IF EXISTS `MEMBER`;
 
 -- 회원
@@ -26,6 +26,7 @@ CREATE TABLE `MEMBER`
     `password`   varchar(100) NOT NULL,
     `gender`     ENUM('MALE', 'FEMALE') NOT NULL,
     `mode`       ENUM('MILD', 'SPICY') NOT NULL,
+    `role`       ENUM('ADMIN','NORMAL_USER','FAITHFUL_USER'),
     `image_file` varchar(255) NULL,
     `created_at`  datetime NULL,
     `created_by` varchar(80) NULL,
@@ -38,16 +39,16 @@ CREATE TABLE `MEMBER`
     PRIMARY KEY (`member_id`)
 );
 
-CREATE TABLE `MEMBER_ROLE`
+CREATE TABLE `AUTH`
 (
-    `member_role_id` bigint NOT NULL AUTO_INCREMENT,
+    `auth_id`        bigint NOT NULL AUTO_INCREMENT,
     `member_id`      bigint NOT NULL,
-    `role`           ENUM('ADMIN', 'NORMAL_USER', 'PUNCTUAL_USER') NOT NULL DEFAULT 'NORMAL_USER',
+    `refresh_token`  varchar(255),
     `created_at`     datetime NULL,
     `created_by`     varchar(80) NULL,
     `updated_at`     datetime NULL,
     `updated_by`     varchar(80) NULL,
-    PRIMARY KEY (`member_role_id`),
+    PRIMARY KEY (`auth_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
 
@@ -216,22 +217,24 @@ CREATE TABLE `NOTIFICATION`
 );
 -- -- MEMBER 테이블에 데이터 삽입
 -- password = password1
-INSERT INTO MEMBER (username, nickname, email, password, gender, mode, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
+INSERT INTO MEMBER (username, nickname, email, password, gender, mode,role, image_file, created_at, created_by, updated_at, updated_by, score, phone_number, auth_email, auth_phone)
 VALUES
-    ('일반테스트회원1', 'nick1', 'normal@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
-    ('일반테스트회원2', 'nick2', 'normal2@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 11, '01012345671', true, false),
-    ('일반테스트회원3', 'nick3', 'normal3@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 12, '01012345673', true, false),
-    ('일반테스트회원4', 'nick4', 'normal4@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 13, '01012345675', true, false),
-    ('관리자테스트회원2', 'nick2', 'admin@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
-    ('성실테스트회원3', 'nick3', 'faithful@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
+    ('일반테스트회원1', 'nick1', 'normal@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', 'NORMAL_USER',NULL, NOW(), 'system', NOW(), 'system', 10, '01012345678', true, false),
+    ('일반테스트회원2', 'nick2', 'normal2@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'MILD', 'NORMAL_USER',NULL, NOW(), 'system', NOW(), 'system', 11, '01012345671', true, false),
+    ('일반테스트회원3', 'nick3', 'normal3@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'SPICY', 'NORMAL_USER',NULL, NOW(), 'system', NOW(), 'system', 12, '01012345673', true, false),
+    ('일반테스트회원4', 'nick4', 'normal4@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', 'NORMAL_USER',NULL, NOW(), 'system', NOW(), 'system', 13, '01012345675', true, false),
+    ('관리자테스트회원2', 'nick2', 'admin@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'FEMALE', 'SPICY', 'ADMIN',NULL, NOW(), 'system', NOW(), 'system', 20, '01023456789', true, true),
+    ('성실테스트회원3', 'nick3', 'faithful@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', 'FAITHFUL_USER',NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
 --
--- -- MEMBER_ROLE 테이블에 데이터 삽입
-INSERT INTO MEMBER_ROLE (member_id, role, created_at, created_by, updated_at, updated_by)
+INSERT INTO `AUTH` (`member_id`, `refresh_token`, `created_at`, `created_by`, `updated_at`, `updated_by`)
 VALUES
-    (1, 'NORMAL_USER', NOW(), 'system', NOW(), 'system'),
-    (2, 'ADMIN', NOW(), 'system', NOW(), 'system'),
-    (3, 'PUNCTUAL_USER', NOW(), 'system', NOW(), 'system');
---
+    (1, 'token_for_member_1', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    (2, 'token_for_member_2', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    (3, 'token_for_member_3', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    (4, 'token_for_member_4', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    (5, 'token_for_member_5', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    (6, 'token_for_member_6', NOW(), 'ADMIN', NOW(), 'ADMIN');
+
 -- BOARD 테이블에 데이터 삽입
 INSERT INTO BOARD (member_id, title, contents, created_at, updated_at, total_like, total_scrap)
 VALUES
