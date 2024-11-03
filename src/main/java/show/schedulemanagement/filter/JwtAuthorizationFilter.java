@@ -4,34 +4,33 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.security.SignatureException;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.filter.OncePerRequestFilter;
-import show.schedulemanagement.service.auth.MemberDetailsService;
-import show.schedulemanagement.utils.TokenProvider;
-
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
+import show.schedulemanagement.provider.TokenProvider;
+import show.schedulemanagement.service.auth.MemberDetailsService;
+import show.schedulemanagement.utils.BearerAuthorizationUtils;
 
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final MemberDetailsService memberDetailsService;
+    private final BearerAuthorizationUtils bearerUtils;
     private final TokenProvider tokenProvider;
 
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
@@ -39,6 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/signup",
             "/error",
             "/login",
+            "/renew",
             "/static/**",
             "/js/**",
             "/css/**",
@@ -58,51 +58,30 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
-        log.info("request.getRequestURI() : {}", requestURI);
 
         if (isExcludeUrl(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        Cookie[] cookies = request.getCookies();
-        String jwtToken = findJwtToken(cookies);
+        String authHeader = request.getHeader("Authorization");
+        String token = bearerUtils.extractToken(authHeader);
 
         try {
-            if (jwtToken != null && !jwtToken.isEmpty()) {
-                log.debug("Token found: {}", jwtToken);
-                if (tokenProvider.isValidToken(jwtToken)) {
-                    String loginId = tokenProvider.getUserIdFromToken(jwtToken);
-                    log.debug("loginId : {}", loginId);
-
-                    if (loginId != null && !loginId.isEmpty()) {
-                        UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                        filterChain.doFilter(request, response);
-                    } else {
-                        throw new UsernameNotFoundException("User Not Found");
-                    }
-                } else {
-                    throw new JwtException("Invalid JWT token");
-                }
-            } else {
-                throw new JwtException("JWT token not found");
+            if(tokenProvider.isValidToken(token)){
+                String loginId = tokenProvider.getUserIdFromToken(token);
+                log.debug("loginId : {}", loginId);
+                UserDetails userDetails = memberDetailsService.loadUserByUsername(loginId);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+            }
+            else {
+                throw new JwtException("유효하지 않은 토큰입니다.");
             }
         } catch (Exception e) {
             handleException(response, e);
         }
-    }
-
-    private String findJwtToken(Cookie[] cookies) {
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
     }
 
     private boolean isExcludeUrl(String uri) {
