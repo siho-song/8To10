@@ -18,8 +18,8 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -38,7 +38,7 @@ class NScheduleServiceTest {
 
     @BeforeEach
     void setAuthentication(){
-        MemberDetailsDto member = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
+        MemberDetails member = new MemberDetails(memberService.findByEmail("normal@example.com"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
