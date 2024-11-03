@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.auth.MemberDetailsService;
 
 @Component
@@ -23,12 +23,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        MemberDetailsDto member = (MemberDetailsDto) memberDetailsService.loadUserByUsername(email);
+        MemberDetails member = (MemberDetails) memberDetailsService.loadUserByUsername(email);
         if (member == null || !bCryptPasswordEncoder.matches(password, member.getPassword())) {
-            throw new BadCredentialsException("Invalid email or password");
+            throw new BadCredentialsException("이메일 혹은 패스워드가 잘못되었습니다.");
         }
 
-        return new UsernamePasswordAuthenticationToken(email, password, member.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(member, password, member.getAuthorities());
     }
 
     @Override

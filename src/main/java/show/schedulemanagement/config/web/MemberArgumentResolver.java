@@ -10,7 +10,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -37,7 +37,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     public Member getAuthenticatedMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MemberDetailsDto principal = (MemberDetailsDto) authentication.getPrincipal();
+        MemberDetails principal = (MemberDetails) authentication.getPrincipal();
         return principal.getMember();
     }
 }
