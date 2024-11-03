@@ -21,14 +21,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,12 +45,10 @@ class FScheduleControllerTest {
     TokenProvider tokenProvider;  // TokenProvider 주입받기
 
     String token;
-    MockCookie jwtCookie;
 
     @BeforeEach
-    void setToken(){
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+    void init(){
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
     }
 
     @Test
@@ -72,7 +68,7 @@ class FScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(fScheduleSave);
 
         mockMvc.perform(post("/schedule/fixed")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token) // JWT 쿠키 추가
                         .content(dto)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -95,7 +91,7 @@ class FScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(fScheduleSave);
 
         mockMvc.perform(post("/schedule/fixed")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token) // JWT 쿠키 추가
                         .content(dto)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -110,7 +106,7 @@ class FScheduleControllerTest {
         mockMvc.perform(delete("/schedule/fixed/detail")
                 .param("parentId", parentId)
                 .param("startDate", startDate)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isNoContent());
     }
 
@@ -120,7 +116,7 @@ class FScheduleControllerTest {
         Long id = 1L;
 
         mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isNoContent());
     }
 
@@ -139,7 +135,7 @@ class FScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(fScheduleUpdate);
 
         mockMvc.perform(put("/schedule/fixed")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON)
                 .content(dto)
         ).andExpect(status().isNoContent());
@@ -162,7 +158,7 @@ class FScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(fScheduleDetailUpdate);
 
         mockMvc.perform(patch("/schedule/fixed/detail")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(dto)
         ).andExpect(status().isNoContent());

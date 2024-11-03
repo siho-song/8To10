@@ -13,13 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,12 +35,10 @@ class VScheduleControllerTest {
     MockMvc mockMvc;
 
     String token;
-    MockCookie jwtCookie;
 
     @BeforeEach
-    void setToken(){
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+    void init(){
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
     }
 
     @Test
@@ -57,7 +53,7 @@ class VScheduleControllerTest {
                 .build();
 
         mockMvc.perform(post("/schedule/variable")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -77,7 +73,7 @@ class VScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(vScheduleUpdate);
 
         mockMvc.perform(put("/schedule/variable")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON)
                 .content(dto)
         ).andExpect(status().isNoContent());
