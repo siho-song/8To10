@@ -42,14 +42,13 @@ CREATE TABLE `MEMBER`
 CREATE TABLE `AUTH`
 (
     `auth_id`        bigint NOT NULL AUTO_INCREMENT,
-    `member_id`      bigint NOT NULL,
+    `email`          varchar(80) NOT NULL,
     `refresh_token`  varchar(255),
     `created_at`     datetime NULL,
     `created_by`     varchar(80) NULL,
     `updated_at`     datetime NULL,
     `updated_by`     varchar(80) NULL,
-    PRIMARY KEY (`auth_id`),
-    FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
+    PRIMARY KEY (`auth_id`)
 );
 
 -- 게시판, 댓글
@@ -225,12 +224,12 @@ VALUES
     ('성실테스트회원3', 'nick3', 'faithful@example.com', '$2a$12$vVyp1MKvgHaS68VKu/gyjeaFqHiXzKiu8Cq5A8jeoLZzHM900.0X2', 'MALE', 'MILD', 'FAITHFUL_USER',NULL, NOW(), 'system', NOW(), 'system', 30, '01034567890', false, true);
 --
 
-INSERT INTO `AUTH` (`member_id`, `refresh_token`, `created_at`, `created_by`, `updated_at`, `updated_by`)
+INSERT INTO `AUTH` (`email`, `refresh_token`, `created_at`, `created_by`, `updated_at`, `updated_by`)
 VALUES
-    (1, 'token_for_member_1', NOW(), 'ADMIN', NOW(), 'ADMIN'),
-    (2, 'token_for_member_2', NOW(), 'ADMIN', NOW(), 'ADMIN'),
-    (3, 'token_for_member_3', NOW(), 'ADMIN', NOW(), 'ADMIN'),
-    (4, 'token_for_member_4', NOW(), 'ADMIN', NOW(), 'ADMIN');
+    ('normal@example.com', 'token_for_member_1', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    ('normal2@example.com', 'token_for_member_2', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    ('admin@example.com', 'token_for_member_3', NOW(), 'ADMIN', NOW(), 'ADMIN'),
+    ('faithful@example.com', 'token_for_member_4', NOW(), 'ADMIN', NOW(), 'ADMIN');
 
 -- BOARD 테이블에 데이터 삽입
 INSERT INTO BOARD (member_id, title, contents, created_at, updated_at, total_like, total_scrap)
