@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.repository.member.MemberRepository;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member getAuthenticatedMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MemberDetailsDto principal = (MemberDetailsDto) authentication.getPrincipal();
+        MemberDetails principal = (MemberDetails) authentication.getPrincipal();
         return principal.getMember();
     }
 }

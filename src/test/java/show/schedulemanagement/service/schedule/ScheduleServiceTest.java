@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -35,9 +35,9 @@ class ScheduleServiceTest {
 
     @BeforeEach
     void setAuthentication(){
-        MemberDetailsDto memberDetailsDto = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetailsDto, null,
-                memberDetailsDto.getAuthorities());
+        MemberDetails memberDetails = new MemberDetails(memberService.findByEmail("normal@example.com"));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null,
+                memberDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.MemberService;
 
 @Service
@@ -25,6 +25,6 @@ public class MemberDetailsService implements UserDetailsService {
         if (member == null) {
             throw new UsernameNotFoundException("No member found with email: " + email);
         }
-        return new MemberDetailsDto(member);
+        return new MemberDetails(member);
     }
 }

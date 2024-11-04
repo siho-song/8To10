@@ -9,11 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,12 +26,10 @@ class AchievementControllerTest {
     TokenProvider tokenProvider;
 
     String token;
-    MockCookie jwtCookie;
 
     @BeforeEach
     void init(){
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
     }
 
     @Test
@@ -42,7 +38,7 @@ class AchievementControllerTest {
         int year = 2024;
         int month  = 1;
         mockMvc.perform(get("/achievement/{year}/{month}", year, month)
-                        .cookie(jwtCookie)
+                        .header("Authorization","Bearer " + token)
                 ).andExpect(status().isOk());
     }
 }

@@ -10,16 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
 import show.schedulemanagement.dto.board.BoardSaveRequest;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 import show.schedulemanagement.dto.board.SearchCond;
 import show.schedulemanagement.dto.board.SortCondition;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @SpringBootTest
 @Transactional
@@ -36,12 +34,10 @@ class BoardControllerTest {
     ObjectMapper objectMapper;
 
     String token;
-    MockCookie jwtCookie;
 
     @BeforeEach
     void setAuthenticationToken(){
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
     }
 
     @Test
@@ -50,7 +46,7 @@ class BoardControllerTest {
         BoardSaveRequest dto = new BoardSaveRequest("게시판 테스트용", "테스트......................");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/board/add")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -66,7 +62,7 @@ class BoardControllerTest {
         String sortCond = SortCondition.LIKE.name();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/community/board")
-                        .cookie(jwtCookie)
+                        .header("Authorization","Bearer " + token)
                         .param("keyword", keyword)
                         .param("pageNum", String.valueOf(pageNum))
                         .param("pageSize", String.valueOf(pageSize))
@@ -80,7 +76,7 @@ class BoardControllerTest {
     void boardSearch() throws Exception {
         Long boardId = 1L;
         mockMvc.perform(MockMvcRequestBuilders.get("/community/board/{id}", boardId)
-                        .cookie(jwtCookie)
+                        .header("Authorization","Bearer " + token)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
@@ -91,7 +87,7 @@ class BoardControllerTest {
     void deleteBoard() throws Exception {
         Long boardId = 1L;
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/board/{id}", boardId)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isOk());
     }
 
@@ -105,7 +101,7 @@ class BoardControllerTest {
         String body = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/community/board")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
@@ -115,7 +111,7 @@ class BoardControllerTest {
     @DisplayName("게시글 좋아요 추가 엔드포인트")
     void addHeart() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/community/board/{id}/heart", 3L)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isCreated());
     }
 
@@ -123,7 +119,7 @@ class BoardControllerTest {
     @DisplayName("게시글 좋아요 삭제 엔드포인트")
     void deleteHeart() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/board/{id}/heart", 1L)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isOk());
     }
 
@@ -131,7 +127,7 @@ class BoardControllerTest {
     @DisplayName("게시글 스크랩 등록 엔드포인트")
     void addScrap() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/community/board/{id}/scrap", 2L)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isCreated());
     }
 
@@ -139,7 +135,7 @@ class BoardControllerTest {
     @DisplayName("게시글 스크랩 삭제 엔드포인트")
     void deleteScrap() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/board/{id}/scrap", 1L)
-                        .cookie(jwtCookie)
+                        .header("Authorization","Bearer " + token)
                 ).andExpect(status().isOk());
     }
 }

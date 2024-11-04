@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -29,7 +29,7 @@ class BoardServiceTest {
 
     @BeforeEach
     public void setAuthentication(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
+        MemberDetails user = new MemberDetails(memberService.findByEmail("normal@example.com"));
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

@@ -22,7 +22,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -46,7 +46,7 @@ class FScheduleDetailServiceTest {
 
     @BeforeEach
     public void setAuthentication(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
+        MemberDetails user = new MemberDetails(memberService.findByEmail("normal@example.com"));
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

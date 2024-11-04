@@ -1,4 +1,4 @@
-package show.schedulemanagement.dto.auth;
+package show.schedulemanagement.domain.auth;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import show.schedulemanagement.domain.member.Member;
 
 @Getter
-public class MemberDetailsDto implements UserDetails {
+public class MemberDetails implements UserDetails {
 
     private final Member member;
 
-    public MemberDetailsDto(Member member) {
+    public MemberDetails(Member member) {
         this.member = member;
     }
 

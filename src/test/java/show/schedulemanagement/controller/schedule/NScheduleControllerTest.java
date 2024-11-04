@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +25,7 @@ import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpd
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -49,12 +47,10 @@ public class NScheduleControllerTest {
     TokenProvider tokenProvider;
 
     String token;
-    MockCookie jwtCookie;
 
     @BeforeEach
-    public void setup() {
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+    public void init() {
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
 
         nScheduleSave = NScheduleSave.builder()
                 .title("Test Schedule")
@@ -80,11 +76,8 @@ public class NScheduleControllerTest {
     @DisplayName("일반일정 정상 등록")
     @Rollback(value = false)
     public void add() throws Exception {
-        String token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        MockCookie jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
-
         mockMvc.perform(post("/schedule/normal")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nScheduleSave)))
                 .andExpect(status().isCreated());
@@ -94,7 +87,7 @@ public class NScheduleControllerTest {
     @DisplayName("일반일정 정상 수정")
     public void update() throws Exception {
         mockMvc.perform(put("/schedule/normal")
-                        .cookie(jwtCookie) // JWT 쿠키 추가
+                        .header("Authorization","Bearer " + token) // JWT 쿠키 추가
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nScheduleUpdate)))
                 .andExpect(status().isNoContent());
@@ -109,7 +102,7 @@ public class NScheduleControllerTest {
                 .build();
 
         mockMvc.perform(put("/schedule/normal/detail")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nScheduleDetailUpdate))
         ).andExpect(status().isNoContent());
@@ -124,7 +117,7 @@ public class NScheduleControllerTest {
         mockMvc.perform(delete("/schedule/normal/detail")
                 .param("parentId", parentId)
                 .param("startDate", startDate)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isNoContent());
     }
 
@@ -134,7 +127,7 @@ public class NScheduleControllerTest {
         Long id = 1L;
 
         mockMvc.perform(delete("/schedule/normal/detail/{id}", id)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isNoContent());
     }
 
@@ -151,7 +144,7 @@ public class NScheduleControllerTest {
         String dto = objectMapper.writeValueAsString(progressUpdateRequest);
 
         mockMvc.perform(patch("/schedule/normal/progress")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(dto)
                 .contentType(APPLICATION_JSON)
         ).andExpect(status().isNoContent());

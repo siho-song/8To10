@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -35,7 +35,7 @@ class ScheduleDetailServiceTest {
 
     @BeforeEach
     public void setAuthentication(){
-        MemberDetailsDto user = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
+        MemberDetails user = new MemberDetails(memberService.findByEmail("normal@example.com"));
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

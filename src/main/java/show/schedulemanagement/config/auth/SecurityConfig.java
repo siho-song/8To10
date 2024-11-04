@@ -24,8 +24,11 @@ import show.schedulemanagement.filter.JwtAuthorizationFilter;
 import show.schedulemanagement.handler.AuthFailureHandler;
 import show.schedulemanagement.handler.AuthSuccessHandler;
 import show.schedulemanagement.provider.CustomAuthenticationProvider;
+import show.schedulemanagement.provider.TokenProvider;
+import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.auth.AuthService;
 import show.schedulemanagement.service.auth.MemberDetailsService;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.utils.BearerAuthorizationUtils;
 
 @Configuration
 @EnableWebSecurity
@@ -39,20 +42,17 @@ public class SecurityConfig {
             "/js/**", "/favicons/**"
     };
 
-    private final TokenProvider tokenProvider;
-
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter,
             JwtAuthorizationFilter jwtAuthorizationFilter
     ) throws Exception {
-        log.debug("[+] WebSecurityConfig Start !!! ");
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/signup/**", "/", "/error")
+                        .requestMatchers("/signup/**", "/", "/error","/renew")
                         .permitAll()
                         .requestMatchers(STATIC_RESOURCES_LOCATION)
                         .permitAll()
@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .logout(logout->
                         logout.logoutUrl("/logout")
                                 .logoutSuccessUrl("/")
-                                .deleteCookies("jwt")
+                                .deleteCookies("refresh_token")
                 )
                 .addFilterBefore(emailPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -103,8 +103,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider) {
-        return new ProviderManager(Collections.singletonList(customAuthenticationProvider));
+    public MemberDetailsService memberDetailsService(MemberService memberService) {
+        return new MemberDetailsService(memberService);
     }
 
     @Bean
@@ -116,8 +116,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthSuccessHandler customAuthSuccessHandler() {
-        return new AuthSuccessHandler(tokenProvider);
+    public AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider) {
+        return new ProviderManager(Collections.singletonList(customAuthenticationProvider));
+    }
+
+    @Bean
+    public AuthSuccessHandler customAuthSuccessHandler(
+            TokenProvider tokenProvider, AuthService authService) {
+        return new AuthSuccessHandler(tokenProvider,authService);
     }
 
     @Bean
@@ -126,13 +132,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(MemberDetailsService memberDetailsService) {
-        return new JwtAuthorizationFilter(memberDetailsService, tokenProvider);
+    public BearerAuthorizationUtils bearerAuthorizationUtils(){
+        return new BearerAuthorizationUtils();
     }
 
     @Bean
-    public MemberDetailsService memberDetailsService(show.schedulemanagement.service.MemberServiceImpl memberServiceImpl) {
-        return new MemberDetailsService(memberServiceImpl);
+    public JwtAuthorizationFilter jwtAuthorizationFilter(
+            MemberDetailsService memberDetailsService,
+            TokenProvider tokenProvider,
+            BearerAuthorizationUtils bearerAuthorizationUtils
+            )
+    {
+        return new JwtAuthorizationFilter(memberDetailsService, bearerAuthorizationUtils, tokenProvider);
     }
 
     @Bean

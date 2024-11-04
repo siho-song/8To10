@@ -10,14 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
-import show.schedulemanagement.dto.auth.LoginMemberDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.provider.TokenProvider;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,14 +33,11 @@ class ReplyControllerTest {
     ObjectMapper objectMapper;
 
     private String token;
-    private MockCookie jwtCookie;
 
     @BeforeEach
     void init(){
-        token = tokenProvider.generateJwtToken(new LoginMemberDto("normal@example.com")); // 토큰 생성
-        jwtCookie = new MockCookie("jwt", token); // JWT 쿠키 생성
+        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
     }
-
 
     @Test
     @DisplayName("댓글 정상 등록")
@@ -56,7 +51,7 @@ class ReplyControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
         ).andExpect(status().isCreated());
     }
@@ -73,7 +68,7 @@ class ReplyControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
         ).andExpect(status().isCreated());
     }
@@ -90,7 +85,7 @@ class ReplyControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
         ).andExpect(status().is4xxClientError());
     }
@@ -107,7 +102,7 @@ class ReplyControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/add")
                 .contentType(APPLICATION_JSON)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
         ).andExpect(status().is4xxClientError());
     }
@@ -117,7 +112,7 @@ class ReplyControllerTest {
     void delete() throws Exception {
         Long id = 1L;
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/reply/{id}", id)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isOk());
     }
 
@@ -130,7 +125,7 @@ class ReplyControllerTest {
 
         String body = objectMapper.writeValueAsString(request);
         mockMvc.perform(MockMvcRequestBuilders.put("/community/reply")
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
                 .content(body)
                 .contentType(APPLICATION_JSON)
         ).andExpect(status().isOk());
@@ -141,7 +136,7 @@ class ReplyControllerTest {
     void addHeart() throws Exception {
         Long id = 2L;
         mockMvc.perform(MockMvcRequestBuilders.post("/community/reply/{id}/heart", id)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isCreated());
     }
 
@@ -150,7 +145,7 @@ class ReplyControllerTest {
     void deleteHeart() throws Exception {
         Long id = 1L;
         mockMvc.perform(MockMvcRequestBuilders.delete("/community/reply/{id}/heart", id)
-                .cookie(jwtCookie)
+                .header("Authorization","Bearer " + token)
         ).andExpect(status().isOk());
     }
 }

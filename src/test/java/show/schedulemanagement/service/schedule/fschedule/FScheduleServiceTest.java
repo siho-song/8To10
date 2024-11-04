@@ -20,8 +20,8 @@ import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
-import show.schedulemanagement.dto.auth.MemberDetailsDto;
-import show.schedulemanagement.utils.TokenProvider;
+import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
 @DisplayName("고정일정 서비스 테스트")
@@ -40,7 +40,7 @@ class FScheduleServiceTest {
 
     @BeforeEach
     void setAuthentication(){
-        MemberDetailsDto member = new MemberDetailsDto(memberService.findByEmail("normal@example.com"));
+        MemberDetails member = new MemberDetails(memberService.findByEmail("normal@example.com"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

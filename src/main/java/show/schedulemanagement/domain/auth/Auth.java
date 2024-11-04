@@ -24,16 +24,13 @@ import show.schedulemanagement.domain.member.Member;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@ToString(exclude = {"member"})
 public class Auth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "auth_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private String email;
 
     private String refreshToken;
 
@@ -41,5 +38,12 @@ public class Auth extends BaseEntity {
     void prePersist(){
         this.createdBy = "ADMIN";
         this.updatedBy = "ADMIN";
+    }
+
+    public static Auth from(String memberEmail, String refreshToken) {
+        return Auth.builder()
+                .email(memberEmail)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
