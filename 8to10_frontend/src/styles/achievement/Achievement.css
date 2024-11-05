@@ -1,0 +1,287 @@
+
+.achievement-main-content {
+    width: 60%;
+    height:100vh;
+    padding: 20px;
+    background-color: #f5f5f5;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-content {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.achievement-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.achievement-menu li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.achievement-menu li:hover {
+    background-color: #e0e0e0;
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.progress-bar span {
+    width: 100px;
+    margin-right: 10px;
+}
+
+.progress {
+    flex-grow: 1;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress div {
+    height: 100%;
+    background-color: #4CAF50;
+    text-align: right;
+    padding-right: 5px;
+    color: white;
+    border-radius: 5px;
+}
+
+/* styles.css */
+
+/* .container, .sidebar, .achievement-main-content, .achievement-menu 등 기존 스타일 생략 */
+
+/* 새롭게 추가/수정한 스타일 */
+.achievement-section {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.date-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.date-navigation button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.date-navigation span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.achievement-box-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-button {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.achievement-toggle-buttons {
+    display: flex;
+    justify-content: start;
+    margin-bottom: 10px;
+}
+
+.achievement-toggle-buttons button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.achievement-toggle-buttons button:hover {
+    background-color: #45a049;
+}
+
+
+.progress {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.progress-container {
+    position: relative;
+    width: 100%;
+    background-color: #f3f3f3;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 30px;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.progress-fill {
+    background-color: #4CAF50;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-gif-container {
+    position: absolute;
+    top: -40px; /* 프로그레스 바 위에 위치하도록 조정 */
+    width: 30px; /* GIF의 너비 */
+    height: 30px; /* GIF의 높이 */
+    z-index: 10; /* 다른 요소들 위에 표시 */
+    transform: translateX(-50%);
+}
+
+.progress-gif {
+    width: 100%;
+    height: 100%;
+}
+
+.category-title {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+.achievement-calendar-day {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+.achievement-calendar-header {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+.highlighted-date {
+    background-color: yellow;
+}
+/* END 성취도 달력 */
+
+#achievement-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80vh;
+}
+
+header, .achievement-calendar, #dynamic-achievement-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+header h2 {
+    margin: 0;
+    justify-content: left;
+}
+
+
+.achievement-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.achievement-calendar-day {
+    display: flex;
+    justify-content: flex-start; /* 날짜를 칸의 우상단에 배치하기 위해 flex-start 사용 */
+    align-items: flex-start; /* 날짜를 칸의 우상단에 배치하기 위해 flex-start 사용 */
+    padding: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative; /* 날짜를 절대 위치로 배치하기 위해 position 속성을 사용 */
+}
+
+
+.achievement-calendar-header {
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+.empty {
+    visibility: hidden; /* 이 속성을 추가하여 빈 칸을 숨깁니다 */
+}
+
+.highlighted-date {
+    background-color: yellow;
+}
+
+.achievement-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.achievement-box-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.achievement-toggle-buttons button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.achievement-toggle-buttons button:hover {
+    background-color: #45a049;
+}
+
+

@@ -1,0 +1,67 @@
+
+.login-container, .completion-container {
+    width: 40%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1); /* 그림자 효과 강조 */
+    text-align: center;
+}
+
+
+.login-form-group {
+    margin-bottom: 20px;
+}
+
+
+input[type="email"], input[type="password"] {
+    width: 95%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    margin: 5px auto;
+}
+
+
+.social-login {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.social-login button {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.kakao-login {
+    background-color: #f1e675;
+    color: black;
+}
+
+.google-login {
+    background-color: #fa685d;
+    color: white;
+}
+
+.naver-login {
+    background-color: #03C75A;
+    color: white;
+}
+
+.login-button {
+    width: 95%;
+    padding: 10px;
+    font-size:16px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 5px;
+}

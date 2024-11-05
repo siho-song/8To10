@@ -1,0 +1,258 @@
+.main-container {
+    display: flex; /* 플렉스 설정 추가 */
+    flex-direction: row; /* 헤더는 상단에, 나머지는 가로 배치되도록 */
+    height: 100%; /* 전체 높이 설정 */
+    width: 100%;
+}
+
+
+.main-content {
+    width: 60%; /* 메인 컨텐츠의 너비 설정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* 메인 컨텐츠 내부 그림자 */
+    border-left: 1px solid #bdbdbd; /* 좌측 경계선 추가 */
+    border-right: 1px solid #bdbdbd; /* 우측 경계선 추가 */
+    flex-grow: 1; /* 남은 공간을 메인 컨텐츠가 차지 */
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%; /* 컨테이너의 너비를 전체로 설정 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+    overflow: hidden; /* 넘치는 내용 숨기기 */
+}
+
+
+.sidebar {
+    width: 20%; /* 사이드바의 너비 설정 */
+    height: 93vh;
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    background-color: #f5faf5; /* 사이드바 색상 변경 */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* 사이드바에 그림자 추가 */
+    flex: 0 0 auto; /* 사이즈 고정 방지 */
+}
+
+#calendar {
+    width: 100%;
+    height: 100%;
+}
+
+/* FullCalendar 버튼 기본 스타일 설정 */
+
+/* 5월 16일 00:33 추가*/
+/* DayGridDay 뷰에만 적용되는 ListWeek 스타일 */
+.fc-dayGridDay-view {
+    background-color: #f1f1f1;
+}
+.fc-daygrid-day-frame {
+    border: 1px solid #f1f1f1; /* 경계선 추가 */
+    background-color: #ffffff; /* 배경색 설정 */
+}
+
+.fc-dayGridDay-view .fc-daygrid-day-events {
+    display: flex;
+    flex-direction: column;
+    background-color: #aaa;
+}
+
+.fc-dayGridDay-view .fc-daygrid-event {
+    border-bottom: 1px solid #ccc; /* 이벤트 간 경계선 추가 */
+    padding: 8px 14px; /* 패딩 조정 */
+    background-color: #ffffff; /* 이벤트 배경색 */
+    cursor: pointer;
+}
+
+.fc-dayGridDay-view .fc-daygrid-event:hover {
+    background-color: #f5f5f5; /* 호버 배경색 */
+}
+
+.fc-dayGridDay-view .fc-daygrid-day-top {
+    position: sticky;
+    top: 0;
+    z-index: 2; /* 상단 고정 */
+    background: #aaa;
+}
+
+/* 이벤트 제목과 시간 스타일 */
+.fc-dayGridDay-view .fc-daygrid-event-title,
+.fc-dayGridDay-view .fc-daygrid-event-time {
+    display: block; /* 표시 방식 변경 */
+    white-space: nowrap;
+}
+
+.fc-dayGridDay-view .fc-daygrid-event-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.fc-dayGridDay-view .fc-daygrid-event.fc-event-forced-url:hover a {
+    text-decoration: underline;
+}
+
+/*0516 daygrid에 리스트 뷰 적용-------*/
+
+.fc {
+    height:100%;
+}
+
+.fc .fc-button-primary {
+    background-color: #8fbc8f; /* Pale Green */
+    color: #fff; /* 흰색 텍스트 */
+    border: none; /* 테두리 제거 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 추가 */
+    font-size: 14px; /* 글꼴 크기 조정 */
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #679267; /* 호버 시 약간 어두운 색상 */
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #679267; /* 활성화 상태에서도 동일하게 유지 */
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: #bcbcbc; /* 비활성화 상태에서는 회색 표시 */
+    color: #666;
+}
+
+/* 그룹 버튼 스타일 통일 */
+.fc .fc-button-group .fc-button {
+    background-color: #8fbc8f; /* 모든 버튼 동일한 색상 적용 */
+    color: white;
+}
+
+.fc .fc-button-group .fc-button:hover {
+    background-color: #679267; /* 그룹 버튼 호버 시 */
+}
+
+.fc .fc-day-today {
+    background-color: #dffcdf; /* 오늘 날짜 배경색 */
+}
+
+.fc .fc-day-sun {
+    background-color: #fff4f4; /* 일요일 배경색 */
+}
+
+.fc .fc-day-sat {
+    background-color: #f4f4ff; /* 토요일 배경색 */
+}
+/* 약간의 수정 필요 0922 */
+
+/* 미디어 쿼리를 사용하여 화면 크기에 따른 조정 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 25%; /* 모바일에서 사이드바 너비 조정 */
+    }
+
+    .main-content {
+        width: 50%; /* 모바일에서 메인 컨텐츠 너비 조정 */
+    }
+
+    .board-sidebar {
+        width: 25%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        display: none; /* 매우 작은 화면에서 사이드바 숨기기 */
+    }
+
+    .main-content {
+        width: 100%; /* 작은 화면에서 메인 컨텐츠 너비 100%로 설정 */
+    }
+
+    .board-sidebar {
+        display: none;
+    }
+}
+
+/* START 0528 일정 타이틀 validation */
+#submit-button {
+    flex: 1;
+    background-color: #6AA84F;
+    color: white;
+    margin-right: 10px;
+}
+#submit-button:hover {
+    background-color: #38761D;
+}
+#submit-button:disabled {
+    flex: 1;
+    background-color: #a2a2a2;
+    color: white;
+    margin-right: 10px;
+}
+/* START 0528 일정 타이틀 validation */
+
+
+/* FullCalendar 헤더 기본 스타일 */
+.fc-header-toolbar {
+    font-size: 16px; /* 기본 글꼴 크기 설정 */
+}
+
+/* 화면 크기에 따라 FullCalendar 헤더 스타일 조정 */
+@media (max-width: 768px) {
+    .fc-header-toolbar {
+        font-size: 14px; /* 중간 화면에서 글꼴 크기 축소 */
+    }
+}
+
+@media (max-width: 480px) {
+    .fc-header-toolbar {
+        font-size: 12px; /* 작은 화면에서 글꼴 크기 더 축소 */
+    }
+}
+
+
+/* FullCalendar 기본 스타일 */
+.fc .fc-toolbar-title {
+    font-size: 1.2em; /* 제목 기본 글꼴 크기 */
+}
+
+.fc .fc-button {
+    padding: 8px 10px; /* 버튼 패딩 조정 */
+    font-size: 1em; /* 버튼 글꼴 크기 */
+}
+
+.fc .fc-event {
+    font-size: .85em; /* 이벤트 글꼴 크기 */
+}
+
+/* 화면 크기에 따라 스타일 조정 */
+@media (max-width: 768px) {
+    .fc .fc-toolbar-title {
+        font-size: 1em;
+    }
+
+    .fc .fc-button {
+        padding: 6px 8px;
+        font-size: .85em;
+    }
+
+    .fc .fc-event {
+        font-size: .75em;
+    }
+}
+
+@media (max-width: 480px) {
+    .fc .fc-toolbar-title {
+        font-size: .85em;
+    }
+
+    .fc .fc-button {
+        padding: 4px 6px;
+        font-size: .75em;
+    }
+
+    .fc .fc-event {
+        font-size: .65em;
+    }
+}
