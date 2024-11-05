@@ -15,11 +15,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/")
-    public String loginView() {
-        return "login/login";
-    }
-
     @GetMapping(value = "/renew")
     public ResponseEntity<AccessTokenResponse> renewAccessToken(
             @CookieValue(name = "refresh_token") String refreshToken,

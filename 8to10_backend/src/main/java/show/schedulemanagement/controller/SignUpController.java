@@ -28,11 +28,6 @@ public class SignUpController {
     private final SignUpValidationService signUpValidationService;
     private final MemberService memberService;
 
-    @GetMapping
-    public String getSignUp(@ModelAttribute("dto") SignUpRequest signUpRequest){
-        return "signup/signup";
-    }
-
     @GetMapping("/email/exists")
     public ResponseEntity<String> checkDuplicatedEmail(@RequestParam(name = "email") String email){
         if(signUpValidationService.isDuplicatedEmail(email)){
