@@ -1,0 +1,64 @@
+#schedule-form-container {
+    padding: 7px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 그룹 스타일 */
+.form-group {
+    margin-bottom: 7px;
+}
+
+/* 라벨 스타일 */
+.form-group label {
+    display: block;
+    margin-top:3px;
+    margin-bottom: 7px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 입력 필드 스타일 */
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* 체크박스 스타일 */
+.form-group input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.time-input-group {
+    display: flex;
+    flex-direction: row;
+}
+
+
+/* 체크박스 스타일 */
+.weekday-checkbox-group {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+}
+
+.weekday-checkbox-group label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    margin: auto;
+}
+
+
+.form-group div {
+    border: #999999;
+    border-radius: 4px;
+}

@@ -1,0 +1,148 @@
+@font-face {
+    font-family: 'BMHANNAPro';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_seven@1.0/BMHANNAPro.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body, input[type="date"],button, select {
+    font-family: 'BMHANNAPro', sans-serif;
+}
+
+input[type="text"], textarea, .post-title, .post-author, .post-body, .comment-author, .comment-text {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* 뷰포트 높이를 100%로 설정 */
+    display: flex;
+    flex-direction: column;
+    color: #333;
+    background-color: #f4fff4;
+    line-height: 1.6;
+    align-items: center;
+    overflow-x: hidden; /* 수평 스크롤 숨기기 */
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    flex: 1;
+    background-color: #a2a2a2;
+    color: white;
+    margin-right: 10px;
+}
+
+
+.main-header, .container, .main-content, .sidebar {
+    box-sizing: border-box; /* 너비 계산에 패딩과 테두리 포함 */
+}
+
+#root {
+    width: 100%;
+}
+
+
+.image-container {
+    position: relative; /* 텍스트 위치 설정을 위해 relative */
+    display: inline-block;
+}
+
+
+.image-container::after {
+    content: attr(data-alt); /* data-alt 속성의 값을 텍스트로 사용 */
+    display: none; /* 기본적으로 숨김 */
+    position: absolute;
+    top: 110%; /* 이미지 바로 아래에 텍스트 배치 */
+    left: 50%;
+    transform: translate(-25%); /* 중앙 정렬 및 아래로 이동 */
+    background-color: rgba(0, 0, 0, 0.7); /* 배경색 */
+    color: #fff; /* 텍스트 색 */
+    padding: 3px 10px; /* 패딩 */
+    border-radius: 5px; /* 둥근 모서리 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    z-index: 10; /* 다른 요소 위에 표시 */
+    font-size: 13px;
+}
+
+.header-image-box {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.image-container:hover::after {
+    display: block;
+}
+
+.image-link {
+    display: inline-block;
+    width: auto;
+    height: 50px;
+    text-decoration: none;
+    background: none;
+    border: none;
+}
+
+.image-link svg {
+    display: block;
+    width: auto;
+    height: 50px;
+}
+
+.image-link:hover svg {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 마우스를 올렸을 때 그림자 효과 강화 */
+}
+
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%; /* 컨테이너의 너비를 전체로 설정 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+    overflow: hidden; /* 넘치는 내용 숨기기 */
+}
+
+
+label {
+    display: block;
+    margin-left: 0;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+.button {
+    flex: 1;
+    background-color: #6AA84F;
+    color: white;
+    margin-right: 10px;
+}
+.button-cancel {
+    background-color: #B45F06;
+}
+.button:hover {
+    background-color: #38761D;
+}
+.button-cancel:hover {
+    background-color: #783F04;
+}
