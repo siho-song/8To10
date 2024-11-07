@@ -146,10 +146,12 @@ function FixedScheduleForm({ onClose }) {
         };
 
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch('/api/schedule/fixed', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(finalData),
             });

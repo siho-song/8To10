@@ -47,12 +47,12 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
 
     const handleReplySubmit = async() => {
         try {
-            console.log("reply Form : ", replyForm);
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch("/api/community/reply/add", {
                 method: "POST",
-                credentials: "include",
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(replyForm),
             });
@@ -82,11 +82,14 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
         }
     }
 
-    const handleReplyLikeSubmit = async () => {
+    const handleCommentLikeSubmit = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/reply/${reply.id}/heart`, {
                 method: hasLike ? "DELETE" : "POST",
-                credentials: "include",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                },
             })
 
             if (!response.ok) {
@@ -117,11 +120,12 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
 
     const handleCommentEditSubmit = async () => {
         try {
-            console.log(commentEditForm);
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch("/api/community/reply", {
                 method: "PUT",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(commentEditForm),
             })
@@ -133,10 +137,14 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
         }
     }
 
-    const handleDeleteComment = async () => {
+    const handleCommentDelete = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/reply/${reply.id}`, {
                 method: "DELETE",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                }
             });
 
             if (!response.ok) {
@@ -169,7 +177,7 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
                                 </button>
                                 <button
                                     className="comment-delete-button"
-                                    onClick={handleDeleteComment}
+                                    onClick={handleCommentDelete}
                                 >삭제</button>
                             </div>
                         }
@@ -185,7 +193,7 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
                         </button>
                         <button className={hasLike ? "comment-like-button active" : "comment-like-button"}
                                 data-liked={hasLike}
-                                onClick={handleReplyLikeSubmit}
+                                onClick={handleCommentLikeSubmit}
                         >
                             <span className="replyHeart">좋아요 {totalLike}</span>
                         </button>

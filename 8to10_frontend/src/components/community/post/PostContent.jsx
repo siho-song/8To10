@@ -15,9 +15,12 @@ function PostContent({ post, email }) {
 
     const handleLikeClick = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/board/${post.id}/heart`, {
                 method: hasLike ? "DELETE" : "POST",
-                credentials: "include",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                }
             })
 
             if (!response.ok) {
@@ -33,10 +36,12 @@ function PostContent({ post, email }) {
 
     const handleScrapClick = async () => {
         try {
-            console.log(`method is ${hasScrap ? "DELETE" : "POST"}`);
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/board/${post.id}/scrap`, {
                 method: hasScrap ? "DELETE" : "POST",
-                credentials: "include",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                }
             })
 
             if (!response.ok) {
@@ -50,11 +55,14 @@ function PostContent({ post, email }) {
         }
     }
 
-    const handleDeletePost = async () => {
+    const handlePostDelete = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/board/${post.id}`, {
                 method: "DELETE",
-                credentials: "include",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                }
             });
 
             if (!response.ok) {
@@ -80,7 +88,7 @@ function PostContent({ post, email }) {
                             </button>
                             <button
                                 className="delete-button"
-                                onClick={handleDeletePost}
+                                onClick={handlePostDelete}
                             >삭제</button>
                         </div>
                     }

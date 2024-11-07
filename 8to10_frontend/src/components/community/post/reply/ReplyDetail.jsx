@@ -34,11 +34,12 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
     const handleReplyEditSubmit = async () => {
         try {
-            console.log(replyEditForm);
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch("/api/community/reply", {
                 method: "PUT",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(replyEditForm),
             })
@@ -52,9 +53,12 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
     const handleLikeClick = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/reply/${currentReply.id}/heart`, {
                 method: hasLike ? "DELETE" : "POST",
-                credentials: "include",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                },
             })
 
             if (!response.ok) {
@@ -70,8 +74,12 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
     const handleDeleteReply = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/reply/${reply.id}`, {
                 method: "DELETE",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                },
             });
 
             if (!response.ok) {
