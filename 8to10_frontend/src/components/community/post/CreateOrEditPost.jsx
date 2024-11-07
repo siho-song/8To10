@@ -30,11 +30,12 @@ function CreateOrEditPost({ isEditMode }) {
         }
 
         try {
-
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(isEditMode ? `/api/community/board` : `/api/community/board/add`, {
                 method: isEditMode ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(isEditMode ? updatePostData : postData),
             })
@@ -67,8 +68,12 @@ function CreateOrEditPost({ isEditMode }) {
             const loadPostData = async () => {
 
                 try {
+                    const accessToken = localStorage.getItem('authorization');
                     const response = await fetch(`/api/community/board/${id.postId}`, {
                         method: 'GET',
+                        headers: {
+                            'authorization': `Bearer ${accessToken}`,
+                        }
                     });
 
                     if (!response.ok) {

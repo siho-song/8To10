@@ -1,15 +1,15 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import PostContent from "@/components/community/post/PostContent.jsx";
 import CreateComment from "@/components/community/post/reply/CreateComment.jsx";
 import CommentView from "@/components/community/post/reply/CommentView.jsx";
-import {AuthContext} from "@/components/context/AuthContext.jsx";
 import LeftSideBar from "@/components/community/LeftSideBar.jsx";
+import {useAuth} from "@/components/context/UseAuth.jsx";
 
 const PostDetail = () => {
     const location = useLocation();
 
-    const email = useContext(AuthContext);
+    const { email } = useAuth();
 
     const [post, setPost] = useState(location.state || null);
     const [responseReplies, setResponseReplies] = useState([]);
@@ -25,8 +25,12 @@ const PostDetail = () => {
     useEffect(() => {
         const loadPostData = async () => {
             try {
+                const accessToken = localStorage.getItem('authorization');
                 const response = await fetch(`/api/community/board/${id}`, {
                     method: 'GET',
+                    headers: {
+                        'authorization': `Bearer ${accessToken}`,
+                    },
                 });
 
                 if (!response.ok) {
@@ -72,7 +76,7 @@ const PostDetail = () => {
             <div className="post-main-content">
                 <PostContent
                     post={post}
-                    email={email.email}
+                    email={email}
                 />
                 <CreateComment
                     id={post.id}
@@ -80,7 +84,7 @@ const PostDetail = () => {
                 />
                 <CommentView
                     postId={post.id}
-                    email={email.email}
+                    email={email}
                     replies={responseReplies}
                     likedReplyIds={responseLikedReplyIds}
                     onReplySubmit={addNewComment}

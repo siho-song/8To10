@@ -18,10 +18,14 @@ export const FullCalendarContext = ({ children }) => {
 
     useEffect(() => {
 
-        const fetchEvents = async () => {
+        const loadCalendarEvents = async () => {
             try {
+                const accessToken = localStorage.getItem('authorization');
                 const response = await fetch('/api/schedule', {
-                    method:"GET"
+                    method:"GET",
+                    headers: {
+                        'authorization': `Bearer ${accessToken}`,
+                    }
                 });
 
                 if (!response.ok) {
@@ -51,7 +55,7 @@ export const FullCalendarContext = ({ children }) => {
             }
         }
 
-        fetchEvents();
+        loadCalendarEvents();
     }, []);
 
     const addEvent = (event) => {

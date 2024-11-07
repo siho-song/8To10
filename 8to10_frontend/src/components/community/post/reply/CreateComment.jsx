@@ -19,11 +19,12 @@ function CreateComment({ id, onCommentSubmit }) {
 
     const handleCommentSubmit = async () => {
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch("/api/community/reply/add", {
                 method: "POST",
-                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(bodyData),
             });

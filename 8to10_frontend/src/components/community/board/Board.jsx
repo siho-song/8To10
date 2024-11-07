@@ -52,8 +52,12 @@ const Board = () => {
         });
 
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch(`/api/community/board?${params.toString()}`, {
                 method: 'GET',
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                },
             });
 
             if (!response.ok) {
@@ -64,7 +68,6 @@ const Board = () => {
 
             setPosts(data.content);
             setBoardField('totalPages', data.totalPages);
-
         } catch (error) {
             console.error('Error:', error);
         }

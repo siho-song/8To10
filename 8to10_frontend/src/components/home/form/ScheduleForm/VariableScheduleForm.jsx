@@ -56,10 +56,12 @@ function VariableScheduleForm({ onClose }) {
         };
 
         try {
+            const accessToken = localStorage.getItem('authorization');
             const response = await fetch('/api/schedule/variable', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(finalData),
             });
