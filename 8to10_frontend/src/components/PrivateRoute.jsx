@@ -1,11 +1,22 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "@/components/context/UseAuth.jsx";
+import {useEffect} from "react";
 
 function PrivateRoute() {
-    const {isAuthenticated, loading} = useAuth();
+    const {isAuthenticated, setIsAuthenticated, loading, setLoading} = useAuth();
 
-    console.log("isAuthenticated : ", isAuthenticated);
-    console.log("loading : ", loading);
+    useEffect(() => {
+        if (!isAuthenticated) {
+            const accessToken = localStorage.getItem('authorization');
+
+            if (accessToken) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+            setLoading(false);
+        }
+    }, [isAuthenticated]);
 
     if (loading) {
         return <div>로딩 중...</div>;
