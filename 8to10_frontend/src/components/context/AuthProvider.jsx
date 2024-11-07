@@ -11,7 +11,6 @@ function AuthProvider({ children }) {
     const loginUser = async (email, password) => {
 
         const paramString = new URLSearchParams({email, password});
-        console.log("loginUser 실행")
         try {
             const response = (await fetch(`/api/login`, {
                 method: 'POST',
@@ -24,33 +23,60 @@ function AuthProvider({ children }) {
             if (!response.ok) {
                 const errorData = await response.json();
                 setIsAuthenticated(false);
-                setErrorMessage(errorData.message + ' => 로그인에 실패했습니다.');
+                setErrorMessage(errorData.message + ' : 로그인에 실패했습니다.');
                 throw new Error(errorMessage);
             }
 
             const accessToken = response.headers.get('authorization').split(' ')[1];
-            console.log(accessToken);
             if (accessToken) {
                 localStorage.setItem('authorization', accessToken);
                 setIsAuthenticated(true);
-                setErrorMessage('');
                 setEmail(email);
             } else {
                 throw new Error("액세스 토큰을 확인할 수 없습니다.");
-                setIsAuthenticated(false);
-                setErrorMessage(errorData.message || '로그인 실패');
             }
         } catch (error) {
             console.error(error);
             setIsAuthenticated(false);
-            setErrorMessage( '로그인 실패');
         } finally {
             setLoading(false);
         }
     };
 
+    const refreshAccessToken = async () => {
+        try {
+            const accessToken = localStorage.getItem('authorization');
+            const response = await fetch('/api/renew', {
+                method: "GET",
+                headers: {
+                    'authorization': `Bearer ${accessToken}`,
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                if(response.status === 401) {
+                    localStorage.removeItem('authorization');
+                    setIsAuthenticated(false);
+                    setLoading(false);
+                    setEmail('');
+                }
+                throw new Error("액세스 토큰을 갱신 할 수 없습니다.");
+            }
+            const newAccessToken = response.headers.get('authorization')?.split(' ')[1];
+            if (!newAccessToken){
+                throw new Error("갱신한 액세스 토큰을 확인할 수 없습니다.")
+            }
+            localStorage.setItem('authorization', newAccessToken);
+            return newAccessToken;
+        } catch (error) {
+            console.error("Error : ", error);
+            return null;
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading, loginUser, email, errorMessage }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, refreshAccessToken, loading, setLoading, loginUser, email, errorMessage }}>
             {children}
         </AuthContext.Provider>
     );
