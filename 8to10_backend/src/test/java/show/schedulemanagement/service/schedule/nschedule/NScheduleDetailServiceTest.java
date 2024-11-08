@@ -21,6 +21,7 @@ import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.service.MemberService;
 
@@ -73,7 +74,7 @@ class NScheduleDetailServiceTest {
         NSchedule parent = nScheduleDetail.getNSchedule();
         nScheduleDetailService.deleteById(member, id);
 
-        assertThatThrownBy(() -> nScheduleDetailService.findById(id)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> nScheduleDetailService.findById(id)).isInstanceOf(NotFoundEntityException.class);
         assertThat(parent.getTotalAmount()).isEqualTo(80);
     }
 

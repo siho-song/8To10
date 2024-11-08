@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.reply.ReplyService;
 
@@ -42,7 +43,7 @@ class ReplyServiceTest {
 
         replyService.delete(member,1L);
 
-        assertThatThrownBy(() -> replyService.findById(1L)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> replyService.findById(1L)).isInstanceOf(NotFoundEntityException.class);
     }
 
     @Test
@@ -60,7 +61,7 @@ class ReplyServiceTest {
 
         replyService.delete(member,14L);
 
-        assertThatThrownBy(() -> replyService.findById(14L)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> replyService.findById(14L)).isInstanceOf(NotFoundEntityException.class);
     }
 
     @Test

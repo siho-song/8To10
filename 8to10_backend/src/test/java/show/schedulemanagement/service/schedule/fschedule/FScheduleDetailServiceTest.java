@@ -23,6 +23,7 @@ import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -58,7 +59,7 @@ class FScheduleDetailServiceTest {
         Long id = 1L;
         fScheduleDetailService.deleteById(member,id);
 
-        assertThatThrownBy(() -> fScheduleDetailService.findById(1L)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> fScheduleDetailService.findById(1L)).isInstanceOf(NotFoundEntityException.class);
     }
 
     @Test

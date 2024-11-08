@@ -109,7 +109,7 @@ class AuthControllerTest {
                 .thenReturn(renewAccessToken);
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/renew")
+        ResultActions resultActions = mockMvc.perform(post("/renew")
                 .header("Authorization", expiredAccessTokenHeader)
                 .cookie(new Cookie("refresh_token", refreshToken))
         );

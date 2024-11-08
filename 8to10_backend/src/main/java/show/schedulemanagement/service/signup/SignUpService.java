@@ -26,12 +26,12 @@ public class SignUpService {
 
     @Transactional
     public void signUp(SignUpRequest signUpRequest){
-        if (isValidSignUp(signUpRequest)){
-            encodePassword(signUpRequest);
-            Member member = Member.of(signUpRequest);
-            memberRepository.save(member);
+        if (!isValidSignUp(signUpRequest)){
+            throw new BadRequestException(SIGNUP_FAILED);
         }
-        throw new BadRequestException(SIGNUP_FAILED);
+        encodePassword(signUpRequest);
+        Member member = Member.of(signUpRequest);
+        memberRepository.save(member);
     }
 
     public Boolean isValidSignUp(SignUpRequest signUpRequest) {
