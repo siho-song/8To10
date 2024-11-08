@@ -1,26 +1,26 @@
 package show.schedulemanagement.filter;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.SignatureException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import show.schedulemanagement.exception.AuthException;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.InvalidTokenException;
+import show.schedulemanagement.exception.UserAuthenticationException;
+import show.schedulemanagement.handler.AuthFilterExceptionHandler;
 import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.service.auth.MemberDetailsService;
 import show.schedulemanagement.utils.BearerAuthorizationUtils;
@@ -32,6 +32,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final MemberDetailsService memberDetailsService;
     private final BearerAuthorizationUtils bearerUtils;
     private final TokenProvider tokenProvider;
+    private final AuthFilterExceptionHandler authFilterExceptionHandler;
 
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
             "/",
@@ -77,57 +78,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
             else {
-                throw new JwtException("유효하지 않은 토큰입니다.");
+                throw new UserAuthenticationException(ExceptionCode.INVALID_ACCESS_TOKEN);
             }
-        } catch (Exception e) {
-            handleException(response, e);
+        } catch (AuthenticationException e) {
+            authFilterExceptionHandler.handleException(response,e);
         }
     }
 
     private boolean isExcludeUrl(String uri) {
         return EXCLUDE_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, uri));
-    }
-
-    private void handleException(HttpServletResponse response, Exception e) throws IOException {
-        String logMessage = jsonResponseWrapper(e).getString("message");
-        log.error(logMessage, e);
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-
-        PrintWriter printWriter = response.getWriter();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("error", true);
-        jsonObject.put("message", "로그인 에러");
-
-        printWriter.print(jsonObject);
-        printWriter.flush();
-        printWriter.close();
-    }
-
-    private JSONObject jsonResponseWrapper(Exception e) {
-        String resultMessage = getResultMessage(e);
-
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("status", 401);
-        jsonMap.put("code", "401");
-        jsonMap.put("message", resultMessage);
-        jsonMap.put("reason", e.getMessage());
-        JSONObject jsonObject = new JSONObject(jsonMap);
-        log.error(resultMessage, e);
-        return jsonObject;
-    }
-
-    private String getResultMessage(Exception e) {
-        if (e instanceof ExpiredJwtException) {
-            return "TOKEN Expired";
-        } else if (e instanceof SignatureException) {
-            return "TOKEN SignatureException Login";
-        } else if (e instanceof JwtException) {
-            return "TOKEN Parsing JwtException";
-        } else {
-            return "OTHER ERROR";
-        }
     }
 }
