@@ -23,9 +23,10 @@ import show.schedulemanagement.filter.EmailPasswordAuthenticationFilter;
 import show.schedulemanagement.filter.JwtAuthorizationFilter;
 import show.schedulemanagement.handler.AuthFailureHandler;
 import show.schedulemanagement.handler.AuthSuccessHandler;
+import show.schedulemanagement.handler.AuthFilterExceptionHandler;
 import show.schedulemanagement.provider.CustomAuthenticationProvider;
 import show.schedulemanagement.provider.TokenProvider;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.repository.member.MemberRepository;
 import show.schedulemanagement.service.auth.AuthService;
 import show.schedulemanagement.service.auth.MemberDetailsService;
 import show.schedulemanagement.utils.BearerAuthorizationUtils;
@@ -93,9 +94,11 @@ public class SecurityConfig {
     public EmailPasswordAuthenticationFilter customAuthenticationFilter(
             AuthenticationManager authenticationManager,
             AuthSuccessHandler authSuccessHandler,
-            AuthFailureHandler authFailureHandler
+            AuthFailureHandler authFailureHandler,
+            AuthFilterExceptionHandler authFilterExceptionHandler
     ) {
-        EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter = new EmailPasswordAuthenticationFilter(authenticationManager);
+        EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter = new EmailPasswordAuthenticationFilter(
+                authenticationManager, authFilterExceptionHandler);
         emailPasswordAuthenticationFilter.setAuthenticationSuccessHandler(authSuccessHandler);
         emailPasswordAuthenticationFilter.setAuthenticationFailureHandler(authFailureHandler);
         emailPasswordAuthenticationFilter.afterPropertiesSet();
@@ -103,8 +106,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public MemberDetailsService memberDetailsService(MemberService memberService) {
-        return new MemberDetailsService(memberService);
+    public MemberDetailsService memberDetailsService(MemberRepository memberRepository) {
+        return new MemberDetailsService(memberRepository);
     }
 
     @Bean
@@ -127,8 +130,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthFailureHandler customAuthFailureHandler() {
-        return new AuthFailureHandler();
+    public AuthFailureHandler customAuthFailureHandler(AuthFilterExceptionHandler authFilterExceptionHandler) {
+        return new AuthFailureHandler(authFilterExceptionHandler);
     }
 
     @Bean
@@ -140,10 +143,15 @@ public class SecurityConfig {
     public JwtAuthorizationFilter jwtAuthorizationFilter(
             MemberDetailsService memberDetailsService,
             TokenProvider tokenProvider,
-            BearerAuthorizationUtils bearerAuthorizationUtils
-            )
+            BearerAuthorizationUtils bearerAuthorizationUtils,
+            AuthFilterExceptionHandler authFilterExceptionHandler)
     {
-        return new JwtAuthorizationFilter(memberDetailsService, bearerAuthorizationUtils, tokenProvider);
+        return new JwtAuthorizationFilter(
+                memberDetailsService,
+                bearerAuthorizationUtils,
+                tokenProvider,
+                authFilterExceptionHandler
+        );
     }
 
     @Bean

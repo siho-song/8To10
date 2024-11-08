@@ -1,19 +1,31 @@
 package show.schedulemanagement.filter;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import show.schedulemanagement.exception.AuthException;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.UserAuthenticationException;
+import show.schedulemanagement.handler.AuthFilterExceptionHandler;
 
 @Slf4j
 public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private final AuthFilterExceptionHandler authFilterExceptionHandler;
 
-    public EmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public EmailPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
+                                             AuthFilterExceptionHandler authFilterExceptionHandler) {
         super(authenticationManager);
+        this.authFilterExceptionHandler = authFilterExceptionHandler;
         setFilterProcessesUrl("/login");
     }
 
@@ -25,10 +37,20 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
             authRequest = getAuthRequest(request);
             setDetails(request, authRequest);
         } catch (Exception e) {
-            log.error("Error reading login request", e);
-            throw new RuntimeException(e);
+            log.error("",e);
+            throw new UserAuthenticationException(ExceptionCode.USER_AUTHENTICATE_FAIL);
         }
         return this.getAuthenticationManager().authenticate(authRequest);
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        try {
+            super.doFilter(request, response, chain);
+        } catch (AuthenticationException e) {
+            authFilterExceptionHandler.handleException((HttpServletResponse) response, e);
+        }
     }
 
     private UsernamePasswordAuthenticationToken getAuthRequest(HttpServletRequest request) {

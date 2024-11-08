@@ -1,6 +1,7 @@
 package show.schedulemanagement.provider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.UserAuthenticationException;
 import show.schedulemanagement.service.auth.MemberDetailsService;
 
 @Component
@@ -24,8 +27,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         MemberDetails member = (MemberDetails) memberDetailsService.loadUserByUsername(email);
-        if (member == null || !bCryptPasswordEncoder.matches(password, member.getPassword())) {
-            throw new BadCredentialsException("이메일 혹은 패스워드가 잘못되었습니다.");
+        if (!bCryptPasswordEncoder.matches(password, member.getPassword())) {
+            throw new UserAuthenticationException(ExceptionCode.INVALID_PASSWORD);
         }
 
         return new UsernamePasswordAuthenticationToken(member, password, member.getAuthorities());
