@@ -1,6 +1,7 @@
 package show.schedulemanagement.utils;
 
-import io.jsonwebtoken.JwtException;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.InvalidTokenException;
 
 public class BearerAuthorizationUtils {
     public static final String BEARER_CODE = "Bearer ";
@@ -9,6 +10,6 @@ public class BearerAuthorizationUtils {
         if(authHeader != null && authHeader.startsWith(BEARER_CODE)){
             return authHeader.substring(BEARER_CODE.length()).trim();
         }
-        throw new JwtException("Invalid JWT Token");
+        throw new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN);
     }
 }
