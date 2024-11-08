@@ -1,5 +1,8 @@
 package show.schedulemanagement.service.schedule;
 
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_SCHEDULE;
+import static show.schedulemanagement.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
+import show.schedulemanagement.exception.MismatchException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.schedule.ScheduleRepository;
 
 @Service
@@ -38,12 +41,12 @@ public class ScheduleServiceImpl implements ScheduleService{
             scheduleRepository.deleteById(id);
             return;
         }
-        throw new RuntimeException("작성자만 삭제할 수 있습니다.");
+        throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
     }
 
     @Override
     public Schedule findById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new RuntimeException("Schedule Not Found"));
+        return scheduleRepository.findById(id).orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_SCHEDULE));
     }
 
     @Override

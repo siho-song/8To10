@@ -5,8 +5,6 @@ import java.util.List;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
-import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 
 public interface ScheduleService {
     void save(Schedule Schedule);

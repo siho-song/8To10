@@ -1,8 +1,11 @@
 package show.schedulemanagement.controller;
 
+import static org.springframework.http.HttpStatus.*;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,45 +19,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import show.schedulemanagement.dto.signup.SignUpRequest;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.signup.SignUpService;
-import show.schedulemanagement.service.signup.SignUpValidationService;
 
 @Controller
 @RequestMapping("/signup")
 @RequiredArgsConstructor
 @Slf4j
 public class SignUpController {
-
     private final SignUpService signUpService;
-    private final SignUpValidationService signUpValidationService;
-    private final MemberService memberService;
 
     @GetMapping("/email/exists")
-    public ResponseEntity<String> checkDuplicatedEmail(@RequestParam(name = "email") String email){
-        if(signUpValidationService.isDuplicatedEmail(email)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> checkEmail(@RequestParam(name = "email") String email){
+        Boolean isDuplicatedEmail = signUpService.isDuplicatedEmail(email);
+        return new ResponseEntity<>(isDuplicatedEmail, OK);
     }
 
     @GetMapping("/nickname/exists")
-    public ResponseEntity<String> checkDuplicatedNickName(@RequestParam(name = "nickname") String nickname){
-        if(signUpValidationService.isDuplicatedNickname(nickname)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/complete")
-    public String complete(@RequestParam(name = "username") String username, Model model){
-        model.addAttribute("username", username);
-        return "signup/complete";
+    public ResponseEntity<Boolean> checkNickName(@RequestParam(name = "nickname") String nickname){
+        Boolean isDuplicated = signUpService.isDuplicatedNickname(nickname);
+        return new ResponseEntity<>(isDuplicated, OK);
     }
 
     @PostMapping
-    public String signUp(@ModelAttribute("dto") @Valid SignUpRequest signUpRequest, RedirectAttributes redirectAttributes){
+    public ResponseEntity<Void> signUp(@Valid SignUpRequest signUpRequest){
         signUpService.signUp(signUpRequest);
-        String username = memberService.findByEmail(signUpRequest.getEmail()).getUsername();
-        redirectAttributes.addAttribute("username",username);
-        return "redirect:/signup/complete"; //redirect 해야함
+        return ResponseEntity.noContent().build();
     }
 }

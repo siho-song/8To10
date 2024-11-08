@@ -1,11 +1,15 @@
 package show.schedulemanagement.service.schedule.vschedule;
 
+import static show.schedulemanagement.exception.ExceptionCode.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.vschedule.VSchedule;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.MismatchException;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @Service
@@ -19,7 +23,7 @@ public class VScheduleService {
 
         VSchedule schedule = (VSchedule) scheduleService.findById(vScheduleUpdate.getId());
         if(!member.isSameEmail(schedule.getCreatedBy())){
-            throw new RuntimeException("작성자와 일치하지 않습니다.");
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
         schedule.update(vScheduleUpdate);
     }

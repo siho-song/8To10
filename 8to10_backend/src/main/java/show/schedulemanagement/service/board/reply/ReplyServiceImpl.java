@@ -1,6 +1,10 @@
 package show.schedulemanagement.service.board.reply;
 
-import jakarta.persistence.EntityNotFoundException;
+import static show.schedulemanagement.exception.ExceptionCode.INVALID_REPLY_LEVEL;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_EQUAL_BOARD;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_REPLY;
+import static show.schedulemanagement.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
+import show.schedulemanagement.exception.InvalidLevelException;
+import show.schedulemanagement.exception.MismatchException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
 import show.schedulemanagement.service.board.BoardService;
@@ -31,18 +37,18 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     public Reply findById(Long id) {
-        return replyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+        return replyRepository.findById(id).orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REPLY));
     }
 
     @Override
     public Reply findByIdWithParent(Long id) {
-        return replyRepository.findByIdWithParent(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+        return replyRepository.findByIdWithParent(id).orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REPLY));
     }
 
     @Override
     public Reply findByIdWithMemberAndParent(Long id) {
         return replyRepository.findByIdWithMemberAndParent(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REPLY));
     }
 
     @Override
@@ -87,20 +93,20 @@ public class ReplyServiceImpl implements ReplyService{
         String createdBy = reply.getMember().getEmail();
 
         if(!member.isSameEmail(createdBy)){
-            throw new RuntimeException();
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
-            // 댓글 삭제
-        if (reply.getParent() != null) { // 대댓글 삭제
+
+        if (reply.getParent() != null) {
             replyHeartRepository.deleteByReplyId(id);
             replyRepository.delete(reply);
             return;
         }
+
         List<Reply> nestedReplies = findNestedRepliesByParent(reply);
             replyHeartRepository.deleteByReplies(nestedReplies);
             deleteByReplies(nestedReplies);
             replyHeartRepository.deleteByReplyId(id);
             replyRepository.delete(reply);
-
     }
 
     @Override
@@ -124,13 +130,13 @@ public class ReplyServiceImpl implements ReplyService{
         if(parentReplyBoard.getId().equals(board.getId())){
             return true;
         }
-        throw new RuntimeException("부모댓글의 게시글과 대댓글의 게시글이 일치하지 않습니다."); //TODO Exception 처리
+        throw new MismatchException(NOT_EQUAL_BOARD);
     }
 
     private boolean checkLevel(Reply parent) {
         if (parent.getParent() == null){
             return true;
         }
-        throw new RuntimeException("대댓글에는 댓글을 달 수 없습니다."); //TODO Exception 처리
+        throw new InvalidLevelException(INVALID_REPLY_LEVEL);
     }
 }

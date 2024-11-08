@@ -1,6 +1,8 @@
 package show.schedulemanagement.service.schedule.nschedule;
 
-import jakarta.persistence.EntityNotFoundException;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_N_DETAIL;
+import static show.schedulemanagement.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +16,8 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
+import show.schedulemanagement.exception.MismatchException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.schedule.nschedule.NScheduleDetailRepository;
 import show.schedulemanagement.service.event.ProgressUpdatedEvent;
 
@@ -28,19 +32,20 @@ public class NScheduleDetailService {
     private final ApplicationEventPublisher publisher;
 
     public NScheduleDetail findById(Long id){
-        return nScheduleDetailRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 일정입니다."));
+        return nScheduleDetailRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_DETAIL));
     }
 
     public NScheduleDetail findByIdWithParent(Long id){
         return nScheduleDetailRepository.findByIdWithParent(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_DETAIL));
     }
 
     @Transactional
     public void update(Member member, NScheduleDetailUpdate nScheduleDetailUpdate){
         NScheduleDetail nScheduleDetail = findById(nScheduleDetailUpdate.getId());
         if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
-            throw new RuntimeException("작성자가 일치하지 않습니다.");
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
         nScheduleDetail.update(nScheduleDetailUpdate);
     }
@@ -49,7 +54,7 @@ public class NScheduleDetailService {
     public void deleteById(Member member, Long id) {
         NScheduleDetail nScheduleDetail = findByIdWithParent(id);
         if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
-            throw new RuntimeException("작성자가 일치하지 않습니다.");
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
 
         NSchedule parent = nScheduleDetail.getNSchedule();

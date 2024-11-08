@@ -1,6 +1,8 @@
 package show.schedulemanagement.service.schedule.fschedule;
 
-import jakarta.persistence.EntityNotFoundException;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_F_SCHEDULE;
+import static show.schedulemanagement.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
 import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
+import show.schedulemanagement.exception.MismatchException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.schedule.fschedule.FScheduleRepository;
 
 @Service
@@ -27,7 +31,8 @@ public class FScheduleService {
     private final FScheduleRepository fScheduleRepository;
 
     public FSchedule findById(Long id){
-        return fScheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 고정일정은 존재하지 않습니다."));
+        return fScheduleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_F_SCHEDULE));
     }
 
     @Transactional
@@ -58,7 +63,7 @@ public class FScheduleService {
     public void update(Member member, FScheduleUpdate fScheduleUpdate) {
         FSchedule fSchedule = findById(fScheduleUpdate.getId());
         if (!member.isSameEmail(fSchedule.getCreatedBy())) {
-            throw new RuntimeException("작성자가 일치하지 않습니다.");
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
         fSchedule.update(fScheduleUpdate);
     }
