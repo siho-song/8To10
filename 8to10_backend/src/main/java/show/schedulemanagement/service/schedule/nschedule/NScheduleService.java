@@ -1,6 +1,9 @@
 package show.schedulemanagement.service.schedule.nschedule;
 
-import jakarta.persistence.EntityNotFoundException;
+import static show.schedulemanagement.exception.ExceptionCode.INVALID_N_SCHEDULE_CREATION;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
+import static show.schedulemanagement.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +26,9 @@ import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
 import show.schedulemanagement.domain.schedule.nschedule.NScheduleDetail;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
+import show.schedulemanagement.exception.InvalidScheduleCreationException;
+import show.schedulemanagement.exception.MismatchException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.schedule.nschedule.NScheduleRepository;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.timeslot.TimeSlot;
@@ -41,7 +47,7 @@ public class NScheduleService {
 
     public NSchedule findById(Long id){
         return nScheduleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 일정 입니다."));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_SCHEDULE));
     }
 
     @Transactional
@@ -85,7 +91,7 @@ public class NScheduleService {
 
         NSchedule nSchedule = findById(nScheduleUpdate.getId());
         if(!member.isSameEmail(nSchedule.getCreatedBy())){
-            throw new RuntimeException("작성자가 일치하지 않습니다.");
+            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
         }
         nSchedule.update(nScheduleUpdate);
     }
@@ -113,13 +119,8 @@ public class NScheduleService {
     }
 
     private void validateCreateNSchedule(List<DayOfWeek> selectedDays, int performInWeek) {
-
         if(selectedDays.size() < performInWeek){
-            String errorMessage = String.format(
-                    "일반 일정을 생성할 수 없습니다. 일정을 조율해주세요. %d 만큼의 수행일 수를 줄이거나, %d 만큼의 수행일 수를 늘려야 합니다.",
-                    performInWeek - selectedDays.size() , performInWeek - selectedDays.size()
-            );
-            throw new RuntimeException(errorMessage);
+            throw new InvalidScheduleCreationException(INVALID_N_SCHEDULE_CREATION);
         }
     }
 

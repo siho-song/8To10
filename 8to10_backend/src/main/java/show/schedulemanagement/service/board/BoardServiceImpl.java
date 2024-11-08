@@ -1,7 +1,7 @@
 package show.schedulemanagement.service.board;
 
-import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_BOARD;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardPageRequest;
 import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.board.BoardHeartRepository;
 import show.schedulemanagement.repository.board.BoardRepository;
 import show.schedulemanagement.repository.board.BoardScrapRepository;
@@ -42,19 +42,20 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board findById(Long id) {
-        log.info("currentTransactionName findById: {}", TransactionSynchronizationManager.getCurrentTransactionName());
-        return boardRepository.findById(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_BOARD));
     }
 
     @Override
     public Board findByIdWithMember(Long id) {
-        return boardRepository.findByIdWithMember(id).orElseThrow(()->new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
+        return boardRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_BOARD));
     }
 
     @Override
     public Board findByIdWithRepliesAndMember(Long id) {
-        Optional<Board> board = boardRepository.findByIdWithRepliesAndMember(id);
-        return board.orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
+        return boardRepository.findByIdWithRepliesAndMember(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_BOARD));
     }
 
     @Override
@@ -64,8 +65,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardSearchResponse searchBoard(Long id, Member member) {
-        return boardRepository.searchBoard(id,member)
-                .orElseThrow(()-> new EntityNotFoundException("해당 게시물을 찾을 수 없습니다."));
+        return boardRepository.searchBoard(id, member)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_BOARD));
     }
 
     @Override

@@ -1,7 +1,8 @@
 package show.schedulemanagement.service.board.reply;
 
-import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
+import static show.schedulemanagement.exception.ExceptionCode.DUPLICATED_REPLY_HEART;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_REPLY_HEART;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.board.reply.ReplyHeart;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.exception.DuplicatedException;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
 import show.schedulemanagement.service.event.reply.ReplyHeartAddEvent;
 import show.schedulemanagement.service.event.reply.ReplyHeartSubEvent;
@@ -32,7 +35,7 @@ public class ReplyHeartServiceImpl implements ReplyHeartService {
     @Override
     public ReplyHeart findByMemberAndReplyId(Member member, Long replyId) {
         return replyHeartRepository.findByMemberAndReplyId(member, replyId)
-                .orElseThrow(() -> new EntityNotFoundException("삭제할 좋아요가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REPLY_HEART));
     }
 
     @Override
@@ -41,7 +44,7 @@ public class ReplyHeartServiceImpl implements ReplyHeartService {
         boolean hasLiked = existsReplyHeartByMemberAndReplyId(member, replyId);
 
         if(hasLiked){
-            throw new RuntimeException("이미 좋아요 한 댓글 입니다."); //TODO 추후 커스텀 예외 처리
+            throw new DuplicatedException(DUPLICATED_REPLY_HEART);
         }
         Reply reply = replyService.findById(replyId);
         ReplyHeart replyHeart = ReplyHeart.createReplyHeart(reply, member);
