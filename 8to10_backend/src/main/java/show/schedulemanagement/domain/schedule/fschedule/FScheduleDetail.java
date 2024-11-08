@@ -58,7 +58,9 @@ public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     }
 
     public void update(FScheduleDetailUpdate fScheduleDetailUpdate){
-        detailDescription = fScheduleDetailUpdate.getDetailDescription();
+        if(detailDescription != null){
+            detailDescription = fScheduleDetailUpdate.getDetailDescription();
+        }
         startDate = fScheduleDetailUpdate.getStartDate();
         endDate = fScheduleDetailUpdate.getEndDate();
     }
