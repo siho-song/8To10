@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleAdd;
+import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleSave;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.provider.TokenProvider;
 
@@ -45,7 +45,7 @@ class VScheduleControllerTest {
     @DisplayName("변동일정 생성 엔드포인트 정상 작동")
     void add() throws Exception {
 
-        VScheduleAdd dto = VScheduleAdd.builder()
+        VScheduleSave dto = VScheduleSave.builder()
                 .title("Test Schedule")
                 .commonDescription("Test Description")
                 .start(LocalDateTime.of(2024, 9, 1, 10, 0))
