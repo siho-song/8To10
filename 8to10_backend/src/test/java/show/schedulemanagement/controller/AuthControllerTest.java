@@ -36,7 +36,7 @@ import show.schedulemanagement.service.auth.AuthService;
 @AutoConfigureMockMvc
 class AuthControllerTest {
     @MockBean
-    MemberService memberService;
+    MemberRepository memberRepository;
 
     @MockBean
     AuthService authService;
@@ -47,22 +47,24 @@ class AuthControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    Member member;
+    Optional<Member> member;
 
     @BeforeEach
     void init() {
         // 테스트 데이터 초기화
-        member = Member.builder()
-                .email("testEmail")
-                .password("testPassword")
-                .build();
+        member = Optional.of(
+                Member.builder()
+                        .email("testEmail")
+                        .password("testPassword")
+                        .build()
+        );
     }
 
     @Test
     @DisplayName("로그인에 성공하면 AccessToken, RefreshToken을 발급 받는다.")
     void loginSuccess() throws Exception {
         // given
-        when(memberService.findByEmail(any())).thenReturn(member);
+        when(memberRepository.findByEmail(any())).thenReturn(member);
         when(bCryptPasswordEncoder.matches(any(), any())).thenReturn(true);
 
         // When
@@ -81,7 +83,7 @@ class AuthControllerTest {
     @DisplayName("로그인에 실패하면 응답 상태코드로 401을 받는다.")
     void inValidPassword() throws Exception {
         // given
-        when(memberService.findByEmail(any())).thenReturn(member);
+        when(memberRepository.findByEmail(any())).thenReturn(member);
         when(bCryptPasswordEncoder.matches(any(), any())).thenReturn(false);
 
         // When
