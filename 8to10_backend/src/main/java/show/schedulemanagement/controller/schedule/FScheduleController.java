@@ -1,7 +1,6 @@
 package show.schedulemanagement.controller.schedule;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
@@ -9,6 +8,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,18 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.fschedule.FSchedule;
-import show.schedulemanagement.domain.schedule.fschedule.FScheduleDetail;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
-import show.schedulemanagement.dto.schedule.response.fschedule.FScheduleDetailUpdateResponse;
-import show.schedulemanagement.dto.schedule.response.fschedule.FScheduleUpdateResponse;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.fschedule.FScheduleDetailService;
 import show.schedulemanagement.service.schedule.fschedule.FScheduleService;
+import show.schedulemanagement.validator.ValidationSequence;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,7 +43,7 @@ public class FScheduleController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<ScheduleResponse>> add(
             @CurrentMember Member member,
-            @RequestBody @Valid FScheduleSave dto) {
+            @RequestBody @Validated(value = ValidationSequence.class) FScheduleSave dto) {
 
         FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
 
@@ -83,7 +80,7 @@ public class FScheduleController {
     @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateDetail(
             @CurrentMember Member member,
-            @RequestBody @Valid FScheduleDetailUpdate dto){
+            @RequestBody @Validated(value = ValidationSequence.class) FScheduleDetailUpdate dto){
 
         fScheduleDetailService.update(member, dto);
         return ResponseEntity.noContent().build();

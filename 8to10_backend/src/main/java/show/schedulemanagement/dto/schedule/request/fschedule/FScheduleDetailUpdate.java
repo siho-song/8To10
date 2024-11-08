@@ -5,21 +5,26 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
+import show.schedulemanagement.validator.ValidationGroups.FieldErrorGroup;
+import show.schedulemanagement.validator.ValidationGroups.ObjectErrorGroup;
 import show.schedulemanagement.validator.schedule.fielderror.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @Data
 @Builder
-@StartBeforeEnd
+@StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class FScheduleDetailUpdate implements DateRangeValidatable {
-    @NotNull
+    @NotNull(groups = FieldErrorGroup.class)
     private Long id;
+
     private String detailDescription;
-    @NotNull
-    @ZeroSeconds
+
+    @NotNull(groups = FieldErrorGroup.class)
+    @ZeroSeconds(groups = FieldErrorGroup.class)
     private LocalDateTime startDate;
-    @NotNull
-    @ZeroSeconds
+
+    @NotNull(groups = FieldErrorGroup.class)
+    @ZeroSeconds(groups = FieldErrorGroup.class)
     private LocalDateTime endDate;
 
     @Override
