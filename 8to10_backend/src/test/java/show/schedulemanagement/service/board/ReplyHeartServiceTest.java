@@ -12,6 +12,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.reply.ReplyHeartService;
 import show.schedulemanagement.service.board.reply.ReplyService;
@@ -76,6 +77,6 @@ class ReplyHeartServiceTest {
         Long replyId = 2L;
         Member member = memberService.getAuthenticatedMember();
 
-        assertThatThrownBy(() -> replyHeartService.delete(replyId, member)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> replyHeartService.delete(replyId, member)).isInstanceOf(NotFoundEntityException.class);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -76,6 +77,6 @@ class BoardScrapServiceTest {
 
         Long boardId = 2L;
         assertThatThrownBy(() -> boardScrapService.delete(member, boardId)).isInstanceOf(
-                EntityNotFoundException.class);
+                NotFoundEntityException.class);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -42,7 +43,7 @@ class BoardServiceTest {
 
         boardService.deleteById(member, boardId);
 
-        assertThatThrownBy(()->boardService.findById(1L)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(()->boardService.findById(1L)).isInstanceOf(NotFoundEntityException.class);
     }
 
     @Test

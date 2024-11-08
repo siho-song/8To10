@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -78,6 +79,6 @@ class BoardHeartServiceTest {
         Member member = memberService.getAuthenticatedMember();
 
         assertThatThrownBy(() -> boardHeartService.delete(boardId, member)).isInstanceOf(
-                EntityNotFoundException.class);
+                NotFoundEntityException.class);
     }
 }
