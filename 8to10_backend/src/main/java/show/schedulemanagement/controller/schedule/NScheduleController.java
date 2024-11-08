@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleDetailService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;
+import show.schedulemanagement.validator.ValidationSequence;
 
 @RestController
 @RequestMapping("/schedule/normal")
@@ -44,7 +46,7 @@ public class NScheduleController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Result<ScheduleResponse>> add(
             @CurrentMember Member member,
-            @RequestBody @Valid NScheduleSave dto)
+            @RequestBody @Validated(value = ValidationSequence.class) NScheduleSave dto)
     {
         NSchedule nSchedule = nScheduleService.create(member, dto);
         scheduleService.save(nSchedule);

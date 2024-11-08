@@ -8,6 +8,9 @@ public class FrequencyValidator implements ConstraintValidator<Frequency,String>
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value != null && value.matches(SCHEDULE_FREQUENCY_PATTERN);
+        if(value == null) {
+            return true;
+        }
+        return value.matches(SCHEDULE_FREQUENCY_PATTERN);
     }
 }

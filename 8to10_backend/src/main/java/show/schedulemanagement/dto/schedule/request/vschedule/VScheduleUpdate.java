@@ -6,19 +6,25 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Data;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
+import show.schedulemanagement.validator.ValidationGroups.FieldErrorGroup;
+import show.schedulemanagement.validator.ValidationGroups.ObjectErrorGroup;
 import show.schedulemanagement.validator.schedule.objecterror.StartBeforeEnd;
 
 @Data
-@StartBeforeEnd
+@StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class VScheduleUpdate implements DateRangeValidatable {
     private Long id;
-    @NotBlank
-    @Size(min = 1,max = 80)
+
+    @NotBlank(groups = FieldErrorGroup.class)
+    @Size(min = 1,max = 80 , groups = FieldErrorGroup.class)
     private String title;
+
     private String commonDescription;
-    @NotNull
+
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalDateTime startDate;
-    @NotNull
+
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalDateTime endDate;
 
     @Override

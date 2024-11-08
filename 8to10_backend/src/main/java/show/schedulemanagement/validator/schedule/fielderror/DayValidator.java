@@ -8,6 +8,9 @@ public class DayValidator implements ConstraintValidator<Day,String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value != null && value.matches(SCHEDULE_DAY_PATTERN);
+        if(value == null) {
+            return true;
+        }
+        return value.matches(SCHEDULE_DAY_PATTERN);
     }
 }

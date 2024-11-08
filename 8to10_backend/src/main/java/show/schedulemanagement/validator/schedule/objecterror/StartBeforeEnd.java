@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = StartBeforeEndValidator.class)
 public @interface StartBeforeEnd {
-    String message() default "{schedule.startBeforeEnd.message}}";
+    String message() default "{schedule.startBeforeEnd.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

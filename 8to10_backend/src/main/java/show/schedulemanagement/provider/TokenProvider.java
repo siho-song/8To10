@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import show.schedulemanagement.exception.ExceptionCode;
+import show.schedulemanagement.exception.InvalidTokenException;
 
 @Slf4j
 @Component
@@ -65,6 +67,12 @@ public class TokenProvider {
         return userId;
     }
 
+    public void validateRefreshToken(String refreshToken){
+        if(!isValidToken(refreshToken)){
+            throw new InvalidTokenException(ExceptionCode.INVALID_REFRESH_TOKEN);
+        }
+    }
+
     public boolean isValidToken(String token) {
         try {
             log.info("token : {} ", token);
@@ -81,6 +89,8 @@ public class TokenProvider {
             parseToken(token);
         } catch (ExpiredJwtException e) {
             return true;
+        } catch (JwtException | IllegalArgumentException e){
+            return false;
         }
         return false;
     }

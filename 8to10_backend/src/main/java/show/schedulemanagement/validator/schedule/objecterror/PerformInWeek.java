@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PerformInWeekValidator.class)
 public @interface PerformInWeek {
-    String message() default "{schedule.performInWeek.message}}";
+    String message() default "{schedule.performInWeek.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

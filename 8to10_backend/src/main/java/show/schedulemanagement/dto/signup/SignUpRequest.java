@@ -25,9 +25,11 @@ public class SignUpRequest {
     private String nickname;
 
     @Email
+    @NotBlank
     private String email;
 
     @Password
+    @NotBlank
     private String password;
 
     @PhoneNumber

@@ -15,6 +15,8 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 import show.schedulemanagement.dto.schedule.request.ScheduleSave;
+import show.schedulemanagement.validator.ValidationGroups.FieldErrorGroup;
+import show.schedulemanagement.validator.ValidationGroups.ObjectErrorGroup;
 import show.schedulemanagement.validator.schedule.fielderror.PerformInDay;
 import show.schedulemanagement.validator.schedule.fielderror.ZeroSeconds;
 import show.schedulemanagement.validator.schedule.objecterror.PerformInWeek;
@@ -25,24 +27,30 @@ import show.schedulemanagement.validator.schedule.objecterror.StartDateBeforeEqE
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Slf4j
-@PerformInWeek
-@StartDateBeforeEqEndDate
+@PerformInWeek(groups = ObjectErrorGroup.class)
+@StartDateBeforeEqEndDate(groups = ObjectErrorGroup.class)
 public class NScheduleSave extends ScheduleSave implements DateRangeValidatable {
-    @NotNull
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalDate startDate;
-    @NotNull
+
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalDate endDate;
-    @ZeroSeconds
-    @NotNull
+
+    @ZeroSeconds(groups = FieldErrorGroup.class)
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalTime bufferTime;
-    @PerformInDay
-    @ZeroSeconds
-    @NotNull
+
+    @PerformInDay(groups = FieldErrorGroup.class)
+    @ZeroSeconds(groups = FieldErrorGroup.class)
+    @NotNull(groups = FieldErrorGroup.class)
     private LocalTime performInDay;
-    @NotNull
+
+    @NotNull(groups = FieldErrorGroup.class)
     private Boolean isIncludeSaturday;
-    @NotNull
+
+    @NotNull(groups = FieldErrorGroup.class)
     private Boolean isIncludeSunday;
+
     private int totalAmount;
     private int performInWeek;
 
