@@ -22,7 +22,7 @@ class SignUpControllerTest {
         mockMvc.perform(post("/signup")
                         .content("username=송시호&nickname=쇼쇼&email=thdtlgh234@naver.com&password=aksdf124124!&gender=MALE&mode=SPICY&authEmail=true&authPhone=true&phoneNumber=01099921438&wakeUpTime=08:00:00&bedTime=08:00:00")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isNoContent());
     }
 
     @Test
