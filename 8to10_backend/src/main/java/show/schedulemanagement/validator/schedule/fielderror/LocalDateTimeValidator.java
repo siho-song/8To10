@@ -7,11 +7,8 @@ import java.time.LocalDateTime;
 public class LocalDateTimeValidator implements ConstraintValidator<ZeroSeconds , LocalDateTime> {
     @Override
     public boolean isValid(LocalDateTime value, ConstraintValidatorContext constraintValidatorContext) {
-        if(value == null){
-            constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate("null 일 수 없습니다.")
-                    .addConstraintViolation();
-            return false;
+        if (value == null) {
+            return true;
         }
         return value.getSecond() == 0;
     }
