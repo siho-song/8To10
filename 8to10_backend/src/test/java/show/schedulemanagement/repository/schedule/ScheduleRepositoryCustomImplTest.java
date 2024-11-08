@@ -1,20 +1,14 @@
 package show.schedulemanagement.repository.schedule;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import jakarta.persistence.EntityManager;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.repository.member.MemberRepository;
 import show.schedulemanagement.service.MemberService;
 
 @SpringBootTest
@@ -29,7 +23,7 @@ class ScheduleRepositoryCustomImplTest {
 
 
     @Test
-    void findAllBetweenStartAndEnd() {
+    void findAllBetweenStartAndEnd() { //TODO 테스트 수정
         Member member = memberService.findByEmail("normal@example.com");
         System.out.println("findAllBetweenStartAndEnd findByEmail 실행");
 

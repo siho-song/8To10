@@ -27,7 +27,7 @@ class ReplyServiceTest {
 
     @Test
     @DisplayName("이메일로 댓글과 댓글의 게시판,멤버 함께 조회")
-    void findAllWithBoardAndMemberByEmail() {
+    void findAllWithBoardAndMemberByEmail() { //TODO 테스트 수정
         Member member = memberService.findByEmail("normal@example.com");
 
         List<Reply> allByMemberEmail = replyService.findAllWithBoardAndMemberByEmail(member);

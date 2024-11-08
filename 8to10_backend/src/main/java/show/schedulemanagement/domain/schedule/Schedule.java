@@ -47,5 +47,6 @@ public abstract class Schedule extends BaseEntity {
 
     @Column(nullable = false)
     protected LocalDateTime endDate;
+
     public abstract List<ScheduleAble> getScheduleAbles();
 }
