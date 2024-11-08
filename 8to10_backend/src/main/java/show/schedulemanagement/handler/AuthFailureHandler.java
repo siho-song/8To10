@@ -8,13 +8,20 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import java.io.IOException;
+import show.schedulemanagement.exception.UserAuthenticationException;
 
 @Slf4j
 public class AuthFailureHandler implements AuthenticationFailureHandler {
 
+    private final AuthFilterExceptionHandler authFilterExceptionHandler;
+
+    public AuthFailureHandler(AuthFilterExceptionHandler authFilterExceptionHandler) {
+        this.authFilterExceptionHandler = authFilterExceptionHandler;
+    }
+
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.error("Authentication failed: {}", exception.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException, ServletException {
+        authFilterExceptionHandler.handleException(response, exception);
     }
 }
