@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = StartDateBeforeEqEndDateValidator.class)
 public @interface StartDateBeforeEqEndDate {
-    String message() default "{schedule.startEqualBeforeEnd.message}}";
+    String message() default "{schedule.startEqualBeforeEnd.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
