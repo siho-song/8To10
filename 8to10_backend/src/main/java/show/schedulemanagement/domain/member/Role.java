@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public enum Role {
 
-    ADMIN("관리자"),NORMAL_USER("일반 유저"), FAITHFUL_USER("일정을 잘 지키는 유저");
+    ADMIN("관리자"),NORMAL_USER("일반 유저"), FAITHFUL_USER("성실 유저");
 
-    private final String role;
+    private final String value;
 
-    Role(String role) {
-        this.role = role;
+    Role(String value) {
+        this.value = value;
     }
 }
