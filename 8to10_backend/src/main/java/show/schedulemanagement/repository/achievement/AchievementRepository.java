@@ -10,7 +10,7 @@ import show.schedulemanagement.domain.member.Member;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
 
-    Optional<Achievement> findByAchievementDate(LocalDate achievementDate);
+    Optional<Achievement> findByMemberAndAchievementDate(Member member, LocalDate achievementDate);
 
     @Query("select a from Achievement a where a.member = :member and a.achievementDate between :start and :end")
     List<Achievement> findAllBetweenStartAndEnd(Member member, LocalDate start, LocalDate end);

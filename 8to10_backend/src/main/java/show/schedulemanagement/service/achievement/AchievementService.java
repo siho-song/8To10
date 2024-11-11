@@ -23,6 +23,11 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final NScheduleDetailRepository nScheduleDetailRepository;
 
+    public Achievement findByMemberAndDateIfExists(Member member, LocalDate date){
+        return achievementRepository.findByMemberAndAchievementDate(member, date)
+                .orElse(null);
+    }
+    
     public List<Achievement> findAllBetweenYearAndMonth(Member member, int year, int month){
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = LocalDate.of(year, month, start.lengthOfMonth());
@@ -39,7 +44,7 @@ public class AchievementService {
                 date,
                 member.getEmail());
 
-        Achievement achievement = achievementRepository.findByAchievementDate(date)
+        Achievement achievement = achievementRepository.findByMemberAndAchievementDate(member, date)
                 .orElse(Achievement.createAchievement(member, date, getAchievementRate(nScheduleDetails)));
 
         achievementRepository.save(achievement);
