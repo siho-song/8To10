@@ -12,12 +12,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
 import show.schedulemanagement.domain.board.Board;
+import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
 import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
+import show.schedulemanagement.dto.mypage.ScrappedBoardResponse;
+import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
 
@@ -30,6 +33,9 @@ class MyPageServiceTest {
 
     @MockBean
     ReplyService replyService;
+
+    @MockBean
+    BoardScrapService boardScrapService;
 
     @Autowired
     MyPageService myPageService;
@@ -93,5 +99,27 @@ class MyPageServiceTest {
 
         //then
         assertThat(items).hasSize(replies.size());
+    }
+
+    @Test
+    @DisplayName("유저가 스크랩한 게시글을 불러온다.")
+    @WithUserDetails("normal@example.com")
+    void getScrappedBoard() {
+        //given
+        Member member = memberService.getAuthenticatedMember();
+        Board board1 = Board.builder().id(1L).build();
+        Board board2 = Board.builder().id(2L).build();
+        BoardScrap boardScrap1 = BoardScrap.builder().member(member).board(board1).build();
+        BoardScrap boardScrap2 = BoardScrap.builder().member(member).board(board2).build();
+        List<BoardScrap> boardScraps = List.of(boardScrap1, boardScrap2);
+
+        when(boardScrapService.findAllByMemberWithBoard(member)).thenReturn(boardScraps);
+
+        //when
+        Result<ScrappedBoardResponse> result = myPageService.getScrappedBoard(member);
+        List<ScrappedBoardResponse> items = result.getItems();
+
+        //then
+        assertThat(items).hasSize(boardScraps.size());
     }
 }
