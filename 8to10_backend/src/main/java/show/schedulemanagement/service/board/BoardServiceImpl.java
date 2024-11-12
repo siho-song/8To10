@@ -2,6 +2,7 @@ package show.schedulemanagement.service.board;
 
 import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_BOARD;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -56,6 +57,11 @@ public class BoardServiceImpl implements BoardService {
     public Board findByIdWithRepliesAndMember(Long id) {
         return boardRepository.findByIdWithRepliesAndMember(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_BOARD));
+    }
+
+    @Override
+    public List<Board> findAllByMember(Member member) {
+        return boardRepository.findAllByMember(member);
     }
 
     @Override
