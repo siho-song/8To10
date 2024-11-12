@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
@@ -140,5 +141,24 @@ class MyPageServiceTest {
         Member updatedMember = memberService.findById(member.getId());
         assertThat(updatedMember.getNickname()).isEqualTo(updateNickname);
         myPageService.updateNickname(beforeNickname,member.getId());
+    }
+
+    @Test
+    @DisplayName("유저의 비밀번호를 업데이트 한다.")
+    @WithUserDetails("normal@example.com")
+    void updatePassword() {
+        //given
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Member member = memberService.getAuthenticatedMember();
+        String beforePassword = member.getPassword();
+        String updatePassword = "newPassword12!";
+
+        //when
+        myPageService.updatePassword(updatePassword, member.getId());
+
+        //then
+        Member updatedMember = memberService.findById(member.getId());
+        assertThat(encoder.matches(updatePassword,updatedMember.getPassword())).isTrue();
+        myPageService.updatePassword(beforePassword,member.getId());
     }
 }

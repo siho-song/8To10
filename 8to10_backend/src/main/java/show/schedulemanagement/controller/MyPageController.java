@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
@@ -15,6 +14,7 @@ import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
 import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.NicknameUpdateRequest;
+import show.schedulemanagement.dto.mypage.PasswordUpdateRequest;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
 import show.schedulemanagement.dto.mypage.ScrappedBoardResponse;
 import show.schedulemanagement.service.MyPageService;
@@ -52,6 +52,15 @@ public class MyPageController {
             @CurrentMember Member member)
     {
         myPageService.updateNickname(dto.getNickname(), member.getId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/account/password")
+    public ResponseEntity<Void> updatePassword(
+            @RequestBody @Valid PasswordUpdateRequest dto,
+            @CurrentMember Member member)
+    {
+        myPageService.updatePassword(dto.getPassword(), member.getId());
         return ResponseEntity.noContent().build();
     }
 }

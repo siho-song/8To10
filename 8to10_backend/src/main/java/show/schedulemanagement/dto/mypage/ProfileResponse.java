@@ -13,7 +13,7 @@ public class ProfileResponse {
     private String role;
     private String profileImageUrl;
 
-    public static ProfileResponse of(Member member){
+    public static ProfileResponse from(Member member){
         ProfileResponse response = new ProfileResponse();
         response.email = member.getEmail();
         response.nickname = member.getNickname();

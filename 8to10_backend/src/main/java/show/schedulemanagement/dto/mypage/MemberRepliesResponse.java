@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,7 +16,7 @@ public class MemberRepliesResponse {
     private long totalLike;
     private LocalDateTime createdAt;
 
-    public static MemberRepliesResponse of(Reply reply){
+    public static MemberRepliesResponse from(Reply reply){
         MemberRepliesResponse memberRepliesResponse = new MemberRepliesResponse();
         memberRepliesResponse.replyId = reply.getId();
         memberRepliesResponse.boardId = reply.getBoard().getId();
