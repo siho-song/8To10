@@ -160,4 +160,24 @@ class MyPageControllerTest {
         //then
         resultActions.andExpect(status().isNoContent());
     }
+
+    @Test
+    @DisplayName("비밀번호를 업데이트 한다.")
+    @Transactional
+    void updatePassword() throws Exception {
+
+        //given
+        String updatePassword = "newPassword12!";
+
+        //when
+        ResultActions resultActions = mockMvc.perform(put("/mypage/account/password")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .contentType(APPLICATION_JSON)
+                .content("{\"password\": \"" + updatePassword + "\"}")
+        );
+
+        //then
+        resultActions.andExpect(status().isNoContent());
+    }
 }
