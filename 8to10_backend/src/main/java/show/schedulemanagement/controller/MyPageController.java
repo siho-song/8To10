@@ -9,6 +9,7 @@ import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
+import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
 import show.schedulemanagement.service.MyPageService;
 
@@ -27,5 +28,10 @@ public class MyPageController {
     @GetMapping("/boards")
     public ResponseEntity<Result<MemberBoardsResponse>> getBoards(@CurrentMember Member member) {
         return ResponseEntity.ok(myPageService.getMemberBoards(member));
+    }
+
+    @GetMapping("/replies")
+    public ResponseEntity<Result<MemberRepliesResponse>> getReplies(@CurrentMember Member member) {
+        return ResponseEntity.ok(myPageService.getMemberReplies(member));
     }
 }
