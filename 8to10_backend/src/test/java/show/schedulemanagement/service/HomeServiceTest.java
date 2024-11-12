@@ -41,7 +41,7 @@ class HomeServiceTest {
         //given
         Member member = memberService.getAuthenticatedMember();
         when(achievementService.findByMemberAndDateIfExists(eq(member), any()))
-                .thenThrow(NotFoundEntityException.class);
+                .thenReturn(null);
 
         //when
         UserStatsResponse response = homeService.getDailyUserStats(member);
