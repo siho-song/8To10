@@ -25,6 +25,12 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
 
     @Override
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_MEMBER));
+    }
+
+    @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_MEMBER));

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
@@ -121,5 +122,23 @@ class MyPageServiceTest {
 
         //then
         assertThat(items).hasSize(boardScraps.size());
+    }
+
+    @Test
+    @DisplayName("유저의 닉네임을 업데이트 한다.")
+    @WithUserDetails("normal@example.com")
+    void updateNickname() {
+        //given
+        Member member = memberService.getAuthenticatedMember();
+        String beforeNickname = member.getNickname();
+        String updateNickname = "업데이트된닉네임";
+
+        //when
+        myPageService.updateNickname(updateNickname, member.getId());
+
+        //then
+        Member updatedMember = memberService.findById(member.getId());
+        assertThat(updatedMember.getNickname()).isEqualTo(updateNickname);
+        myPageService.updateNickname(beforeNickname,member.getId());
     }
 }

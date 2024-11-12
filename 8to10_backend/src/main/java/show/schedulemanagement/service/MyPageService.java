@@ -25,6 +25,7 @@ public class MyPageService {
     private final BoardService boardService;
     private final BoardScrapService boardScrapService;
     private final ReplyService replyService;
+    private final MemberService memberService;
 
     public ProfileResponse getProfile(Member member) {
         return ProfileResponse.of(member);
@@ -43,5 +44,11 @@ public class MyPageService {
     public Result<ScrappedBoardResponse> getScrappedBoard(Member member) {
         List<BoardScrap> boardScraps = boardScrapService.findAllByMemberWithBoard(member);
         return Result.fromElements(boardScraps, boardScrap -> ScrappedBoardResponse.from(boardScrap.getBoard()));
+    }
+
+    @Transactional
+    public void updateNickname(String nickname, Long memberId) {
+        Member member = memberService.findById(memberId);
+        member.updateNickname(nickname);
     }
 }
