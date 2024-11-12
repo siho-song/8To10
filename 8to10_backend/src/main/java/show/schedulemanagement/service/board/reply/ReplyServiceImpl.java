@@ -52,6 +52,11 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public List<Reply> findAllByMemberWithBoard(Member member) {
+        return replyRepository.findAllByMemberWithBoard(member);
+    }
+
+    @Override
     public List<Reply> findAllWithBoardAndMemberByEmail(Member member) {
         String email = member.getEmail();
         return replyRepository.findAllWithBoardAndMemberByEmail(email);
