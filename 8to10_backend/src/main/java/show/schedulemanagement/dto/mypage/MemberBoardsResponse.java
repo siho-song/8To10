@@ -16,7 +16,7 @@ public class MemberBoardsResponse {
     private long totalScrap;
     private LocalDateTime createdAt;
 
-    public static MemberBoardsResponse of(Board board){
+    public static MemberBoardsResponse from(Board board){
         MemberBoardsResponse memberBoardsResponse = new MemberBoardsResponse();
         memberBoardsResponse.boardId = board.getId();
         memberBoardsResponse.title = board.getTitle();
