@@ -3,6 +3,7 @@ package show.schedulemanagement.service.board;
 import static show.schedulemanagement.exception.ExceptionCode.DUPLICATED_BOARD_SCRAP;
 import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_BOARD_SCRAP;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,10 @@ public class BoardScrapServiceImpl implements BoardScrapService{
         BoardScrap boardScrap = findByMemberAndBoardId(member, boardId);
         boardScrapRepository.delete(boardScrap);
         publisher.publishEvent(new BoardScrapSubEvent(boardId));
+    }
+
+    @Override
+    public List<BoardScrap> findAllByMemberWithBoard(Member member) {
+        return boardScrapRepository.findAllByMemberWithBoard(member);
     }
 }

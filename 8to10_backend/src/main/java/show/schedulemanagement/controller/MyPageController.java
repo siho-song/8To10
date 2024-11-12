@@ -11,6 +11,7 @@ import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
 import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
+import show.schedulemanagement.dto.mypage.ScrappedBoardResponse;
 import show.schedulemanagement.service.MyPageService;
 
 @RestController
@@ -33,5 +34,10 @@ public class MyPageController {
     @GetMapping("/replies")
     public ResponseEntity<Result<MemberRepliesResponse>> getReplies(@CurrentMember Member member) {
         return ResponseEntity.ok(myPageService.getMemberReplies(member));
+    }
+
+    @GetMapping("/scrapped-boards")
+    public ResponseEntity<Result<ScrappedBoardResponse>> getScrapBoards(@CurrentMember Member member) {
+        return ResponseEntity.ok(myPageService.getScrappedBoard(member));
     }
 }

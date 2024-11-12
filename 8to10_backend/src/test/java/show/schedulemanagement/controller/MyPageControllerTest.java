@@ -18,8 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import show.schedulemanagement.domain.board.Board;
+import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.provider.TokenProvider;
+import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
 
@@ -33,6 +35,9 @@ class MyPageControllerTest {
 
     @MockBean
     ReplyService replyService;
+
+    @MockBean
+    BoardScrapService boardScrapService;
 
     @Autowired
     MockMvc mockMvc;
@@ -99,6 +104,32 @@ class MyPageControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(get("/mypage/replies")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+        );
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(3));
+    }
+
+    @Test
+    @DisplayName("유저가 스크랩한 게시글들을 불러온다.")
+    void getScrappedBoards() throws Exception {
+        //given
+        Board board1 = Board.builder().id(1L).build();
+        Board board2 = Board.builder().id(2L).build();
+        Board board3 = Board.builder().id(3L).build();
+
+        BoardScrap boardScrap1 = BoardScrap.builder().id(1L).board(board1).build();
+        BoardScrap boardScrap2 = BoardScrap.builder().id(2L).board(board2).build();
+        BoardScrap boardScrap3 = BoardScrap.builder().id(3L).board(board3).build();
+
+        when(boardScrapService.findAllByMemberWithBoard(any())).thenReturn(
+                List.of(boardScrap1, boardScrap2, boardScrap3));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/mypage/scrapped-boards")
                 .accept(APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
         );
