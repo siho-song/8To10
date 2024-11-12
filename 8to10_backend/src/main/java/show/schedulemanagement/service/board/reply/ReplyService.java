@@ -10,6 +10,7 @@ public interface ReplyService {
     Reply findById(Long id);
     Reply findByIdWithParent(Long id);
     Reply findByIdWithMemberAndParent(Long id);
+    List<Reply> findAllByMemberWithBoard(Member member);
     List<Reply> findAllWithBoardAndMemberByEmail(Member member);
     List<Reply> findNestedRepliesByParent(Reply reply);
     void deleteByReplies(List<Reply> replies);

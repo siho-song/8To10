@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
+import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
+import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
 import show.schedulemanagement.service.board.BoardService;
+import show.schedulemanagement.service.board.reply.ReplyService;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,6 +20,7 @@ import show.schedulemanagement.service.board.BoardService;
 public class MyPageService {
 
     private final BoardService boardService;
+    private final ReplyService replyService;
 
     public ProfileResponse getProfile(Member member) {
         return ProfileResponse.of(member);
@@ -27,4 +31,8 @@ public class MyPageService {
         return Result.fromElements(boards, MemberBoardsResponse::of);
     }
 
+    public Result<MemberRepliesResponse> getMemberReplies(Member member) {
+        List<Reply> replies = replyService.findAllByMemberWithBoard(member);
+        return Result.fromElements(replies, MemberRepliesResponse::of);
+    }
 }

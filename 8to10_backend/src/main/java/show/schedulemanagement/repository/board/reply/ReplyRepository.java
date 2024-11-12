@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import show.schedulemanagement.domain.board.reply.Reply;
+import show.schedulemanagement.domain.member.Member;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @EntityGraph(attributePaths = "parent")
@@ -24,6 +25,10 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     @Query("select r from Reply r where r.parent = :parent")
     List<Reply> findNestedRepliesByParent(@Param(value = "parent") Reply parent);
+
+    @EntityGraph(attributePaths = {"board"})
+    @Query("select r from Reply r where r.member = :member")
+    List<Reply> findAllByMemberWithBoard(Member member);
 
     @Modifying
     @Query("delete from Reply r where r in :replies")
