@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
@@ -48,7 +50,7 @@ class MyPageControllerTest {
     String token;
 
     @BeforeEach
-    void init(){
+    void init() {
         token = tokenProvider.generateAccessToken("normal@example.com");
     }
 
@@ -58,7 +60,7 @@ class MyPageControllerTest {
 
         ResultActions resultActions = mockMvc.perform(get("/mypage")
                 .accept(APPLICATION_JSON)
-                .header("Authorization","Bearer " + token)
+                .header("Authorization", "Bearer " + token)
         );
 
         resultActions.andExpect(status().isOk())
@@ -100,7 +102,7 @@ class MyPageControllerTest {
         Reply reply2 = Reply.builder().id(2L).board(board2).build();
         Reply reply3 = Reply.builder().id(3L).board(board3).build();
 
-        when(replyService.findAllByMemberWithBoard(any())).thenReturn(List.of(reply1,reply2,reply3));
+        when(replyService.findAllByMemberWithBoard(any())).thenReturn(List.of(reply1, reply2, reply3));
 
         //when
         ResultActions resultActions = mockMvc.perform(get("/mypage/replies")
@@ -137,5 +139,25 @@ class MyPageControllerTest {
         //then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3));
+    }
+
+    @Test
+    @DisplayName("닉네임을 업데이트 한다.")
+    @Transactional
+    void updateNickname() throws Exception {
+
+        //given
+        String updateNickname = "업데이트될닉네임";
+
+        //when
+        ResultActions resultActions = mockMvc.perform(put("/mypage/account/nickname")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .contentType(APPLICATION_JSON)
+                .content("{\"nickname\": \"" + updateNickname + "\"}")
+        );
+
+        //then
+        resultActions.andExpect(status().isNoContent());
     }
 }
