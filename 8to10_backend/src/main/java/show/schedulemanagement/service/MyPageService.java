@@ -2,6 +2,7 @@ package show.schedulemanagement.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
@@ -27,18 +28,20 @@ public class MyPageService {
     private final ReplyService replyService;
     private final MemberService memberService;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public ProfileResponse getProfile(Member member) {
-        return ProfileResponse.of(member);
+        return ProfileResponse.from(member);
     }
 
     public Result<MemberBoardsResponse> getMemberBoards(Member member) {
         List<Board> boards = boardService.findAllByMember(member);
-        return Result.fromElements(boards, MemberBoardsResponse::of);
+        return Result.fromElements(boards, MemberBoardsResponse::from);
     }
 
     public Result<MemberRepliesResponse> getMemberReplies(Member member) {
         List<Reply> replies = replyService.findAllByMemberWithBoard(member);
-        return Result.fromElements(replies, MemberRepliesResponse::of);
+        return Result.fromElements(replies, MemberRepliesResponse::from);
     }
 
     public Result<ScrappedBoardResponse> getScrappedBoard(Member member) {
@@ -50,5 +53,12 @@ public class MyPageService {
     public void updateNickname(String nickname, Long memberId) {
         Member member = memberService.findById(memberId);
         member.updateNickname(nickname);
+    }
+
+    @Transactional
+    public void updatePassword(String password, Long memberId) {
+        Member member = memberService.findById(memberId);
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        member.updatePassword(encodedPassword);
     }
 }
