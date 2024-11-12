@@ -31,10 +31,9 @@ import show.schedulemanagement.dto.signup.SignUpRequest;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-@Table(name = "MEMBER")
 @DynamicInsert
-@ToString(exclude = {"memberRoles"})
 @Builder
+@ToString
 public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
@@ -110,5 +109,9 @@ public class Member extends BaseEntity {
 
     public boolean isSameEmail(String email) {
         return this.email.equals(email);
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
