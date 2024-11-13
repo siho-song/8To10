@@ -1,10 +1,16 @@
 package show.schedulemanagement.service;
 
+import static show.schedulemanagement.exception.ExceptionCode.REQUIRE_CONTENT_TYPE;
+import static show.schedulemanagement.exception.ExceptionCode.REQUIRE_IMAGE_FILE;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import show.schedulemanagement.constant.AppConstant;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
@@ -14,6 +20,7 @@ import show.schedulemanagement.dto.mypage.MemberBoardsResponse;
 import show.schedulemanagement.dto.mypage.MemberRepliesResponse;
 import show.schedulemanagement.dto.mypage.ProfileResponse;
 import show.schedulemanagement.dto.mypage.ScrappedBoardResponse;
+import show.schedulemanagement.exception.BadRequestException;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
@@ -27,6 +34,7 @@ public class MyPageService {
     private final BoardScrapService boardScrapService;
     private final ReplyService replyService;
     private final MemberService memberService;
+    private final MultipartFileStorageService multiPartFileStorageService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -60,5 +68,29 @@ public class MyPageService {
         Member member = memberService.findById(memberId);
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         member.updatePassword(encodedPassword);
+    }
+
+    @Transactional
+    public void uploadProfilePhoto(Member member, MultipartFile file) throws IOException {
+        validateImageFileType(file.getContentType());
+        Member findMember = memberService.findById(member.getId());
+
+        String profileImageUrl = findMember.getImageFile();
+        if(profileImageUrl != null){
+            multiPartFileStorageService.deleteFile(profileImageUrl);
+        }
+
+        String savedFilePath = multiPartFileStorageService.saveFile(file, AppConstant.imageFilePath);
+        findMember.updateProfilePhoto(savedFilePath);
+    }
+
+    private void validateImageFileType(String contentType) {
+        if(contentType == null) {
+            throw new BadRequestException(REQUIRE_CONTENT_TYPE);
+        }
+
+        if (!contentType.startsWith("image/")) {
+            throw new BadRequestException(REQUIRE_IMAGE_FILE);
+        }
     }
 }
