@@ -1,13 +1,18 @@
 package show.schedulemanagement.controller;
 
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
@@ -44,6 +49,14 @@ public class MyPageController {
     @GetMapping("/scrapped-boards")
     public ResponseEntity<Result<ScrappedBoardResponse>> getScrapBoards(@CurrentMember Member member) {
         return ResponseEntity.ok(myPageService.getScrappedBoard(member));
+    }
+
+    @PutMapping(value = "/profile/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadProfilePhoto(
+            @CurrentMember Member member,
+            @RequestParam(name = "file") MultipartFile file) throws IOException {
+        myPageService.uploadProfilePhoto(member, file);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/account/nickname")
