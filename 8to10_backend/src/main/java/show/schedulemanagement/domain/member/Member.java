@@ -66,8 +66,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Mode mode;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "xxx") //TODO 기본 이미지 파일 생성 후 , value 값 수정
     private String imageFile;
 
     @Column(nullable = false)
@@ -117,5 +115,9 @@ public class Member extends BaseEntity {
 
     public void updatePassword(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    public void updateProfilePhoto(String filePath) {
+        this.imageFile = filePath;
     }
 }
