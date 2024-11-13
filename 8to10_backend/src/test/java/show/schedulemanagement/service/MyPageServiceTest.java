@@ -1,15 +1,20 @@
 package show.schedulemanagement.service;
 
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +49,9 @@ class MyPageServiceTest {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    MultipartFileStorageService multipartFileStorageService;
 
     @Test
     @DisplayName("유저의 프로필을 불러온다.")
@@ -160,5 +168,22 @@ class MyPageServiceTest {
         Member updatedMember = memberService.findById(member.getId());
         assertThat(encoder.matches(updatePassword,updatedMember.getPassword())).isTrue();
         myPageService.updatePassword(beforePassword,member.getId());
+    }
+
+    @Test
+    @DisplayName("유저의 프로필 사진을 등록,업데이트 한다.")
+    @WithUserDetails("normal@example.com")
+    void uploadProfilePhoto() throws IOException {
+        //given
+        Member member = memberService.getAuthenticatedMember();
+        MockMultipartFile imageFile = new MockMultipartFile("file", "testFile.jpg", "image/jpg",
+                "Test image content".getBytes());
+        //when
+        myPageService.uploadProfilePhoto(member, imageFile);
+
+        //then
+        Member findMember = memberService.findById(member.getId());
+        assertThat(findMember.getImageFile()).isNotNull();
+        multipartFileStorageService.deleteFile(findMember.getImageFile());
     }
 }
