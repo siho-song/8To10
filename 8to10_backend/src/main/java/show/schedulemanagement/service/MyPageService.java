@@ -84,6 +84,16 @@ public class MyPageService {
         findMember.updateProfilePhoto(savedFilePath);
     }
 
+    @Transactional
+    public void deleteProfilePhoto(Member member) {
+        Member findMember = memberService.findById(member.getId());
+        String imageFileUrl = findMember.getImageFile();
+        if(imageFileUrl != null){
+            multiPartFileStorageService.deleteFile(imageFileUrl);
+            findMember.updateProfilePhoto(null);
+        }
+    }
+
     private void validateImageFileType(String contentType) {
         if(contentType == null) {
             throw new BadRequestException(REQUIRE_CONTENT_TYPE);

@@ -2,7 +2,6 @@ package show.schedulemanagement.service.signup;
 
 import static show.schedulemanagement.exception.ExceptionCode.*;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.signup.SignUpRequest;
 import show.schedulemanagement.exception.BadRequestException;
-import show.schedulemanagement.exception.ExceptionCode;
-import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.member.MemberRepository;
 
 @Service
@@ -30,7 +27,7 @@ public class SignUpService {
             throw new BadRequestException(SIGNUP_FAILED);
         }
         encodePassword(signUpRequest);
-        Member member = Member.of(signUpRequest);
+        Member member = Member.from(signUpRequest);
         memberRepository.save(member);
     }
 

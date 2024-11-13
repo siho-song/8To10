@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
+import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.provider.TokenProvider;
+import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
@@ -43,6 +46,9 @@ class MyPageControllerTest {
 
     @MockBean
     BoardScrapService boardScrapService;
+
+    @MockBean
+    MemberService memberService;
 
     @Autowired
     MockMvc mockMvc;
@@ -199,6 +205,27 @@ class MyPageControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .contentType(MULTIPART_FORM_DATA)
                 .with(request -> { request.setMethod("PUT"); return request; })
+        );
+
+        //then
+        resultActions.andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("프로필 사진을 삭제한다.")
+    @Transactional
+    void deletePhoto() throws Exception {
+        //given
+        Member member = new Member(1L, "test", null, null,
+                null, null, null, null, null,
+                "testImage.jpg", null, false, false);
+
+        when(memberService.findById(any())).thenReturn(member);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(delete("/mypage/profile/photo")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
         );
 
         //then
