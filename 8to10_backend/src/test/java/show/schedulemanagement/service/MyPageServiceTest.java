@@ -176,7 +176,10 @@ class MyPageServiceTest {
     void uploadProfilePhoto() throws IOException {
         //given
         Member member = memberService.getAuthenticatedMember();
-        MockMultipartFile imageFile = new MockMultipartFile("file", "testFile.jpg", "image/jpg",
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "file",
+                "testFile.jpg",
+                "image/jpg",
                 "Test image content".getBytes());
         //when
         myPageService.uploadProfilePhoto(member, imageFile);
@@ -185,5 +188,27 @@ class MyPageServiceTest {
         Member findMember = memberService.findById(member.getId());
         assertThat(findMember.getImageFile()).isNotNull();
         multipartFileStorageService.deleteFile(findMember.getImageFile());
+    }
+
+    @Test
+    @DisplayName("유저의 프로필 사진을 삭제 한다.")
+    @WithUserDetails("normal@example.com")
+    void deleteProfilePhoto() throws IOException {
+        //given
+        Member member = memberService.getAuthenticatedMember();
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "file",
+                "testFile.jpg",
+                "image/jpg",
+                "Test image content".getBytes());
+
+        myPageService.uploadProfilePhoto(member, imageFile);
+
+        //when
+        myPageService.deleteProfilePhoto(member);
+
+        //then
+        Member findMember = memberService.findById(member.getId());
+        assertThat(findMember.getImageFile()).isNull();
     }
 }
