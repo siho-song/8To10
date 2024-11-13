@@ -33,6 +33,10 @@ public enum ExceptionCode {
     NOT_FOUND_REPLY_HEART(5021, "댓글 좋아요를 찾을 수 없습니다."),
     DUPLICATED_REPLY_HEART(5022, "이미 좋아요 한 댓글입니다."),
 
+    REQUIRE_IMAGE_FILE(6001, "이미지 파일만 등록 가능합니다."),
+    REQUIRE_FILE_NAME(6002, "파일 이름은 필수입니다."),
+    REQUIRE_CONTENT_TYPE(6003, "파일의 Content-Type은 필수 입니다."),
+
     NOT_FOUND_REFRESH_TOKEN(9001, "REFRESH TOKEN 을 찾을 수 없습니다"),
     INVALID_ACCESS_TOKEN(9002,"유효하지 않은 ACCESS TOKEN 입니다."),
     INVALID_REFRESH_TOKEN(9003,"유효하지 않은 REFRESH TOKEN 입니다."),

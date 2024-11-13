@@ -42,6 +42,7 @@ out/
 
 ### resources ###
 **/src/main/resources/static/lib/**
+upload/**
 
 ### main/generated ###
 **/src/main/generated

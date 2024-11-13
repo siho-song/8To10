@@ -3,7 +3,9 @@ package show.schedulemanagement.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -175,6 +178,27 @@ class MyPageControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .contentType(APPLICATION_JSON)
                 .content("{\"password\": \"" + updatePassword + "\"}")
+        );
+
+        //then
+        resultActions.andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("프로필 사진을 업로드 한다.")
+    @Transactional
+    void uploadPhoto() throws Exception {
+
+        //given
+        MockMultipartFile file = new MockMultipartFile("file", "testFile.jpg", "image/jpg", "Test Contetnt".getBytes());
+
+        //when
+        ResultActions resultActions = mockMvc.perform(multipart("/mypage/profile/photo")
+                .file(file)
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .contentType(MULTIPART_FORM_DATA)
+                .with(request -> { request.setMethod("PUT"); return request; })
         );
 
         //then
