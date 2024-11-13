@@ -4,24 +4,17 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Collate;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
@@ -84,7 +77,7 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public static Member of(SignUpRequest signUpRequest){
+    public static Member from(SignUpRequest signUpRequest){
         return Member.builder()
                 .username(signUpRequest.getUsername())
                 .nickname(signUpRequest.getNickname())
