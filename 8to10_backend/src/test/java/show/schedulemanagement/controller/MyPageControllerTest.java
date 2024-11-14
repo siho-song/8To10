@@ -205,7 +205,6 @@ class MyPageControllerTest {
     @Transactional
     void uploadPhoto() throws Exception {
 
-
         //given
         MockMultipartFile file = new MockMultipartFile("file", "testFile.jpg", "image/jpg", "Test Contetnt".getBytes());
         Member member = new Member(1L, "test", null, null,
@@ -225,6 +224,10 @@ class MyPageControllerTest {
 
         //then
         resultActions.andExpect(status().isNoContent());
+        mockMvc.perform(delete("/mypage/profile/photo")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+        );
     }
 
     @Test
