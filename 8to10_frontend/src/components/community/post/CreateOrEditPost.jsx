@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 import PropTypes from "prop-types";
 import api from "@/api/api.js";
@@ -8,8 +8,10 @@ function CreateOrEditPost({ isEditMode }) {
     const [title, setTitle] = useState('');
     const [contents, setContents] = useState('');
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const id = useParams();
+
+    const location = useLocation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,34 +55,10 @@ function CreateOrEditPost({ isEditMode }) {
     };
 
     useEffect(() => {
-        if (isEditMode && id) {
-            const loadPostData = async () => {
-
-                try {
-                    const accessToken = localStorage.getItem('authorization');
-                    const response = await fetch(`/api/community/board/${id.postId}`, {
-                        method: 'GET',
-                        headers: {
-                            'authorization': `Bearer ${accessToken}`,
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('서버와의 통신에 실패했습니다.');
-                    }
-
-                    const boardData = await response.json();
-
-                    console.log("boardData : ", boardData);
-
-                    setTitle(boardData.title);
-                    setContents(boardData.contents);
-                } catch (error) {
-                    console.error("Error : ", error);
-                }
-            }
-
-            loadPostData();
+        if (isEditMode && id && location.state) {
+            const { title: initialTitle, contents: initialContents } = location.state;
+            setTitle(initialTitle || '');
+            setContents(initialContents || '');
         }
     }, []);
 

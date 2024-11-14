@@ -60,7 +60,12 @@ function PostContent({ post, email }) {
                     {email === post.writer &&
                         <div id="edit-delete-controls" className="edit-delete-controls">
                             <button onClick={() => {
-                                navigate(`/community/board/edit/${post.id}`)
+                                navigate(`/community/board/edit/${post.id}`,{
+                                    state: {
+                                        title: post.title,
+                                        contents: post.contents,
+                                    }
+                                })
                             }}>수정
                             </button>
                             <button
