@@ -210,7 +210,8 @@ CREATE TABLE `NOTIFICATION`
     `is_read`         boolean NOT NULL DEFAULT false,
     `entity_id`       bigint NULL,
     `created_at`    datetime NULL,
-    `type`            varchar(255) NULL COMMENT 'null 이면 일반 메시지',
+    `updated_at`    datetime NULL,
+    `notification_type`  ENUM('REPLY_ADD', 'TODO_UPDATE','ACHIEVEMENT_FEEDBACK') NOT NULL,
     PRIMARY KEY (`notification_id`),
     FOREIGN KEY (`member_id`) REFERENCES `MEMBER` (`member_id`)
 );
@@ -441,8 +442,7 @@ VALUES
     (3, '2024-01-12', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com');
 
 -- NOTIFICATION 테이블에 데이터 삽입
-INSERT INTO NOTIFICATION (member_id, message, is_read, entity_id, created_at, type)
-VALUES
-    (1, 'You have a new message!', false, NULL, NOW(), NULL),
-    (2, 'Your schedule is updated.', false, 1, NOW(), 'schedule'),
-    (3, 'Your post received a new comment.', false, 2, NOW(), 'comment');
+INSERT INTO NOTIFICATION (member_id, message, is_read, entity_id, created_at, updated_at, notification_type)
+VALUES (1, 'You have a new message!', false, NULL, NOW(), NOW(), 'REPLY_ADD'),
+       (2, 'Your schedule is updated.', false, 1, NOW(), NOW(), 'TODO_UPDATE'),
+       (3, 'Your post received a new comment.', false, 2, NOW(), NOW(), 'ACHIEVEMENT_FEEDBACK');
