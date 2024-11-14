@@ -3,23 +3,26 @@ import {
     convertToDuration
 } from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
 import {useState} from "react";
-import {useCalendar} from "@/components/context/FullCalendarContext.jsx";
+import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
+import api from "@/api/api.js";
 
 function NormalScheduleForm({ onClose }) {
 
     const { addEvent } = useCalendar();
 
+    const today = new Date();
+
     const [formData, setFormData] = useState({
         title: '',
         commonDescription: '',
-        startDate: '',
-        endDate: '',
-        bufferHour: '0',
-        bufferMinute: '0',
+        startDate: `${today.toISOString().split('T')[0]}`,
+        endDate: `${new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}`,
+        bufferHour: 0,
+        bufferMinute: 0,
         totalAmount: '0',
-        performHour: '0',
-        performMinute: '0',
+        performHour: 0,
+        performMinute: 0,
         performInWeek: '1',
         includeSaturday: false,
         includeSunday: false
@@ -50,27 +53,16 @@ function NormalScheduleForm({ onClose }) {
         };
 
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch('/api/schedule/normal', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(finalData),
-            });
-            console.log("finalData : ", finalData);
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            } else {
-                const data = await response.json();
+            const url = '/schedule/normal';
+            const response = await api.post(url, finalData);
+            const data = response.data;
 
-                console.log("data : ", data);
-                data.items.forEach(event => {
-                    console.log("new event : ", event);
-                    addEvent(event);
-                });
-            }
+            data.items.forEach(event => {
+                console.log("new event : ", event);
+                addEvent(event);
+            });
+            onClose();
+
         } catch (error) {
             console.error('폼 제출 중 오류:', error);
         }

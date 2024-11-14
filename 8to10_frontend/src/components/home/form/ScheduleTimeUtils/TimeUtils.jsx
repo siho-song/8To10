@@ -8,15 +8,15 @@ export const convertToDuration = (hour, minute) => {
 };
 
 export const convertPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
-    console.log("hour : ", hour);
-    if (period === 'PM' && hour !== 12) {
-        hour += 12;
+    let hourInt = parseInt(hour);
+    if (period === 'PM' && hourInt !== 12) {
+        hourInt += 12;
     } else if (period === 'AM' && hour === 12) {
-        hour = 0;
+        hourInt = 0;
     }
 
-    console.log("LocalTime : ", `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
-    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+    console.log("LocalTime : ", `${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
+    return `${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 };
 
 export function formatDateTime(dateTime) {
