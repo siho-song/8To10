@@ -4,12 +4,12 @@ import "./styles/styles.css";
 
 import Login from './components/login/Login';
 import SignUp from './components/signUp/SignUp';
-import AuthProvider from "./components/context/AuthProvider.jsx";
+import AuthProvider from "./context/AuthProvider.jsx";
 
 import PrivateRoute from "./components/PrivateRoute.jsx";
 
 import MainView from "./components/home/MainView.jsx";
-import {FullCalendarContext} from "@/components/context/FullCalendarContext.jsx";
+import {FullCalendarContext} from "@/context/FullCalendarContext.jsx";
 
 import MyPageView from "@/components/myPage/MyPageView.jsx";
 
