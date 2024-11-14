@@ -1,5 +1,6 @@
 import {useState} from "react";
 import PropTypes from "prop-types";
+import api from "@/api/api.js";
 
 function CreateComment({ id, onCommentSubmit }) {
 
@@ -19,25 +20,13 @@ function CreateComment({ id, onCommentSubmit }) {
 
     const handleCommentSubmit = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch("/api/community/reply/add", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(bodyData),
-            });
-
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            }
-
-            const data = await response.json();
+            const url = "/community/reply/add";
+            const response = await api.post(url, bodyData);
+            const data = response.data;
 
             const newComment = {
                 id: data.replyId,
-                content: data.contents,
+                contents: data.contents,
                 createdAt: data.createdAt,
                 updatedAt: data.updatedAt,
                 nickname: data.nickname,

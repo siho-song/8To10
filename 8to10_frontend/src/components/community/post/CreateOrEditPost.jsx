@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 
 import PropTypes from "prop-types";
+import api from "@/api/api.js";
 
 function CreateOrEditPost({ isEditMode }) {
     const [title, setTitle] = useState('');
@@ -30,21 +31,9 @@ function CreateOrEditPost({ isEditMode }) {
         }
 
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(isEditMode ? `/api/community/board` : `/api/community/board/add`, {
-                method: isEditMode ? 'PUT' : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(isEditMode ? updatePostData : postData),
-            })
-
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            }
-
-            const data = await response.json();
+            const url = isEditMode ? `/community/board` : `/community/board/add`;
+            const response = isEditMode ? await api.put(url, updatePostData) : await api.post(url, postData);
+            const data = response.data;
 
             if (isEditMode) {
                 navigate(`/community/board/${data.id}`);

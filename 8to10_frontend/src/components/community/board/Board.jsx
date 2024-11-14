@@ -5,6 +5,8 @@ import PaginationComponent from "./Pagination.jsx";
 
 import '@/styles/community/Board.css';
 import LeftSideBar from "@/components/community/LeftSideBar.jsx";
+import api from "@/api/api.js";
+
 
 const Board = () => {
 
@@ -52,19 +54,9 @@ const Board = () => {
         });
 
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/board?${params.toString()}`, {
-                method: 'GET',
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            }
-
-            const data = await response.json();
+            const url = `/community/board?${params.toString()}`;
+            const response = await api.get(url);
+            const data = response.data;
 
             setPosts(data.content);
             setBoardField('totalPages', data.totalPages);
