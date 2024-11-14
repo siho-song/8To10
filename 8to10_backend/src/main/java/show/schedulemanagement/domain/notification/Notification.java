@@ -19,6 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
+import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.member.Member;
 
 @Entity
@@ -27,7 +29,7 @@ import show.schedulemanagement.domain.member.Member;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @DynamicInsert
-public class Notification{
+public class Notification extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "notification_id")
     private Long id;
@@ -39,15 +41,11 @@ public class Notification{
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    @Column(nullable = false)
     @ColumnDefault(value = "false")
     private boolean isRead;
 
     private Long entityId;
 
-    private String type;
-
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-
+    private NotificationType notificationType;
 }
