@@ -161,7 +161,8 @@ function FixedScheduleForm({ onClose }) {
             onClose();
 
         } catch (error) {
-            console.error('폼 제출 중 오류:', error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 

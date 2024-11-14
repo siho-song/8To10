@@ -67,7 +67,8 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
             resetReplyInput();
             setShowReplyInput(false);
         } catch (error) {
-            console.log("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -79,7 +80,8 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
             setTotalLike(!hasLike ? (totalLike + 1) : (totalLike - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -106,7 +108,8 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
 
             setComment(()=>({...data}));
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -117,7 +120,8 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
 
             onCommentDelete(reply.id);
         } catch (error) {
-            console.log("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 

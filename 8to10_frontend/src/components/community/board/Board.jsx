@@ -61,7 +61,8 @@ const Board = () => {
             setPosts(data.content);
             setBoardField('totalPages', data.totalPages);
         } catch (error) {
-            console.error('Error:', error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 

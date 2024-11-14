@@ -70,7 +70,8 @@ function VariableScheduleForm({ onClose }) {
             onClose();
 
         } catch (error) {
-            console.error('폼 제출 중 오류:', error);
+            console.error(error.toString());
+            console.error(error);
         }
     };
 

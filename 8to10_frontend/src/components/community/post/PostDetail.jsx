@@ -34,7 +34,8 @@ const PostDetail = () => {
                 setResponseReplies(replies);
                 setResponseLikedReplyIds(likedReplyIds);
             } catch (error) {
-                console.error('Error:', error);
+                console.error("Error : \n", error.toString());
+                console.error(error);
             }
         }
         if (!post) {

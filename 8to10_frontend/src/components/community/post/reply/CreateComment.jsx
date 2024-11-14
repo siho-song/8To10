@@ -40,7 +40,8 @@ function CreateComment({ id, onCommentSubmit }) {
 
         }
         catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 

@@ -46,8 +46,8 @@ function CreateOrEditPost({ isEditMode }) {
                 navigate(`/community/board/${data.id}`, { state: newPost });
             }
         } catch (error) {
-            console.log("글 등록에 실패했습니다.");
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
 
     };

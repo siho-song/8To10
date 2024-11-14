@@ -22,7 +22,8 @@ function PostContent({ post, email }) {
             setTotalLikes(!hasLike ? (totalLikes + 1) : (totalLikes - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -34,7 +35,8 @@ function PostContent({ post, email }) {
             setTotalScraps(!hasScrap ? (totalScraps + 1) : (totalScraps - 1));
             setHasScrap(!hasScrap);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -45,7 +47,8 @@ function PostContent({ post, email }) {
 
             navigate("/community/board");
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 

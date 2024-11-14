@@ -41,7 +41,8 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
             setCurrentReply(()=>({...data}));
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -53,7 +54,8 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
             setTotalLike(!hasLike ? (totalLike + 1) : (totalLike - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -64,7 +66,8 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
             onReplyDelete(reply.id);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 
