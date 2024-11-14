@@ -1,22 +1,44 @@
 import { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/components/context/UseAuth.jsx';
+import { useAuth } from '@/context/UseAuth.jsx';
 
 import "@/styles/login/Login.css";
+import authApi from "@/api/AuthApi.js";
+import {parseBearerToken} from "@/utils/TokenUtils.js";
 
 function Login() {
 
-    const [email, setEmail] = useState('');
+    const [inputEmail, setInputEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { loginUser, errorMessage } = useAuth();
+    const { errorMessage } = useAuth();
 
-    const {isAuthenticated} = useAuth();
+    const {isAuthenticated, setIsAuthenticated, setLoading, setEmail } = useAuth();
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        loginUser(email, password);
+
+        try {
+            const url = '/login'
+            const response = await authApi.post(url, {
+                email:inputEmail,
+                password:password
+            });
+
+            const accessToken = response.headers['authorization'];
+            localStorage.setItem('Authorization', parseBearerToken(accessToken));
+            localStorage.setItem('Email', inputEmail);
+            setIsAuthenticated(true);
+            setEmail(inputEmail);
+        } catch (error) {
+            console.error(error.toString());
+            console.error(error);
+            setIsAuthenticated(false);
+        } finally {
+            setLoading(false);
+        }
+        // loginUser(email, password);
     };
 
     useEffect(() => {
@@ -35,8 +57,8 @@ function Login() {
                         type="email"
                         id="email"
                         name="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={inputEmail}
+                        onChange={(e) => setInputEmail(e.target.value)}
                         required
                     />
                 </div>
