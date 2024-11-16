@@ -1,4 +1,5 @@
 import {createContext, useContext, useEffect, useState} from 'react';
+import api from "@/api/api.js";
 
 const CalendarContext = createContext();
 
@@ -20,19 +21,9 @@ export const FullCalendarContext = ({ children }) => {
 
         const loadCalendarEvents = async () => {
             try {
-                const accessToken = localStorage.getItem('authorization');
-                const response = await fetch('/api/schedule', {
-                    method:"GET",
-                    headers: {
-                        'authorization': `Bearer ${accessToken}`,
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('서버와의 통신에 실패했습니다.');
-                }
-
-                const data = await response.json();
+                const url = '/schedule';
+                const response = await api.get(url);
+                const data = response.data;
 
                 const formattedEvents = data.items.map(event => ({
                     id: generateEventId(event),
@@ -51,10 +42,10 @@ export const FullCalendarContext = ({ children }) => {
 
                 setEvents(formattedEvents);
             } catch (error) {
-                console.error('Failed to fetch events:', error);
+                console.error("Error : \n", error.toString());
+                console.error(error);
             }
         }
-
         loadCalendarEvents();
     }, []);
 

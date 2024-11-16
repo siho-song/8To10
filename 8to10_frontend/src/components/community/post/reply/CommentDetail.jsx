@@ -5,6 +5,7 @@ import "@/styles/community/Board.css";
 
 import ReplyDetail from "@/components/community/post/reply/ReplyDetail.jsx";
 import {formatDateTime} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
+import api from "@/api/api.js";
 
 function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySubmit, onCommentDelete, onReplyDelete }) {
 
@@ -47,25 +48,13 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
 
     const handleReplySubmit = async() => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch("/api/community/reply/add", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(replyForm),
-            });
-
-            if (!response.ok) {
-                throw new Error('대댓글의 작성에 실패했습니다');
-            }
-
-            const data = await response.json();
+            const url = "/community/reply/add";
+            const response = await api.post(url, replyForm);
+            const data = response.data;
 
             const newComment = {
                 id: data.replyId,
-                content: data.contents,
+                contents: data.contents,
                 createdAt: data.createdAt,
                 updatedAt: data.updatedAt,
                 nickname: data.nickname,
@@ -78,28 +67,21 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
             resetReplyInput();
             setShowReplyInput(false);
         } catch (error) {
-            console.log("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handleCommentLikeSubmit = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/reply/${reply.id}/heart`, {
-                method: hasLike ? "DELETE" : "POST",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                },
-            })
-
-            if (!response.ok) {
-                throw new Error(hasLike ? "좋아요 취소에 실패했습니다." : "좋아요에 실패했습니다.");
-            }
+            const url = `/community/reply/${reply.id}/heart`;
+            hasLike ? await api.delete(url) : await api.post(url);
 
             setTotalLike(!hasLike ? (totalLike + 1) : (totalLike - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -107,53 +89,39 @@ function CommentDetail({ postId, email, reply, replies, likedReplyIds, onReplySu
         const value = e.target.value;
         setCommentEditForm((prevData) => ({
             ...prevData,
-            content: value,
+            contents: value,
         }))
     }
 
     const resetCommentEditInput = () => {
         setCommentEditForm((prevData) => ({
             ...prevData,
-            content: comment.contents,
+            contents: comment.contents,
         }))
     }
 
     const handleCommentEditSubmit = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch("/api/community/reply", {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(commentEditForm),
-            })
+            const url = "/community/reply";
+            const response = await api.put(url, commentEditForm);
+            const data = response.data;
 
-            const data = await response.json();
             setComment(()=>({...data}));
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handleCommentDelete = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/reply/${reply.id}`, {
-                method: "DELETE",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("댓글을 삭제할 수 없습니다.");
-            }
+            const url = `/community/reply/${reply.id}`;
+            await api.delete(url);
 
             onCommentDelete(reply.id);
         } catch (error) {
-            console.log("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 

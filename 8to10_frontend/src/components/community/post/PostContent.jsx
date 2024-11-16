@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import {formatDateTime} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
 import {useState} from "react";
+import api from "@/api/api.js";
 
 function PostContent({ post, email }) {
 
@@ -15,63 +16,39 @@ function PostContent({ post, email }) {
 
     const handleLikeClick = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/board/${post.id}/heart`, {
-                method: hasLike ? "DELETE" : "POST",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                }
-            })
-
-            if (!response.ok) {
-                throw new Error(hasLike ? "좋아요 취소에 실패했습니다." : "좋아요에 실패했습니다.");
-            }
+            const url = `/community/board/${post.id}/heart`;
+            hasLike ? await api.delete(url) : await api.post(url);
 
             setTotalLikes(!hasLike ? (totalLikes + 1) : (totalLikes - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handleScrapClick = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/board/${post.id}/scrap`, {
-                method: hasScrap ? "DELETE" : "POST",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                }
-            })
-
-            if (!response.ok) {
-                throw new Error(hasScrap ? "스크랩 취소에 실패했습니다." : "스크랩에 실패했습니다.");
-            }
+            const url = `/community/board/${post.id}/scrap`;
+            hasScrap ? await api.delete(url) : await api.post(url);
 
             setTotalScraps(!hasScrap ? (totalScraps + 1) : (totalScraps - 1));
             setHasScrap(!hasScrap);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handlePostDelete = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/board/${post.id}`, {
-                method: "DELETE",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("게시글을 삭제할 수 없습니다");
-            }
+            const url = `/community/board/${post.id}`;
+            await api.delete(url);
 
             navigate("/community/board");
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
@@ -83,7 +60,12 @@ function PostContent({ post, email }) {
                     {email === post.writer &&
                         <div id="edit-delete-controls" className="edit-delete-controls">
                             <button onClick={() => {
-                                navigate(`/community/board/edit/${post.id}`)
+                                navigate(`/community/board/edit/${post.id}`,{
+                                    state: {
+                                        title: post.title,
+                                        contents: post.contents,
+                                    }
+                                })
                             }}>수정
                             </button>
                             <button

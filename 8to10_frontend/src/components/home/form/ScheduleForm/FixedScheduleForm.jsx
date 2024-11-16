@@ -5,12 +5,13 @@ import {
     convertPeriodTimeToLocalTimeFormat,
     convertToDuration
 } from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx"
-import { useCalendar } from "@/components/context/FullCalendarContext.jsx";
+import { useCalendar } from "@/context/FullCalendarContext.jsx";
 
 import "@/styles/home/scheduleForm.css";
 import PropTypes from "prop-types";
 
 import * as Yup from 'yup';
+import api from "@/api/api.js";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -52,7 +53,6 @@ function FixedScheduleForm({ onClose }) {
         days: [],
     });
     const [errors, setErrors] = useState({});
-    const [isFormValid, setIsFormValid] = useState(false);
 
     const validateField = async (name, value) => {
         try {
@@ -70,14 +70,14 @@ function FixedScheduleForm({ onClose }) {
             console.log("폼 검증 로직 끝");
             setErrors({});
             console.log("폼 검증 로직 세팅");
-            setIsFormValid(true);
+            return true;
         } catch (error) {
             const newErrors = error.inner.reduce((acc, err) => {
                 acc[err.path] = err.message;
                 return acc;
             }, {});
             setErrors(newErrors);
-            setIsFormValid(false);
+            return false;
         }
     };
 
@@ -131,43 +131,38 @@ function FixedScheduleForm({ onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await validateForm();
-        if (!isFormValid) return;
+        const isValid = await validateForm();
+        if (!isValid) return;
 
         const finalData = {
             title: formData.title,
             commonDescription: formData.commonDescription,
             startDate: formData.startDate,
             endDate: formData.endDate,
-            startTime: convertPeriodTimeToLocalTimeFormat(formData.startTime, formData.startHour, formData.startMinute),
+            startTime: convertPeriodTimeToLocalTimeFormat(
+                formData.startTime,
+                formData.startHour,
+                formData.startMinute
+            ),
             duration: convertToDuration(formData.durationHour, formData.durationMinute),
             frequency: formData.frequency,
             days: formData.days,
         };
 
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch('/api/schedule/fixed', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(finalData),
-            });
+            const url = '/schedule/fixed';
+            const response = await api.post(url, finalData);
+            const data = response.data;
 
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            } else {
-                const data = await response.json();
-                data.items.forEach(event => {
-                    console.log("new event : ", event);
-                    addEvent(event);
-                });
-                onClose();
-            }
+            data.items.forEach(event => {
+                console.log("new event : ", event);
+                addEvent(event);
+            });
+            onClose();
+
         } catch (error) {
-            console.error('폼 제출 중 오류:', error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 

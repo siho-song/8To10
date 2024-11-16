@@ -3,14 +3,13 @@ import {useLocation, useParams} from 'react-router-dom';
 import PostContent from "@/components/community/post/PostContent.jsx";
 import CreateComment from "@/components/community/post/reply/CreateComment.jsx";
 import CommentView from "@/components/community/post/reply/CommentView.jsx";
-import LeftSideBar from "@/components/community/LeftSideBar.jsx";
-import {useAuth} from "@/components/context/UseAuth.jsx";
+import {useAuth} from "@/context/UseAuth.jsx";
+import api from "@/api/api.js";
 
 const PostDetail = () => {
     const location = useLocation();
 
     const { email } = useAuth();
-
     const [post, setPost] = useState(location.state || null);
     const [responseReplies, setResponseReplies] = useState([]);
     const [responseLikedReplyIds, setResponseLikedReplyIds] = useState([]);
@@ -25,29 +24,18 @@ const PostDetail = () => {
     useEffect(() => {
         const loadPostData = async () => {
             try {
-                const accessToken = localStorage.getItem('authorization');
-                const response = await fetch(`/api/community/board/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'authorization': `Bearer ${accessToken}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('서버와의 통신에 실패했습니다.');
-                }
-
-                const data = await response.json();
+                const url = `/community/board/${id}`;
+                const response = await api.get(url);
+                const data = response.data;
 
                 const { replies, likedReplyIds, ...restOfPost } = data;
-
-                console.log("restOfPosts :", restOfPost);
 
                 setPost(restOfPost);
                 setResponseReplies(replies);
                 setResponseLikedReplyIds(likedReplyIds);
             } catch (error) {
-                console.error('Error:', error);
+                console.error("Error : \n", error.toString());
+                console.error(error);
             }
         }
         if (!post) {

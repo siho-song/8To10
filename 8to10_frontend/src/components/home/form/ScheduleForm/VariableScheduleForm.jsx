@@ -5,23 +5,27 @@ import {useState} from "react";
 import {
     convertPeriodTimeToLocalTimeFormat,
 } from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
-import {useCalendar} from "@/components/context/FullCalendarContext.jsx";
+import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
+import api from "@/api/api.js";
 
 function VariableScheduleForm({ onClose }) {
 
     const { addEvent } = useCalendar();
+
+    const today = new Date();
+
     const [formData, setFormData] = useState({
         title: '',
         commonDescription: '',
-        startDate: '',
-        endDate: '',
+        startDate: `${today.toISOString().split('T')[0]}`,
+        endDate: `${new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}`,
         startTime: 'AM',
-        startHour: '1',
-        startMinute: '0',
+        startHour: 1,
+        startMinute: 0,
         endTime: 'AM',
-        endHour: '1',
-        endMinute: '0',
+        endHour: 1,
+        endMinute: 0,
     });
 
     const handleChange = (e) => {
@@ -55,27 +59,19 @@ function VariableScheduleForm({ onClose }) {
             end: endDateTime
         };
 
-        try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch('/api/schedule/variable', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(finalData),
-            });
+        console.log("finalData : ", finalData);
 
-            if (!response.ok) {
-                throw new Error('서버와의 통신에 실패했습니다.');
-            } else {
-                const data = await response.json();
-                console.log("new event : ", data);
-                addEvent(data);
-                onClose();
-            }
+        try {
+            const url = '/schedule/variable';
+            const response = await api.post(url, finalData);
+            const data = response.data;
+
+            addEvent(data);
+            onClose();
+
         } catch (error) {
-            console.error('폼 제출 중 오류:', error);
+            console.error(error.toString());
+            console.error(error);
         }
     };
 

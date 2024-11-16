@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import {formatDateTime} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
 import {useEffect, useState} from "react";
+import api from "@/api/api.js";
 
 function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
@@ -21,7 +22,7 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
         const value = e.target.value;
         setReplyEditForm((prevData) => ({
             ...prevData,
-            content: value,
+            contents: value,
         }))
     }
 
@@ -34,61 +35,39 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
 
     const handleReplyEditSubmit = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch("/api/community/reply", {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(replyEditForm),
-            })
+            const url = "/community/reply";
+            const response = await api.put(url, replyEditForm);
+            const data = response.data;
 
-            const data = await response.json();
             setCurrentReply(()=>({...data}));
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handleLikeClick = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/reply/${currentReply.id}/heart`, {
-                method: hasLike ? "DELETE" : "POST",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                },
-            })
-
-            if (!response.ok) {
-                throw new Error(hasLike ? "좋아요 취소에 실패했습니다." : "좋아요에 실패했습니다.");
-            }
+            const url = `/community/reply/${currentReply.id}/heart`;
+            hasLike ? await api.delete(url) : await api.post(url);
 
             setTotalLike(!hasLike ? (totalLike + 1) : (totalLike - 1));
             setHasLike(!hasLike);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     }
 
     const handleDeleteReply = async () => {
         try {
-            const accessToken = localStorage.getItem('authorization');
-            const response = await fetch(`/api/community/reply/${reply.id}`, {
-                method: "DELETE",
-                headers: {
-                    'authorization': `Bearer ${accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("대댓글을 삭제할 수 없습니다.");
-            }
+            const url = `/community/reply/${reply.id}`;
+            await api.delete(url);
 
             onReplyDelete(reply.id);
         } catch (error) {
-            console.error("Error : ", error);
+            console.error("Error : \n", error.toString());
+            console.error(error);
         }
     };
 

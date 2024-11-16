@@ -13,7 +13,7 @@ import listPlugin from '@fullcalendar/list';
 import "@/styles/styles.css";
 import "@/styles/home/Fullcalendar.css";
 
-import { useCalendar } from '@/components/context/FullCalendarContext.jsx';
+import { useCalendar } from '@/context/FullCalendarContext.jsx';
 
 function handleWindowResize(calendar) {
     if (window.innerWidth < 768) {
