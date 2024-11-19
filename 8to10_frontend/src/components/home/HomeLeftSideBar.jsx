@@ -1,14 +1,10 @@
 import "@/styles/home/LeftSideBar..css"
+import UserStatsCard from "@/components/home/userStatsCard/UserStatsCard.jsx";
 
 function HomeSidebarLeft() {
     return (
         <div className="sidebar" id="left-sidebar">
-            <div className="achievement-box">
-                <span>User</span> 님의 <br /> 달성률은 <strong>(95.5%)</strong> 입니다.
-                <button className="details-button" onClick={() => window.location.href = '/achievement'}>
-                    자세히 보기
-                </button>
-            </div>
+            <UserStatsCard />
 
             <div className="todo-container">
                 <h3>TO-DO</h3>
