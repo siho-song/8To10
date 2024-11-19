@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
-import CommentDetail from "@/components/community/post/reply/CommentDetail.jsx";
+import CommentItem from "@/components/community/post/reply/CommentItem.jsx";
 
-function CommentView({ postId, email, replies, likedReplyIds, onReplySubmit, onCommentDelete, onReplyDelete }) {
+function CommentSection({ postId, email, replies, likedReplyIds, onReplySubmit, onCommentDelete, onReplyDelete }) {
 
     return (
         <div id="comment-container">
             {replies.filter(reply => !reply.parentId)
                     .map(reply => (
-                        <CommentDetail
+                        <CommentItem
                             key={reply.id}
                             email={email}
                             postId={postId}
@@ -24,7 +24,7 @@ function CommentView({ postId, email, replies, likedReplyIds, onReplySubmit, onC
 }
 
 
-CommentView.propTypes = {
+CommentSection.propTypes = {
     postId: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
     replies: PropTypes.arrayOf(
@@ -45,4 +45,4 @@ CommentView.propTypes = {
     onReplyDelete: PropTypes.func.isRequired,
 }
 
-export default CommentView;
+export default CommentSection;
