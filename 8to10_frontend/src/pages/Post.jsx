@@ -1,20 +1,20 @@
-import Header from "@/components/Header.jsx";
+import PrivateHeader from "@/components/PrivateHeader.jsx";
 import CreateOrEditPost from "@/components/community/post/CreateOrEditPost.jsx";
 import PropTypes from "prop-types";
 import LeftSideBar from "@/components/community/LeftSideBar.jsx";
 
-function CreatePostView({ isEditMode=false }) {
+function Post({ isEditMode=false }) {
 
     return (
         <div>
-            <Header />
+            <PrivateHeader />
             <CreateOrEditPost isEditMode={isEditMode} />
         </div>
     );
 }
 
-CreatePostView.propTypes = {
+Post.propTypes = {
     isEditMode: PropTypes.bool,
 }
 
-export default CreatePostView;
+export default Post;
