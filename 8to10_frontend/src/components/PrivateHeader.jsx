@@ -8,7 +8,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import logoIcon from '@/assets/images/logo.png';
 
-function Header() {
+function PrivateHeader() {
     return (
         <div className="main-header">
             <div className="logo">
@@ -43,4 +43,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default PrivateHeader;
