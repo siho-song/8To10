@@ -1,16 +1,16 @@
-import Header from "../Header.jsx";
+import PrivateHeader from "../components/PrivateHeader.jsx";
 
 import "@/styles/myPage/MyPage.css";
 import MyPageInit from "@/components/myPage/MyPageInit.jsx";
 
-function MyPageView() {
+function MyPage() {
 
     return (
         <div>
-            <Header />
+            <PrivateHeader />
             <MyPageInit />
         </div>
     );
 }
 
-export default MyPageView;
+export default MyPage;

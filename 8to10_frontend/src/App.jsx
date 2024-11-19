@@ -8,14 +8,14 @@ import AuthProvider from "./context/AuthProvider.jsx";
 
 import PrivateRoute from "./components/PrivateRoute.jsx";
 
-import MainView from "./components/home/MainView.jsx";
+import Home from "./pages/Home.jsx";
 import {FullCalendarContext} from "@/context/FullCalendarContext.jsx";
 
-import MyPageView from "@/components/myPage/MyPageView.jsx";
+import MyPage from "@/pages/MyPage.jsx";
 
-import BoardView from "@/components/community/board/BoardView.jsx";
-import CreatePostView from "@/components/community/post/CreatePostView.jsx";
-import PostDetailView from "@/components/community/post/PostDetailView.jsx";
+import Community from "@/pages/Community.jsx";
+import Post from "@/pages/Post.jsx";
+import BoardPost from "@/pages/BoardPost.jsx";
 
 
 function App() {
@@ -31,17 +31,17 @@ function App() {
                             path="/home"
                             element={
                                 <FullCalendarContext>
-                                    <MainView />
+                                    <Home />
                                 </FullCalendarContext>
                             }
                         />
 
-                        <Route path="/mypage" element={<MyPageView />}/>
+                        <Route path="/mypage" element={<MyPage />}/>
 
-                        <Route path="/community/board" element={<BoardView />}/>
-                        <Route path="/community/board/add" element={<CreatePostView isEditMode={false}/>} />
-                        <Route path="/community/board/edit/:postId" element={<CreatePostView isEditMode={true}/>}/>
-                        <Route path="/community/board/:id" element={<PostDetailView />}/>
+                        <Route path="/community/board" element={<Community />}/>
+                        <Route path="/community/board/add" element={<Post isEditMode={false}/>} />
+                        <Route path="/community/board/edit/:postId" element={<Post isEditMode={true}/>}/>
+                        <Route path="/community/board/:id" element={<BoardPost />}/>
                     </Route>
                 </Routes>
             </Router>

@@ -1,52 +1,34 @@
 import axios from 'axios';
-import { buildAuthorizationHeader, parseBearerToken } from "@/utils/TokenUtils.js";
 import CustomErrors from "@/api/CustomErrors.js";
-import { HTTP_METHODS } from "@/constants/HttpMethods.js";
 import {HTTP_STATUS} from "@/constants/HttpStatusCodes.js";
+import {
+    setAcceptHeaders,
+    setAuthorizationHeaders,
+    setContentTypeHeaders,
+    setWithCredentials
+} from "@/helpers/AxiosUtils.js";
+import {refreshAccessToken} from "@/helpers/TokenUtils.js";
 
-
-const api = axios.create({
+const authenticatedApi = axios.create({
     baseURL: 'http://localhost:8080',
     timeout: 5000,
 });
 
-const refreshAccessToken = async() => {
 
-    try {
-        const response = await api.post('/renew');
-        return response.data['accessToken'];
-    } catch (error) {
-        console.error(error)
-    }
-}
+authenticatedApi.interceptors.request.use((config) => {
 
-api.interceptors.request.use((config) => {
+    setWithCredentials(config);
 
-
-    const accessToken = localStorage.getItem('Authorization');
-    if(accessToken) {
-        config.headers['Authorization'] = buildAuthorizationHeader(accessToken);
-    }
-
-    if ([HTTP_METHODS.POST, HTTP_METHODS.PUT, HTTP_METHODS.PATCH].includes(config.method)
-        && config.data
-        && Object.keys(config.data).length > 0) {
-        config.headers['Content-Type'] = 'application/json';
-    }
-
-    if (config.url.includes('/renew')) {
-        console.log("renew executed");
-        config.withCredentials = true;
-    }
-
-    config.headers['Accept'] = 'application/json';
+    setAuthorizationHeaders(config);
+    setContentTypeHeaders(config);
+    setAcceptHeaders(config);
 
     return config;
 }, (error) => {
     return Promise.reject(error);
 });
 
-api.interceptors.response.use((response) => {
+authenticatedApi.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
 
@@ -60,10 +42,9 @@ api.interceptors.response.use((response) => {
             const updatedAccessToken = await refreshAccessToken();
 
             localStorage.setItem('Authorization', updatedAccessToken);
-            api.defaults.headers['Authorization'] = updatedAccessToken;
             response.config.headers['Authorization'] = updatedAccessToken;
 
-            return api(response.config);
+            return authenticatedApi(response.config);
         } catch (refreshError) {
             // TODO 로그아웃
             localStorage.clear();
@@ -79,4 +60,4 @@ api.interceptors.response.use((response) => {
     }
 });
 
-export default api;
+export default authenticatedApi;

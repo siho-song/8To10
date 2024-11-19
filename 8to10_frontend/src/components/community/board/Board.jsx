@@ -5,7 +5,8 @@ import PaginationComponent from "./Pagination.jsx";
 
 import '@/styles/community/Board.css';
 import LeftSideBar from "@/components/community/LeftSideBar.jsx";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 
 const Board = () => {
@@ -55,7 +56,9 @@ const Board = () => {
 
         try {
             const url = `/community/board?${params.toString()}`;
-            const response = await api.get(url);
+            const response = await authenticatedApi.get(url, {
+                apiEndPoint: API_ENDPOINT_NAMES.GET_BOARD_PAGING,
+            });
             const data = response.data;
 
             setPosts(data.content);

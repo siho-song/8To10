@@ -1,11 +1,12 @@
 import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
-import {formatDateTime} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
+import {formatDateTime} from "@/helpers/TimeUtils.js";
 import {useState} from "react";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
-function PostContent({ post, email }) {
+function PostItem({ post, email }) {
 
     const navigate = useNavigate();
 
@@ -17,7 +18,16 @@ function PostContent({ post, email }) {
     const handleLikeClick = async () => {
         try {
             const url = `/community/board/${post.id}/heart`;
-            hasLike ? await api.delete(url) : await api.post(url);
+            hasLike ? await authenticatedApi.delete(
+                url,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.DELETE_POST_LIKE,
+            }) : await authenticatedApi.post(
+                url,
+                {},
+                {
+                apiEndPoint: API_ENDPOINT_NAMES.CREATE_POST_LIKE,
+            });
 
             setTotalLikes(!hasLike ? (totalLikes + 1) : (totalLikes - 1));
             setHasLike(!hasLike);
@@ -30,7 +40,16 @@ function PostContent({ post, email }) {
     const handleScrapClick = async () => {
         try {
             const url = `/community/board/${post.id}/scrap`;
-            hasScrap ? await api.delete(url) : await api.post(url);
+            hasScrap ? await authenticatedApi.delete(
+                url,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.DELETE_POST_SCRAP,
+                }) : await authenticatedApi.post(
+                    url,
+                {},
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_POST_SCRAP,
+            });
 
             setTotalScraps(!hasScrap ? (totalScraps + 1) : (totalScraps - 1));
             setHasScrap(!hasScrap);
@@ -43,7 +62,11 @@ function PostContent({ post, email }) {
     const handlePostDelete = async () => {
         try {
             const url = `/community/board/${post.id}`;
-            await api.delete(url);
+            await authenticatedApi.delete(
+                url,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.DELETE_POST,
+            });
 
             navigate("/community/board");
         } catch (error) {
@@ -124,7 +147,7 @@ function PostContent({ post, email }) {
     );
 }
 
-PostContent.propTypes = {
+PostItem.propTypes = {
     post: PropTypes.shape({
         id: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
@@ -141,4 +164,4 @@ PostContent.propTypes = {
     email: PropTypes.string.isRequired,
 }
 
-export default PostContent;
+export default PostItem;
