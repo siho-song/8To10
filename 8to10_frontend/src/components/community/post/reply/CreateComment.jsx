@@ -1,6 +1,7 @@
 import {useState} from "react";
 import PropTypes from "prop-types";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 function CreateComment({ id, onCommentSubmit }) {
 
@@ -21,7 +22,13 @@ function CreateComment({ id, onCommentSubmit }) {
     const handleCommentSubmit = async () => {
         try {
             const url = "/community/reply/add";
-            const response = await api.post(url, bodyData);
+            const response = await authenticatedApi.post(
+                url,
+                bodyData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_REPLY,
+                }
+            );
             const data = response.data;
 
             const newComment = {

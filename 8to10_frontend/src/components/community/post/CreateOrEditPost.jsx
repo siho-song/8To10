@@ -2,7 +2,8 @@ import {useEffect, useState} from 'react';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 import PropTypes from "prop-types";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 function CreateOrEditPost({ isEditMode }) {
     const [title, setTitle] = useState('');
@@ -34,7 +35,17 @@ function CreateOrEditPost({ isEditMode }) {
 
         try {
             const url = isEditMode ? `/community/board` : `/community/board/add`;
-            const response = isEditMode ? await api.put(url, updatePostData) : await api.post(url, postData);
+            const response = isEditMode ? await authenticatedApi.put(
+                url,
+                updatePostData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.EDIT_POST,
+                }) : await authenticatedApi.post(
+                    url,
+                    postData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_POST,
+                });
             const data = response.data;
 
             if (isEditMode) {

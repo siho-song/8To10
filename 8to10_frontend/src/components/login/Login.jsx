@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/UseAuth.jsx';
 
 import "@/styles/login/Login.css";
-import authApi from "@/api/AuthApi.js";
-import {parseBearerToken} from "@/utils/TokenUtils.js";
+import publicApi from "@/api/PublicApi.js";
+import {parseBearerToken} from "@/helpers/TokenUtils.js";
+import PublicHeader from "@/components/PublicHeader.jsx";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 function Login() {
 
@@ -21,9 +23,13 @@ function Login() {
 
         try {
             const url = '/login'
-            const response = await authApi.post(url, {
+            const response = await publicApi.post(
+                url,
+                {
                 email:inputEmail,
-                password:password
+                password:password,
+            },{
+                apiEndPoint: API_ENDPOINT_NAMES.LOGIN,
             });
 
             const accessToken = response.headers['authorization'];
@@ -38,7 +44,6 @@ function Login() {
         } finally {
             setLoading(false);
         }
-        // loginUser(email, password);
     };
 
     useEffect(() => {

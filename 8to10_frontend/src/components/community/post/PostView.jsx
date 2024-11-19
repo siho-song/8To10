@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
-import PostContent from "@/components/community/post/PostContent.jsx";
+import PostItem from "@/components/community/post/PostItem.jsx";
 import CreateComment from "@/components/community/post/reply/CreateComment.jsx";
-import CommentView from "@/components/community/post/reply/CommentView.jsx";
+import CommentSection from "@/components/community/post/reply/CommentSection.jsx";
 import {useAuth} from "@/context/UseAuth.jsx";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
-const PostDetail = () => {
+const PostView = () => {
     const location = useLocation();
 
     const { email } = useAuth();
@@ -25,7 +26,11 @@ const PostDetail = () => {
         const loadPostData = async () => {
             try {
                 const url = `/community/board/${id}`;
-                const response = await api.get(url);
+                const response = await authenticatedApi.get(
+                    url,
+                    {
+                        apiEndPoint: API_ENDPOINT_NAMES.GET_POST,
+                });
                 const data = response.data;
 
                 const { replies, likedReplyIds, ...restOfPost } = data;
@@ -41,7 +46,7 @@ const PostDetail = () => {
         if (!post) {
             loadPostData();
         }
-    },[post]);
+    },[]);
 
     if (!post) {
         return ("게시물을 불러오는 중입니다.");
@@ -62,7 +67,7 @@ const PostDetail = () => {
     return (
         <div className="post-container">
             <div className="post-main-content">
-                <PostContent
+                <PostItem
                     post={post}
                     email={email}
                 />
@@ -70,7 +75,7 @@ const PostDetail = () => {
                     id={post.id}
                     onCommentSubmit={addNewComment}
                 />
-                <CommentView
+                <CommentSection
                     postId={post.id}
                     email={email}
                     replies={responseReplies}
@@ -85,4 +90,4 @@ const PostDetail = () => {
     );
 };
 
-export default PostDetail;
+export default PostView;

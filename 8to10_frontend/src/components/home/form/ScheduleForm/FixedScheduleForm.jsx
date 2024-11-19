@@ -4,14 +4,15 @@ import { InitializeTimeOptions, InitializeTimeOptionsWithPeriod } from "../Sched
 import {
     convertPeriodTimeToLocalTimeFormat,
     convertToDuration
-} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx"
+} from "@/helpers/TimeUtils.js"
 import { useCalendar } from "@/context/FullCalendarContext.jsx";
 
 import "@/styles/home/scheduleForm.css";
 import PropTypes from "prop-types";
 
 import * as Yup from 'yup';
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -151,7 +152,12 @@ function FixedScheduleForm({ onClose }) {
 
         try {
             const url = '/schedule/fixed';
-            const response = await api.post(url, finalData);
+            const response = await authenticatedApi.post(
+                url,
+                finalData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_F_SCHEDULE,
+                });
             const data = response.data;
 
             data.items.forEach(event => {

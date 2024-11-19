@@ -4,10 +4,11 @@ import {
 import {useState} from "react";
 import {
     convertPeriodTimeToLocalTimeFormat,
-} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
+} from "@/helpers/TimeUtils.js";
 import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 function VariableScheduleForm({ onClose }) {
 
@@ -63,7 +64,12 @@ function VariableScheduleForm({ onClose }) {
 
         try {
             const url = '/schedule/variable';
-            const response = await api.post(url, finalData);
+            const response = await authenticatedApi.post(
+                url,
+                finalData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_V_SCHEDULE,
+            });
             const data = response.data;
 
             addEvent(data);

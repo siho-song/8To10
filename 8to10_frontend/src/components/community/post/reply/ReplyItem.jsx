@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 
-import {formatDateTime} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
+import {formatDateTime} from "@/helpers/TimeUtils.js";
 import {useEffect, useState} from "react";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
-function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
+function ReplyItem({ email, reply, likedReplyIds, onReplyDelete }) {
 
     const [currentReply, setCurrentReply] = useState(reply);
 
@@ -36,7 +37,13 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
     const handleReplyEditSubmit = async () => {
         try {
             const url = "/community/reply";
-            const response = await api.put(url, replyEditForm);
+            const response = await authenticatedApi.put(
+                url,
+                replyEditForm,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.EDIT_REPLY,
+                }
+            );
             const data = response.data;
 
             setCurrentReply(()=>({...data}));
@@ -49,7 +56,18 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
     const handleLikeClick = async () => {
         try {
             const url = `/community/reply/${currentReply.id}/heart`;
-            hasLike ? await api.delete(url) : await api.post(url);
+            hasLike ? await authenticatedApi.delete(
+                url,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.DELETE_REPLY_LIKE,
+                }
+                ) : await authenticatedApi.post(
+                    url,
+                {},
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_REPLY_LIKE,
+                }
+            );
 
             setTotalLike(!hasLike ? (totalLike + 1) : (totalLike - 1));
             setHasLike(!hasLike);
@@ -62,7 +80,12 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
     const handleDeleteReply = async () => {
         try {
             const url = `/community/reply/${reply.id}`;
-            await api.delete(url);
+            await authenticatedApi.delete(
+                url,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.DELETE_REPLY,
+                }
+            );
 
             onReplyDelete(reply.id);
         } catch (error) {
@@ -139,7 +162,7 @@ function ReplyDetail({ email, reply, likedReplyIds, onReplyDelete }) {
     );
 }
 
-ReplyDetail.propTypes = {
+ReplyItem.propTypes = {
     email: PropTypes.string.isRequired,
     reply: PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -155,4 +178,4 @@ ReplyDetail.propTypes = {
     onReplyDelete: PropTypes.func.isRequired,
 }
 
-export default ReplyDetail;
+export default ReplyItem;

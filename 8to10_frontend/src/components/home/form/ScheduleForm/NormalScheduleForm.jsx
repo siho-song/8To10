@@ -1,11 +1,12 @@
 import { InitializeTimeOptions, } from "@/components/home/form/ScheduleTimeUtils/TimeOptions.jsx";
 import {
     convertToDuration
-} from "@/components/home/form/ScheduleTimeUtils/TimeUtils.jsx";
+} from "@/helpers/TimeUtils.js";
 import {useState} from "react";
 import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 function NormalScheduleForm({ onClose }) {
 
@@ -54,7 +55,12 @@ function NormalScheduleForm({ onClose }) {
 
         try {
             const url = '/schedule/normal';
-            const response = await api.post(url, finalData);
+            const response = await authenticatedApi.post(
+                url,
+                finalData,
+                {
+                    apiEndPoint: API_ENDPOINT_NAMES.CREATE_N_SCHEDULE,
+                });
             const data = response.data;
 
             data.items.forEach(event => {

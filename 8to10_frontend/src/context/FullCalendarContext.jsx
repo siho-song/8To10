@@ -1,5 +1,6 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import api from "@/api/api.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 const CalendarContext = createContext();
 
@@ -22,7 +23,11 @@ export const FullCalendarContext = ({ children }) => {
         const loadCalendarEvents = async () => {
             try {
                 const url = '/schedule';
-                const response = await api.get(url);
+                const response = await authenticatedApi.get(
+                    url,
+                    {
+                        apiEndPoint: API_ENDPOINT_NAMES.GET_EVENTS,
+                });
                 const data = response.data;
 
                 const formattedEvents = data.items.map(event => ({
