@@ -16,6 +16,7 @@ public enum ExceptionCode {
     NOT_FOUND_SCHEDULE(2000, "일정을 찾을 수 없습니다."),
     NOT_FOUND_F_SCHEDULE(2001, "고정일정을 찾을 수 없습니다"),
     NOT_FOUND_F_DETAIL(2011, "고정일정 세부사항을 찾을 수 없습니다"),
+
     NOT_FOUND_N_SCHEDULE(3001, "일반일정을 찾을 수 없습니다"),
     INVALID_N_SCHEDULE_CREATION(3002, "일반 일정을 생성할 수 없습니다. 일정을 조율해주세요."),
     NOT_FOUND_N_DETAIL(3011, "일반일정을 세부사항을 찾을 수 없습니다"),
@@ -44,6 +45,8 @@ public enum ExceptionCode {
     INVALID_PASSWORD(9005, "비밀번호가 유효하지 않습니다"),
     INVALID_EMAIL(9006, "이메일이 유효하지 않습니다."),
 
+    INVALID_REDIS_MESSAGE(9001, "유효하지 않은 Redis Message 입니다."),
+    FAILED_SSE_NOTIFICATION_SEND(9002, "알림전송에 실패하였습니다."),
     INTERNAL_SERVER_ERROR(9999,"서버 내부 오류");
 
     private final int code;
