@@ -23,6 +23,7 @@ import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.board.reply.ReplyHeartRepository;
 import show.schedulemanagement.repository.board.reply.ReplyRepository;
 import show.schedulemanagement.service.board.BoardService;
+import show.schedulemanagement.service.notification.AsyncEventPublisher;
 import show.schedulemanagement.service.event.reply.ReplyEvent;
 
 @Service
@@ -34,6 +35,7 @@ public class ReplyServiceImpl implements ReplyService{
     private final ReplyRepository replyRepository;
     private final BoardService boardService;
     private final ReplyHeartRepository replyHeartRepository;
+    private final AsyncEventPublisher eventPublisher;
 
     @Override
     public Reply findById(Long id) {
@@ -75,19 +77,19 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     @Transactional
     public Reply save(ReplySaveRequest request, Member member) {
-        Board board = boardService.findById(request.getBoardId());
+        Board board = boardService.findByIdWithMember(request.getBoardId());
         Long parentId = request.getParentId();
+
+        Reply reply = Reply.from(null, request.getContents(), member, board);
 
         if(parentId != null){
             Reply parent = findByIdWithParent(parentId);
             if(checkEqualBoard(parent.getBoard(), board) && checkLevel(parent)){
-                Reply child = Reply.from(parent, request.getContents(), member, board);
-                replyRepository.save(child);
-                return child;
+                reply.assignParent(parent);
             }
         }
-        Reply reply = Reply.from(null, request.getContents(), member, board);
         replyRepository.save(reply);
+        eventPublisher.publishReplyAddEvent(board, reply);
         return reply;
     }
 

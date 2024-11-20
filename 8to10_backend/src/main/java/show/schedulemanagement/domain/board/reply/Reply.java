@@ -58,6 +58,10 @@ public class Reply extends BaseTimeEntity {
                 .build();
     }
 
+    public void assignParent(Reply parent) {
+        this.parent = parent;
+    }
+
     public void updateContents(String contents){
         this.contents = contents;
     }
