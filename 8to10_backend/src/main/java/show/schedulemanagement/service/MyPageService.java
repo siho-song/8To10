@@ -24,6 +24,7 @@ import show.schedulemanagement.exception.BadRequestException;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
+import show.schedulemanagement.service.member.MemberService;
 
 @Service
 @Transactional(readOnly = true)

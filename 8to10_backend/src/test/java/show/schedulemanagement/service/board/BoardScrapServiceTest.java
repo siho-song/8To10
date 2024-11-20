@@ -3,7 +3,6 @@ package show.schedulemanagement.service.board;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.exception.NotFoundEntityException;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @DisplayName("게시글 스크랩 서비스")

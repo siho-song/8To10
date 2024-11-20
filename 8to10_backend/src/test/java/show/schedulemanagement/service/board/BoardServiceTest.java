@@ -2,7 +2,6 @@ package show.schedulemanagement.service.board;
 
 import static org.assertj.core.api.Assertions.*;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.exception.NotFoundEntityException;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @Transactional

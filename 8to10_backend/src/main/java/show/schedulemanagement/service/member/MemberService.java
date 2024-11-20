@@ -1,4 +1,4 @@
-package show.schedulemanagement.service;
+package show.schedulemanagement.service.member;
 
 import show.schedulemanagement.domain.member.Member;
 
