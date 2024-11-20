@@ -27,7 +27,6 @@ import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
 import show.schedulemanagement.dto.Result;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleDetailService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
 import show.schedulemanagement.service.schedule.ScheduleService;

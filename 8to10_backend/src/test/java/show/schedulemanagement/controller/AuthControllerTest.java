@@ -2,7 +2,6 @@ package show.schedulemanagement.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -22,14 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import show.schedulemanagement.domain.auth.MemberDetails;
-import show.schedulemanagement.domain.member.Gender;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.member.Mode;
 import show.schedulemanagement.repository.member.MemberRepository;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.auth.AuthService;
 
 @SpringBootTest
