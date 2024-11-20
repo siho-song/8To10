@@ -15,7 +15,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import show.schedulemanagement.exception.AuthException;
 import show.schedulemanagement.exception.ExceptionCode;
-import show.schedulemanagement.exception.UserAuthenticationException;
 import show.schedulemanagement.handler.AuthFilterExceptionHandler;
 
 @Slf4j
@@ -38,7 +37,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
             setDetails(request, authRequest);
         } catch (Exception e) {
             log.error("",e);
-            throw new UserAuthenticationException(ExceptionCode.USER_AUTHENTICATE_FAIL);
+            throw new AuthException(ExceptionCode.USER_AUTHENTICATE_FAIL);
         }
         return this.getAuthenticationManager().authenticate(authRequest);
     }
