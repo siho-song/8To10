@@ -15,7 +15,6 @@ import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.achievement.AchievementResponse;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.achievement.AchievementService;
 
 @RestController

@@ -3,7 +3,6 @@ package show.schedulemanagement.handler;
 import static show.schedulemanagement.exception.ExceptionCode.INTERNAL_SERVER_ERROR;
 import static show.schedulemanagement.exception.ExceptionCode.INVALID_REQUEST;
 
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -38,7 +37,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<ErrorResponse> handleMissingHeaderException(MissingRequestHeaderException e){
+    public ResponseEntity<ErrorResponse> handleMissingHeaderException(MissingRequestHeaderException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.of(INVALID_REQUEST.getCode(), "누락된 헤더 : " + e.getHeaderName()));

@@ -10,7 +10,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @Transactional

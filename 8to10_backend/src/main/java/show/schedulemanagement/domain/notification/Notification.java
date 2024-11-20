@@ -6,20 +6,21 @@ import static lombok.AccessLevel.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.service.event.NotificationEvent;
 
 @Entity
 @Getter
@@ -27,7 +28,7 @@ import show.schedulemanagement.domain.member.Member;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @DynamicInsert
-public class Notification{
+public class Notification extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "notification_id")
     private Long id;
@@ -39,15 +40,33 @@ public class Notification{
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    @Column(nullable = false)
     @ColumnDefault(value = "false")
     private boolean isRead;
 
-    private Long entityId;
+    private String targetUrl;
 
-    private String type;
+    private Long relatedEntityId;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @Enumerated(value = EnumType.STRING)
+    private NotificationType notificationType;
 
+    public static Notification from(Member member, NotificationEvent event){
+        Notification notification = new Notification();
+        notification.member = member;
+        notification.message = event.getMessage();
+        notification.isRead = false;
+
+        NotificationType notificationType = event.getNotificationType();
+        notification.notificationType = notificationType;
+
+        notification.setTargetUrl(notificationType.getBaseTargetUrl(),event.getTargetEntityId());
+        notification.relatedEntityId = event.getRelatedEntityId();
+
+        return notification;
+    }
+
+    private void setTargetUrl(String baseTargetUrl, Long targetEntityId){
+        this.targetUrl = baseTargetUrl + "/" + targetEntityId;
+    }
 }

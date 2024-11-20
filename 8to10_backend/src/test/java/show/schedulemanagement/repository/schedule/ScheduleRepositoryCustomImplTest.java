@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @Transactional

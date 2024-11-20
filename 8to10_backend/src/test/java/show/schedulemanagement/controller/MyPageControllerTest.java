@@ -28,7 +28,7 @@ import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.provider.TokenProvider;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
@@ -157,6 +157,11 @@ class MyPageControllerTest {
 
         //given
         String updateNickname = "업데이트될닉네임";
+        Member member = new Member(1L, "test", "닉네임", null,
+                null, null, null, null, null,
+                "testImage.jpg", null, false, false);
+
+        when(memberService.findById(any())).thenReturn(member);
 
         //when
         ResultActions resultActions = mockMvc.perform(put("/mypage/account/nickname")
@@ -177,6 +182,11 @@ class MyPageControllerTest {
 
         //given
         String updatePassword = "newPassword12!";
+        Member member = new Member(1L, "test", null, null,
+                "password", null, null, null, null,
+                "testImage.jpg", null, false, false);
+
+        when(memberService.findById(any())).thenReturn(member);
 
         //when
         ResultActions resultActions = mockMvc.perform(put("/mypage/account/password")
@@ -197,6 +207,11 @@ class MyPageControllerTest {
 
         //given
         MockMultipartFile file = new MockMultipartFile("file", "testFile.jpg", "image/jpg", "Test Contetnt".getBytes());
+        Member member = new Member(1L, "test", null, null,
+                null, null, null, null, null,
+                "testImage.jpg", null, false, false);
+
+        when(memberService.findById(any())).thenReturn(member);
 
         //when
         ResultActions resultActions = mockMvc.perform(multipart("/mypage/profile/photo")
@@ -209,6 +224,10 @@ class MyPageControllerTest {
 
         //then
         resultActions.andExpect(status().isNoContent());
+        mockMvc.perform(delete("/mypage/profile/photo")
+                .accept(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+        );
     }
 
     @Test

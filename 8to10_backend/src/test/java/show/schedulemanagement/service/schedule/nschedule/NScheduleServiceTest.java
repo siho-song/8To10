@@ -20,7 +20,7 @@ import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.provider.TokenProvider;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @DisplayName("일반일정 서비스 테스트")

@@ -22,7 +22,7 @@ import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleSave;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleUpdate;
 import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.provider.TokenProvider;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @DisplayName("고정일정 서비스 테스트")
 @SpringBootTest

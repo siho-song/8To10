@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import show.schedulemanagement.dto.ErrorResponse;
-import show.schedulemanagement.exception.UserAuthenticationException;
+import show.schedulemanagement.exception.AuthException;
 
 @Component
 @Slf4j
@@ -25,11 +25,11 @@ public class AuthFilterExceptionHandler {
     public void handleException(HttpServletResponse response, AuthenticationException e) throws IOException {
         log.error(e.getMessage(), e);
 
-        UserAuthenticationException userAuthenticationException;
+        AuthException userAuthenticationException;
         ErrorResponse errorResponse;
 
-        if(e instanceof UserAuthenticationException){
-            userAuthenticationException = (UserAuthenticationException) e;
+        if(e instanceof AuthException){
+            userAuthenticationException = (AuthException) e;
             errorResponse = ErrorResponse.of(userAuthenticationException.getCode(), e.getMessage());
         }
         else {

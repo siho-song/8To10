@@ -3,7 +3,6 @@ package show.schedulemanagement.service.schedule.nschedule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,7 @@ import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequ
 import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.provider.TokenProvider;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @DisplayName("일반일정 자식일정 서비스 테스트")

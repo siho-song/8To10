@@ -1,14 +1,11 @@
 package show.schedulemanagement.service;
 
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.board.reply.Reply;
@@ -30,6 +26,7 @@ import show.schedulemanagement.dto.mypage.ScrappedBoardResponse;
 import show.schedulemanagement.service.board.BoardScrapService;
 import show.schedulemanagement.service.board.BoardService;
 import show.schedulemanagement.service.board.reply.ReplyService;
+import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @DisplayName("마이페이지 서비스 테스트")

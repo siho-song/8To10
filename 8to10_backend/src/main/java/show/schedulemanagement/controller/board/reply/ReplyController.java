@@ -22,7 +22,6 @@ import show.schedulemanagement.dto.board.reply.ReplySaveRequest;
 import show.schedulemanagement.dto.board.reply.ReplySaveResponse;
 import show.schedulemanagement.dto.board.reply.ReplySearchResponse;
 import show.schedulemanagement.dto.board.reply.ReplyUpdateRequest;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.board.reply.ReplyHeartService;
 import show.schedulemanagement.service.board.reply.ReplyService;
 

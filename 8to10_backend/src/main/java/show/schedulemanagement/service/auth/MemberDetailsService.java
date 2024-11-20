@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.exception.AuthException;
 import show.schedulemanagement.exception.ExceptionCode;
-import show.schedulemanagement.exception.UserAuthenticationException;
 import show.schedulemanagement.repository.member.MemberRepository;
 
 @Service
@@ -22,7 +22,7 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UserAuthenticationException(ExceptionCode.INVALID_EMAIL));
+                .orElseThrow(() -> new AuthException(ExceptionCode.INVALID_EMAIL));
         return new MemberDetails(member);
     }
 }

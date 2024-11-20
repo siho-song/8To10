@@ -18,8 +18,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import show.schedulemanagement.exception.AuthException;
 import show.schedulemanagement.exception.ExceptionCode;
-import show.schedulemanagement.exception.InvalidTokenException;
-import show.schedulemanagement.exception.UserAuthenticationException;
 import show.schedulemanagement.handler.AuthFilterExceptionHandler;
 import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.service.auth.MemberDetailsService;
@@ -66,9 +64,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String authHeader = request.getHeader("Authorization");
-        String token = bearerUtils.extractToken(authHeader);
-
         try {
+            String token = bearerUtils.extractToken(authHeader);
             if(tokenProvider.isValidToken(token)){
                 String loginId = tokenProvider.getUserIdFromToken(token);
                 log.debug("loginId : {}", loginId);
@@ -78,7 +75,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
             else {
-                throw new UserAuthenticationException(ExceptionCode.INVALID_ACCESS_TOKEN);
+                throw new AuthException(ExceptionCode.INVALID_ACCESS_TOKEN);
             }
         } catch (AuthenticationException e) {
             authFilterExceptionHandler.handleException(response,e);

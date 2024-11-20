@@ -17,7 +17,6 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
-import show.schedulemanagement.service.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @RestController

@@ -16,7 +16,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.Schedule;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 import show.schedulemanagement.domain.auth.MemberDetails;
-import show.schedulemanagement.service.MemberService;
+import show.schedulemanagement.service.member.MemberService;
 import show.schedulemanagement.service.schedule.ScheduleService;
 
 @SpringBootTest
