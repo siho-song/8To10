@@ -15,6 +15,7 @@ import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.notification.NotificationType;
 import show.schedulemanagement.service.achievement.AchievementService;
 import show.schedulemanagement.service.event.NotificationEvent;
+import show.schedulemanagement.service.member.MemberService;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ import show.schedulemanagement.service.event.NotificationEvent;
 public class AsyncEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
     private final AchievementService achievementService;
+    private final MemberService memberService;
 
     @Async
     public void publishReplyAddEvent(Board board, Reply reply) {
@@ -63,6 +65,20 @@ public class AsyncEventPublisher {
                     null,
                     null,
                     feedbackMessage.getMessage(),
+                    type));
+        }
+    }
+
+    @Scheduled(cron = "0 0 22 * * *")
+    public void publishTodoUpdateEvent(){
+        List<Member> members = memberService.findAll();
+        NotificationType type = NotificationType.TODO_UPDATE;
+        for (Member member : members) {
+            eventPublisher.publishEvent(new NotificationEvent(
+                    member.getEmail(),
+                    null,
+                    null,
+                    NotificationMessage.TODO_UPDATE.getMessage(),
                     type));
         }
     }

@@ -2,6 +2,7 @@ package show.schedulemanagement.service.member;
 
 import static show.schedulemanagement.exception.ExceptionCode.*;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,11 @@ public class MemberServiceImpl implements MemberService{
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_MEMBER));
+    }
+
+    @Override
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 
     @Override
