@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,10 @@ public class AchievementService {
         LocalDate end = LocalDate.of(year, month, start.lengthOfMonth());
 
         return achievementRepository.findAllBetweenStartAndEnd(member, start, end);
+    }
+
+    public List<Achievement> findAllByDateWithMember(LocalDate date) {
+        return achievementRepository.findAllByDateWithMember(date);
     }
 
     @EventListener
