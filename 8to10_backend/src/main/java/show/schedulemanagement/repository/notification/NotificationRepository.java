@@ -11,6 +11,6 @@ import show.schedulemanagement.domain.notification.Notification;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     @Query("select n from Notification n where n.createdAt > :dateTime and n.member= :member")
-    List<Notification> findNewerNotifications(@Param("dateTime") LocalDateTime dateTime, Member member);
+    List<Notification> findAllAfterDateTime(@Param("dateTime") LocalDateTime dateTime, Member member);
 
 }

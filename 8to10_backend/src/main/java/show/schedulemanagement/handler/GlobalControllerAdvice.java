@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import show.schedulemanagement.dto.ErrorResponse;
 import show.schedulemanagement.exception.AuthException;
@@ -48,6 +49,11 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         log.error(e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.of(INVALID_REQUEST.getCode(), "누락된 쿠키 : " + e.getCookieName()));
+    }
+
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException e){
+        // SSE 통신시 `DefaultHandlerExceptionResolver` 에서 발생하는 `AsyncRequestNotUsableException` 예외 경고 무시
     }
 
     @ExceptionHandler(BusinessException.class)

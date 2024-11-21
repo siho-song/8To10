@@ -1,14 +1,19 @@
 package show.schedulemanagement.service.notification;
 
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.notification.NotificationType;
+import show.schedulemanagement.service.achievement.AchievementService;
 import show.schedulemanagement.service.event.NotificationEvent;
 
 @Component
@@ -16,6 +21,7 @@ import show.schedulemanagement.service.event.NotificationEvent;
 @Slf4j
 public class AsyncEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
+    private final AchievementService achievementService;
 
     @Async
     public void publishReplyAddEvent(Board board, Reply reply) {
@@ -38,6 +44,26 @@ public class AsyncEventPublisher {
                     reply.getId(),
                     NotificationMessage.REPLY_ADD.getMessage(),
                     NotificationType.REPLY_ADD));
+        }
+    }
+
+    @Scheduled(cron = "1 0 0 * * *")
+    public void publishFeedBackEvent(){
+        List<Achievement> achievements = achievementService.findAllByDateWithMember(LocalDate.now().minusDays(1L));
+        for (Achievement achievement : achievements) {
+            Member member = achievement.getMember();
+            FeedbackMessage feedbackMessage = FeedbackMessage.selectRandomMessage(
+                    member.getMode(),
+                    achievement.getAchievementRate()
+            );
+
+            NotificationType type = NotificationType.ACHIEVEMENT_FEEDBACK;
+            eventPublisher.publishEvent(new NotificationEvent(
+                    member.getEmail(),
+                    null,
+                    null,
+                    feedbackMessage.getMessage(),
+                    type));
         }
     }
 }

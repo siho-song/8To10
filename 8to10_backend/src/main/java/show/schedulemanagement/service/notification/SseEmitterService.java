@@ -15,7 +15,10 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import show.schedulemanagement.domain.member.Member;
+import show.schedulemanagement.domain.notification.Notification;
+import show.schedulemanagement.dto.NotificationResponse;
 import show.schedulemanagement.exception.SseSendException;
+import show.schedulemanagement.repository.notification.NotificationRepository;
 import show.schedulemanagement.repository.notification.SseEmitterRepository;
 
 @Service
@@ -26,8 +29,7 @@ public class SseEmitterService {
 
     private final SseEmitterRepository sseEmitterRepository;
 
-    private final RedisOperations<String,String> redisOperations;
-    private final ChannelTopic lastEventIdTopic;
+    private final NotificationService notificationService;
 
     public List<SseEmitter> findAllStartWithByMemberEmail(String email){
         return sseEmitterRepository.findAllStartWithByMemberEmail(email);
@@ -36,28 +38,23 @@ public class SseEmitterService {
     public SseEmitter subscribe(Member member, String lastEventId) {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
         String uniqueEmitterId = generateUniqueClientId(member.getEmail(),LocalDateTime.now());
-
         sseEmitterRepository.save(uniqueEmitterId, emitter);
 
         emitter.onCompletion(() -> sseEmitterRepository.deleteById(uniqueEmitterId));
         emitter.onTimeout(() -> sseEmitterRepository.deleteById(uniqueEmitterId));
         emitter.onError((e) -> sseEmitterRepository.deleteById(uniqueEmitterId));
 
-        try {
-            emitter.send(
-                    SseEmitter.event()
-                            .id(uniqueEmitterId)
-                            .name("init")
-                            .data("init")
-            );
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            sseEmitterRepository.deleteById(uniqueEmitterId);
-            throw new SseSendException(FAILED_SSE_NOTIFICATION_SEND);
-        }
+        sendToClient(emitter,uniqueEmitterId,"init","init");
 
         if(lastEventId != null){
-            redisOperations.convertAndSend(lastEventIdTopic.getTopic(), lastEventId);
+            LocalDateTime dateTime = extractDateTime(lastEventId);
+            List<Notification> notifications = notificationService.findAllAfterDateTime(dateTime, member);
+            notifications.forEach(
+                    notification -> sendToClient(emitter,
+                            uniqueEmitterId,
+                            "notification",
+                            NotificationResponse.from(notification))
+            );
         }
 
         return emitter;
@@ -76,10 +73,6 @@ public class SseEmitterService {
             sseEmitterRepository.deleteById(id);
             throw new SseSendException(FAILED_SSE_NOTIFICATION_SEND);
         }
-    }
-
-    public String extractClientEmail(String sseEmitterId) {
-        return sseEmitterId.substring(0, sseEmitterId.lastIndexOf("_"));
     }
 
     public LocalDateTime extractDateTime(String sseEmitterId) {
