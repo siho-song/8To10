@@ -10,7 +10,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import show.schedulemanagement.service.notification.NotificationService;
+import show.schedulemanagement.handler.RedisChannelEventListener;
 
 @Configuration
 public class RedisConfig {
@@ -40,24 +40,17 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory redisConnectionFactory,
-            MessageListenerAdapter notificationListenerAdapter,
-            MessageListenerAdapter lastEventIdListenerAdapter
-            ){
+            MessageListenerAdapter notificationListenerAdapter)
+    {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
         container.addMessageListener(notificationListenerAdapter, notificationTopic());
-        container.addMessageListener(lastEventIdListenerAdapter, lastEventIdTopic());
         return container;
     }
 
     @Bean
-    public MessageListenerAdapter notificationListenerAdapter(NotificationService notificationService){
-        return new MessageListenerAdapter(notificationService, "handleNotificationEvent");
-    }
-
-    @Bean
-    public MessageListenerAdapter lastEventIdListenerAdapter(NotificationService notificationService) {
-        return new MessageListenerAdapter(notificationService, "handleLastEventId");
+    public MessageListenerAdapter notificationListenerAdapter(RedisChannelEventListener redisChannelEventListener){
+        return new MessageListenerAdapter(redisChannelEventListener, "handleNotificationEvent");
     }
 
     @Bean
@@ -65,8 +58,4 @@ public class RedisConfig {
         return new ChannelTopic("notificationChannel");
     }
 
-    @Bean
-    public ChannelTopic lastEventIdTopic(){
-        return new ChannelTopic("lastEventIdChannel");
-    }
 }
