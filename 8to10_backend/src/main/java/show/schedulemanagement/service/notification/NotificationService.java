@@ -1,5 +1,6 @@
 package show.schedulemanagement.service.notification;
 
+import static show.schedulemanagement.exception.ExceptionCode.*;
 import static show.schedulemanagement.exception.ExceptionCode.INVALID_REDIS_MESSAGE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +27,7 @@ import show.schedulemanagement.service.event.NotificationEvent;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
@@ -34,6 +36,15 @@ public class NotificationService {
     private final ChannelTopic notificationTopic;
     private final ObjectMapper objectMapper;
 
+    public Notification findByIdWithMember(Long id) {
+        return notificationRepository.findByIdWithMember(id).orElseThrow(()->new NotFoundEntityException(
+                NOT_FOUND_NOTIFICATION));
+    }
+
+    public List<Notification> findAllAfterDateTime(LocalDateTime dateTime, Member member) {
+        return notificationRepository.findAllAfterDateTime(dateTime, member);
+    }
+
     @Transactional
     public void save(Notification notification){
         notificationRepository.save(notification);
@@ -41,16 +52,18 @@ public class NotificationService {
 
     @Transactional
     public void deleteById(Member member, Long id) {
-        Notification notification = notificationRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_NOTIFICATION));
+        Notification notification = findByIdWithMember(id);
         if(member.isSameEmail(notification.getMember().getEmail())){
             notificationRepository.deleteById(id);
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<Notification> findAllAfterDateTime(LocalDateTime dateTime, Member member) {
-        return notificationRepository.findAllAfterDateTime(dateTime, member);
+    @Transactional
+    public void updateReadStatus(Member member, Long id) {
+        Notification notification = findByIdWithMember(id);
+        if (member.isSameEmail(notification.getMember().getEmail())) {
+            notification.updateIsRead();
+        }
     }
 
     @Async

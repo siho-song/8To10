@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,12 @@ public class NotificationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@CurrentMember Member member, @PathVariable(value = "id") Long id) {
         notificationService.deleteById(member, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@CurrentMember Member member, @PathVariable(value = "id") Long id) {
+        notificationService.updateReadStatus(member,id);
         return ResponseEntity.noContent().build();
     }
 

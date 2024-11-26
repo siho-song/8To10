@@ -66,6 +66,10 @@ public class Notification extends BaseTimeEntity {
         return notification;
     }
 
+    public void updateIsRead(){
+        this.isRead = true;
+    }
+
     private void setTargetUrl(String baseTargetUrl, Long targetEntityId){
         this.targetUrl = baseTargetUrl + "/" + targetEntityId;
     }
