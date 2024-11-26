@@ -43,7 +43,9 @@ const TodoList = () => {
                 currentDate={currentDate}
                 changeCurrentDate={changeCurrentDate}
             />
-            <TodoItemsList/>
+            <TodoItemsList
+                todoEvents={todoEvents}
+            />
             <button
                 id="submit-todo-btn"
                 onClick={handleTodoSubmit}
