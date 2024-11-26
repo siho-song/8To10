@@ -34,3 +34,10 @@ export function formatDateTime(dateTime) {
 
     return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`;
 }
+
+export const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1);
+    const day = String(date.getDate());
+    return `${year}.${month}.${day}`;
+}
