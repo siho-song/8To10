@@ -5,7 +5,7 @@ import {
     formatPeriodTimeToLocalTimeFormat,
     formatDuration
 } from "@/helpers/TimeFormatter.js"
-import { useCalendar } from "@/context/FullCalendarContext.jsx";
+import { useCalendar } from "@/context/fullCalendar/useCalendar.jsx";
 
 import "@/styles/home/scheduleForm.css";
 import PropTypes from "prop-types";

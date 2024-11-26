@@ -1,14 +1,10 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from "react";
+import {formatFixedSchedule, formatNormalSchedule, formatVariableSchedule} from "@/helpers/ScheduleFormatter.js";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
-import {formatFixedSchedule, formatNormalSchedule, formatVariableSchedule} from "../helpers/ScheduleFormatter.js";
+import {CalendarContext} from "@/context/fullCalendar/FullCalendarContext.jsx";
 
-const CalendarContext = createContext();
-
-export const useCalendar = () => useContext(CalendarContext);
-
-// Provider 컴포넌트
-export const FullCalendarContext = ({ children }) => {
+export const FullCalendarProvider = ({ children }) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -20,7 +16,7 @@ export const FullCalendarContext = ({ children }) => {
                     url,
                     {
                         apiEndPoint: API_ENDPOINT_NAMES.GET_EVENTS,
-                });
+                    });
                 const data = response.data;
 
                 const formattedEvents = data.items.map((event) => {

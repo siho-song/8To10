@@ -5,7 +5,7 @@ import {useState} from "react";
 import {
     formatPeriodTimeToLocalTimeFormat,
 } from "@/helpers/TimeFormatter.js";
-import {useCalendar} from "@/context/FullCalendarContext.jsx";
+import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";

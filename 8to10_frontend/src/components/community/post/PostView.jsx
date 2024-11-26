@@ -3,7 +3,7 @@ import {useLocation, useParams} from 'react-router-dom';
 import PostItem from "@/components/community/post/PostItem.jsx";
 import CreateComment from "@/components/community/post/reply/CreateComment.jsx";
 import CommentSection from "@/components/community/post/reply/CommentSection.jsx";
-import {useAuth} from "@/context/UseAuth.jsx";
+import {useAuth} from "@/context/auth/UseAuth.jsx";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 

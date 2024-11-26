@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import {useAuth} from "@/context/UseAuth.jsx";
+import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
 

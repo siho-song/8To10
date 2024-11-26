@@ -1,6 +1,6 @@
 import { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/UseAuth.jsx';
+import { useAuth } from '@/context/auth/UseAuth.jsx';
 
 import "@/styles/login/Login.css";
 import publicApi from "@/api/PublicApi.js";
