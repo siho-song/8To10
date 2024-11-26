@@ -37,9 +37,12 @@ const TodoList = () => {
     }
 
     return (
-        <div className="todo-list-container">
+        <div className="todo-container">
             <h3>TO-DO</h3>
-            <TodoListHeader/>
+            <TodoListHeader
+                currentDate={currentDate}
+                changeCurrentDate={changeCurrentDate}
+            />
             <TodoItemsList/>
             <button
                 id="submit-todo-btn"

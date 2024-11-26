@@ -1,12 +1,49 @@
+import {formatDate} from "@/helpers/TimeFormatter.js";
+import PropTypes from "prop-types";
 
-const TodoListHeader = () => {
+const TodoListHeader = ({currentDate, changeCurrentDate}) => {
+
+    const handlePrevDateClick = () => {
+        const prevDate = new Date(currentDate);
+        prevDate.setDate(prevDate.getDate() - 1);
+        changeCurrentDate(prevDate);
+    }
+
+    const handleNextDateClick = () => {
+        const nextDate = new Date(currentDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (nextDate < today) {
+            nextDate.setDate(nextDate.getDate() + 1);
+            changeCurrentDate(nextDate);
+        }
+    }
+
     return (
         <div id="todo-list-header">
-            <button id="prev-date-btn">이전</button>
-            <span id="current-date"></span>
-            <button id="next-date-btn">다음</button>
+            <button
+                id="prev-date-btn"
+                onClick={handlePrevDateClick}
+            >
+                이전
+            </button>
+
+            <span id="current-date">{formatDate(currentDate)}</span>
+
+            <button
+                id="next-date-btn"
+                onClick={handleNextDateClick}
+            >
+                다음
+            </button>
         </div>
     );
+}
+
+TodoListHeader.propTypes = {
+    currentDate: PropTypes.instanceOf(Date).isRequired,
+    changeCurrentDate: PropTypes.func.isRequired,
 }
 
 export default TodoListHeader;
