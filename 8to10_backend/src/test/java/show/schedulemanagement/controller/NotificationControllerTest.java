@@ -1,8 +1,9 @@
 package show.schedulemanagement.controller;
 
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import show.schedulemanagement.provider.TokenProvider;
 import show.schedulemanagement.repository.notification.SseEmitterRepository;
 import show.schedulemanagement.service.notification.SseEmitterService;
@@ -69,5 +69,14 @@ class NotificationControllerTest {
         mockMvc.perform(delete("/notification/{id}", notificationId)
                         .header("Authorization", "Bearer " + token)
                 ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("알림 읽음 상태를 읽음 처리한다")
+    public void updateById() throws Exception {
+        Long notificationId = 1L;
+        mockMvc.perform(put("/notification/{id}", notificationId)
+                .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isNoContent());
     }
 }
