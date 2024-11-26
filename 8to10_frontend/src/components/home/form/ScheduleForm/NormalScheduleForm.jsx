@@ -7,6 +7,7 @@ import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatNormalSchedule} from "@/helpers/ScheduleFormatter.js";
 
 function NormalScheduleForm({ onClose }) {
 
@@ -64,8 +65,8 @@ function NormalScheduleForm({ onClose }) {
             const data = response.data;
 
             data.items.forEach(event => {
-                console.log("new event : ", event);
-                addEvent(event);
+                const formattedEvent = formatNormalSchedule(event);
+                addEvent(formattedEvent);
             });
             onClose();
 

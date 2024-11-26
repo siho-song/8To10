@@ -1,6 +1,7 @@
 import {createContext, useContext, useEffect, useState} from 'react';
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatFixedSchedule, formatNormalSchedule, formatVariableSchedule} from "../helpers/ScheduleFormatter.js";
 
 const CalendarContext = createContext();
 
@@ -9,14 +10,6 @@ export const useCalendar = () => useContext(CalendarContext);
 // Provider 컴포넌트
 export const FullCalendarContext = ({ children }) => {
     const [events, setEvents] = useState([]);
-
-    const generateEventId = (event) => {
-        if (event.parentId) {
-            return `${event.parentId}-${event.id}`;
-        }
-        return event.id;
-    };
-
 
     useEffect(() => {
 
@@ -30,20 +23,15 @@ export const FullCalendarContext = ({ children }) => {
                 });
                 const data = response.data;
 
-                const formattedEvents = data.items.map(event => ({
-                    id: generateEventId(event),
-                    groupId: event.parentId,
-                    title: event.title,
-                    start: event.start,
-                    end: event.end,
-                    color: event.color,
-                    extendedProps: {
-                        type: event.type,
-                        parentId: event.parentId,
-                        commonDescription: event.commonDescription,
-                        detailDescription: "",
+                const formattedEvents = data.items.map((event) => {
+                    if (event.type === "normal") {
+                        return formatNormalSchedule(event);
+                    } else if (event.type === "variable") {
+                        return formatVariableSchedule(event);
+                    } else if (event.type === "fixed") {
+                        return formatFixedSchedule(event);
                     }
-                }));
+                });
 
                 setEvents(formattedEvents);
             } catch (error) {

@@ -9,6 +9,7 @@ import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatVariableSchedule} from "@/helpers/ScheduleFormatter.js";
 
 function VariableScheduleForm({ onClose }) {
 
@@ -71,8 +72,8 @@ function VariableScheduleForm({ onClose }) {
                     apiEndPoint: API_ENDPOINT_NAMES.CREATE_V_SCHEDULE,
             });
             const data = response.data;
-
-            addEvent(data);
+            const formattedEvent = formatVariableSchedule(data);
+            addEvent(formattedEvent);
             onClose();
 
         } catch (error) {

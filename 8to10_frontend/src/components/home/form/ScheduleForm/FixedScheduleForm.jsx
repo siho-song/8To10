@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import * as Yup from 'yup';
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatFixedSchedule} from "@/helpers/ScheduleFormatter.js";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -66,11 +67,8 @@ function FixedScheduleForm({ onClose }) {
 
     const validateForm = async () => {
         try {
-            console.log("폼 검증 로직 시작");
             await validationSchema.validate(formData, { abortEarly: false });
-            console.log("폼 검증 로직 끝");
             setErrors({});
-            console.log("폼 검증 로직 세팅");
             return true;
         } catch (error) {
             const newErrors = error.inner.reduce((acc, err) => {
@@ -161,8 +159,8 @@ function FixedScheduleForm({ onClose }) {
             const data = response.data;
 
             data.items.forEach(event => {
-                console.log("new event : ", event);
-                addEvent(event);
+                const formattedEvent = formatFixedSchedule(event);
+                addEvent(formattedEvent);
             });
             onClose();
 
