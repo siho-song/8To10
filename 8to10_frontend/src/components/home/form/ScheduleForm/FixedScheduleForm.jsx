@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { InitializeTimeOptions, InitializeTimeOptionsWithPeriod } from "../ScheduleTimeUtils/TimeOptions.jsx";
 import {
-    convertPeriodTimeToLocalTimeFormat,
-    convertToDuration
-} from "@/helpers/TimeUtils.js"
+    formatPeriodTimeToLocalTimeFormat,
+    formatDuration
+} from "@/helpers/TimeFormatter.js"
 import { useCalendar } from "@/context/FullCalendarContext.jsx";
 
 import "@/styles/home/scheduleForm.css";
@@ -138,12 +138,12 @@ function FixedScheduleForm({ onClose }) {
             commonDescription: formData.commonDescription,
             startDate: formData.startDate,
             endDate: formData.endDate,
-            startTime: convertPeriodTimeToLocalTimeFormat(
+            startTime: formatPeriodTimeToLocalTimeFormat(
                 formData.startTime,
                 formData.startHour,
                 formData.startMinute
             ),
-            duration: convertToDuration(formData.durationHour, formData.durationMinute),
+            duration: formatDuration(formData.durationHour, formData.durationMinute),
             frequency: formData.frequency,
             days: formData.days,
         };

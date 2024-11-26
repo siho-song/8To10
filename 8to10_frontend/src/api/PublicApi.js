@@ -1,6 +1,6 @@
 import axios from 'axios';
 import CustomErrors from "@/api/CustomErrors.js";
-import {setAcceptHeaders, setContentTypeHeaders, setWithCredentials} from "@/helpers/AxiosUtils.js";
+import {setAcceptHeaders, setContentTypeHeaders, setWithCredentials} from "@/helpers/AxiosConfig.js";
 
 const publicApi = axios.create({
     baseURL: 'http://localhost:8080',

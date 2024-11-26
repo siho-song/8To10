@@ -1,13 +1,13 @@
-export function convertTo24HourFormat(date, hour, minute) {
+export function format24HourFormat(date, hour, minute) {
     const hourInt = parseInt(hour) % 12 + (hour >= 12 ? 12 : 0); // 24시간 형식으로 변환
     return `${date}T${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
 }
 
-export const convertToDuration = (hour, minute) => {
+export const formatDuration = (hour, minute) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 };
 
-export const convertPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
+export const formatPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
     let hourInt = parseInt(hour);
     if (period === 'PM' && hourInt !== 12) {
         hourInt += 12;

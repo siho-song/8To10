@@ -1,7 +1,7 @@
 import { InitializeTimeOptions, } from "@/components/home/form/ScheduleTimeUtils/TimeOptions.jsx";
 import {
-    convertToDuration
-} from "@/helpers/TimeUtils.js";
+    formatDuration
+} from "@/helpers/TimeFormatter.js";
 import {useState} from "react";
 import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
@@ -46,9 +46,9 @@ function NormalScheduleForm({ onClose }) {
             commonDescription: formData.commonDescription,
             startDate: formData.startDate,
             endDate: formData.endDate,
-            bufferTime: convertToDuration(formData.bufferHour, formData.bufferMinute),
+            bufferTime: formatDuration(formData.bufferHour, formData.bufferMinute),
             totalAmount: formData.totalAmount,
-            performInDay: convertToDuration(formData.performHour, formData.performMinute),
+            performInDay: formatDuration(formData.performHour, formData.performMinute),
             performInWeek: formData.performInWeek,
             isIncludeSaturday: formData.includeSaturday,
             isIncludeSunday: formData.includeSunday

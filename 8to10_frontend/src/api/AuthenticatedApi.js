@@ -6,8 +6,8 @@ import {
     setAuthorizationHeaders,
     setContentTypeHeaders,
     setWithCredentials
-} from "@/helpers/AxiosUtils.js";
-import {refreshAccessToken} from "@/helpers/TokenUtils.js";
+} from "@/helpers/AxiosConfig.js";
+import {refreshAccessToken} from "@/helpers/TokenManager.js";
 
 const authenticatedApi = axios.create({
     baseURL: 'http://localhost:8080',

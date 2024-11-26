@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "@/styles/community/Board.css";
 
 import ReplyItem from "@/components/community/post/reply/ReplyItem.jsx";
-import {formatDateTime} from "@/helpers/TimeUtils.js";
+import {formatDateTime} from "@/helpers/TimeFormatter.js";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 

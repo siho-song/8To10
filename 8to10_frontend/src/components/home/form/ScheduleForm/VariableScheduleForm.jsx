@@ -3,8 +3,8 @@ import {
 } from "@/components/home/form/ScheduleTimeUtils/TimeOptions.jsx";
 import {useState} from "react";
 import {
-    convertPeriodTimeToLocalTimeFormat,
-} from "@/helpers/TimeUtils.js";
+    formatPeriodTimeToLocalTimeFormat,
+} from "@/helpers/TimeFormatter.js";
 import {useCalendar} from "@/context/FullCalendarContext.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
@@ -42,13 +42,13 @@ function VariableScheduleForm({ onClose }) {
 
         e.preventDefault();
 
-        const startDateTime = formData.startDate +'T'+ convertPeriodTimeToLocalTimeFormat(
+        const startDateTime = formData.startDate +'T'+ formatPeriodTimeToLocalTimeFormat(
             formData.startTime,
             formData.startHour,
             formData.startMinute
         );
 
-        const endDateTime = formData.endDate + 'T' + convertPeriodTimeToLocalTimeFormat(
+        const endDateTime = formData.endDate + 'T' + formatPeriodTimeToLocalTimeFormat(
             formData.endTime,
             formData.endHour,
             formData.endMinute

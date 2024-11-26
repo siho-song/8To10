@@ -4,7 +4,7 @@ import { useAuth } from '@/context/UseAuth.jsx';
 
 import "@/styles/login/Login.css";
 import publicApi from "@/api/PublicApi.js";
-import {parseBearerToken} from "@/helpers/TokenUtils.js";
+import {parseBearerToken} from "@/helpers/TokenManager.js";
 import PublicHeader from "@/components/PublicHeader.jsx";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
