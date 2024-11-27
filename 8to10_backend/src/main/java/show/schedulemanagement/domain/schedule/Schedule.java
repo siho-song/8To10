@@ -39,7 +39,7 @@ public abstract class Schedule extends BaseEntity {
     @Column(nullable = false)
     protected String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT DEFAULT ''")
     protected String commonDescription;
 
     @Column(nullable = false)

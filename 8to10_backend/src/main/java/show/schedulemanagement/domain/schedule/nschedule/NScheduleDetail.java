@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
@@ -19,20 +18,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
-import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
-import show.schedulemanagement.dto.schedule.response.nschedule.NScheduleUpdateResponse;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@DynamicInsert
 @ToString(exclude = "nSchedule")
 public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -49,12 +43,10 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
-    private boolean completeStatus;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT DEFAULT ''")
     private String detailDescription;
+
+    private boolean completeStatus;
 
     @Setter
     private int dailyAmount;
