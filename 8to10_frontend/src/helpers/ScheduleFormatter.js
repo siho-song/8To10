@@ -1,18 +1,29 @@
-const generateEventIdWithParentId = (event) => {
+export const generateEventIdWithParentId = (event) => {
     if (event.parentId) {
         return `${event.parentId}-${event.id}`;
     }
     return event.id;
 };
 
-const parseEventIdWithParentId = (event) => {
-    if (event.parentId) {
-        return event.id.split("-").pop();
+export const parseEventIdWithParentId = (event) => {
+    if (event.extendedProps.parentId) {
+        return Number(event.id.split("-").pop());
     }
     return event.id;
 }
 
 export const formatNormalSchedule = (event) => {
+    let achievedAmount;
+
+    if(event.dailyAmount) {
+        if (event.completeStatus) {
+            achievedAmount = event.dailyAmount;
+        } else {
+            achievedAmount = 0;
+        }
+    } else {
+        achievedAmount = NaN;
+    }
     return {
         id: generateEventIdWithParentId(event),
         groupId: event.parentId,
@@ -27,7 +38,10 @@ export const formatNormalSchedule = (event) => {
             detailDescription: "",
             bufferTime : event.bufferTime,
             completeStatus: event.completeStatus,
+            isComplete: event.completeStatus,
             dailyAmount : event.dailyAmount,
+            achievedAmount: achievedAmount,
+            originId: event.id,
         }
     };
 }
@@ -61,3 +75,16 @@ export const formatFixedSchedule = (event) => {
         },
     };
 }
+
+export const formatTodoEventSubmit = (event) => {
+    if (!event) return {};
+
+    return {
+        scheduleDetailId: event.extendedProps.originId,
+        date: event.start.split("T")[0],
+        isComplete: event.extendedProps.isComplete,
+        ...(event.extendedProps.dailyAmount && {
+            achievedAmount: event.extendedProps.achievedAmount,
+        }),
+    };
+};
