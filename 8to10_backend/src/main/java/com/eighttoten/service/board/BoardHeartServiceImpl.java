@@ -35,7 +35,7 @@ public class BoardHeartServiceImpl implements BoardHeartService{
         }
 
         Board board = boardService.findById(boardId);
-        BoardHeart boardHeart = BoardHeart.createBoardHeart(board, member);
+        BoardHeart boardHeart = BoardHeart.of(board, member);
 
         boardHeartRepository.save(boardHeart);
         publisher.publishEvent(new BoardHeartAddEvent(boardId));

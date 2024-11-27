@@ -80,7 +80,7 @@ public class NScheduleService {
         Map<DayOfWeek, TimeSlot> selectedTimeSlots = timeSlotService
                 .selectRandomTimeSlots(selectedDays, availableSlotMap);
 
-        NSchedule nSchedule = NSchedule.createNSchedule(member, dto);
+        NSchedule nSchedule = NSchedule.from(member, dto);
         addDetails(nSchedule, selectedTimeSlots, dto.getPerformInDay(), nSchedule.getBufferTime());
 
         return nSchedule;
@@ -144,7 +144,7 @@ public class NScheduleService {
                 LocalDateTime endDateTime = startDateTime.plusHours(performInDay.getHour())
                         .plusMinutes(performInDay.getMinute());
 
-                NScheduleDetail nscheduleDetail = NScheduleDetail.createNscheduleDetail(nSchedule.getCommonDescription(),
+                NScheduleDetail nscheduleDetail = NScheduleDetail.from(nSchedule.getCommonDescription(),
                         startDateTime, endDateTime);
                 nscheduleDetail.setNSchedule(nSchedule);
             }

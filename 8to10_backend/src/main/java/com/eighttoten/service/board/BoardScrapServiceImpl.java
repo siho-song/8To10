@@ -45,7 +45,7 @@ public class BoardScrapServiceImpl implements BoardScrapService{
             throw new DuplicatedException(DUPLICATED_BOARD_SCRAP);
         }
         Board board = boardService.findById(boardId);
-        BoardScrap boardScrap = BoardScrap.from(board, member);
+        BoardScrap boardScrap = BoardScrap.of(board, member);
         boardScrapRepository.save(boardScrap);
         publisher.publishEvent(new BoardScrapAddEvent(boardId));
     }

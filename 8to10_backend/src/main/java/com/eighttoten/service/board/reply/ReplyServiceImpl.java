@@ -80,7 +80,7 @@ public class ReplyServiceImpl implements ReplyService{
         Board board = boardService.findByIdWithMember(request.getBoardId());
         Long parentId = request.getParentId();
 
-        Reply reply = Reply.from(null, request.getContents(), member, board);
+        Reply reply = Reply.of(null, request.getContents(), member, board);
 
         if(parentId != null){
             Reply parent = findByIdWithParent(parentId);

@@ -23,7 +23,7 @@ public class AuthService {
 
     @Transactional
     public void save(String email, String refreshToken) {
-        Auth auth = Auth.from(email, refreshToken);
+        Auth auth = Auth.of(email, refreshToken);
         authRepository.save(auth);
     }
 

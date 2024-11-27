@@ -47,7 +47,7 @@ public class ReplyHeartServiceImpl implements ReplyHeartService {
             throw new DuplicatedException(DUPLICATED_REPLY_HEART);
         }
         Reply reply = replyService.findById(replyId);
-        ReplyHeart replyHeart = ReplyHeart.createReplyHeart(reply, member);
+        ReplyHeart replyHeart = ReplyHeart.of(reply, member);
 
         replyHeartRepository.save(replyHeart);
         publisher.publishEvent(new ReplyHeartAddEvent(replyId));
