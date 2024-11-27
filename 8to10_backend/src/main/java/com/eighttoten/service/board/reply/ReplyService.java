@@ -98,7 +98,7 @@ public class ReplyService{
     public void deleteByReplies(List<Reply> replies) {
         replyRepository.deleteByReplies(replies);
     }
-    
+
     @Transactional
     public Reply save(ReplySaveRequest request, Member member) {
         Board board = boardService.findByIdWithMember(request.getBoardId());
