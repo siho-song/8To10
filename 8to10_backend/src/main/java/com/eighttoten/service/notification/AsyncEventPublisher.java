@@ -1,13 +1,5 @@
 package com.eighttoten.service.notification;
 
-import java.time.LocalDate;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import com.eighttoten.domain.achievement.Achievement;
 import com.eighttoten.domain.board.Board;
 import com.eighttoten.domain.board.reply.Reply;
@@ -16,10 +8,16 @@ import com.eighttoten.domain.notification.NotificationType;
 import com.eighttoten.service.achievement.AchievementService;
 import com.eighttoten.service.event.NotificationEvent;
 import com.eighttoten.service.member.MemberService;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class AsyncEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
     private final AchievementService achievementService;

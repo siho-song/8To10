@@ -3,13 +3,6 @@ package com.eighttoten.service;
 import static com.eighttoten.exception.ExceptionCode.REQUIRE_CONTENT_TYPE;
 import static com.eighttoten.exception.ExceptionCode.REQUIRE_IMAGE_FILE;
 
-import java.io.IOException;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import com.eighttoten.constant.AppConstant;
 import com.eighttoten.domain.board.Board;
 import com.eighttoten.domain.board.BoardScrap;
@@ -25,6 +18,13 @@ import com.eighttoten.service.board.BoardScrapService;
 import com.eighttoten.service.board.BoardService;
 import com.eighttoten.service.board.reply.ReplyService;
 import com.eighttoten.service.member.MemberService;
+import java.io.IOException;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)

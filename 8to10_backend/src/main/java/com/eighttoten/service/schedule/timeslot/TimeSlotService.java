@@ -21,9 +21,7 @@ import org.springframework.stereotype.Service;
 import com.eighttoten.domain.schedule.ScheduleAble;
 
 @Service
-@Slf4j
 public class TimeSlotService {
-
     public Map<LocalDate, List<TimeSlot>> findAllBetweenStartAndEnd(
             Map<LocalDate, List<ScheduleAble>> sortedScheduleAbleMap,
             LocalDate startDate,

@@ -2,22 +2,18 @@ package com.eighttoten.service.signup;
 
 import static com.eighttoten.exception.ExceptionCode.SIGNUP_FAILED;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.dto.signup.SignUpRequest;
 import com.eighttoten.exception.BadRequestException;
 import com.eighttoten.repository.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-@Slf4j
 public class SignUpService {
-
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
