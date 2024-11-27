@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.domain.schedule.Schedule;
 import com.eighttoten.domain.schedule.ScheduleAble;
@@ -24,25 +23,24 @@ import com.eighttoten.dto.schedule.request.nschedule.NScheduleUpdate;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @DiscriminatorValue(value = "N")
-@ToString(callSuper = true)
 public class NSchedule extends Schedule{
     @Column(nullable = false)
     private LocalTime bufferTime;
 
-    private int totalAmount;
-
     @OneToMany(mappedBy = "nSchedule", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<NScheduleDetail> nScheduleDetails = new ArrayList<>();
 
-    public static NSchedule createNSchedule(Member member, NScheduleSave nScheduleSave){
+    private int totalAmount;
+
+    public static NSchedule from(Member member, NScheduleSave dto){
         NSchedule nSchedule = new NSchedule();
         nSchedule.member = member;
-        nSchedule.title = nScheduleSave.getTitle();
-        nSchedule.commonDescription = nScheduleSave.getCommonDescription();
-        nSchedule.startDate = LocalDateTime.of(nScheduleSave.getStartDate(),LocalTime.of(0,0));
-        nSchedule.endDate = LocalDateTime.of(nScheduleSave.getEndDate(),LocalTime.of(0,0));
-        nSchedule.bufferTime = nScheduleSave.getBufferTime();
-        nSchedule.totalAmount = nScheduleSave.getTotalAmount();
+        nSchedule.title = dto.getTitle();
+        nSchedule.commonDescription = dto.getCommonDescription();
+        nSchedule.startDate = LocalDateTime.of(dto.getStartDate(),LocalTime.of(0,0));
+        nSchedule.endDate = LocalDateTime.of(dto.getEndDate(),LocalTime.of(0,0));
+        nSchedule.bufferTime = dto.getBufferTime();
+        nSchedule.totalAmount = dto.getTotalAmount();
         return nSchedule;
     }
 
