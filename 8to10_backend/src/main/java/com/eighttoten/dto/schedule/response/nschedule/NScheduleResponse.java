@@ -12,8 +12,6 @@ import com.eighttoten.dto.schedule.response.ScheduleResponse;
 
 @SuperBuilder
 @Getter
-@ToString(callSuper = true)
-@NoArgsConstructor
 public class NScheduleResponse extends ScheduleResponse {
     private Long parentId;
     private String detailDescription;

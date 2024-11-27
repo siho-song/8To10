@@ -14,7 +14,6 @@ import com.eighttoten.validator.schedule.fielderror.ZeroSeconds;
 import com.eighttoten.validator.schedule.objecterror.StartBeforeEnd;
 
 @SuperBuilder
-@ToString(callSuper = true)
 @Getter
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
 @NoArgsConstructor

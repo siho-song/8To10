@@ -1,5 +1,13 @@
 package com.eighttoten.dto.schedule.request.nschedule;
 
+import com.eighttoten.dto.schedule.request.DateRangeValidatable;
+import com.eighttoten.dto.schedule.request.ScheduleSave;
+import com.eighttoten.validator.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.validator.ValidationGroups.ObjectErrorGroup;
+import com.eighttoten.validator.schedule.fielderror.PerformInDay;
+import com.eighttoten.validator.schedule.fielderror.ZeroSeconds;
+import com.eighttoten.validator.schedule.objecterror.PerformInWeek;
+import com.eighttoten.validator.schedule.objecterror.StartDateBeforeEqEndDate;
 import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -10,23 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import lombok.extern.slf4j.Slf4j;
-import com.eighttoten.dto.schedule.request.DateRangeValidatable;
-import com.eighttoten.dto.schedule.request.ScheduleSave;
-import com.eighttoten.validator.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.validator.ValidationGroups.ObjectErrorGroup;
-import com.eighttoten.validator.schedule.fielderror.PerformInDay;
-import com.eighttoten.validator.schedule.fielderror.ZeroSeconds;
-import com.eighttoten.validator.schedule.objecterror.PerformInWeek;
-import com.eighttoten.validator.schedule.objecterror.StartDateBeforeEqEndDate;
 
 @SuperBuilder
 @Getter
-@ToString(callSuper = true)
 @NoArgsConstructor
-@Slf4j
 @PerformInWeek(groups = ObjectErrorGroup.class)
 @StartDateBeforeEqEndDate(groups = ObjectErrorGroup.class)
 public class NScheduleSave extends ScheduleSave implements DateRangeValidatable {

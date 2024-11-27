@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class Result<T> {
     private List<T> items = new ArrayList<>();
 

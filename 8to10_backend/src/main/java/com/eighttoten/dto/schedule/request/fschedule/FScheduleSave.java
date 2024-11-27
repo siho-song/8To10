@@ -1,14 +1,5 @@
 package com.eighttoten.dto.schedule.request.fschedule;
 
-import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 import com.eighttoten.dto.schedule.request.DateRangeValidatable;
 import com.eighttoten.dto.schedule.request.ScheduleSave;
 import com.eighttoten.validator.ValidationGroups.FieldErrorGroup;
@@ -19,11 +10,18 @@ import com.eighttoten.validator.schedule.fielderror.PerformInDay;
 import com.eighttoten.validator.schedule.fielderror.UniqueDayList;
 import com.eighttoten.validator.schedule.fielderror.ZeroSeconds;
 import com.eighttoten.validator.schedule.objecterror.StartBeforeEnd;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
 @NoArgsConstructor
-@ToString(callSuper = true)
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class FScheduleSave extends ScheduleSave implements DateRangeValidatable {
     @NotNull(groups = FieldErrorGroup.class)

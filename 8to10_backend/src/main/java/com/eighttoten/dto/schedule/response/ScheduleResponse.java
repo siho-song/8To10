@@ -1,12 +1,5 @@
 package com.eighttoten.dto.schedule.response;
 
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 import com.eighttoten.domain.schedule.Schedule;
 import com.eighttoten.domain.schedule.ScheduleAble;
 import com.eighttoten.domain.schedule.fschedule.FSchedule;
@@ -17,9 +10,14 @@ import com.eighttoten.domain.schedule.vschedule.VSchedule;
 import com.eighttoten.dto.schedule.response.fschedule.FScheduleResponse;
 import com.eighttoten.dto.schedule.response.nschedule.NScheduleResponse;
 import com.eighttoten.dto.schedule.response.vschedule.VScheduleResponse;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,8 +25,8 @@ public abstract class ScheduleResponse {
     private Long id;
     private String title;
     private String commonDescription;
-    private LocalDateTime start; //2023-01-02T11:00:00
-    private LocalDateTime end; // 2023-01-02T11:00:00
+    private LocalDateTime start;
+    private LocalDateTime end;
     private String type; // "normal","fixed","variable"
     private String color;
 
