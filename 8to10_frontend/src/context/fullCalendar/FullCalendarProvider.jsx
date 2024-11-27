@@ -42,8 +42,32 @@ export const FullCalendarProvider = ({ children }) => {
         setEvents((prevEvents) => [...prevEvents, event]);
     };
 
+    const updateExtendedProps = (id, keys, values) => {
+        if (keys.length !== values.length) {
+            console.error("Keys and values must have the same length.");
+            return;
+        }
+
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                id === event.id
+                    ? {
+                        ...event,
+                        extendedProps: {
+                            ...event.extendedProps,
+                            ...keys.reduce((acc, key, index) => {
+                                acc[key] = values[index];
+                                return acc;
+                            }, {}),
+                        },
+                    }
+                    : event
+            )
+        );
+    };
+
     return (
-        <CalendarContext.Provider value={{ events, addEvent }}>
+        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps }}>
             {children}
         </CalendarContext.Provider>
     );
