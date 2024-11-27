@@ -68,7 +68,7 @@ public class SseEmitterService {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             sseEmitterRepository.deleteById(id);
-            throw new SseSendException(FAILED_SSE_NOTIFICATION_SEND);
+            throw new SseSendException(FAILED_SSE_NOTIFICATION_SEND.getMessage());
         }
     }
 

@@ -4,6 +4,18 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.eighttoten.config.web.CurrentMember;
+import com.eighttoten.domain.board.Board;
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.dto.board.BoardPageRequest;
+import com.eighttoten.dto.board.BoardPageResponse;
+import com.eighttoten.dto.board.BoardSaveRequest;
+import com.eighttoten.dto.board.BoardSaveResponse;
+import com.eighttoten.dto.board.BoardSearchResponse;
+import com.eighttoten.dto.board.BoardUpdateRequest;
+import com.eighttoten.service.board.BoardHeartService;
+import com.eighttoten.service.board.BoardScrapService;
+import com.eighttoten.service.board.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,25 +32,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.eighttoten.config.web.CurrentMember;
-import com.eighttoten.domain.board.Board;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.dto.board.BoardPageRequest;
-import com.eighttoten.dto.board.BoardPageResponse;
-import com.eighttoten.dto.board.BoardSaveRequest;
-import com.eighttoten.dto.board.BoardSaveResponse;
-import com.eighttoten.dto.board.BoardSearchResponse;
-import com.eighttoten.dto.board.BoardUpdateRequest;
-import com.eighttoten.service.board.BoardHeartService;
-import com.eighttoten.service.board.BoardScrapService;
-import com.eighttoten.service.board.BoardService;
 
 @RestController
 @RequestMapping("/community/board")
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
-
     private final BoardService boardService;
     private final BoardHeartService boardHeartService;
     private final BoardScrapService boardScrapService;

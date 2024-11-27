@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PasswordValidator implements ConstraintValidator<Password, String> {
-
     String PASSWORD_PATTERN = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
 
     @Override

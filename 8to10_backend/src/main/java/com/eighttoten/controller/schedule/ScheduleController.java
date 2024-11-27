@@ -2,9 +2,14 @@ package com.eighttoten.controller.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.eighttoten.config.web.CurrentMember;
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.domain.schedule.Schedule;
+import com.eighttoten.dto.Result;
+import com.eighttoten.dto.schedule.response.ScheduleResponse;
+import com.eighttoten.service.schedule.ScheduleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,15 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.eighttoten.config.web.CurrentMember;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.Schedule;
-import com.eighttoten.dto.Result;
-import com.eighttoten.dto.schedule.response.ScheduleResponse;
-import com.eighttoten.service.schedule.ScheduleService;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {

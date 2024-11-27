@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Slf4j
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     public static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/static/",
             "classpath:/",

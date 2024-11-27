@@ -1,11 +1,11 @@
 package com.eighttoten.dto.board.reply;
 
+import com.eighttoten.domain.board.reply.Reply;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Data;
-import com.eighttoten.domain.board.reply.Reply;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class ReplySearchResponse {
     private Long id;
@@ -13,9 +13,9 @@ public class ReplySearchResponse {
     private String contents;
     private String nickname; // 닉네임
     private String writer; // 이메일
-    private long totalLike;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private long totalLike;
 
     public static ReplySearchResponse from(Reply reply){
         return ReplySearchResponse.builder()

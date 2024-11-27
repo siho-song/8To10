@@ -13,10 +13,10 @@ public class AppConstantValidator {
     @PostConstruct
     public void validateAppConstant(){
         if(WORK_START_TIME.isAfter(WORK_END_TIME)){
-            throw new RuntimeException("AppConstant Setting Error, WORK_START_TIME must be before WORK_END_TIME");
+            throw new RuntimeException("WORK_START_TIME 은 WORK_END_TIME 보다 이전이어야 합니다.");
         }
         if(WORK_END_TIME.equals(WORK_START_TIME)){
-            throw new RuntimeException("AppConstant Setting Error, WORK_END_TIME and WORK_START_TIME cannot equal");
+            throw new RuntimeException("WORK_END_TIME 은 WORK_START_TIME 보다 이후여야 합니다.");
         }
     }
 }

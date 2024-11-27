@@ -17,7 +17,6 @@ import com.eighttoten.service.signup.SignUpService;
 @Controller
 @RequestMapping("/signup")
 @RequiredArgsConstructor
-@Slf4j
 public class SignUpController {
     private final SignUpService signUpService;
 

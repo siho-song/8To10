@@ -24,8 +24,7 @@ import com.eighttoten.service.notification.SseEmitterService;
 @Component
 @Slf4j
 public class RedisChannelEventListener {
-
-    private static final String NOTIFICATION_EVENT = "notification";
+    private static final String NOTIFICATION_EVENT_NAME = "notification";
 
     private final NotificationService notificationService;
     private final MemberService memberService;
@@ -49,7 +48,7 @@ public class RedisChannelEventListener {
             emitters.forEach(emitter -> sseEmitterService.sendToClient(
                     emitter,
                     sseEmitterService.generateUniqueClientId(member.getEmail(), LocalDateTime.now()),
-                    NOTIFICATION_EVENT,
+                    NOTIFICATION_EVENT_NAME,
                     response)
             );
         }

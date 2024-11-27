@@ -3,34 +3,33 @@ package com.eighttoten.service.auth;
 import static com.eighttoten.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_REFRESH_TOKEN;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.eighttoten.domain.auth.Auth;
 import com.eighttoten.exception.InvalidTokenException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.provider.TokenProvider;
 import com.eighttoten.repository.auth.AuthRepository;
 import com.eighttoten.utils.BearerAuthorizationUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final AuthRepository authRepository;
     private final TokenProvider tokenProvider;
     private final BearerAuthorizationUtils bearerUtils;
-
-    @Transactional
-    public void save(String email, String refreshToken) {
-        Auth auth = Auth.from(email, refreshToken);
-        authRepository.save(auth);
-    }
 
     @Transactional(readOnly = true)
     public Auth findByRefreshToken(String refreshToken) {
         return authRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REFRESH_TOKEN));
+    }
+
+    @Transactional
+    public void save(String email, String refreshToken) {
+        Auth auth = Auth.of(email, refreshToken);
+        authRepository.save(auth);
     }
 
     @Transactional(readOnly = true)

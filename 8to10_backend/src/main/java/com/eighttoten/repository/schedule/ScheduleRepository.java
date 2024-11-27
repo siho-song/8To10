@@ -1,7 +1,7 @@
 package com.eighttoten.repository.schedule;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.eighttoten.domain.schedule.Schedule;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleRepository extends JpaRepository<Schedule,Long>, ScheduleRepositoryCustom{
 }

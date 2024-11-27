@@ -4,17 +4,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.eighttoten.config.web.CurrentMember;
 import com.eighttoten.domain.board.reply.Reply;
 import com.eighttoten.domain.member.Member;
@@ -24,13 +13,21 @@ import com.eighttoten.dto.board.reply.ReplySearchResponse;
 import com.eighttoten.dto.board.reply.ReplyUpdateRequest;
 import com.eighttoten.service.board.reply.ReplyHeartService;
 import com.eighttoten.service.board.reply.ReplyService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/community/reply")
 @RequiredArgsConstructor
-@Slf4j
 public class ReplyController {
-
     private final ReplyService replyService;
     private final ReplyHeartService replyHeartService;
 

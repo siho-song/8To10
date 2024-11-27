@@ -3,6 +3,7 @@ package com.eighttoten.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.eighttoten.dto.signup.SignUpRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,16 +33,17 @@ class MemberRepositoryTest {
         save, read
          */
         //given
-        Member member4 = Member.builder()
+        SignUpRequest signUpRequest = SignUpRequest.builder()
                 .username("testUser4")
                 .password("1234")
                 .email("testUser4@test.com")
                 .gender(Gender.FEMALE)
                 .phoneNumber("01099920438")
                 .nickname("테스트유저4")
-                .authPhone(false)
-                .authEmail(false)
+                .isAuthPhone(false)
+                .isAuthEmail(false)
                 .build();
+        Member member4 = Member.from(signUpRequest);
 
         //when
         Member saveMember = memberRepository.save(member4);
@@ -64,41 +66,4 @@ class MemberRepositoryTest {
         assertThatThrownBy(()-> memberRepository.findById(member4.getId()).orElseThrow(NullPointerException::new))
                 .isInstanceOf(NullPointerException.class);
     }
-
-//    @Test
-//    @DisplayName(value = "멤버객체의 ROLE의 기본값은 ROLE.NORMAL_USER 이다.")
-//    void 멤버객체_ROLE의_기본_값_NORMAL_USER(){
-//        //given
-//        Member member4 = Member.builder()
-//                .username("testUser4")
-//                .password("1234")
-//                .email("testUser4@test.com")
-//                .gender(Gender.FEMALE)
-//                .nickname("테스트유저4")
-//                .build();
-//
-//        Member saveMember = memberRepository.save(member4);
-//        em.flush();
-//        em.clear();
-//
-//        //when
-//        Member findMember = memberRepository.findById(saveMember.getId()).orElse(null);
-//
-//        //then
-//        assert findMember != null;
-//        assertThat(findMember.getRole()).isEqualTo(Role.NORMAL_USER);
-//    }
-
-//    @Test
-//    @DisplayName("이메일로 Member를 조회하면서 roles를 페치 조인")
-//    void findWithRolesByEmail() {
-//        String email = "test@example.com";
-//
-//        Optional<Member> memberOpt = memberRepository.findWithRolesByEmail(email);
-//        assertThat(memberOpt).isPresent();
-//
-//        Member member = memberOpt.get();
-//        assertThat(member.getRoles()).isNotNull();
-//        assertThat(member.getRoles()).isNotEmpty();
-//    }
 }

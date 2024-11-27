@@ -1,20 +1,5 @@
 package com.eighttoten.repository.board;
 
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import com.eighttoten.domain.board.QBoard;
 import com.eighttoten.domain.board.QBoardHeart;
 import com.eighttoten.domain.board.QBoardScrap;
@@ -29,10 +14,22 @@ import com.eighttoten.dto.board.BoardSearchResponse;
 import com.eighttoten.dto.board.SearchCond;
 import com.eighttoten.dto.board.SortCondition;
 import com.eighttoten.dto.board.reply.ReplySearchResponse;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
-@Slf4j
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
-
     private final EntityManager em;
 
     private JPAQueryFactory query;

@@ -60,7 +60,7 @@ class FScheduleServiceTest {
                 .build();
 
         Member member = memberService.getAuthenticatedMember();
-        FSchedule fSchedule = FSchedule.createFSchedule(member, fScheduleSave);
+        FSchedule fSchedule = FSchedule.from(member, fScheduleSave);
 
         fScheduleService.addDetails(fSchedule, fScheduleSave);
         List<ScheduleAble> scheduleAbles = fSchedule.getScheduleAbles();

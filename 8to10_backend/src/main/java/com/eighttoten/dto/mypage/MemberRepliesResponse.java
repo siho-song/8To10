@@ -1,10 +1,10 @@
 package com.eighttoten.dto.mypage;
 
+import com.eighttoten.domain.board.reply.Reply;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.eighttoten.domain.board.reply.Reply;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

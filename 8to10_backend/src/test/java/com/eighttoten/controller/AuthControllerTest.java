@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.eighttoten.TestDataUtils;
 import jakarta.servlet.http.Cookie;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +47,7 @@ class AuthControllerTest {
     @BeforeEach
     void init() {
         // 테스트 데이터 초기화
-        member = Optional.of(
-                Member.builder()
-                        .email("testEmail")
-                        .password("testPassword")
-                        .build()
-        );
+        member = Optional.of(TestDataUtils.createTestMember());
     }
 
     @Test

@@ -13,7 +13,6 @@ import com.eighttoten.domain.auth.MemberDetails;
 import com.eighttoten.domain.member.Member;
 
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(CurrentMember.class) &&

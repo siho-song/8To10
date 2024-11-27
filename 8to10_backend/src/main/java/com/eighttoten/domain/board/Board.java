@@ -4,6 +4,10 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.domain.auditing.baseentity.BaseTimeEntity;
+import com.eighttoten.domain.board.reply.Reply;
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.dto.board.BoardSaveRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,15 +21,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.eighttoten.domain.auditing.baseentity.BaseTimeEntity;
-import com.eighttoten.domain.board.reply.Reply;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.dto.board.BoardSaveRequest;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
-@Builder
 @Getter
 public class Board extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -50,11 +48,11 @@ public class Board extends BaseTimeEntity {
     private List<Reply> replies;
 
     public static Board from(Member member , BoardSaveRequest dto){
-        return Board.builder()
-                .title(dto.getTitle())
-                .contents(dto.getContents())
-                .member(member)
-                .build();
+        Board board = new Board();
+        board.member = member;
+        board.title = dto.getTitle();
+        board.contents = dto.getContents();
+        return board;
     }
 
     public void update(String title, String content){

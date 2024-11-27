@@ -1,5 +1,7 @@
 package com.eighttoten.provider;
 
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
@@ -14,14 +16,10 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import com.eighttoten.exception.ExceptionCode;
-import com.eighttoten.exception.InvalidTokenException;
 
-@Slf4j
 @Component
 public class TokenProvider {
     private static final String ISSUER = "8to10_Server";
@@ -80,7 +78,6 @@ public class TokenProvider {
 
     public boolean isValidToken(String token) {
         try {
-            log.info("token : {} ", token);
             parseToken(token);
             return true;
         }

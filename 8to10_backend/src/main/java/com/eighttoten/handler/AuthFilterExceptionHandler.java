@@ -1,5 +1,7 @@
 package com.eighttoten.handler;
 
+import com.eighttoten.dto.ErrorResponse;
+import com.eighttoten.exception.AuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -7,8 +9,6 @@ import java.io.PrintWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import com.eighttoten.dto.ErrorResponse;
-import com.eighttoten.exception.AuthException;
 
 @Component
 @Slf4j

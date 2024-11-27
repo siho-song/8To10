@@ -4,6 +4,7 @@ package com.eighttoten.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.eighttoten.TestDataUtils;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -72,8 +73,8 @@ class MyPageServiceTest {
     void getMemberBoards() {
         //given
         Member member = memberService.getAuthenticatedMember();
-        Board board1 = Board.builder().member(member).title("test1").build();
-        Board board2 = Board.builder().member(member).title("test2").build();
+        Board board1 = TestDataUtils.createTestBoard(member);
+        Board board2 = TestDataUtils.createTestBoard(member);
         List<Board> boards = List.of(board1, board2);
 
         when(boardService.findAllByMember(member)).thenReturn(boards);
@@ -92,10 +93,10 @@ class MyPageServiceTest {
     void getMemberReplies() {
         //given
         Member member = memberService.getAuthenticatedMember();
-        Board board1 = Board.builder().id(1L).build();
-        Board board2 = Board.builder().id(2L).build();
-        Reply reply1 = Reply.builder().member(member).board(board1).contents("test1").build();
-        Reply reply2 = Reply.builder().member(member).board(board2).contents("test2").build();
+        Board board1 = TestDataUtils.createTestBoard(member);
+        Board board2 = TestDataUtils.createTestBoard(member);
+        Reply reply1 = TestDataUtils.createTestReply(null, member, board1);
+        Reply reply2 = TestDataUtils.createTestReply(null, member, board2);
         List<Reply> replies = List.of(reply1, reply2);
 
         when(replyService.findAllByMemberWithBoard(member)).thenReturn(replies);
@@ -114,10 +115,10 @@ class MyPageServiceTest {
     void getScrappedBoard() {
         //given
         Member member = memberService.getAuthenticatedMember();
-        Board board1 = Board.builder().id(1L).build();
-        Board board2 = Board.builder().id(2L).build();
-        BoardScrap boardScrap1 = BoardScrap.builder().member(member).board(board1).build();
-        BoardScrap boardScrap2 = BoardScrap.builder().member(member).board(board2).build();
+        Board board1 = TestDataUtils.createTestBoard(member);
+        Board board2 = TestDataUtils.createTestBoard(member);
+        BoardScrap boardScrap1 = TestDataUtils.createTestBoardScrap(board1,member);
+        BoardScrap boardScrap2 = TestDataUtils.createTestBoardScrap(board2,member);
         List<BoardScrap> boardScraps = List.of(boardScrap1, boardScrap2);
 
         when(boardScrapService.findAllByMemberWithBoard(member)).thenReturn(boardScraps);

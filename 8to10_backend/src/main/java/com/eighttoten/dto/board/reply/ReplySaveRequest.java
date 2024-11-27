@@ -1,8 +1,12 @@
 package com.eighttoten.dto.board.reply;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 public class ReplySaveRequest {
     private Long boardId;
     private Long parentId;

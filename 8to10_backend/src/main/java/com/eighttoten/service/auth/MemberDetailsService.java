@@ -1,22 +1,19 @@
 package com.eighttoten.service.auth;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import com.eighttoten.domain.auth.MemberDetails;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.exception.AuthException;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.repository.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MemberDetailsService implements UserDetailsService {
-
     private final MemberRepository memberRepository;
 
     @Override

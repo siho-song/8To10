@@ -1,13 +1,13 @@
 package com.eighttoten.dto.board;
 
+import com.eighttoten.dto.board.reply.ReplySearchResponse;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import com.eighttoten.dto.board.reply.ReplySearchResponse;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 public class BoardSearchResponse {
     private Long id;
     private String title;

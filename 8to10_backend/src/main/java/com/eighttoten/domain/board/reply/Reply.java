@@ -4,29 +4,21 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.domain.auditing.baseentity.BaseTimeEntity;
+import com.eighttoten.domain.board.Board;
+import com.eighttoten.domain.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import com.eighttoten.domain.auditing.baseentity.BaseTimeEntity;
-import com.eighttoten.domain.board.Board;
-import com.eighttoten.domain.member.Member;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Builder
-@AllArgsConstructor
-@Table(name = "REPLY")
-@ToString(exclude = "parent")
 public class Reply extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_id")
@@ -49,13 +41,13 @@ public class Reply extends BaseTimeEntity {
 
     private long totalLike;
 
-    public static Reply from(Reply parent, String contents, Member member, Board board) {
-        return Reply.builder()
-                .member(member)
-                .board(board)
-                .parent(parent)
-                .contents(contents)
-                .build();
+    public static Reply of(Reply parent, String contents, Member member, Board board) {
+        Reply reply = new Reply();
+        reply.parent = parent;
+        reply.contents = contents;
+        reply.member = member;
+        reply.board = board;
+        return reply;
     }
 
     public void assignParent(Reply parent) {

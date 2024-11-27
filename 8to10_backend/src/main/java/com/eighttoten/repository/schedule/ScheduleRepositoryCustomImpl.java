@@ -1,11 +1,5 @@
 package com.eighttoten.repository.schedule;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.domain.schedule.Schedule;
 import com.eighttoten.domain.schedule.fschedule.FSchedule;
@@ -16,11 +10,13 @@ import com.eighttoten.domain.schedule.nschedule.QNSchedule;
 import com.eighttoten.domain.schedule.nschedule.QNScheduleDetail;
 import com.eighttoten.domain.schedule.vschedule.QVSchedule;
 import com.eighttoten.domain.schedule.vschedule.VSchedule;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-
-@Slf4j
 public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
-
     private final EntityManager em;
 
     private JPAQueryFactory query;

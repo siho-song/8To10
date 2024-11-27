@@ -11,10 +11,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.eighttoten.TestDataUtils;
+import com.eighttoten.dto.board.BoardSaveRequest;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,6 +64,8 @@ class MyPageControllerTest {
     @BeforeEach
     void init() {
         token = tokenProvider.generateAccessToken("normal@example.com");
+        when(memberService.findById(any())).thenReturn(TestDataUtils.createTestMember());
+
     }
 
     @Test
@@ -82,9 +87,9 @@ class MyPageControllerTest {
     @DisplayName("유저가 작성한 게시글을 불러온다.")
     void getMemberBoards() throws Exception {
         //given
-        Board board1 = Board.builder().id(1L).build();
-        Board board2 = Board.builder().id(2L).build();
-        Board board3 = Board.builder().id(3L).build();
+        Board board1 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board2 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board3 = TestDataUtils.createTestBoard(memberService.findById(1L));
 
         when(boardService.findAllByMember(any())).thenReturn(List.of(board1, board2, board3));
 
@@ -103,13 +108,13 @@ class MyPageControllerTest {
     @DisplayName("유저가 작성한 댓글들을 불러온다.")
     void getMemberReplies() throws Exception {
         //given
-        Board board1 = Board.builder().id(1L).build();
-        Board board2 = Board.builder().id(2L).build();
-        Board board3 = Board.builder().id(3L).build();
+        Board board1 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board2 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board3 = TestDataUtils.createTestBoard(memberService.findById(1L));
 
-        Reply reply1 = Reply.builder().id(1L).board(board1).build();
-        Reply reply2 = Reply.builder().id(2L).board(board2).build();
-        Reply reply3 = Reply.builder().id(3L).board(board3).build();
+        Reply reply1 = TestDataUtils.createTestReply(null,memberService.findById(1L),board1);
+        Reply reply2 = TestDataUtils.createTestReply(null,memberService.findById(1L),board2);
+        Reply reply3 = TestDataUtils.createTestReply(null,memberService.findById(1L),board3);
 
         when(replyService.findAllByMemberWithBoard(any())).thenReturn(List.of(reply1, reply2, reply3));
 
@@ -128,13 +133,13 @@ class MyPageControllerTest {
     @DisplayName("유저가 스크랩한 게시글들을 불러온다.")
     void getScrappedBoards() throws Exception {
         //given
-        Board board1 = Board.builder().id(1L).build();
-        Board board2 = Board.builder().id(2L).build();
-        Board board3 = Board.builder().id(3L).build();
+        Board board1 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board2 = TestDataUtils.createTestBoard(memberService.findById(1L));
+        Board board3 = TestDataUtils.createTestBoard(memberService.findById(1L));
 
-        BoardScrap boardScrap1 = BoardScrap.builder().id(1L).board(board1).build();
-        BoardScrap boardScrap2 = BoardScrap.builder().id(2L).board(board2).build();
-        BoardScrap boardScrap3 = BoardScrap.builder().id(3L).board(board3).build();
+        BoardScrap boardScrap1 = BoardScrap.of(board1, memberService.findById(1L));
+        BoardScrap boardScrap2 = BoardScrap.of(board2, memberService.findById(1L));
+        BoardScrap boardScrap3 = BoardScrap.of(board3, memberService.findById(1L));
 
         when(boardScrapService.findAllByMemberWithBoard(any())).thenReturn(
                 List.of(boardScrap1, boardScrap2, boardScrap3));
@@ -157,9 +162,7 @@ class MyPageControllerTest {
 
         //given
         String updateNickname = "업데이트될닉네임";
-        Member member = new Member(1L, "test", "닉네임", null,
-                null, null, null, null, null,
-                "testImage.jpg", 0, false, false);
+        Member member = TestDataUtils.createTestMember();
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -182,9 +185,7 @@ class MyPageControllerTest {
 
         //given
         String updatePassword = "newPassword12!";
-        Member member = new Member(1L, "test", null, null,
-                "password", null, null, null, null,
-                "testImage.jpg", 0, false, false);
+        Member member = TestDataUtils.createTestMember();
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -207,9 +208,7 @@ class MyPageControllerTest {
 
         //given
         MockMultipartFile file = new MockMultipartFile("file", "testFile.jpg", "image/jpg", "Test Contetnt".getBytes());
-        Member member = new Member(1L, "test", null, null,
-                null, null, null, null, null,
-                "testImage.jpg", 0, false, false);
+        Member member =TestDataUtils.createTestMember();
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -235,9 +234,7 @@ class MyPageControllerTest {
     @Transactional
     void deletePhoto() throws Exception {
         //given
-        Member member = new Member(1L, "test", null, null,
-                null, null, null, null, null,
-                "testImage.jpg", 0, false, false);
+        Member member = TestDataUtils.createTestMember();
 
         when(memberService.findById(any())).thenReturn(member);
 

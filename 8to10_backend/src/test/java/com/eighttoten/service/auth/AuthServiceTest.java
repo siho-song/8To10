@@ -54,7 +54,7 @@ class AuthServiceTest {
         doNothing().when(tokenProvider).validateRefreshToken(any());
         when(tokenProvider.isExpiredToken(any())).thenReturn(true);
 
-        Auth auth = Auth.from("normal@example.com", null);
+        Auth auth = Auth.of("normal@example.com", null);
         when(authRepository.findByRefreshToken(any())).thenReturn(Optional.of(auth));
 
         when(tokenProvider.generateAccessToken(any())).thenReturn("New AccessToken");

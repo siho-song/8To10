@@ -1,12 +1,12 @@
 package com.eighttoten.dto.schedule.response.nschedule;
 
+import com.eighttoten.domain.schedule.nschedule.NSchedule;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Builder;
-import lombok.Data;
-import com.eighttoten.domain.schedule.nschedule.NSchedule;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class NScheduleUpdateResponse {
     private Long id;

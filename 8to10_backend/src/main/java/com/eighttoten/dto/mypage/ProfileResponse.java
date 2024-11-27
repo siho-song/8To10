@@ -1,9 +1,9 @@
 package com.eighttoten.dto.mypage;
 
+import com.eighttoten.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.eighttoten.domain.member.Member;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter

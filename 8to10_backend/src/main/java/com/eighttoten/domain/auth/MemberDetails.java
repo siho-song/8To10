@@ -1,15 +1,14 @@
 package com.eighttoten.domain.auth;
 
+import com.eighttoten.domain.member.Member;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.eighttoten.domain.member.Member;
 
 @Getter
 public class MemberDetails implements UserDetails {
-
     private final Member member;
 
     public MemberDetails(Member member) {

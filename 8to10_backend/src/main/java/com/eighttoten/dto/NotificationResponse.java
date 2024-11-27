@@ -1,18 +1,15 @@
 package com.eighttoten.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import com.eighttoten.domain.notification.Notification;
 import com.eighttoten.domain.notification.NotificationType;
+import lombok.Getter;
 
-@NoArgsConstructor
 @Getter
 public class NotificationResponse {
-
-    String message;
-    Long relatedEntityId;
-    String targetUrl;
-    NotificationType notificationType;
+    private String message;
+    private Long relatedEntityId;
+    private String targetUrl;
+    private NotificationType notificationType;
 
     public static NotificationResponse from(Notification notification) {
         NotificationResponse notificationResponse = new NotificationResponse();

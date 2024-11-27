@@ -1,9 +1,9 @@
 package com.eighttoten.validator.schedule.objecterror;
 
+import com.eighttoten.dto.schedule.request.nschedule.NScheduleSave;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.temporal.ChronoUnit;
-import com.eighttoten.dto.schedule.request.nschedule.NScheduleSave;
 
 public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSave> {
     @Override
