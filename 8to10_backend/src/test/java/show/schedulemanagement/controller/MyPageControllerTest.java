@@ -159,7 +159,7 @@ class MyPageControllerTest {
         String updateNickname = "업데이트될닉네임";
         Member member = new Member(1L, "test", "닉네임", null,
                 null, null, null, null, null,
-                "testImage.jpg", null, false, false);
+                "testImage.jpg", 0, false, false);
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -184,7 +184,7 @@ class MyPageControllerTest {
         String updatePassword = "newPassword12!";
         Member member = new Member(1L, "test", null, null,
                 "password", null, null, null, null,
-                "testImage.jpg", null, false, false);
+                "testImage.jpg", 0, false, false);
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -209,7 +209,7 @@ class MyPageControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "testFile.jpg", "image/jpg", "Test Contetnt".getBytes());
         Member member = new Member(1L, "test", null, null,
                 null, null, null, null, null,
-                "testImage.jpg", null, false, false);
+                "testImage.jpg", 0, false, false);
 
         when(memberService.findById(any())).thenReturn(member);
 
@@ -237,7 +237,7 @@ class MyPageControllerTest {
         //given
         Member member = new Member(1L, "test", null, null,
                 null, null, null, null, null,
-                "testImage.jpg", null, false, false);
+                "testImage.jpg", 0, false, false);
 
         when(memberService.findById(any())).thenReturn(member);
 
