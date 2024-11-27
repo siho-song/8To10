@@ -15,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.dto.signup.SignUpRequest;
@@ -61,16 +60,10 @@ public class Member extends BaseEntity {
 
     private String imageFile;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "0")
-    private Double score;
+    private double score;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
     private boolean authEmail;
 
-    @Column(nullable = false)
-    @ColumnDefault(value = "false")
     private boolean authPhone;
 
     public void changeNickname(String nickname){
