@@ -1,6 +1,7 @@
 package show.schedulemanagement.constant;
 
-import static show.schedulemanagement.constant.AppConstant.*;
+import static show.schedulemanagement.constant.AppConstant.WORK_END_TIME;
+import static show.schedulemanagement.constant.AppConstant.WORK_START_TIME;
 
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
