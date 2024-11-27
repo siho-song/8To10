@@ -2,7 +2,7 @@ package show.schedulemanagement.domain.notification;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.service.event.NotificationEvent;
@@ -27,7 +26,6 @@ import show.schedulemanagement.service.event.NotificationEvent;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@DynamicInsert
 public class Notification extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "notification_id")
