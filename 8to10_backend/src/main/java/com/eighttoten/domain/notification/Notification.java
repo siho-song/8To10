@@ -23,8 +23,6 @@ import com.eighttoten.service.event.NotificationEvent;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Notification extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -35,19 +33,18 @@ public class Notification extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private NotificationType notificationType;
+
     @Column(columnDefinition = "TEXT")
     private String message;
-
-    @ColumnDefault(value = "false")
-    private boolean isRead;
 
     private String targetUrl;
 
     private Long relatedEntityId;
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private NotificationType notificationType;
+    private boolean isRead;
 
     public static Notification from(Member member, NotificationEvent event){
         Notification notification = new Notification();

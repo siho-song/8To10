@@ -4,28 +4,22 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.domain.auditing.baseentity.BaseEntity;
+import com.eighttoten.dto.signup.SignUpRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
-import com.eighttoten.domain.auditing.baseentity.BaseEntity;
-import com.eighttoten.dto.signup.SignUpRequest;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
 @DynamicInsert
-@Builder
-@ToString
 public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
@@ -70,19 +64,19 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public static Member from(SignUpRequest signUpRequest){
-        return Member.builder()
-                .username(signUpRequest.getUsername())
-                .nickname(signUpRequest.getNickname())
-                .email(signUpRequest.getEmail())
-                .password(signUpRequest.getPassword())
-                .phoneNumber(signUpRequest.getPhoneNumber())
-                .gender(signUpRequest.getGender())
-                .mode(signUpRequest.getMode())
-                .role(Role.NORMAL_USER)
-                .authEmail(signUpRequest.getAuthEmail())
-                .authPhone(signUpRequest.getAuthPhone())
-                .build();
+    public static Member from(SignUpRequest dto){
+        Member member = new Member();
+        member.username = dto.getUsername();
+        member.nickname = dto.getNickname();
+        member.email = dto.getEmail();
+        member.password = dto.getPassword();
+        member.phoneNumber = dto.getPhoneNumber();
+        member.gender = dto.getGender();
+        member.mode = dto.getMode();
+        member.role = Role.NORMAL_USER;
+        member.authEmail = dto.isAuthEmail();
+        member.authPhone = dto.isAuthPhone();
+        return member;
     }
 
     @PrePersist

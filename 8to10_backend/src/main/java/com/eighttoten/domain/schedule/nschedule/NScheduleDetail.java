@@ -4,6 +4,9 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.domain.auditing.baseentity.BaseEntity;
+import com.eighttoten.domain.schedule.ScheduleAble;
+import com.eighttoten.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,22 +15,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import com.eighttoten.domain.auditing.baseentity.BaseEntity;
-import com.eighttoten.domain.schedule.ScheduleAble;
-import com.eighttoten.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@ToString(exclude = "nSchedule")
 public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "n_schedule_detail_id")
@@ -53,8 +47,7 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
 
     private int achievedAmount;
 
-    public static NScheduleDetail createNscheduleDetail(String commonDescription, LocalDateTime startDate,
-                                                        LocalDateTime endDate) {
+    public static NScheduleDetail from(String commonDescription, LocalDateTime startDate, LocalDateTime endDate) {
         NScheduleDetail nScheduleDetail = new NScheduleDetail();
         nScheduleDetail.completeStatus = false;
         nScheduleDetail.detailDescription = commonDescription;
