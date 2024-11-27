@@ -26,7 +26,6 @@ import com.eighttoten.domain.member.Member;
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "dtype")
-@ToString(exclude = {"member"})
 public abstract class Schedule extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "schedule_id")
