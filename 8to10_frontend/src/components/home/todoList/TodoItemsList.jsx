@@ -1,13 +1,17 @@
 import PropTypes from "prop-types";
+import TodoItem from "@/components/home/todoList/TodoItem.jsx";
 
-const TodoItemsList = ({todoEvents}) => {
+const TodoItemsList = ({filteredEvents}) => {
     return (
         <div id="todo-list-container">
-            {todoEvents.length > 0 ? (
-                todoEvents.map((event) => {
-                    // TODO TodoItem구현
-                })
-            ): (
+            {filteredEvents.length > 0 ? (
+                filteredEvents.map((event) => (
+                    <TodoItem
+                        key={event.id}
+                        event={event}
+                    />
+                ))
+            ) : (
                 <p>현재 할 일이 없습니다.</p>
             )}
         </div>
@@ -15,7 +19,7 @@ const TodoItemsList = ({todoEvents}) => {
 }
 
 TodoItemsList.propTypes = {
-    todoEvents: PropTypes.arrayOf(
+    filteredEvents: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             groupId: PropTypes.number,
@@ -30,10 +34,13 @@ TodoItemsList.propTypes = {
                 detailDescription: PropTypes.string,
                 bufferTime: PropTypes.string,
                 completeStatus: PropTypes.bool,
+                isComplete: PropTypes.bool,
                 dailyAmount: PropTypes.number,
+                achievedAmount: PropTypes.number,
+                originId: PropTypes.number,
             }).isRequired,
-        })
-    )
+        }),
+    ),
 };
 
 export default TodoItemsList;
