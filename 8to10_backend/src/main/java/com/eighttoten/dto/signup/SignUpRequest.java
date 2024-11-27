@@ -38,6 +38,6 @@ public class SignUpRequest {
 
     private Gender gender;
     private Mode mode;
-    private Boolean authEmail;
-    private Boolean authPhone;
+    private boolean isAuthEmail;
+    private boolean isAuthPhone;
 }
