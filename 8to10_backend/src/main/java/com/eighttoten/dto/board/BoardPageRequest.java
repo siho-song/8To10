@@ -1,11 +1,13 @@
 package com.eighttoten.dto.board;
 
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class BoardPageRequest {
     private String keyword; //제목, 내용으로 검색
     @Size(min = 1)

@@ -1,12 +1,14 @@
 package com.eighttoten.dto.board;
 
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Data;
 import com.eighttoten.domain.board.Board;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
+@AllArgsConstructor
 @Builder
+@Getter
 public class BoardSaveResponse {
     private Long id;
     private String title;

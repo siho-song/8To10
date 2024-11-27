@@ -3,9 +3,11 @@ package com.eighttoten.dto.board;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@NoArgsConstructor
+@Getter
 @AllArgsConstructor
 public class BoardSaveRequest {
     @NotBlank
