@@ -3,12 +3,13 @@ import {
 } from "@/components/home/form/ScheduleTimeUtils/TimeOptions.jsx";
 import {useState} from "react";
 import {
-    convertPeriodTimeToLocalTimeFormat,
-} from "@/helpers/TimeUtils.js";
-import {useCalendar} from "@/context/FullCalendarContext.jsx";
+    formatPeriodTimeToLocalTimeFormat,
+} from "@/helpers/TimeFormatter.js";
+import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatVariableSchedule} from "@/helpers/ScheduleFormatter.js";
 
 function VariableScheduleForm({ onClose }) {
 
@@ -41,13 +42,13 @@ function VariableScheduleForm({ onClose }) {
 
         e.preventDefault();
 
-        const startDateTime = formData.startDate +'T'+ convertPeriodTimeToLocalTimeFormat(
+        const startDateTime = formData.startDate +'T'+ formatPeriodTimeToLocalTimeFormat(
             formData.startTime,
             formData.startHour,
             formData.startMinute
         );
 
-        const endDateTime = formData.endDate + 'T' + convertPeriodTimeToLocalTimeFormat(
+        const endDateTime = formData.endDate + 'T' + formatPeriodTimeToLocalTimeFormat(
             formData.endTime,
             formData.endHour,
             formData.endMinute
@@ -71,8 +72,8 @@ function VariableScheduleForm({ onClose }) {
                     apiEndPoint: API_ENDPOINT_NAMES.CREATE_V_SCHEDULE,
             });
             const data = response.data;
-
-            addEvent(data);
+            const formattedEvent = formatVariableSchedule(data);
+            addEvent(formattedEvent);
             onClose();
 
         } catch (error) {

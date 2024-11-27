@@ -5,7 +5,7 @@ import {
     JSON_ENDPOINTS,
     URL_ENCODED_ENDPOINTS
 } from "@/constants/ApiEndPoints.js";
-import {buildBearerToken} from "@/helpers/TokenUtils.js";
+import {buildBearerToken} from "@/helpers/TokenManager.js";
 
 export const setAuthorizationHeaders = (config) => {
     const accessToken = localStorage.getItem('Authorization');

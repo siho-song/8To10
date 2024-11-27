@@ -1,13 +1,13 @@
-export function convertTo24HourFormat(date, hour, minute) {
+export function format24HourFormat(date, hour, minute) {
     const hourInt = parseInt(hour) % 12 + (hour >= 12 ? 12 : 0); // 24시간 형식으로 변환
     return `${date}T${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
 }
 
-export const convertToDuration = (hour, minute) => {
+export const formatDuration = (hour, minute) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 };
 
-export const convertPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
+export const formatPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
     let hourInt = parseInt(hour);
     if (period === 'PM' && hourInt !== 12) {
         hourInt += 12;
@@ -33,4 +33,24 @@ export function formatDateTime(dateTime) {
     hours = hours ? String(hours).padStart(2, '0') : '12'; // 0일 경우 12로 표시
 
     return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`;
+}
+
+export const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+export function formatLocalDateTimeToTime(dateString) {
+
+    const [datePart, timePart] = dateString.split("T");
+    const [hour, minute] = timePart.split(":").map(Number);
+
+    const period = hour >= 12 ? "오후" : "오전";
+    const formattedHour = hour % 12 || 12;
+
+    const formattedMinute = String(minute).padStart(2, "0");
+
+    return `${period} ${formattedHour}시 ${formattedMinute}분`;
 }

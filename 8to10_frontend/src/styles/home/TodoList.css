@@ -1,0 +1,156 @@
+.todo-container {
+    background-color: #dffcdf; /* 밝고 깔끔한 배경색 */
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 더 부드러운 그림자 */
+    max-width: 500px; /* 최대 너비 제한 */
+    margin: 20px auto; /* 가운데 정렬 */
+}
+
+.todo-container h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #333; /* 어두운 텍스트 색상 */
+}
+
+/* 날짜 선택 헤더 */
+.todo-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.todo-list-header button {
+    background: #4CAF50; /* 녹색 버튼 */
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 20px; /* 둥근 버튼 */
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.todo-list-header button:hover {
+    background: #45a049;
+    transform: scale(1.1); /* 살짝 확대 */
+}
+
+.todo-list-header span {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.todo-item:hover {
+    transform: translateY(-3px); /* 살짝 떠오르는 효과 */
+    background-color: #f5f5f5;
+}
+
+.todo-item.completed {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.todo-item.completed p {
+    color: white;
+}
+
+.todo-item h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.todo-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 5px;
+}
+
+.todo-amount {
+    font-size: 14px;
+    color: #666;
+}
+
+.todo-amount span {
+    font-weight: bold;
+    color: #333;
+}
+
+.todo-time {
+    font-size: 14px;
+    color: #888;
+}
+
+.achievement-input {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+
+.achievement-input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+
+.check-button {
+    background: #e0e0e0;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #666;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.check-button:hover {
+    background: #4CAF50;
+    color: white;
+    transform: scale(1.2);
+}
+
+.submit-todo-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-todo-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import {formatDateTime} from "@/helpers/TimeUtils.js";
+import {formatDateTime} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";

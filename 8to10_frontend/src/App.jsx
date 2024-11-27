@@ -4,12 +4,12 @@ import "./styles/styles.css";
 
 import Login from './components/login/Login';
 import SignUp from './components/signUp/SignUp';
-import AuthProvider from "./context/AuthProvider.jsx";
+import AuthProvider from "./context/auth/AuthProvider.jsx";
 
 import PrivateRoute from "./components/PrivateRoute.jsx";
 
 import Home from "./pages/Home.jsx";
-import {FullCalendarContext} from "@/context/FullCalendarContext.jsx";
+import {FullCalendarProvider} from "@/context/fullCalendar/FullCalendarProvider.jsx";
 
 import MyPage from "@/pages/MyPage.jsx";
 
@@ -30,9 +30,9 @@ function App() {
                         <Route
                             path="/home"
                             element={
-                                <FullCalendarContext>
-                                    <Home />
-                                </FullCalendarContext>
+                                <FullCalendarProvider>
+                                <Home />
+                                </FullCalendarProvider>
                             }
                         />
 

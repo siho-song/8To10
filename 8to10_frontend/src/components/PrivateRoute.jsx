@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import {useAuth} from "@/context/UseAuth.jsx";
+import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
-import {refreshAccessToken} from "@/helpers/TokenUtils.js";
+import {refreshAccessToken} from "@/helpers/TokenManager.js";
 
 function PrivateRoute() {
     const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail} = useAuth();

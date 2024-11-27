@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { InitializeTimeOptions, InitializeTimeOptionsWithPeriod } from "../ScheduleTimeUtils/TimeOptions.jsx";
 import {
-    convertPeriodTimeToLocalTimeFormat,
-    convertToDuration
-} from "@/helpers/TimeUtils.js"
-import { useCalendar } from "@/context/FullCalendarContext.jsx";
+    formatPeriodTimeToLocalTimeFormat,
+    formatDuration
+} from "@/helpers/TimeFormatter.js"
+import { useCalendar } from "@/context/fullCalendar/useCalendar.jsx";
 
 import "@/styles/home/scheduleForm.css";
 import PropTypes from "prop-types";
@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import * as Yup from 'yup';
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {formatFixedSchedule} from "@/helpers/ScheduleFormatter.js";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -66,11 +67,8 @@ function FixedScheduleForm({ onClose }) {
 
     const validateForm = async () => {
         try {
-            console.log("폼 검증 로직 시작");
             await validationSchema.validate(formData, { abortEarly: false });
-            console.log("폼 검증 로직 끝");
             setErrors({});
-            console.log("폼 검증 로직 세팅");
             return true;
         } catch (error) {
             const newErrors = error.inner.reduce((acc, err) => {
@@ -140,12 +138,12 @@ function FixedScheduleForm({ onClose }) {
             commonDescription: formData.commonDescription,
             startDate: formData.startDate,
             endDate: formData.endDate,
-            startTime: convertPeriodTimeToLocalTimeFormat(
+            startTime: formatPeriodTimeToLocalTimeFormat(
                 formData.startTime,
                 formData.startHour,
                 formData.startMinute
             ),
-            duration: convertToDuration(formData.durationHour, formData.durationMinute),
+            duration: formatDuration(formData.durationHour, formData.durationMinute),
             frequency: formData.frequency,
             days: formData.days,
         };
@@ -161,8 +159,8 @@ function FixedScheduleForm({ onClose }) {
             const data = response.data;
 
             data.items.forEach(event => {
-                console.log("new event : ", event);
-                addEvent(event);
+                const formattedEvent = formatFixedSchedule(event);
+                addEvent(formattedEvent);
             });
             onClose();
 
