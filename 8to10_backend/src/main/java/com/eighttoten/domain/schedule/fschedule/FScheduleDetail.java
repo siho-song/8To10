@@ -25,7 +25,6 @@ import com.eighttoten.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@ToString(exclude = {"fSchedule"})
 public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "f_schedule_detail_id")
@@ -56,11 +55,11 @@ public class FScheduleDetail extends BaseEntity implements ScheduleAble {
         fSchedule.getFScheduleDetails().add(this);
     }
 
-    public void update(FScheduleDetailUpdate fScheduleDetailUpdate){
+    public void update(FScheduleDetailUpdate dto){
         if(detailDescription != null){
-            detailDescription = fScheduleDetailUpdate.getDetailDescription();
+            detailDescription = dto.getDetailDescription();
         }
-        startDate = fScheduleDetailUpdate.getStartDate();
-        endDate = fScheduleDetailUpdate.getEndDate();
+        startDate = dto.getStartDate();
+        endDate = dto.getEndDate();
     }
 }
