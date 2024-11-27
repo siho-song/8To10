@@ -14,7 +14,6 @@ import com.eighttoten.handler.RedisChannelEventListener;
 
 @Configuration
 public class RedisConfig {
-
     @Value(value = "${spring.data.redis.host}")
     private String redisHost;
 
@@ -57,5 +56,4 @@ public class RedisConfig {
     public ChannelTopic notificationTopic(){
         return new ChannelTopic("notificationChannel");
     }
-
 }

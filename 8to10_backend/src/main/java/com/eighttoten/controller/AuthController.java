@@ -12,7 +12,6 @@ import com.eighttoten.service.auth.AuthService;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
 
     @PostMapping(value = "/renew")

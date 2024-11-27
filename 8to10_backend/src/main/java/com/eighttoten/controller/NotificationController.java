@@ -20,7 +20,6 @@ import com.eighttoten.service.notification.SseEmitterService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
-@Slf4j
 public class NotificationController {
     private final SseEmitterService sseEmitterService;
     private final NotificationService notificationService;
