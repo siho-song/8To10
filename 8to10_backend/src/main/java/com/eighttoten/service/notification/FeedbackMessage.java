@@ -3,11 +3,11 @@ package com.eighttoten.service.notification;
 import static com.eighttoten.domain.member.Mode.MILD;
 import static com.eighttoten.domain.member.Mode.SPICY;
 
+import com.eighttoten.domain.member.Mode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import lombok.Getter;
-import com.eighttoten.domain.member.Mode;
 
 @Getter
 public enum FeedbackMessage {

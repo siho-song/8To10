@@ -25,9 +25,7 @@ import com.eighttoten.repository.schedule.fschedule.FScheduleRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class FScheduleService {
-
     private final FScheduleRepository fScheduleRepository;
 
     public FSchedule findById(Long id){

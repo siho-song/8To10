@@ -3,6 +3,12 @@ package com.eighttoten.service.notification;
 import static com.eighttoten.exception.ExceptionCode.INVALID_REDIS_MESSAGE;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_NOTIFICATION;
 
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.domain.notification.Notification;
+import com.eighttoten.exception.InvalidRedisMessageException;
+import com.eighttoten.exception.NotFoundEntityException;
+import com.eighttoten.repository.notification.NotificationRepository;
+import com.eighttoten.service.event.NotificationEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -15,12 +21,6 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.notification.Notification;
-import com.eighttoten.exception.InvalidRedisMessageException;
-import com.eighttoten.exception.NotFoundEntityException;
-import com.eighttoten.repository.notification.NotificationRepository;
-import com.eighttoten.service.event.NotificationEvent;
 
 @Service
 @RequiredArgsConstructor

@@ -12,7 +12,6 @@ import com.eighttoten.exception.BadRequestException;
 
 @Service
 public class MultipartFileStorageService {
-
     public String saveFile(MultipartFile multipartFile, String directoryPath) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
 

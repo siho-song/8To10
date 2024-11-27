@@ -4,21 +4,6 @@ import static com.eighttoten.exception.ExceptionCode.INVALID_N_SCHEDULE_CREATION
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
 import static com.eighttoten.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.domain.schedule.Schedule;
 import com.eighttoten.domain.schedule.ScheduleAble;
@@ -33,13 +18,25 @@ import com.eighttoten.repository.schedule.nschedule.NScheduleRepository;
 import com.eighttoten.service.schedule.ScheduleService;
 import com.eighttoten.service.schedule.timeslot.TimeSlot;
 import com.eighttoten.service.schedule.timeslot.TimeSlotService;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class NScheduleService {
-
     private final ScheduleService scheduleService;
     private final NScheduleRepository nScheduleRepository;
     private final TimeSlotService timeSlotService;
