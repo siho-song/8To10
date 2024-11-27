@@ -1,25 +1,22 @@
 package com.eighttoten.service.achievement;
 
-import java.time.LocalDate;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.eighttoten.domain.achievement.Achievement;
 import com.eighttoten.domain.member.Member;
 import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
 import com.eighttoten.repository.achievement.AchievementRepository;
 import com.eighttoten.repository.schedule.nschedule.NScheduleDetailRepository;
 import com.eighttoten.service.event.ProgressUpdatedEvent;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class AchievementService {
-
     private final AchievementRepository achievementRepository;
     private final NScheduleDetailRepository nScheduleDetailRepository;
 
@@ -27,7 +24,7 @@ public class AchievementService {
         return achievementRepository.findByMemberAndAchievementDate(member, date)
                 .orElse(null);
     }
-    
+
     public List<Achievement> findAllBetweenYearAndMonth(Member member, int year, int month){
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = LocalDate.of(year, month, start.lengthOfMonth());
