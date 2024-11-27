@@ -1,6 +1,6 @@
 package show.schedulemanagement.service.member;
 
-import static show.schedulemanagement.exception.ExceptionCode.*;
+import static show.schedulemanagement.exception.ExceptionCode.NOT_FOUND_MEMBER;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import show.schedulemanagement.domain.auth.MemberDetails;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.repository.member.MemberRepository;
-import show.schedulemanagement.domain.auth.MemberDetails;
 
 @Service
 @RequiredArgsConstructor

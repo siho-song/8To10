@@ -1,6 +1,6 @@
 package show.schedulemanagement.service.signup;
 
-import static show.schedulemanagement.exception.ExceptionCode.*;
+import static show.schedulemanagement.exception.ExceptionCode.SIGNUP_FAILED;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

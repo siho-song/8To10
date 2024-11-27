@@ -1,7 +1,6 @@
 package show.schedulemanagement.service.event.reply;
 
 import lombok.Getter;
-import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.reply.Reply;
 
 @Getter

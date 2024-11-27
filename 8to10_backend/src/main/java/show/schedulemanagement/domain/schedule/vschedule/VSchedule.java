@@ -8,17 +8,15 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.domain.schedule.Schedule;
+import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleSave;
 import show.schedulemanagement.dto.schedule.request.vschedule.VScheduleUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@DynamicInsert
 @DiscriminatorValue(value = "V")
 @ToString(callSuper = true)
 public class VSchedule extends Schedule implements ScheduleAble {
