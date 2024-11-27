@@ -21,7 +21,7 @@ const TodoListHeader = ({currentDate, changeCurrentDate}) => {
     }
 
     return (
-        <div id="todo-list-header">
+        <div className="todo-list-header">
             <button
                 id="prev-date-btn"
                 onClick={handlePrevDateClick}
