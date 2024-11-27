@@ -1,5 +1,8 @@
 package com.eighttoten.filter;
 
+import com.eighttoten.exception.AuthException;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.handler.AuthFilterExceptionHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -13,9 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.eighttoten.exception.AuthException;
-import com.eighttoten.exception.ExceptionCode;
-import com.eighttoten.handler.AuthFilterExceptionHandler;
 
 @Slf4j
 public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
