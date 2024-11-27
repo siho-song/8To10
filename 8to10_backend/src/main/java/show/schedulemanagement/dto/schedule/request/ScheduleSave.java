@@ -16,8 +16,9 @@ public abstract class ScheduleSave {
     @NotBlank(groups = FieldErrorGroup.class)
     @Size(min = 1,max = 80, groups = FieldErrorGroup.class)
     private String title;
-    
-    private String commonDescription = "";
+
+    @NotBlank
+    private String commonDescription;
 
     protected ScheduleSave(String title, String commonDescription) {
         this.title = title;
