@@ -20,6 +20,6 @@ public class AuthController {
             @RequestHeader("Authorization") String accessTokenHeader)
     {
         String renewAccessToken = authService.getRenewalAccessToken(refreshToken, accessTokenHeader);
-        return ResponseEntity.ok(AccessTokenResponse.from(renewAccessToken));
+        return ResponseEntity.ok(AccessTokenResponse.of(renewAccessToken));
     }
 }

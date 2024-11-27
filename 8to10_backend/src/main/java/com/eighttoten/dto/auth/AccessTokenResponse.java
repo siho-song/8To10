@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class AccessTokenResponse {
     private String accessToken;
 
-    public static AccessTokenResponse from(String accessToken){
+    public static AccessTokenResponse of(String accessToken){
         AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
         accessTokenResponse.accessToken = accessToken;
         return accessTokenResponse;
