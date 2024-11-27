@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
 import show.schedulemanagement.domain.auditing.baseentity.BaseTimeEntity;
 import show.schedulemanagement.domain.board.reply.Reply;
 import show.schedulemanagement.domain.member.Member;
@@ -28,7 +27,6 @@ import show.schedulemanagement.dto.board.BoardSaveRequest;
 @AllArgsConstructor
 @Builder
 @Getter
-@DynamicInsert
 public class Board extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "board_id")

@@ -1,6 +1,6 @@
 package show.schedulemanagement.controller;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

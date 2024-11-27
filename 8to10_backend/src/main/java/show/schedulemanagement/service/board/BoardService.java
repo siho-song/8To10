@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 import show.schedulemanagement.dto.board.BoardUpdateRequest;
 

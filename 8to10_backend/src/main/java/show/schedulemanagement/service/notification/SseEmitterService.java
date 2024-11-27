@@ -10,15 +10,12 @@ import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.notification.Notification;
 import show.schedulemanagement.dto.NotificationResponse;
 import show.schedulemanagement.exception.SseSendException;
-import show.schedulemanagement.repository.notification.NotificationRepository;
 import show.schedulemanagement.repository.notification.SseEmitterRepository;
 
 @Service

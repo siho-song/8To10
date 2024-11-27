@@ -9,8 +9,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.auth.MemberDetails;
+import show.schedulemanagement.domain.member.Member;
 
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 

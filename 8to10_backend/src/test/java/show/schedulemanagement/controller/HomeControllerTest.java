@@ -18,6 +18,7 @@ import show.schedulemanagement.provider.TokenProvider;
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@DisplayName("홈 컨트롤러 테스트")
 class HomeControllerTest {
 
     @Autowired

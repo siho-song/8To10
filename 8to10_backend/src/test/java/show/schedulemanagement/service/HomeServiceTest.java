@@ -22,6 +22,7 @@ import show.schedulemanagement.service.member.MemberService;
 
 @Slf4j
 @SpringBootTest
+@DisplayName("홈 서비스 테스트")
 class HomeServiceTest {
 
     @Autowired

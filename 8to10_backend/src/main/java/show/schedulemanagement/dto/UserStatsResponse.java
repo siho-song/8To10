@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import show.schedulemanagement.domain.member.Role;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

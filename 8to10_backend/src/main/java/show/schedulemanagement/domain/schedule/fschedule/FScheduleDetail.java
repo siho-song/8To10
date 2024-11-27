@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import show.schedulemanagement.domain.auditing.baseentity.BaseEntity;
 import show.schedulemanagement.domain.schedule.ScheduleAble;
 import show.schedulemanagement.dto.schedule.request.fschedule.FScheduleDetailUpdate;

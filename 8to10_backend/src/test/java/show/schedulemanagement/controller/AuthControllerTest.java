@@ -27,6 +27,7 @@ import show.schedulemanagement.service.auth.AuthService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("인증 컨트롤러 테스트")
 class AuthControllerTest {
     @MockBean
     MemberRepository memberRepository;

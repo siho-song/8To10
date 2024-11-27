@@ -1,7 +1,6 @@
 package show.schedulemanagement.service.board;
 
 import java.util.List;
-import show.schedulemanagement.domain.board.Board;
 import show.schedulemanagement.domain.board.BoardScrap;
 import show.schedulemanagement.domain.member.Member;
 

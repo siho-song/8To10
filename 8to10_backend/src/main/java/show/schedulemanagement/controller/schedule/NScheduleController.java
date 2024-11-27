@@ -1,7 +1,7 @@
 package show.schedulemanagement.controller.schedule;
 
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import show.schedulemanagement.config.web.CurrentMember;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.domain.schedule.nschedule.NSchedule;
+import show.schedulemanagement.dto.Result;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleSave;
 import show.schedulemanagement.dto.schedule.request.nschedule.NScheduleUpdate;
 import show.schedulemanagement.dto.schedule.request.nschedule.ProgressUpdateRequest;
 import show.schedulemanagement.dto.schedule.response.ScheduleResponse;
-import show.schedulemanagement.dto.Result;
+import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleDetailService;
 import show.schedulemanagement.service.schedule.nschedule.NScheduleService;
-import show.schedulemanagement.service.schedule.ScheduleService;
 import show.schedulemanagement.validator.ValidationSequence;
 
 @RestController

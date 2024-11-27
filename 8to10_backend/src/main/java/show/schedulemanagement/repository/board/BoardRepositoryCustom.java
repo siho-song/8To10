@@ -4,8 +4,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import show.schedulemanagement.domain.member.Member;
-import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardPageRequest;
+import show.schedulemanagement.dto.board.BoardPageResponse;
 import show.schedulemanagement.dto.board.BoardSearchResponse;
 
 public interface BoardRepositoryCustom {

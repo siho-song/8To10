@@ -3,7 +3,6 @@ package show.schedulemanagement.validator.schedule.objecterror;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import show.schedulemanagement.dto.schedule.request.DateRangeValidatable;
 
 public class StartDateBeforeEqEndDateValidator implements ConstraintValidator<StartDateBeforeEqEndDate, DateRangeValidatable> {

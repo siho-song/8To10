@@ -1,11 +1,10 @@
 package show.schedulemanagement.handler;
 
-import static show.schedulemanagement.utils.BearerAuthorizationUtils.*;
+import static show.schedulemanagement.utils.BearerAuthorizationUtils.BEARER_CODE;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

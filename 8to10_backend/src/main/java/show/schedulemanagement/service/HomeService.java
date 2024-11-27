@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import show.schedulemanagement.domain.achievement.Achievement;
 import show.schedulemanagement.domain.member.Member;
 import show.schedulemanagement.dto.UserStatsResponse;
-import show.schedulemanagement.exception.NotFoundEntityException;
 import show.schedulemanagement.service.achievement.AchievementService;
 
 @Service

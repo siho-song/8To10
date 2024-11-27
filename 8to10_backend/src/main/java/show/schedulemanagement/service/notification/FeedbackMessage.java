@@ -1,6 +1,7 @@
 package show.schedulemanagement.service.notification;
 
-import static show.schedulemanagement.domain.member.Mode.*;
+import static show.schedulemanagement.domain.member.Mode.MILD;
+import static show.schedulemanagement.domain.member.Mode.SPICY;
 
 import java.util.Arrays;
 import java.util.List;

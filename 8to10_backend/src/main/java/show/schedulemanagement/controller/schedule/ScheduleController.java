@@ -1,6 +1,6 @@
 package show.schedulemanagement.controller.schedule;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
