@@ -37,7 +37,20 @@ export function formatDateTime(dateTime) {
 
 export const formatDate = (date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1);
-    const day = String(date.getDate());
-    return `${year}.${month}.${day}`;
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+export function formatLocalDateTimeToTime(dateString) {
+
+    const [datePart, timePart] = dateString.split("T");
+    const [hour, minute] = timePart.split(":").map(Number);
+
+    const period = hour >= 12 ? "오후" : "오전";
+    const formattedHour = hour % 12 || 12;
+
+    const formattedMinute = String(minute).padStart(2, "0");
+
+    return `${period} ${formattedHour}시 ${formattedMinute}분`;
 }
