@@ -19,7 +19,6 @@ import com.eighttoten.dto.board.SearchCond;
 import com.eighttoten.dto.board.SortCondition;
 
 @SpringBootTest
-
 class BoardRepositoryCustomImplTest {
     @Autowired
     BoardRepository boardRepository;
