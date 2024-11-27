@@ -22,6 +22,7 @@ import show.schedulemanagement.service.notification.SseEmitterService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@DisplayName("알림 컨트롤러 테스트")
 class NotificationControllerTest {
 
     @Autowired

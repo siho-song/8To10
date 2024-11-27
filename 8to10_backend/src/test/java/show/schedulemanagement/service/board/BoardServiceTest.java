@@ -19,6 +19,7 @@ import show.schedulemanagement.service.member.MemberService;
 
 @SpringBootTest
 @Transactional
+@DisplayName("게시글 서비스 테스트")
 class BoardServiceTest {
 
     @Autowired

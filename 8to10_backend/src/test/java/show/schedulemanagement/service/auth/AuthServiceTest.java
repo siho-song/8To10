@@ -24,6 +24,7 @@ import show.schedulemanagement.repository.auth.AuthRepository;
 import show.schedulemanagement.utils.BearerAuthorizationUtils;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("인증 서비스 테스트")
 class AuthServiceTest {
     @Mock
     AuthRepository authRepository;
