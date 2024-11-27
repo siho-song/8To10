@@ -12,5 +12,4 @@ public class InvalidRedisMessageException extends RuntimeException {
         super(exceptionCode.getMessage());
         this.exceptionCode = exceptionCode;
     }
-
 }
