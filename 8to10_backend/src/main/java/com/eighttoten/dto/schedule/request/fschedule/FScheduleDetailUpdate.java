@@ -1,16 +1,20 @@
 package com.eighttoten.dto.schedule.request.fschedule;
 
-import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Data;
 import com.eighttoten.dto.schedule.request.DateRangeValidatable;
 import com.eighttoten.validator.ValidationGroups.FieldErrorGroup;
 import com.eighttoten.validator.ValidationGroups.ObjectErrorGroup;
 import com.eighttoten.validator.schedule.fielderror.ZeroSeconds;
 import com.eighttoten.validator.schedule.objecterror.StartBeforeEnd;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class FScheduleDetailUpdate implements DateRangeValidatable {

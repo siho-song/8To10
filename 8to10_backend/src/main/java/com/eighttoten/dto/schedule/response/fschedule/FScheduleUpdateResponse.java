@@ -1,11 +1,11 @@
 package com.eighttoten.dto.schedule.response.fschedule;
 
+import com.eighttoten.domain.schedule.fschedule.FSchedule;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Data;
-import com.eighttoten.domain.schedule.fschedule.FSchedule;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class FScheduleUpdateResponse {
     private Long id;

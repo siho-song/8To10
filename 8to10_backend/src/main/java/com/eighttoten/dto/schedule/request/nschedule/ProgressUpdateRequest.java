@@ -3,9 +3,9 @@ package com.eighttoten.dto.schedule.request.nschedule;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class ProgressUpdateRequest {
 
