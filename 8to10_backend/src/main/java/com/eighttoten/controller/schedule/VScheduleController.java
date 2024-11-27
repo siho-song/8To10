@@ -33,7 +33,7 @@ public class VScheduleController {
             @CurrentMember Member member,
             @RequestBody @Validated(value = ValidationSequence.class) VScheduleSave dto)
     {
-        VSchedule schedule = VSchedule.createVSchedule(member, dto);
+        VSchedule schedule = VSchedule.from(member, dto);
         scheduleService.save(schedule);
         return new ResponseEntity<>(ScheduleResponse.from(schedule,null), CREATED);
     }

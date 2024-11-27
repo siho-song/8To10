@@ -43,7 +43,7 @@ public class FScheduleController {
             @CurrentMember Member member,
             @RequestBody @Validated(value = ValidationSequence.class) FScheduleSave dto) {
 
-        FSchedule fSchedule = FSchedule.createFSchedule(member, dto);
+        FSchedule fSchedule = FSchedule.from(member, dto);
 
         fScheduleService.addDetails(fSchedule, dto);
         scheduleService.save(fSchedule);
