@@ -6,7 +6,7 @@ import {
     setAuthorizationHeaders,
     setContentTypeHeaders,
     setWithCredentials
-} from "@/helpers/AxiosConfig.js";
+} from "@/helpers/AxiosHelper.js";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
 
 const authenticatedApi = axios.create({
