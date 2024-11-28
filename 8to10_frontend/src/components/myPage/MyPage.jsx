@@ -1,4 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
 
 import "@/styles/myPage/MyPage.css";
 
@@ -9,6 +12,35 @@ function MyPage() {
     const [userRole, setUserRole] = useState("");
     const [userProfileImageUrl, setUserProfileImageUrl] = useState("");
 
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            try {
+                const url = "/mypage";
+                const response = await authenticatedApi.get(url, {
+                    apiEndPoint: API_ENDPOINT_NAMES.GET_USER_PROFILE,
+                })
+
+                setUserNickname(response.data.nickname);
+                setUserEmail(response.data.email);
+                setUserRole(response.data.role);
+
+                if (response.data.profileImageUrl) {
+                    setUserProfileImageUrl(response.data.profileImageUrl);
+                } else if (response.data.role === USER_ROLE.FAITHFUL_USER) {
+                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.FAITHFUL_USER);
+                } else if (response.data.role === USER_ROLE.NORMAL_USER){
+                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.NORMAL_USER);
+                } else {
+                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.ADMIN);
+                }
+            } catch(error) {
+                console.error(error.toString());
+                console.error(error);
+            }
+        }
+
+        loadUserProfile();
+    }, []);
 
     return (
 
