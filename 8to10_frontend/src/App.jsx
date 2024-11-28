@@ -11,8 +11,6 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import Home from "./pages/Home.jsx";
 import {FullCalendarProvider} from "@/context/fullCalendar/FullCalendarProvider.jsx";
 
-import MyPage from "@/pages/MyPage.jsx";
-
 import Community from "@/pages/Community.jsx";
 import Post from "@/pages/Post.jsx";
 import BoardPost from "@/pages/BoardPost.jsx";
@@ -35,9 +33,6 @@ function App() {
                                 </FullCalendarProvider>
                             }
                         />
-
-                        <Route path="/mypage" element={<MyPage />}/>
-
                         <Route path="/community/board" element={<Community />}/>
                         <Route path="/community/board/add" element={<Post isEditMode={false}/>} />
                         <Route path="/community/board/edit/:postId" element={<Post isEditMode={true}/>}/>
