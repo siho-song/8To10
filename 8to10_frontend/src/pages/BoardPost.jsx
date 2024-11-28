@@ -6,7 +6,6 @@ function BoardPost() {
 
     return (
         <div>
-            <PrivateHeader />
             <div className="container">
                 <LeftSideBar/>
                 <PostView />

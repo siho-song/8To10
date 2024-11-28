@@ -7,7 +7,6 @@ function Post({ isEditMode=false }) {
 
     return (
         <div>
-            <PrivateHeader />
             <CreateOrEditPost isEditMode={isEditMode} />
         </div>
     );

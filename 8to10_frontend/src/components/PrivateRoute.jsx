@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
+import PrivateHeader from "@/components/PrivateHeader.jsx";
 
 function PrivateRoute() {
     const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail} = useAuth();
@@ -38,7 +39,14 @@ function PrivateRoute() {
         return <div>로딩 중...</div>;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+    return isAuthenticated ? (
+        <>
+            <PrivateHeader />
+            <Outlet />
+        </>
+    ) : (
+            <Navigate to="/" />
+    );
 }
 
 export default PrivateRoute;
