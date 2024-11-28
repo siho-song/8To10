@@ -1,0 +1,146 @@
+/* NotificationPopup.css */
+
+/* 팝업 컨테이너 */
+.notification-popup {
+    position: fixed;
+    top: 7vh;
+    width: 320px; /* 사이드바 너비와 일치 */
+    right: 0; /* 화면 오른쪽에 정렬 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.notification-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px; /* 패딩을 줄여서 헤더 높이 감소 */
+    background-color: #4CAF50;
+    color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+    font-size: 14px; /* 텍스트 크기를 줄임 */
+    line-height: 1.2; /* 텍스트의 세로 정렬을 개선 */
+}
+
+/* 닫기 버튼 */
+.notification-close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px; /* 버튼 텍스트 크기를 헤더와 일치 */
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.notification-close-button:hover {
+    color: #dddddd; /* 닫기 버튼 호버 색상 변경 */
+}
+/* 팝업 내용 */
+.notification-popup-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* 알림 항목 */
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 읽지 않은 알림 스타일 */
+.notification-item.unread {
+    background-color: #f9f9f9;
+}
+
+/* 읽은 알림 스타일 */
+.notification-item.read {
+    background-color: #868e96;
+}
+
+.notification-item:hover {
+    background-color: #ececec;
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.notification-remove-button {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.notification-remove-button:hover {
+    color: #000;
+}
+
+/* 스크롤바 커스터마이징 */
+.notification-popup-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-popup-content::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+.notification-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+.notification-button {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.notification-button.has-unread {
+    color: #FF4757; /* 알림이 있을 때 색상 */
+}
+
+.notification-button:hover {
+    color: #000;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4757;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.notification-button svg{
+    width: auto;
+    height: 40px;
+}
