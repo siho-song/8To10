@@ -4,7 +4,6 @@ import Board from "@/components/community/board/Board.jsx";
 function Community() {
     return (
         <div>
-            <PrivateHeader />
             <Board />
         </div>
     );

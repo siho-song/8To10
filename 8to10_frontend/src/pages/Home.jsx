@@ -6,7 +6,6 @@ import "@/styles/home/Fullcalendar.css";
 function Home() {
     return (
         <div>
-            <PrivateHeader />
             <FullcalendarView />
         </div>
     );

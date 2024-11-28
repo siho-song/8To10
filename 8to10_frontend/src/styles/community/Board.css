@@ -652,3 +652,10 @@ hr {
 
 /* START 05/22 성취도 페이지 */
 /* styles.css */
+
+/* 포커스된 댓글 및 답글 스타일 */
+.focused {
+    border: 2px solid #4CAF50;
+    background-color: #e8f5e9;
+    transition: background-color 0.3s ease, border 0.3s ease;
+}

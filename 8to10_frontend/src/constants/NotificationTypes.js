@@ -1,0 +1,11 @@
+export const NOTIFICATION_TYPES = {
+    REPLY_ADD:"REPLY_ADD",
+    NESTED_REPLY_ADD:"NESTED_REPLY_ADD",
+    TODO_UPDATE: "TODO_UPDATE",
+    ACHIEVEMENT_FEEDBACK:"ACHIEVEMENT_FEEDBACK",
+}
+
+export const BASE_URL = {
+    REPLY_ADD: "/community",
+    NESTED_REPLY_ADD: "/community",
+}

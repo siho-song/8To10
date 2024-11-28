@@ -7,7 +7,6 @@ function MyPage() {
 
     return (
         <div>
-            <PrivateHeader />
             <MyPageInit />
         </div>
     );

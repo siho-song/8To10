@@ -11,7 +11,7 @@ const PostView = () => {
     const location = useLocation();
 
     const { email } = useAuth();
-    const [post, setPost] = useState(location.state || null);
+    const [post, setPost] = useState(location.state?.post || null);
     const [responseReplies, setResponseReplies] = useState([]);
     const [responseLikedReplyIds, setResponseLikedReplyIds] = useState([]);
 

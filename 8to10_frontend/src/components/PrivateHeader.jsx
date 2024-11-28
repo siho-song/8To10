@@ -7,6 +7,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import logoIcon from '@/assets/images/logo.png';
+import Notification from "@/components/notification/Notification.jsx";
 
 function PrivateHeader() {
     return (
@@ -21,6 +22,7 @@ function PrivateHeader() {
             <div className="navigation">
                 <nav>
                     <ul className="header-image-box">
+                        <Notification />
                         <div className="image-container" data-alt="마이페이지">
                             <Link to="/mypage" className="image-link">
                                 <AccountCircleIcon/>

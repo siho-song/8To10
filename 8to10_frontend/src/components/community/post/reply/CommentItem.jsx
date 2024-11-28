@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 
 import "@/styles/community/Board.css";
@@ -7,8 +7,12 @@ import ReplyItem from "@/components/community/post/reply/ReplyItem.jsx";
 import {formatDateTime} from "@/helpers/TimeFormatter.js";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {useLocation} from "react-router-dom";
 
 function CommentItem({ postId, email, reply, replies, likedReplyIds, onReplySubmit, onCommentDelete, onReplyDelete }) {
+
+    const commentRef = useRef(null);
+    const location = useLocation();
 
     const [comment, setComment] = useState(reply);
 
@@ -153,10 +157,19 @@ function CommentItem({ postId, email, reply, replies, likedReplyIds, onReplySubm
     useEffect(() => {
     }, [showReplyInput, comment]);
 
+    useEffect(() => {
+        const focusId = location.state?.relatedEntityId;
+        if (focusId === comment.id) {
+            commentRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            commentRef.current.classList.add("focused");
+            setTimeout(() => commentRef.current.classList.remove("focused"), 5000);
+        }
+    }, [])
+
     return (
-        <div className="comment" id={`comment-${comment.id}`}>
+        <div className="comment" id={`comment-${comment.id}`} ref={commentRef}>
             { !isCommentEditMode ? (
-                <div className="comment-header">
+                <div className="comment-header" ref={commentRef}>
                     <div className="comment-profile">
                         <span className="comment-author">{comment.nickname}</span>
                         {email === comment.writer &&
