@@ -5,6 +5,7 @@ import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
 
 import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
+import ChangePassword from "@/components/myPage/ChangePassword.jsx";
 
 function MyPage() {
 
@@ -102,6 +103,12 @@ function MyPage() {
                     <ChangeNickname
                         nickname={userNickname}
                         changeNickname={changeUserNickname}
+                        onBack={() => setCurrentView("mypage")}
+                    />
+                )}
+
+                {currentView === "changePassword" && (
+                    <ChangePassword
                         onBack={() => setCurrentView("mypage")}
                     />
                 )}
