@@ -56,7 +56,7 @@ function CreateOrEditPost({ isEditMode }) {
                     hasLike: false,
                     hasScrap: false,
                 }
-                navigate(`/community/board/${data.id}`, { state: newPost });
+                navigate(`/community/board/${data.id}`, { state: {post:newPost} });
             }
         } catch (error) {
             console.error("Error : \n", error.toString());
