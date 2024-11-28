@@ -1,4 +1,14 @@
+import {useState} from "react";
+
+import "@/styles/myPage/MyPage.css";
+
 function MyPage() {
+
+    const [userNickname, setUserNickname] = useState("");
+    const [userEmail, setUserEmail] = useState("");
+    const [userRole, setUserRole] = useState("");
+    const [userProfileImageUrl, setUserProfileImageUrl] = useState("");
+
 
     return (
 
@@ -10,28 +20,27 @@ function MyPage() {
                         <button className="logout-button">로그아웃</button>
                     </div>
                     <div className="profile-info">
-                        <img src="https://via.placeholder.com/100" alt="Profile Picture" className="profile-picture"/>
+                        <img src={userProfileImageUrl} alt="Profile Picture" className="profile-picture"/>
                         <div className="user-info">
-                            <strong>이름 / 닉네임</strong>
-                            <span>아이디</span>
+                            <strong>{userNickname}</strong>
+                            <span>{userRole} / {userEmail}</span>
                         </div>
                     </div>
                 </div>
                 <div className="mypage-section">
                     <h2>계정</h2>
                     <ul>
-                        <li className="clickable-item" onClick="location.href='/mypage/change-pages/change-email'">이메일 변경</li>
-                        <li className="clickable-item" onClick="location.href='/mypage/change-pages/change-phone'">휴대폰 번호 변경</li>
-                        <li className="clickable-item" onClick="location.href='/mypage/change-pages/change-nickname'">닉네임 변경</li>
-                        <li className="clickable-item" onClick="location.href='/mypage/change-pages/change-password'">비밀번호 변경</li>
+                        <li className="clickable-item">닉네임 변경</li>
+                        <li className="clickable-item">비밀번호 변경</li>
+                        <li className="clickable-item">프로필 사진 변경</li>
                     </ul>
                 </div>
                 <div className="mypage-section">
                     <h2>커뮤니티</h2>
                     <ul>
-                        <li className="clickable-item" onClick="location.href='/mypage/my-posts'">내가 쓴 게시글 보기</li>
-                        <li className="clickable-item" onClick="location.href='/mypage/my-comments'">댓글 쓴 글보기</li>
-                        <li className="clickable-item" onClick="location.href='/mypage/my-scrap'">스크랩한 게시글 보기</li>
+                        <li className="clickable-item">내가 쓴 게시글 보기</li>
+                        <li className="clickable-item">내가 쓴 댓글 보기</li>
+                        <li className="clickable-item">스크랩한 게시글 보기</li>
                     </ul>
                 </div>
             </div>
