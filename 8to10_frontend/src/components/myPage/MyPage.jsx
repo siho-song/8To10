@@ -1,4 +1,4 @@
-function MyPageInit() {
+function MyPage() {
 
     return (
 
@@ -39,4 +39,4 @@ function MyPageInit() {
     );
 }
 
-export default MyPageInit;
+export default MyPage;
