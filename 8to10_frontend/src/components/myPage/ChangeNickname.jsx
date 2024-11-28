@@ -7,15 +7,14 @@ import PropTypes from "prop-types";
 function ChangeNickname({ nickname, changeNickname, onBack }) {
 
     const [newNickname, setNewNickname] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
     const [submitError, setSubmitError] = useState("");
     const [isDuplicate, setIsDuplicate] = useState(null);
-
-    const [nonDuplicatedMessage, setNonDuplicatedMessage] = useState("");
+    const [isValidNickname, setIsValidNickname] = useState(true);
     let validNickname = "";
 
     const isNicknameValid = (nickname) => {
-        const regex = /^(?=.{2,12}$|^[a-zA-Z0-9_.]{2,20}$)[ㄱ-ㅎ가-힣a-zA-Z0-9_.]+$/;
+        const regex = /^(?:[가-힣a-zA-Z0-9_.]{2,12}|[a-zA-Z0-9_.]{2,20})$/;
+        ;
         return regex.test(nickname);
     };
 
@@ -24,16 +23,13 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
         setNewNickname(inputValue);
 
         if (!isNicknameValid(inputValue)) {
-            setErrorMessage(
-                "닉네임은 2~12자의 한글 또는 20자의 영어, 숫자, 특수문자(_와 .만 허용)만 가능합니다."
-            );
+            setIsValidNickname(false);
         } else {
-            setErrorMessage("");
+            setIsValidNickname(true);
         }
 
-        if (newNickname !== validNickname) {
+        if (inputValue !== validNickname) {
             setIsDuplicate(null);
-            setNonDuplicatedMessage("");
         }
     };
 
@@ -48,11 +44,9 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
 
             console.log(response.data);
             setIsDuplicate(false);
-            setNonDuplicatedMessage("사용할 수 있는 닉네임입니다.");
             validNickname = newNickname;
         } catch (error) {
             setIsDuplicate(true);
-            setErrorMessage("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
             validNickname="";
             // console.log(error.toString());
             // console.log(error);
@@ -111,17 +105,18 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
                         type="button"
                         className="check-duplicate-button"
                         onClick={handleCheckDuplicate}
-                        disabled={newNickname.length === 0 || errorMessage.length > 0 || isDuplicate===false}
+                        disabled={newNickname.length === 0 || !isValidNickname || isDuplicate===false}
                     >
                         중복확인
                     </button>
                 </div>
-                {nonDuplicatedMessage && <p className="non-duplicated-message">{nonDuplicatedMessage}</p>}
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {!isValidNickname && newNickname.length > 0 && <p className="error-message">닉네임은 2~12자의 한글 또는 20자의 영어 및 숫자, 특수문자는 _와 .만 허용됩니다.</p>}
+                {isDuplicate && <p className="error-message">이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해주세요.</p>}
+                {isDuplicate === false && <p className="normal-message">사용할 수 있는 닉네임입니다.</p>}
             </div>
             <button
                 className="save-button"
-                disabled={newNickname.length === 0 || errorMessage.length > 0 || isDuplicate===true}
+                disabled={newNickname.length === 0 || isDuplicate===true}
                 onClick={handleNewNicknameSubmit}
             >
                 저장
