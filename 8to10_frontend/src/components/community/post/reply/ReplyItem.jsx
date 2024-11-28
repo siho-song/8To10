@@ -1,11 +1,15 @@
 import PropTypes from "prop-types";
 
 import {formatDateTime} from "@/helpers/TimeFormatter.js";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {useLocation} from "react-router-dom";
 
 function ReplyItem({ email, reply, likedReplyIds, onReplyDelete }) {
+
+    const location = useLocation();
+    const replyRef = useRef(null);
 
     const [currentReply, setCurrentReply] = useState(reply);
 
@@ -95,13 +99,21 @@ function ReplyItem({ email, reply, likedReplyIds, onReplyDelete }) {
     };
 
     useEffect(() => {
-
     }, [currentReply]);
+
+    useEffect(() => {
+        const focusId = location.state?.relatedEntityId;
+        if (focusId === currentReply.id) {
+            replyRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            replyRef.current.classList.add("focused");
+            setTimeout(() => replyRef.current.classList.remove("focused"), 5000);
+        }
+    }, []);
 
     return (
         <div className="reply">
             {!isReplyEditMode ? (
-                <div className="reply-group">
+                <div className="reply-group" ref={replyRef}>
                     <div className="reply-header">
                         <span className="comment-author">{currentReply.nickname}</span>
                         {email === currentReply.writer &&
