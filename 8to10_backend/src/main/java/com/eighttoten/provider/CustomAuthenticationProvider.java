@@ -27,7 +27,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!bCryptPasswordEncoder.matches(password, member.getPassword())) {
             throw new AuthException(ExceptionCode.INVALID_PASSWORD);
         }
-
         return new UsernamePasswordAuthenticationToken(member, password, member.getAuthorities());
     }
 
