@@ -14,7 +14,6 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
 
     const isNicknameValid = (nickname) => {
         const regex = /^(?:[가-힣a-zA-Z0-9_.]{2,12}|[a-zA-Z0-9_.]{2,20})$/;
-        ;
         return regex.test(nickname);
     };
 
@@ -43,7 +42,7 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
             );
 
             console.log(response.data);
-            setIsDuplicate(false);
+            setIsDuplicate(response.data);
             validNickname = newNickname;
         } catch (error) {
             setIsDuplicate(true);
