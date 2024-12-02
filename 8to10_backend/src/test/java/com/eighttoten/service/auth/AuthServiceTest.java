@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.eighttoten.repository.auth.AuthRedisRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,14 +21,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.eighttoten.domain.auth.Auth;
 import com.eighttoten.exception.InvalidTokenException;
 import com.eighttoten.provider.TokenProvider;
-import com.eighttoten.repository.auth.AuthRepository;
 import com.eighttoten.utils.BearerAuthorizationUtils;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("인증 서비스 테스트")
 class AuthServiceTest {
     @Mock
-    AuthRepository authRepository;
+    AuthRedisRepository authRedisRepository;
 
     @Mock
     TokenProvider tokenProvider;
@@ -55,7 +55,7 @@ class AuthServiceTest {
         when(tokenProvider.isExpiredToken(any())).thenReturn(true);
 
         Auth auth = Auth.of("normal@example.com", null);
-        when(authRepository.findByRefreshToken(any())).thenReturn(Optional.of(auth));
+        when(authRedisRepository.findByRefreshToken(any())).thenReturn(Optional.of(auth));
 
         when(tokenProvider.generateAccessToken(any())).thenReturn("New AccessToken");
         //when
@@ -64,7 +64,7 @@ class AuthServiceTest {
         //then
         verify(tokenProvider, times(1)).validateRefreshToken(refreshToken);
         verify(tokenProvider, times(1)).isExpiredToken(accessToken);
-        verify(authRepository, times(1)).findByRefreshToken(refreshToken);
+        verify(authRedisRepository, times(1)).findByRefreshToken(refreshToken);
         assertThat(renewalAccessToken).isEqualTo("New AccessToken");
     }
 

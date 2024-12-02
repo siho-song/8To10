@@ -1,35 +1,23 @@
 package com.eighttoten.domain.auth;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.eighttoten.domain.auditing.baseentity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Auth extends BaseEntity {
+@RedisHash(value = "Auth", timeToLive = 604000)
+public class Auth implements Serializable {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "auth_id")
-    private Long id;
-
     private String email;
 
+    @Indexed
     private String refreshToken;
-
-    @PrePersist
-    void prePersist(){
-        this.createdBy = "ADMIN";
-        this.updatedBy = "ADMIN";
-    }
 
     public static Auth of(String memberEmail, String refreshToken) {
         Auth auth = new Auth();

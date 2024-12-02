@@ -36,12 +36,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/login",
             "/renew",
             "/static/**",
-            "/js/**",
-            "/css/**",
             "/templates/**",
             "/images/**",
             "/signup/**",
-            "/favicon**"
+            "/public/**",
+            "/actuator/**",
+            "/favicon.ico"
     );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();

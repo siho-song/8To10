@@ -40,7 +40,8 @@ public class SecurityConfig {
     private static final String[] STATIC_RESOURCES_LOCATION = new String[]{
             "/css/**", "/resources/**",
             "/static/**", "/images/**",
-            "/js/**", "/favicons/**"
+            "/js/**", "/public/**",
+            "/favicon.ico"
     };
 
     @Bean
@@ -53,7 +54,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/signup/**", "/", "/error","/renew")
+                        .requestMatchers("/signup/**", "/", "/error","/renew","/actuator/**")
                         .permitAll()
                         .requestMatchers(STATIC_RESOURCES_LOCATION)
                         .permitAll()
@@ -69,11 +70,6 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(emailPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(STATIC_RESOURCES_LOCATION);
     }
 
     @Bean
