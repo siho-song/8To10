@@ -9,6 +9,7 @@ import ChangePassword from "@/components/myPage/ChangePassword.jsx";
 import ChangeProfileImage from "@/components/myPage/ChangeProfileImage.jsx";
 import MyPosts from "@/components/myPage/MyPosts.jsx";
 import PropTypes from "prop-types";
+import MyReplies from "@/components/myPage/MyReplies.jsx";
 
 function MyPage({closeModal}) {
 
@@ -113,9 +114,11 @@ function MyPage({closeModal}) {
                             >내가 쓴 게시글 보기</li>
                             <li
                                 className="clickable-item"
+                                onClick={() => setCurrentView("myComments")}
                             >내가 쓴 댓글 보기</li>
                             <li
                                 className="clickable-item"
+                                onClick={() => setCurrentView("myScrapedPosts")}
                             >스크랩한 게시글 보기</li>
                         </ul>
                     </div>
@@ -149,6 +152,13 @@ function MyPage({closeModal}) {
 
                 {currentView === "myPosts" && (
                     <MyPosts
+                        onBack={() => setCurrentView("mypage")}
+                        closeModal={closeModal}
+                    />
+                )}
+
+                {currentView === "myComments" && (
+                    <MyReplies
                         onBack={() => setCurrentView("mypage")}
                         closeModal={closeModal}
                     />
