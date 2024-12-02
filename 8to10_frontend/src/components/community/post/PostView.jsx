@@ -43,7 +43,8 @@ const PostView = () => {
                 console.error(error);
             }
         }
-        if (!post || !location.state) {
+
+        if (!location.state?.post) {
             loadPostData();
         }
     },[id]);

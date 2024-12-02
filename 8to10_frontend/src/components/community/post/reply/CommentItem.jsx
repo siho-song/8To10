@@ -164,7 +164,7 @@ function CommentItem({ postId, email, reply, replies, likedReplyIds, onReplySubm
             commentRef.current.classList.add("focused");
             setTimeout(() => commentRef.current.classList.remove("focused"), 5000);
         }
-    }, [])
+    }, [location])
 
     return (
         <div className="comment" id={`comment-${comment.id}`} ref={commentRef}>
