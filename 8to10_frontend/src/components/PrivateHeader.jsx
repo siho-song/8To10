@@ -51,7 +51,9 @@ function PrivateHeader() {
                 </nav>
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <MyPage />
+                <MyPage
+                    closeModal={closeModal}
+                />
             </Modal>
         </div>
     );
