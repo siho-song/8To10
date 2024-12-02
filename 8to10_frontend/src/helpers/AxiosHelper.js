@@ -2,7 +2,7 @@ import { HEADERS, MEDIA_TYPES } from "@/constants/RequestHeaderConfig.js";
 import {
     API_ENDPOINTS_METHOD,
     CORS_REQUIRED_ENDPOINTS,
-    JSON_ENDPOINTS,
+    JSON_ENDPOINTS, MULTIPART_ENDPOINTS,
     URL_ENCODED_ENDPOINTS
 } from "@/constants/ApiEndPoints.js";
 import {buildBearerToken} from "@/helpers/TokenManager.js";
@@ -20,6 +20,8 @@ export const setContentTypeHeaders = (config) => {
         config.headers[HEADERS.CONTENT_TYPE] = MEDIA_TYPES.JSON;
     } else if (isUrlEncodedEndPoint(config)) {
         config.headers[HEADERS.CONTENT_TYPE] = MEDIA_TYPES.FORM_URL_ENCODED;
+    } else if (isMultipartEndPoint(config)) {
+        config.headers[HEADERS.CONTENT_TYPE] = MEDIA_TYPES.MULTIPART;
     }
 }
 
@@ -50,4 +52,8 @@ const isJSONEndPoint = (config) => {
 const isUrlEncodedEndPoint = (config) => {
     return URL_ENCODED_ENDPOINTS.includes(config.apiEndPoint)
         && isValidMethod(config);
+}
+
+const isMultipartEndPoint = (config) => {
+    return MULTIPART_ENDPOINTS.includes(config.apiEndPoint);
 }
