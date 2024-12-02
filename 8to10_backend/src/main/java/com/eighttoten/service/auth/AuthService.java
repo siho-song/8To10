@@ -7,32 +7,27 @@ import com.eighttoten.domain.auth.Auth;
 import com.eighttoten.exception.InvalidTokenException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.provider.TokenProvider;
-import com.eighttoten.repository.auth.AuthRepository;
+import com.eighttoten.repository.auth.AuthRedisRepository;
 import com.eighttoten.utils.BearerAuthorizationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final AuthRepository authRepository;
+    private final AuthRedisRepository authRedisRepository;
     private final TokenProvider tokenProvider;
     private final BearerAuthorizationUtils bearerUtils;
 
-    @Transactional(readOnly = true)
     public Auth findByRefreshToken(String refreshToken) {
-        return authRepository.findByRefreshToken(refreshToken)
+        return authRedisRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_REFRESH_TOKEN));
     }
 
-    @Transactional
     public void save(String email, String refreshToken) {
-        Auth auth = Auth.of(email, refreshToken);
-        authRepository.save(auth);
+        authRedisRepository.save(Auth.of(email,refreshToken));
     }
 
-    @Transactional(readOnly = true)
     public String getRenewalAccessToken(String refreshToken, String accessTokenHeader){
         String accessToken = bearerUtils.extractToken(accessTokenHeader);
 
