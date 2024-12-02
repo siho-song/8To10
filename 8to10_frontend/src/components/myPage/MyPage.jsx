@@ -7,8 +7,10 @@ import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
 import ChangePassword from "@/components/myPage/ChangePassword.jsx";
 import ChangeProfileImage from "@/components/myPage/ChangeProfileImage.jsx";
+import MyPosts from "@/components/myPage/MyPosts.jsx";
+import PropTypes from "prop-types";
 
-function MyPage() {
+function MyPage({closeModal}) {
 
     const [userNickname, setUserNickname] = useState("");
     const [userEmail, setUserEmail] = useState("");
@@ -68,7 +70,7 @@ function MyPage() {
     return (
             <div className="mypage-container">
                 {currentView === "mypage" && (
-                <div className={`mypage-content ${currentView !== "mypage" ? "" : "slide-left"}`}>
+                <div className={"mypage-content"}>
                     <div className="mypage-section">
                         <div className="section-header">
                             <h2>내 정보</h2>
@@ -105,9 +107,16 @@ function MyPage() {
                     <div className="mypage-section">
                         <h2>커뮤니티</h2>
                         <ul>
-                            <li className="clickable-item">내가 쓴 게시글 보기</li>
-                            <li className="clickable-item">내가 쓴 댓글 보기</li>
-                            <li className="clickable-item">스크랩한 게시글 보기</li>
+                            <li
+                                className="clickable-item"
+                                onClick={() => setCurrentView("myPosts")}
+                            >내가 쓴 게시글 보기</li>
+                            <li
+                                className="clickable-item"
+                            >내가 쓴 댓글 보기</li>
+                            <li
+                                className="clickable-item"
+                            >스크랩한 게시글 보기</li>
                         </ul>
                     </div>
                 </div>
@@ -137,8 +146,19 @@ function MyPage() {
                         onBack={() => setCurrentView("mypage")}
                     />
                 )}
+
+                {currentView === "myPosts" && (
+                    <MyPosts
+                        onBack={() => setCurrentView("mypage")}
+                        closeModal={closeModal}
+                    />
+                )}
             </div>
     );
+}
+
+MyPage.propTypes = {
+    closeModal: PropTypes.func,
 }
 
 export default MyPage;
