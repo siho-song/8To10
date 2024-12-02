@@ -2,7 +2,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
 const MyPosts = ({onBack, closeModal}) => {
@@ -17,7 +17,6 @@ const MyPosts = ({onBack, closeModal}) => {
                     url,
                     {apiEndPoint: API_ENDPOINT_NAMES.GET_MY_POSTS,},
                 );
-                console.log(response.data);
                 setPosts(response.data.items);
             } catch (error) {
                 console.error(error.toString());
