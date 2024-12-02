@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
-import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {API_ENDPOINT_NAMES, DEFAULT_URL} from "@/constants/ApiEndPoints.js";
 import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
 
 import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
 import ChangePassword from "@/components/myPage/ChangePassword.jsx";
+import ChangeProfileImage from "@/components/myPage/ChangeProfileImage.jsx";
 
 function MyPage() {
 
@@ -14,6 +15,8 @@ function MyPage() {
     const [userRole, setUserRole] = useState("");
     const [userProfileImageUrl, setUserProfileImageUrl] = useState("");
     const [currentView, setCurrentView] = useState("mypage");
+
+    const [profileImageUpdated, setProfileImageUpdated] = useState(false);
 
     useEffect(() => {
         const loadUserProfile = async () => {
@@ -28,13 +31,16 @@ function MyPage() {
                 setUserRole(response.data.role);
 
                 if (response.data.profileImageUrl) {
-                    setUserProfileImageUrl(response.data.profileImageUrl);
-                } else if (response.data.role === USER_ROLE.FAITHFUL_USER) {
-                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.FAITHFUL_USER);
-                } else if (response.data.role === USER_ROLE.NORMAL_USER) {
-                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.NORMAL_USER);
+                    const imageSource = DEFAULT_URL + response.data.profileImageUrl;
+                    setUserProfileImageUrl(imageSource);
                 } else {
-                    setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.ADMIN);
+                    if (response.data.role === USER_ROLE.FAITHFUL_USER) {
+                        setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.FAITHFUL_USER);
+                    } else if (response.data.role === USER_ROLE.NORMAL_USER) {
+                        setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.NORMAL_USER);
+                    } else {
+                        setUserProfileImageUrl(DEFAULT_PROFILE_IMAGE_PATH.ADMIN);
+                    }
                 }
             } catch(error) {
                 console.error(error.toString());
@@ -43,7 +49,7 @@ function MyPage() {
         }
 
         loadUserProfile();
-    }, []);
+    }, [profileImageUpdated]);
 
     const changeUserNickname = (nickname) => {
         if (nickname.length > 0) {
@@ -51,10 +57,18 @@ function MyPage() {
         }
     }
 
+    const changeProfileImageUrl = (url) => {
+        setUserProfileImageUrl(url);
+    }
+
+    const changeProfileImageUpdated = () => {
+        setProfileImageUpdated(!profileImageUpdated);
+    }
+
     return (
             <div className="mypage-container">
                 {currentView === "mypage" && (
-                <div className={`mypage-content ${currentView !== "profile" ? "" : "slide-left"}`}>
+                <div className={`mypage-content ${currentView !== "mypage" ? "" : "slide-left"}`}>
                     <div className="mypage-section">
                         <div className="section-header">
                             <h2>내 정보</h2>
@@ -109,6 +123,17 @@ function MyPage() {
 
                 {currentView === "changePassword" && (
                     <ChangePassword
+                        onBack={() => setCurrentView("mypage")}
+                    />
+                )}
+
+                {currentView === "changeProfileImage" && (
+                    <ChangeProfileImage
+                        userProfileImageUrl={userProfileImageUrl}
+                        userRole={userRole}
+                        profileImageUpdated={profileImageUpdated}
+                        changeProfileImageUpdated={changeProfileImageUpdated}
+                        changeProfileUrl={changeProfileImageUrl}
                         onBack={() => setCurrentView("mypage")}
                     />
                 )}
