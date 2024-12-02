@@ -10,6 +10,7 @@ import ChangeProfileImage from "@/components/myPage/ChangeProfileImage.jsx";
 import MyPosts from "@/components/myPage/MyPosts.jsx";
 import PropTypes from "prop-types";
 import MyReplies from "@/components/myPage/MyReplies.jsx";
+import MyScrappedBoards from "@/components/myPage/MyScrappedBoards.jsx";
 
 function MyPage({closeModal}) {
 
@@ -118,7 +119,7 @@ function MyPage({closeModal}) {
                             >내가 쓴 댓글 보기</li>
                             <li
                                 className="clickable-item"
-                                onClick={() => setCurrentView("myScrapedPosts")}
+                                onClick={() => setCurrentView("myScrappedPosts")}
                             >스크랩한 게시글 보기</li>
                         </ul>
                     </div>
@@ -159,6 +160,12 @@ function MyPage({closeModal}) {
 
                 {currentView === "myComments" && (
                     <MyReplies
+                        onBack={() => setCurrentView("mypage")}
+                        closeModal={closeModal}
+                    />
+                )}
+                {currentView === "myScrappedPosts" && (
+                    <MyScrappedBoards
                         onBack={() => setCurrentView("mypage")}
                         closeModal={closeModal}
                     />
