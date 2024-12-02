@@ -8,8 +8,17 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import logoIcon from '@/assets/images/logo.png';
 import Notification from "@/components/notification/Notification.jsx";
+import Modal from "@/components/modal/Modal.jsx";
+import MyPage from "@/components/myPage/MyPage.jsx";
+import {useState} from "react";
 
 function PrivateHeader() {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
     return (
         <div className="main-header">
             <div className="logo">
@@ -24,9 +33,9 @@ function PrivateHeader() {
                     <ul className="header-image-box">
                         <Notification />
                         <div className="image-container" data-alt="마이페이지">
-                            <Link to="/mypage" className="image-link">
+                            <button className="image-link" onClick={openModal}>
                                 <AccountCircleIcon/>
-                            </Link>
+                            </button>
                         </div>
                         <div className="image-container" data-alt="커뮤니티">
                             <Link to="/community/board" className="image-link">
@@ -41,6 +50,11 @@ function PrivateHeader() {
                     </ul>
                 </nav>
             </div>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <MyPage
+                    closeModal={closeModal}
+                />
+            </Modal>
         </div>
     );
 }

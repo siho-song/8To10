@@ -43,10 +43,11 @@ const PostView = () => {
                 console.error(error);
             }
         }
-        if (!post) {
+
+        if (!location.state?.post) {
             loadPostData();
         }
-    },[]);
+    },[id]);
 
     if (!post) {
         return ("게시물을 불러오는 중입니다.");
