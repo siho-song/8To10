@@ -7,7 +7,7 @@ import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
 import ChangePassword from "@/components/myPage/ChangePassword.jsx";
 import ChangeProfileImage from "@/components/myPage/ChangeProfileImage.jsx";
-import MyPosts from "@/components/myPage/MyPosts.jsx";
+import MyBoards from "@/components/myPage/MyBoards.jsx";
 import PropTypes from "prop-types";
 import MyReplies from "@/components/myPage/MyReplies.jsx";
 import MyScrappedBoards from "@/components/myPage/MyScrappedBoards.jsx";
@@ -152,7 +152,7 @@ function MyPage({closeModal}) {
                 )}
 
                 {currentView === "myPosts" && (
-                    <MyPosts
+                    <MyBoards
                         onBack={() => setCurrentView("mypage")}
                         closeModal={closeModal}
                     />

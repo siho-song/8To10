@@ -5,7 +5,7 @@ import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
-const MyPosts = ({onBack, closeModal}) => {
+const MyBoards = ({onBack, closeModal}) => {
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ const MyPosts = ({onBack, closeModal}) => {
                 <button className="back-button" onClick={onBack}>
                     <ArrowBackIcon/> 뒤로
                 </button>
-                <h2>내가 쓴 글</h2>
+                <h2>내가 쓴 게시글</h2>
             </div>
             <div className="myposts-container">
                 {posts.length === 0 ? (
@@ -69,9 +69,9 @@ const MyPosts = ({onBack, closeModal}) => {
     );
 };
 
-MyPosts.propTypes = {
+MyBoards.propTypes = {
     onBack: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
 }
 
-export default MyPosts;
+export default MyBoards;
