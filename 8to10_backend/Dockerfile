@@ -3,8 +3,17 @@ FROM gkdldhdl/jdk:17
 LABEL maintainer="siho-song"
 
 ARG WORK_DIR=/app
+ARG JAR_FILE_PATH=./build/libs/*.jar
+ARG ENTRYPOINT_PATH=entrypoint.sh
+ARG APP_NAME=8to10
+
 WORKDIR ${WORK_DIR}
 
-ARG JAR_FILE=./build/libs/*.jar
+COPY ${JAR_FILE_PATH} ${WORK_DIR}/build/${APP_NAME}.jar
+COPY ./entrypoint.sh /app/entrypoint.sh
 
-COPY ${JAR_FILE} ${WORK_DIR}/build/8to10.jar
+RUN chmod +x ${WORK_DIR}/entrypoint.sh
+
+EXPOSE 8080
+
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
