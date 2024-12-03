@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES, DEFAULT_URL} from "@/constants/ApiEndPoints.js";
 import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
+import {DEFAULT_PROFILE_IMAGE_PATH, PROFILE_IMAGE_PATH} from "@/constants/ImagePaths.js";
 
 import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
@@ -35,7 +36,8 @@ function MyPage({closeModal}) {
                 setUserRole(response.data.role);
 
                 if (response.data.profileImageUrl) {
-                    const imageSource = DEFAULT_URL + response.data.profileImageUrl;
+                    const imageFileName = response.data.profileImageUrl.split(PROFILE_IMAGE_PATH).pop();
+                    const imageSource = DEFAULT_URL + PROFILE_IMAGE_PATH + imageFileName;
                     setUserProfileImageUrl(imageSource);
                 } else {
                     if (response.data.role === USER_ROLE.FAITHFUL_USER) {
