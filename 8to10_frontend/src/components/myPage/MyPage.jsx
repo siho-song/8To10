@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES, DEFAULT_URL} from "@/constants/ApiEndPoints.js";
-import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
+import {USER_ROLE} from "@/constants/UserRole.js";
+import {DEFAULT_PROFILE_IMAGE_PATH, PROFILE_IMAGE_PATH} from "@/constants/ImagePaths.js";
 
 import "@/styles/myPage/MyPage.css";
 import ChangeNickname from "@/components/myPage/ChangeNickname.jsx";
@@ -12,7 +13,13 @@ import PropTypes from "prop-types";
 import MyReplies from "@/components/myPage/MyReplies.jsx";
 import MyScrappedBoards from "@/components/myPage/MyScrappedBoards.jsx";
 
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "@/context/auth/UseAuth.jsx";
+
 function MyPage({closeModal}) {
+
+    const navigate = useNavigate();
+    const {logout} = useAuth();
 
     const [userNickname, setUserNickname] = useState("");
     const [userEmail, setUserEmail] = useState("");
@@ -35,7 +42,8 @@ function MyPage({closeModal}) {
                 setUserRole(response.data.role);
 
                 if (response.data.profileImageUrl) {
-                    const imageSource = DEFAULT_URL + response.data.profileImageUrl;
+                    const imageFileName = response.data.profileImageUrl.split(PROFILE_IMAGE_PATH).pop();
+                    const imageSource = DEFAULT_URL + PROFILE_IMAGE_PATH + imageFileName;
                     setUserProfileImageUrl(imageSource);
                 } else {
                     if (response.data.role === USER_ROLE.FAITHFUL_USER) {
@@ -69,14 +77,22 @@ function MyPage({closeModal}) {
         setProfileImageUpdated(!profileImageUpdated);
     }
 
+    const handleLogout = () => {
+        logout(() => navigate("/"));
+    }
+
     return (
-            <div className="mypage-container">
-                {currentView === "mypage" && (
+        <div className="mypage-container">
+            {currentView === "mypage" && (
                 <div className={"mypage-content"}>
                     <div className="mypage-section">
                         <div className="section-header">
                             <h2>내 정보</h2>
-                            <button className="logout-button">로그아웃</button>
+                            <button
+                                className="logout-button"
+                                onClick={handleLogout}
+                            >로그아웃
+                            </button>
                         </div>
                         <div className="profile-info">
                             <img src={userProfileImageUrl} alt="Profile Picture" className="profile-picture"/>

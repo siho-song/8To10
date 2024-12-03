@@ -2,6 +2,7 @@ import axios from 'axios';
 import CustomErrors from "@/api/CustomErrors.js";
 import {HTTP_STATUS} from "@/constants/HttpStatusCodes.js";
 import {
+    callLogoutHandler,
     setAcceptHeaders,
     setAuthorizationHeaders,
     setContentTypeHeaders,
@@ -46,9 +47,7 @@ authenticatedApi.interceptors.response.use((response) => {
 
             return authenticatedApi(response.config);
         } catch (refreshError) {
-            // TODO 로그아웃
-            localStorage.clear();
-            console.log("직접 : ", refreshError);
+            callLogoutHandler();
             return Promise.reject(refreshError);
         }
     }

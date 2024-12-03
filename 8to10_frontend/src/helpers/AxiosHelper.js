@@ -57,3 +57,15 @@ const isUrlEncodedEndPoint = (config) => {
 const isMultipartEndPoint = (config) => {
     return MULTIPART_ENDPOINTS.includes(config.apiEndPoint);
 }
+
+let externalLogoutHandler = null;
+
+export const setLogoutHandler = (logoutFunction) => {
+    externalLogoutHandler = logoutFunction;
+};
+
+export const callLogoutHandler = () => {
+    if (externalLogoutHandler) {
+        externalLogoutHandler();
+    }
+};

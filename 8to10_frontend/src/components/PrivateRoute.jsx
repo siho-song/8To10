@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
-import {refreshAccessToken} from "@/helpers/TokenManager.js";
+import {parseBearerToken, refreshAccessToken} from "@/helpers/TokenManager.js";
 import PrivateHeader from "@/components/PrivateHeader.jsx";
 
 function PrivateRoute() {
-    const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail} = useAuth();
+    const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail, logout} = useAuth();
 
     useEffect(() => {
         const refreshAuthentication = async () => {
@@ -15,13 +15,17 @@ function PrivateRoute() {
                     const email = localStorage.getItem('Email');
 
                     if (accessToken && email) {
-                        const response = await refreshAccessToken();
-                        if (response) {
+                        const updatedAccessToken = await refreshAccessToken();
+                        if (updatedAccessToken) {
+                            localStorage.setItem('Authorization', parseBearerToken(updatedAccessToken));
                             setIsAuthenticated(true);
                             setEmail(email);
                         }
                     }
                 } catch(error) {
+                    logout(() =>{
+                        console.log("로그아웃");
+                    });
                     console.error(error.toString());
                     console.error(error);
                 } finally {
@@ -29,6 +33,7 @@ function PrivateRoute() {
                 }
             }
         }
+
         if (!isAuthenticated) {
             setLoading(true);
         }

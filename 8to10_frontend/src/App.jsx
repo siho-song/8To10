@@ -14,6 +14,7 @@ import {FullCalendarProvider} from "@/context/fullCalendar/FullCalendarProvider.
 import Community from "@/pages/Community.jsx";
 import Post from "@/pages/Post.jsx";
 import BoardPost from "@/pages/BoardPost.jsx";
+import SignUpComplete from "@/components/signUp/SignUpComplete.jsx";
 
 
 function App() {
@@ -23,13 +24,14 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
+                    <Route path="/signup/complete" element={<SignUpComplete />} />
                     <Route path="/" element={<Login />} />
                     <Route element={<PrivateRoute />}>
                         <Route
                             path="/home"
                             element={
                                 <FullCalendarProvider>
-                                <Home />
+                                    <Home />
                                 </FullCalendarProvider>
                             }
                         />

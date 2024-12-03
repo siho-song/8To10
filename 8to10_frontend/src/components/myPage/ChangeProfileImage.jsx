@@ -3,7 +3,9 @@ import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PropTypes from "prop-types";
-import {DEFAULT_PROFILE_IMAGE_PATH, USER_ROLE} from "@/constants/UserRole.js";
+import {USER_ROLE} from "@/constants/UserRole.js";
+import {DEFAULT_PROFILE_IMAGE_PATH} from "@/constants/ImagePaths.js";
+
 
 const ChangeProfileImage = ({userProfileImageUrl, changeProfileUrl, userRole, profileImageUpdated, changeProfileImageUpdated, onBack}) => {
     const [file, setFile] = useState(null);
