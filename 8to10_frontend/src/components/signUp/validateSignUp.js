@@ -7,7 +7,7 @@ import {
     NAME_PATTERN, NICKNAME_FIELD_MESSAGE,
     NICKNAME_PATTERN, PASSWORD_FIELD_MESSAGE, PASSWORD_PATTERN, PHONE_NUMBER_FIELD_MESSAGE,
     PHONE_NUMBER_PATTERN
-} from "@/constants/SignUpValidator.js";
+} from "@/constants/SignUpValidateMessage.js";
 
 export const validateName = (name) => {
 
