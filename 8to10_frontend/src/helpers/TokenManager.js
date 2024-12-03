@@ -23,6 +23,8 @@ export const refreshAccessToken = async() => {
             {apiEndPoint: API_ENDPOINT_NAMES.RENEW});
         return response.data['accessToken'];
     } catch (error) {
-        console.error(error)
+        console.error(error.toString());
+        console.error(error);
+        throw error;
     }
 }
