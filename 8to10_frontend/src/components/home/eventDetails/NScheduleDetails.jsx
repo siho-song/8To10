@@ -43,8 +43,15 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                             <strong>개별 일정 메모</strong>
                         </h2>
                     </div>
+                <div className="event-detail-prop">
+                    <h2><strong>일일 목표 달성 량</strong></h2>
                     <hr className="event-details-contour"/>
-                    <p>{selectedEvent.extendedProps.detailDescription}</p>
+                    <p>{selectedEvent.extendedProps.dailyAmount}</p>
+                </div>
+                <div className="event-detail-prop">
+                    <h2><strong>일정 시작 전 여유시간</strong></h2>
+                    <hr className="event-details-contour"/>
+                    <p>{formatBufferTime(selectedEvent.extendedProps.bufferTime)}</p>
                 </div>
             </div>
         </div>
