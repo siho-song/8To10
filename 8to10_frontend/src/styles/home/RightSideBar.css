@@ -197,3 +197,84 @@ select {
     flex-direction: row;
 }
 
+.detail-description-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-description-header p {
+    font-size: 0.9rem;
+}
+
+.detail-description-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-description-btn {
+    cursor: pointer;
+    color: #4CAF50;
+}
+
+.detail-description-btn:hover {
+    cursor: pointer;
+    color: #3e8e41;
+    text-decoration: underline;
+}
+
+.detail-description-delete-btn {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #e15b27;
+}
+
+.detail-description-delete-btn:hover {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #FF4757;
+    text-decoration: underline;
+}
+
+.description-edit-btns {
+    display: flex;
+    margin-top: 10px;
+}
+
+.description-edit-btn {
+    margin-right: 5px;
+}
+
+.description-cancel-btn {
+    margin-left:5px;
+    background-color: #e15b27 !important;
+}
+
+.detail-description-textarea {
+    margin-top: 10px;
+    width: 100%; /* 부모 요소의 너비에 맞게 확장 */
+    max-width: 500px; /* 최대 너비 제한 */
+    height: auto; /* 자동 높이 조정 */
+    padding: 10px; /* 안쪽 여백 */
+    font-size: 14px; /* 글자 크기 */
+    line-height: 1.5; /* 줄 간격 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    border-radius: 8px; /* 둥근 모서리 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
+    resize: vertical; /* 세로로만 크기 조정 가능 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 */
+}
+
+.detail-description-textarea:focus {
+    border-color: #4CAF50; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 5px rgba(56, 142, 60, 0.5); /* 포커스 시 그림자 효과 */
+    outline: none; /* 기본 outline 제거 */
+}
+
+.detail-description-textarea::placeholder {
+    color: #aaa; /* 플레이스홀더 텍스트 색상 */
+    font-style: italic; /* 이탤릭체 */
+}
+
+
+

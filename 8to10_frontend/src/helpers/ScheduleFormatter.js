@@ -35,7 +35,7 @@ export const formatNormalSchedule = (event) => {
             type: event.type,
             parentId: event.parentId,
             commonDescription: event.commonDescription,
-            detailDescription: "",
+            detailDescription: event.detailDescription,
             bufferTime : event.bufferTime,
             completeStatus: event.completeStatus,
             isComplete: event.completeStatus,
@@ -71,7 +71,7 @@ export const formatFixedSchedule = (event) => {
         extendedProps: {
             type: event.type,
             commonDescription: event.commonDescription,
-            detailDescription: "",
+            detailDescription: event.detailDescription,
             originId: event.id,
         },
     };
