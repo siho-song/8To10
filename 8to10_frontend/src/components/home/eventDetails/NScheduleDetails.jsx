@@ -4,6 +4,8 @@ import {useState} from "react";
 
 const NScheduleDetails = ({selectedEvent, onClose}) => {
 
+    const [hasCommonDescription, setHasCommonDescription] = useState(selectedEvent.extendedProps.commonDescription.length > 0);
+
     return (
         <div id="event-details-container-normal">
             <div className="event-details-header-normal">
@@ -30,15 +32,15 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <hr className="event-detail-contour"/>
                     <p>{formatDateTime(selectedEvent.end)}</p>
                 </div>
-                <div className="event-detail-prop">
-                    <h2>
-                        <strong>공통 일정 메모</strong>
-                    </h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.extendedProps.commonDescription}</p>
-                </div>
-                <div className="event-detail-prop">
-                    <div className="detail-description-header">
+                {hasCommonDescription &&
+                    <div className="event-detail-prop">
+                        <h2>
+                            <strong>공통 일정 메모</strong>
+                        </h2>
+                        <hr className="event-detail-contour"/>
+                        <p>{selectedEvent.extendedProps.commonDescription}</p>
+                    </div>
+                }
                         <h2>
                             <strong>개별 일정 메모</strong>
                         </h2>
