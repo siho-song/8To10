@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
-import {parseBearerToken, refreshAccessToken} from "@/helpers/TokenManager.js";
+import {refreshAccessToken} from "@/helpers/TokenManager.js";
 import PrivateHeader from "@/components/PrivateHeader.jsx";
 
 function PrivateRoute() {
@@ -16,8 +16,10 @@ function PrivateRoute() {
 
                     if (accessToken && email) {
                         const updatedAccessToken = await refreshAccessToken();
+                        console.log("updatedAccessToken : ",updatedAccessToken);
+                        console.log("email : ", email);
                         if (updatedAccessToken) {
-                            localStorage.setItem('Authorization', parseBearerToken(updatedAccessToken));
+                            localStorage.setItem('Authorization', updatedAccessToken);
                             setIsAuthenticated(true);
                             setEmail(email);
                         }
