@@ -67,7 +67,10 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <p>{formatBufferTime(selectedEvent.extendedProps.bufferTime)}</p>
                 </div>
                 {!hasDetailDescription &&
-                    <button className="create-detail-description">개별 메모 추가</button>
+                    <button
+                        className="create-detail-description"
+                        onClick={handleCreateDetailDescription}
+                    >개별 메모 추가</button>
                 }
             </div>
         </div>
