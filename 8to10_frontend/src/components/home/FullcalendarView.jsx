@@ -49,14 +49,14 @@ function Calendar() {
     };
 
     const displayEventDetailsInSidebar = (event) => {
-        setSelectedEvent({
-            type: event.extendedProps.type,
+        const selectedEvent = {
+            id: event.id,
             title: event.title,
-            start: event.start.toLocaleString(),
-            end: event.end ? event.end.toLocaleString() : event.start.toLocaleString(),
-            commonDescription: event.extendedProps.commonDescription || '',
-            detailDescription: event.extendedProps.detailDescription || '',
-        });
+            start: event.start,
+            end: event.end,
+            extendedProps: event.extendedProps
+        };
+        setSelectedEvent(selectedEvent);
     };
 
     const handleClose = () => {
