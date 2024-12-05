@@ -4,6 +4,7 @@ import {useState} from "react";
 
 const NScheduleDetails = ({selectedEvent, onClose}) => {
 
+    const [hasDetailDescription, setHasDetailDescription] = useState(selectedEvent.extendedProps.detailDescription.length > 0);
     const [hasCommonDescription, setHasCommonDescription] = useState(selectedEvent.extendedProps.commonDescription.length > 0);
 
     return (
@@ -41,10 +42,20 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         <p>{selectedEvent.extendedProps.commonDescription}</p>
                     </div>
                 }
-                        <h2>
-                            <strong>개별 일정 메모</strong>
-                        </h2>
+                {hasDetailDescription &&
+                    <div className="event-detail-prop">
+                        <div className="detail-description-header">
+                            <h2>
+                                <strong>개별 일정 메모</strong>
+                            </h2>
+                            <p className="detail-description-btn" onClick={() => {
+                                console.log("수정")
+                            }}>수정</p>
+                        </div>
+                        <hr className="event-details-contour"/>
+                        <p>{selectedEvent.extendedProps.detailDescription}</p>
                     </div>
+                }
                 <div className="event-detail-prop">
                     <h2><strong>일일 목표 달성 량</strong></h2>
                     <hr className="event-details-contour"/>
@@ -55,6 +66,9 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <hr className="event-details-contour"/>
                     <p>{formatBufferTime(selectedEvent.extendedProps.bufferTime)}</p>
                 </div>
+                {!hasDetailDescription &&
+                    <button className="create-detail-description">개별 메모 추가</button>
+                }
             </div>
         </div>
     );

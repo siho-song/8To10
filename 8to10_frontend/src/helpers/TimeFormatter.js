@@ -54,3 +54,9 @@ export function formatLocalDateTimeToTime(dateString) {
 
     return `${period} ${formattedHour}시 ${formattedMinute}분`;
 }
+
+export function formatBufferTime(bufferTime) {
+    const [hour, minute, second] = bufferTime.split(":");
+    console.log(bufferTime.split(":"));
+    return `${parseInt(hour)}시간 ${parseInt(minute)}분`;
+}
