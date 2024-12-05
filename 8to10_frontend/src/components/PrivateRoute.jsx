@@ -16,8 +16,6 @@ function PrivateRoute() {
 
                     if (accessToken && email) {
                         const updatedAccessToken = await refreshAccessToken();
-                        console.log("updatedAccessToken : ",updatedAccessToken);
-                        console.log("email : ", email);
                         if (updatedAccessToken) {
                             localStorage.setItem('Authorization', updatedAccessToken);
                             setIsAuthenticated(true);

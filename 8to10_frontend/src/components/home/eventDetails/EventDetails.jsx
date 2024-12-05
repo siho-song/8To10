@@ -5,7 +5,6 @@ import VScheduleDetails from "@/components/home/eventDetails/VScheduleDetails.js
 
 function EventDetails({ selectedEvent, onClose }) {
     if (!selectedEvent) return null;
-    console.log(selectedEvent);
     return (
         <>
             {selectedEvent.extendedProps.type === "normal" &&

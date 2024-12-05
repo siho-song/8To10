@@ -20,6 +20,7 @@ export const FullCalendarProvider = ({ children }) => {
                 const data = response.data;
 
                 const formattedEvents = data.items.map((event) => {
+                    console.log("event : ", event);
                     if (event.type === "normal") {
                         return formatNormalSchedule(event);
                     } else if (event.type === "variable") {

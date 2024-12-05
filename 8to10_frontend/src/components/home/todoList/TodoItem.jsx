@@ -12,7 +12,6 @@ const TodoItem = ({event}) => {
 
     const handleInputChange = (e) => {
         const inputValue = parseInt(e.target.value, 10) || 0;
-        console.log(inputValue);
         if (inputValue >= 0 && inputValue <= extendedProps.dailyAmount) {
             if (inputValue === extendedProps.dailyAmount) {
                 updateExtendedProps(event.id, ["isComplete", "achievedAmount"], [true, inputValue]);
