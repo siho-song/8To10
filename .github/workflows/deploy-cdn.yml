@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '8to10_frontend/**' # 8to10_frontend 폴더 내의 변경 사항만 감지
+      - '8to10_frontend/**'
 
 jobs:
   deploy:
@@ -13,34 +13,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Authenticate to Google Cloud
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+
+      - name: install npm dependencies
+        run: npm install
+
+      - name: Build React app
+        working-directory: 8to10_frontend
+        run: npm run build
+
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      # 3. Set up Google Cloud CLI
+          
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      # 4. Build the frontend
-      - name: Build Frontend
-        working-directory: 8to10_frontend
-        run: |
-          npm install
-          npm run build
-
-      # 5. Upload files to Google Cloud Storage
       - name: Upload to GCS
         run: |
-          gsutil rsync -r 8to10_frontend/dist gs://{ {vars.STATIC_ASSETS_BUCKET }}/
-      # 6. Invalidate CDN cache
+          gsutil rsync -r 8to10_frontend/dist gs://$STATIC_ASSETS_BUCKET/
+   
       - name: Invalidate CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache my-url-map \
