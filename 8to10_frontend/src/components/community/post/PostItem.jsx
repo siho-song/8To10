@@ -83,7 +83,7 @@ function PostItem({ post, email }) {
                     {email === post.writer &&
                         <div id="edit-delete-controls" className="edit-delete-controls">
                             <button onClick={() => {
-                                navigate(`/community/board/edit/${post.id}`,{
+                                navigate(`/community/board/edit/${post.id}`, {
                                     state: {
                                         title: post.title,
                                         contents: post.contents,
@@ -94,7 +94,8 @@ function PostItem({ post, email }) {
                             <button
                                 className="delete-button"
                                 onClick={handlePostDelete}
-                            >삭제</button>
+                            >삭제
+                            </button>
                         </div>
                     }
                     <button onClick={() => {
@@ -116,7 +117,16 @@ function PostItem({ post, email }) {
 
                 <hr/>
 
-                <p className="post-body">{post.contents}</p>
+                <p className="post-body">
+                    {post.contents.split("\n").map((line, index) => (
+                        <span key={index}>
+                            {line}
+                            <br/>
+                        </span>
+                    ))}
+                </p>
+
+
 
                 <div className="post-stats">
                     <div className="post-likes">
