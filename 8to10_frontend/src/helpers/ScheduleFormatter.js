@@ -71,7 +71,7 @@ export const formatFixedSchedule = (event) => {
         extendedProps: {
             type: event.type,
             commonDescription: event.commonDescription,
-            detailDescription: event.detailDescription,
+            detailDescription: event.detailDescription || "",
             originId: event.id,
         },
     };
