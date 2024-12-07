@@ -1,6 +1,12 @@
-name: Deploy to CDN
+name: CI/CD Workflow
 
 on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '8to10_frontend/**'
+
   push:
     branches:
       - main
@@ -8,14 +14,14 @@ on:
       - '8to10_frontend/**'
 
 jobs:
-  deploy:
-    name: Deploy Frontend to CDN
+  ci:
+    if: ${{ github.event_name == 'pull_request' }} # Pull Request에서만 실행
+    name: Run CI
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
 
       - name: Get npm cache directory
         id: npm-cache-dir
@@ -29,9 +35,42 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      
 
-      - name: install npm dependencies
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build React app
+        working-directory: 8to10_frontend
+        run: npm run build
+
+      - name: Run Tests
+        working-directory: 8to10_frontend
+        run: npm test
+
+  # CI/CD Job: main 브랜치로 병합(Push) 시 실행
+  deploy:
+    if: ${{ github.event_name == 'push' }} # Push 이벤트에서만 실행
+    name: Deploy Frontend to CDN
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install npm dependencies
         run: npm install
 
       - name: Build React app
@@ -42,7 +81,7 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-          
+
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
@@ -51,7 +90,7 @@ jobs:
       - name: Upload to GCS
         run: |
           gsutil rsync -r 8to10_frontend/dist gs://$STATIC_ASSETS_BUCKET/
-   
+
       - name: Invalidate CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache my-url-map \
