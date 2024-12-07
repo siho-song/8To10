@@ -1,0 +1,49 @@
+
+.achievement-box {
+    background-color: #dffcdf;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.todo-container {
+    background-color: #f5faf5;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 좌측 사이드 바 */
+/* 좌측 사이드바 사용자 달성률 박스 스타일 */
+.achievement-box {
+    background-color: #dffcdf;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-box p {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.details-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.details-button:hover {
+    background-color: #45a049;
+}
+
+
