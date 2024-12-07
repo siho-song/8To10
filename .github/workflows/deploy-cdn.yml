@@ -103,5 +103,6 @@ jobs:
 
       - name: Invalidate CDN cache
         run: |
-          gcloud compute url-maps invalidate-cdn-cache my-url-map \
+          gcloud compute url-maps invalidate-cdn-cache eighttoten-static-lb \
             --path "/*"
+            --project ${{ secrets.GCP_PROJECT_ID }}
