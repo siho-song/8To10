@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {formatLocalDateTimeToTime} from "@/helpers/TimeFormatter.js";
 import {useState} from "react";
-import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 
 const TodoItem = ({event}) => {
 

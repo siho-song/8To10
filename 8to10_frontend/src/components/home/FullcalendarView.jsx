@@ -10,10 +10,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 
-import "@/styles/styles.css";
+import "@/styles/Styles.css";
 import "@/styles/home/Fullcalendar.css";
 
-import { useCalendar } from '@/context/fullCalendar/useCalendar.jsx';
+import { useCalendar } from '@/context/fullCalendar/UseCalendar.jsx';
 
 function handleWindowResize(calendar) {
     if (window.innerWidth < 768) {

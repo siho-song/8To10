@@ -3,7 +3,7 @@ import {formatBufferTime, formatDateTime} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
-import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 
 const NScheduleDetails = ({selectedEvent, onClose}) => {
 

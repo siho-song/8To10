@@ -3,7 +3,7 @@ import {
     formatDuration
 } from "@/helpers/TimeFormatter.js";
 import {useState} from "react";
-import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import PropTypes from "prop-types";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
