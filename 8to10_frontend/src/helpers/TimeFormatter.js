@@ -15,7 +15,6 @@ export const formatPeriodTimeToLocalTimeFormat = (period, hour, minute) => {
         hourInt = 0;
     }
 
-    console.log("LocalTime : ", `${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
     return `${hourInt.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 };
 
@@ -53,4 +52,9 @@ export function formatLocalDateTimeToTime(dateString) {
     const formattedMinute = String(minute).padStart(2, "0");
 
     return `${period} ${formattedHour}시 ${formattedMinute}분`;
+}
+
+export function formatBufferTime(bufferTime) {
+    const [hour, minute, second] = bufferTime.split(":");
+    return `${parseInt(hour)}시간 ${parseInt(minute)}분`;
 }

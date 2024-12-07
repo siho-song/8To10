@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {formatLocalDateTimeToTime} from "@/helpers/TimeFormatter.js";
 import {useState} from "react";
-import {useCalendar} from "@/context/fullCalendar/useCalendar.jsx";
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 
 const TodoItem = ({event}) => {
 
@@ -12,7 +12,6 @@ const TodoItem = ({event}) => {
 
     const handleInputChange = (e) => {
         const inputValue = parseInt(e.target.value, 10) || 0;
-        console.log(inputValue);
         if (inputValue >= 0 && inputValue <= extendedProps.dailyAmount) {
             if (inputValue === extendedProps.dailyAmount) {
                 updateExtendedProps(event.id, ["isComplete", "achievedAmount"], [true, inputValue]);

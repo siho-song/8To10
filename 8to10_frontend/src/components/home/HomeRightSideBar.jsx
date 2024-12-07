@@ -3,29 +3,13 @@ import PropTypes from 'prop-types';
 
 import "@/styles/home/RightSideBar.css"
 
-import EventDetails from "./EventDetails.jsx";
+import EventDetails from "./eventDetails/EventDetails.jsx";
 import FixedScheduleForm from "./form/ScheduleForm/FixedScheduleForm.jsx";
 import ScheduleTypePopup from "./form/ScheduleTypePopup.jsx";
 import NormalScheduleForm from "@/components/home/form/ScheduleForm/NormalScheduleForm.jsx";
 import VariableScheduleForm from "@/components/home/form/ScheduleForm/VariableScheduleForm.jsx";
 
-HomeSidebarRight.propTypes = {
-    selectedEvent: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        start: PropTypes.oneOfType([
-            PropTypes.instanceOf(Date),
-            PropTypes.string,
-        ]).isRequired,
-        end: PropTypes.oneOfType([
-            PropTypes.instanceOf(Date),
-            PropTypes.string,
-        ]),
-        description: PropTypes.string,
-    }),
-    onClose: PropTypes.func.isRequired,
-    showScheduleForm: PropTypes.bool.isRequired,
-    onShowForm: PropTypes.func.isRequired,
-};
+
 
 function HomeSidebarRight({ selectedEvent, onClose, showScheduleForm, onShowForm }) {
     const [showPopup, setShowPopup] = useState(false);
@@ -69,5 +53,29 @@ function HomeSidebarRight({ selectedEvent, onClose, showScheduleForm, onShowForm
         </div>
     );
 }
+
+HomeSidebarRight.propTypes = {
+    selectedEvent: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        start: PropTypes.instanceOf(Date).isRequired,
+        end: PropTypes.instanceOf(Date).isRequired,
+        extendedProps: PropTypes.shape({
+            type: PropTypes.string.isRequired,
+            commonDescription: PropTypes.string,
+            detailDescription: PropTypes.string,
+            bufferTime: PropTypes.string,
+            completeStatus: PropTypes.bool,
+            isComplete: PropTypes.bool,
+            dailyAmount: PropTypes.number,
+            achievedAmount: PropTypes.number,
+            parentId: PropTypes.number,
+            originId: PropTypes.number,
+        }),
+    }),
+    onClose: PropTypes.func.isRequired,
+    showScheduleForm: PropTypes.bool.isRequired,
+    onShowForm: PropTypes.func.isRequired,
+};
 
 export default HomeSidebarRight;

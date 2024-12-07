@@ -17,9 +17,6 @@ function AuthProvider({ children }) {
                 url,
                 {apiEndPoint: API_ENDPOINT_NAMES.LOGOUT}
             );
-
-            console.log(response);
-
         } catch (error) {
             console.error(error.toString());
             console.error(error);

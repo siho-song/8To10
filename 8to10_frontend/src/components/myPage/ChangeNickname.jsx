@@ -41,7 +41,6 @@ function ChangeNickname({ nickname, changeNickname, onBack }) {
                 {apiEndPoint:API_ENDPOINT_NAMES.SIGNUP_NICKNAME_EXISTS,}
             );
 
-            console.log(response.data);
             setIsDuplicate(response.data);
             validNickname = newNickname;
         } catch (error) {

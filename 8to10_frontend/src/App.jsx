@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import "./styles/styles.css";
+import "./styles/Styles.css";
 
 import Login from './components/login/Login';
 import SignUp from './components/signUp/SignUp';
