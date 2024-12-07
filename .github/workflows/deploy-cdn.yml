@@ -99,7 +99,7 @@ jobs:
 
       - name: Upload to GCS
         run: |
-          gsutil rsync -r ./8to10_frontend/dist gs://$STATIC_ASSETS_BUCKET/
+          gsutil rsync -r ./8to10_frontend/dist gs://${{ env.STATIC_ASSETS_BUCKET }}/
 
       - name: Invalidate CDN cache
         run: |
