@@ -35,17 +35,21 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+      
+      - name: Check directory structure
+        run: ls -R
+
 
       - name: Install npm dependencies
-        working-directory: 8to10_frontend
+        working-directory: ./8to10_frontend
         run: npm install
 
       - name: Build React app
-        working-directory: 8to10_frontend
+        working-directory: ./8to10_frontend
         run: npm run build
 
       - name: Run Tests
-        working-directory: 8to10_frontend
+        working-directory: ./8to10_frontend
         run: npm test
 
   deploy:
