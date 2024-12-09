@@ -212,14 +212,25 @@ select {
     justify-content: space-between;
 }
 
-.detail-description-btn {
+.detail-description-btn.normal {
     cursor: pointer;
     color: #4CAF50;
 }
 
-.detail-description-btn:hover {
+.detail-description-btn.normal:hover {
     cursor: pointer;
     color: #3e8e41;
+    text-decoration: underline;
+}
+
+.detail-description-btn.fixed {
+    cursor: pointer;
+    color: #4a90e2;
+}
+
+.detail-description-btn.fixed:hover {
+    cursor: pointer;
+    color: rgba(74, 144, 226, 0.5);
     text-decoration: underline;
 }
 
@@ -265,7 +276,19 @@ select {
     transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 */
 }
 
-.detail-description-textarea:focus {
+.detail-description-textarea.normal:focus {
+    border-color: #4CAF50; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 5px rgba(56, 142, 60, 0.5); /* 포커스 시 그림자 효과 */
+    outline: none; /* 기본 outline 제거 */
+}
+
+.detail-description-textarea.fixed:focus {
+    border-color: #4a90e2; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    outline: none; /* 기본 outline 제거 */
+}
+
+.detail-description-textarea.variable:focus {
     border-color: #4CAF50; /* 포커스 시 테두리 색상 */
     box-shadow: 0 0 5px rgba(56, 142, 60, 0.5); /* 포커스 시 그림자 효과 */
     outline: none; /* 기본 outline 제거 */
@@ -277,4 +300,68 @@ select {
 }
 
 
+.create-detail-description.normal {
+    background-color: #4CAF50 !important;
+}
 
+.create-detail-description.normal:hover {
+    background-color: rgba(56, 142, 60, 0.5) !important;
+}
+
+.create-detail-description.fixed {
+    background-color: #4a90e2 !important;
+}
+
+.create-detail-description.fixed:hover {
+    background-color: rgba(74, 144, 226, 0.5) !important;
+}
+
+.description-edit-btn.normal {
+    background-color: #4CAF50 !important;
+}
+
+.description-edit-btn.normal:hover {
+    background-color: rgba(56, 142, 60, 0.5) !important;
+}
+
+.description-edit-btn.fixed {
+    background-color: #4a90e2 !important;
+}
+
+.description-edit-btn.fixed:hover {
+    background-color: rgba(74, 144, 226, 0.5) !important;
+}
+
+
+.fixed-item-edit-btn {
+    background-color: #4a90e2 !important;
+}
+.fixed-item-edit-btn:hover {
+    background-color: rgba(74, 144, 226, 0.5) !important;
+}
+
+.common-description-edit-message {
+    margin-top:10px;
+    padding: 2px;
+    background-color: #ffffff;
+    border: 2px solid #4a90e2;
+    border-radius: 4px;
+}
+
+.fixed-edit-cancel-btn {
+    background-color: #e15b27 !important;
+}
+
+.error-message {
+    color: hotpink;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.fixed-edit-btn {
+    background-color: #4a90e2 !important;
+}
+
+.fixed-edit-btn:hover {
+    background-color: rgba(74, 144, 226, 0.5) !important;
+}
