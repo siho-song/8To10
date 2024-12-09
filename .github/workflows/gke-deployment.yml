@@ -43,8 +43,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle','**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{github.job}}
-
-      # 4. Build with Gradle
+      # 4. Add execution permission to gradlew
+      - name: Grant execute permission to gradlew
+        run: chmod +x 8to10_backend/gradlew
+      # 5. Build with Gradle
       - name: Build with Gradle
         working-directory: 8to10_backend
         run: ./gradlew clean build
