@@ -102,8 +102,6 @@ function SignUp() {
                 isAuthPhone: true,
             };
 
-            console.log('회원가입 요청 데이터:', finalData);
-
             try {
                 const url = "/signup";
                 const response = await authenticatedApi.post(
@@ -112,7 +110,6 @@ function SignUp() {
                     {apiEndPoint: API_ENDPOINT_NAMES.SIGNUP,},
                 );
 
-                console.log(response);
                 navigate("/signup/complete");
             } catch (error) {
                 console.error(error.toString());
