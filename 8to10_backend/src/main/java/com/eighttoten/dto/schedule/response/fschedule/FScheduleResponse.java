@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class FScheduleResponse extends ScheduleResponse {
     private Long parentId;
+    private String detailDescription;
     public FScheduleResponse(FSchedule fSchedule, FScheduleDetail fScheduleDetail) {
         super(fScheduleDetail.getId(),
                 fSchedule.getTitle(),
@@ -23,5 +24,6 @@ public class FScheduleResponse extends ScheduleResponse {
                 ScheduleColor.FIXED.hexCode);
 
         this.parentId = fSchedule.getId();
+        this.detailDescription = fScheduleDetail.getDetailDescription();
     }
 }
