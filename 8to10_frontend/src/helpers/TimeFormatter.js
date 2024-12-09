@@ -58,3 +58,57 @@ export function formatBufferTime(bufferTime) {
     const [hour, minute, second] = bufferTime.split(":");
     return `${parseInt(hour)}시간 ${parseInt(minute)}분`;
 }
+
+export function  formatDateToLocalDateTime(date) {
+    if (!(date instanceof Date)) {
+        throw new Error("Invalid input: Expected a Date object");
+    }
+
+    // Pad single digit numbers with a leading zero
+    const pad = (num) => String(num).padStart(2, "0");
+
+    // Extract date and time components
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1); // Months are zero-indexed
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    // Format as LocalDateTime (YYYY-MM-DDTHH:mm:ss)
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
+
+export function extractDateInfo(date) {
+    if (!(date instanceof Date)) {
+        throw new Error("Invalid input: Expected a Date object");
+    }
+
+    const pad = (num) => String(num).padStart(2, '0');
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+
+    return {
+        date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
+        period: hour < 12 ? 'AM' : 'PM',
+        hour: hour % 12 || 12,
+        minute: minute,
+    };
+}
+
+export function createLocalDateTime({ date, period, hour, minute }) {
+
+    const [year, month, day] = date.split('-').map(Number);
+    let normalizedHours = hour;
+
+    if (period === 'PM' && hour !== 12) {
+        normalizedHours = hour + 12;
+    } else if (period === 'AM' && hour === 12) {
+        normalizedHours = 0;
+    }
+
+    const pad = (num) => String(num).padStart(2, '0');
+    return `${year}-${pad(month)}-${pad(day)}T${pad(normalizedHours)}:${pad(minute)}:00`;
+}
+
