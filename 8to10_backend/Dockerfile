@@ -1,4 +1,4 @@
-FROM gkdldhdl/jdk:17
+FROM openjdk:17-jdk
 
 LABEL maintainer="siho-song"
 
