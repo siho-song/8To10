@@ -2,7 +2,7 @@ export const generateEventIdWithParentId = (event) => {
     if (event.parentId) {
         return `${event.parentId}-${event.id}`;
     }
-    return event.id;
+    return `${event.id}`;
 };
 
 export const parseEventIdWithParentId = (event) => {
@@ -35,7 +35,7 @@ export const formatNormalSchedule = (event) => {
             type: event.type,
             parentId: event.parentId,
             commonDescription: event.commonDescription,
-            detailDescription: event.detailDescription,
+            detailDescription: event.detailDescription || "",
             bufferTime : event.bufferTime,
             completeStatus: event.completeStatus,
             isComplete: event.completeStatus,
@@ -48,7 +48,7 @@ export const formatNormalSchedule = (event) => {
 
 export const formatVariableSchedule = (event) => {
     return {
-        id: event.id,
+        id: generateEventIdWithParentId(event),
         title: event.title,
         start: event.start,
         end: event.end,
@@ -61,6 +61,7 @@ export const formatVariableSchedule = (event) => {
 }
 
 export const formatFixedSchedule = (event) => {
+    console.log(event);
     return {
         id: generateEventIdWithParentId(event),
         groupId: event.parentId,

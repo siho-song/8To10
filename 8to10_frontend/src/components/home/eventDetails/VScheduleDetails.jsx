@@ -61,7 +61,7 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
 
 VScheduleDetails.propTypes = {
     selectedEvent: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         start: PropTypes.instanceOf(Date).isRequired,
         end: PropTypes.instanceOf(Date).isRequired,

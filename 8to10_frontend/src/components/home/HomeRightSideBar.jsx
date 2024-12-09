@@ -48,7 +48,9 @@ function HomeSidebarRight({ selectedEvent, onClose, showScheduleForm, onShowForm
             {showScheduleForm && scheduleType && (
                 scheduleType === "fixed"
                     ? <FixedScheduleForm onClose={onClose} />
-                    : (scheduleType === "normal" ? <NormalScheduleForm onClose={onClose} /> : <VariableScheduleForm onClose={onClose} />)
+                    : (scheduleType === "normal"
+                        ? <NormalScheduleForm onClose={onClose} />
+                        : <VariableScheduleForm onClose={onClose} />)
             )}
         </div>
     );
