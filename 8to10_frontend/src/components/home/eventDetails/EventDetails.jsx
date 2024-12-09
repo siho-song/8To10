@@ -5,6 +5,7 @@ import VScheduleDetails from "@/components/home/eventDetails/VScheduleDetails.js
 
 function EventDetails({ selectedEvent, onClose }) {
     if (!selectedEvent) return null;
+
     return (
         <>
             {selectedEvent.extendedProps.type === "normal" &&
@@ -31,11 +32,10 @@ function EventDetails({ selectedEvent, onClose }) {
 
 EventDetails.propTypes = {
     selectedEvent: PropTypes.shape({
-        id: PropTypes.oneOfType(PropTypes.number || PropTypes.string).isRequired,
+        id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired,
-        color: PropTypes.string.isRequired,
+        start: PropTypes.instanceOf(Date).isRequired,
+        end: PropTypes.instanceOf(Date).isRequired,
         extendedProps: PropTypes.shape({
             type: PropTypes.string.isRequired,
             commonDescription: PropTypes.string,
