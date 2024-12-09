@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAR_FILE=$(find /app/build -type f -name '*.jar' | head -n 1)
+JAR_FILE=$(ls /app/build/*.jar 2>/dev/null | head -n 1)
 
 if [ -n "$JAR_FILE" ]; then
   echo "Running JAR file: $JAR_FILE with profile: prod"
