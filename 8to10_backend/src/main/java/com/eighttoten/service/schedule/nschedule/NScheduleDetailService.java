@@ -8,6 +8,8 @@ import com.eighttoten.domain.schedule.nschedule.NSchedule;
 import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
 import com.eighttoten.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest;
+import com.eighttoten.exception.BadRequestException;
+import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.MismatchException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.repository.schedule.nschedule.NScheduleDetailRepository;
@@ -85,12 +87,13 @@ public class NScheduleDetailService {
 
         if (dailyAmount == 0) {
             nScheduleDetail.updateCompleteStatus(progressUpdateRequest.isComplete());
-            return;
         }
 
         if (isValidAchievementAmount(newAchievementAmount, dailyAmount)) {
             nScheduleDetail.updateAchievedAmount(newAchievementAmount);
             nScheduleDetail.updateCompleteStatus(nScheduleDetail.getAchievedAmount() == dailyAmount);
+        } else {
+            throw new BadRequestException(ExceptionCode.INVALID_ACHIEVEMENT_AMOUNT);
         }
 
         publisher.publishEvent(ProgressUpdatedEvent.createdEvent(member,date));
