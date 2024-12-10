@@ -120,7 +120,7 @@ jobs:
       # 8. Build and Push Docker Image
       - name: Build and Push Docker Image
         env:
-          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/8to10-image-repo/8to10-app
+          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
         run: |
           docker build -t $IMAGE_NAME:$GITHUB_SHA -f 8to10_backend/Dockerfile 8to10_backend
           docker push $IMAGE_NAME:$GITHUB_SHA   
@@ -136,7 +136,7 @@ jobs:
       # 10. Update Deployment
       - name: Update Deployment
         env:
-          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/8to10-image-repo/8to10-app
+          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
         run: |
           echo "Current Image: $CURRENT_IMAGE"
           kubectl set image deployment/8to10-deployment 8to10=$IMAGE_NAME:$GITHUB_SHA
