@@ -139,4 +139,4 @@ export const MULTIPART_ENDPOINTS = [
     API_ENDPOINT_NAMES.PUT_PROFILE_IMAGE,
 ]
 
-export const DEFAULT_URL = "http://localhost:8080";
+export const DEFAULT_URL = "http://35.216.13.200:80";

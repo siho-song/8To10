@@ -1,9 +1,10 @@
 import axios from 'axios';
 import CustomErrors from "@/api/CustomErrors.js";
 import {setAcceptHeaders, setContentTypeHeaders, setWithCredentials} from "@/helpers/AxiosHelper.js";
+import {DEFAULT_URL} from "@/constants/ApiEndPoints.js";
 
 const publicApi = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: DEFAULT_URL,
     timeout: 5000,
 });
 
