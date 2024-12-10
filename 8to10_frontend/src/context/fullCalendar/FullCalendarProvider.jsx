@@ -4,7 +4,7 @@ import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {CalendarContext} from "@/context/fullCalendar/FullCalendarContext.jsx";
 
-export const FullCalendarProvider = ({ children }) => {
+export const FullCalendarProvider = ({children}) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -71,23 +71,24 @@ export const FullCalendarProvider = ({ children }) => {
             )
         );
     };
-
-    const updateEventTime = (id, newStart, newEnd) => {
+    const updateProps = (id, keys, values) => {
         setEvents((prevEvents) =>
             prevEvents.map((event) =>
-                event.id === id
+                id === event.id
                     ? {
                         ...event,
-                        start: newStart, // 새 시작 시간
-                        end: newEnd,     // 새 종료 시간
+                        ...keys.reduce((acc, key, index) => {
+                            acc[key] = values[index];
+                            return acc;
+                        }, {}),
                     }
                     : event
             )
-        );
-    };
+        )
+    }
 
     return (
-        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps, updateEventTime, deleteEvent }}>
+        <CalendarContext.Provider value={{events, addEvent, updateExtendedProps, updateProps, deleteEvent}}>
             {children}
         </CalendarContext.Provider>
     );

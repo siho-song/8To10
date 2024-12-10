@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {formatDateInfo, formatDateTime, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
+import {formatDateInfo, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
@@ -9,7 +9,7 @@ import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {updateExtendedProps, updateEventTime} = useCalendar();
+    const {updateExtendedProps, updateProps} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
@@ -41,21 +41,10 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
         setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
         setIsDescriptionCreateMode(false);
         setIsItemEditMode(false);
+        setEndDateError("");
 
-        setStartDate({
-            date: startDateInfo.date,
-            period: startDateInfo.period,
-            hour: startDateInfo.hour,
-            minute: startDateInfo.minute,
-        });
-
-        setEndDate({
-            date: endDateInfo.date,
-            period: endDateInfo.period,
-            hour: endDateInfo.hour,
-            minute: endDateInfo.minute,
-        });
-
+        setStartDate(startDateInfo);
+        setEndDate(startDateInfo);
     }, [selectedEvent]);
 
 
@@ -128,7 +117,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             );
 
             updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
-            updateEventTime(selectedEvent.id, startDateTime, endDateTime)
+            updateProps(selectedEvent.id, ['start', 'end'], startDateTime, endDateTime);
             setIsItemEditMode(false);
             setHasDetailDescription(detailDescription.length > 0);
         } catch (error) {
