@@ -9,7 +9,7 @@ export default defineConfig({
     proxy: {
       // 프록시 설정: /api로 시작하는 모든 요청을 Spring 서버로 포워딩
       '/api': {
-        target: 'http://localhost:8080', // Spring 서버 URL
+        target: 'http://35.216.13.200:80', // Spring 서버 URL
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''), // 경로에서 /api를 제거
       },
