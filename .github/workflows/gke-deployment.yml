@@ -16,7 +16,7 @@ on:
 jobs:
   # CI Job: 실행 시 Pull Request에서만 동작
   ci:
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' }}
     name: Build and Test
     runs-on: ubuntu-latest
 
@@ -58,7 +58,7 @@ jobs:
 
   # CD Job: 실행 시 Push 이벤트에서만 동작
   cd:
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' }}
     name: Deploy to GKE
     runs-on: ubuntu-latest
 
@@ -120,7 +120,7 @@ jobs:
       # 8. Build and Push Docker Image
       - name: Build and Push Docker Image
         env:
-          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
+          IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
         run: |
           docker build -t $IMAGE_NAME:$GITHUB_SHA -f 8to10_backend/Dockerfile 8to10_backend
           docker push $IMAGE_NAME:$GITHUB_SHA   
