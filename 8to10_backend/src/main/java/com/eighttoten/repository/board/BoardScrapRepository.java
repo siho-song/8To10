@@ -19,7 +19,7 @@ public interface BoardScrapRepository extends JpaRepository<BoardScrap, Long> {
 
     Optional<BoardScrap> findByMemberAndBoardId(Member member, Long boardId);
 
-    @EntityGraph("board")
+    @EntityGraph(attributePaths = "board")
     @Query("select s from BoardScrap s where s.member = :member")
     List<BoardScrap> findAllByMemberWithBoard(Member member);
 }

@@ -60,7 +60,8 @@
         <h3>🚀 지금 시작해보세요!</h3>
         <p><strong>EightToTen</strong>과 함께라면 누구나 꾸준함의 가치를 느끼고, 자신을 변화시킬 수 있습니다.</p>
     </div>
-    <a href="http://www.naver.com/" style="height: 50px;line-height: 30px;margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: #fff; text-decoration: none; border-radius: 5px;">👉 지금 체험하러 가기</a>
+
+[//]: # (    <a href="http://www.naver.com/" style="height: 50px;line-height: 30px;margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: #fff; text-decoration: none; border-radius: 5px;">👉 지금 체험하러 가기</a>)
 </div>
 
 <br/>
@@ -125,7 +126,9 @@
 [//]: # ()
 [//]: # (---)
 
-
+### ERD
+![ERD diagram](https://github.com/user-attachments/assets/3a95beb3-72f5-4a05-a7e0-1855bf556051)
+링크 - [ERD](https://www.erdcloud.com/d/2DYRimZu7tKGfzqg8)
 
 
 ## 👥 팀원

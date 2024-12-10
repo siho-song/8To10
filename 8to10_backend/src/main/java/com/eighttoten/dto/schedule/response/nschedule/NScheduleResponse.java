@@ -32,7 +32,7 @@ public class NScheduleResponse extends ScheduleResponse {
         this.completeStatus = nScheduleDetail.isCompleteStatus();
         this.parentId = nSchedule.getId();
         this.dailyAmount = nScheduleDetail.getDailyAmount();
-        this.detailDescription = nSchedule.getCommonDescription();
+        this.detailDescription = nScheduleDetail.getDetailDescription();
         this.bufferTime = nSchedule.getBufferTime();
     }
 }

@@ -20,7 +20,6 @@ export const FullCalendarProvider = ({ children }) => {
                 const data = response.data;
 
                 const formattedEvents = data.items.map((event) => {
-                    console.log("event : ", event);
                     if (event.type === "normal") {
                         return formatNormalSchedule(event);
                     } else if (event.type === "variable") {
@@ -67,8 +66,22 @@ export const FullCalendarProvider = ({ children }) => {
         );
     };
 
+    const updateEventTime = (id, newStart, newEnd) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                event.id === id
+                    ? {
+                        ...event,
+                        start: newStart, // 새 시작 시간
+                        end: newEnd,     // 새 종료 시간
+                    }
+                    : event
+            )
+        );
+    };
+
     return (
-        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps }}>
+        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps, updateEventTime }}>
             {children}
         </CalendarContext.Provider>
     );

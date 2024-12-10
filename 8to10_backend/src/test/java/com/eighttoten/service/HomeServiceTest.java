@@ -58,14 +58,13 @@ class HomeServiceTest {
     void getDailyUserStats_achievement_not_null(){
         //given
         Member member = memberService.getAuthenticatedMember();
-        double achievementRate = 0.1;
         when(achievementService.findByMemberAndDateIfExists(eq(member), any()))
-                .thenReturn(Achievement.createAchievement(member, LocalDate.now(), achievementRate));
+                .thenReturn(Achievement.createAchievement(member, LocalDate.now()));
 
         //when
         UserStatsResponse response = homeService.getDailyUserStats(member);
 
         //then
-        assertThat(response.getAchievementRate()).isEqualTo(achievementRate);
+        assertThat(response.getAchievementRate()).isEqualTo(0);
     }
 }

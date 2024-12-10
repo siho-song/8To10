@@ -3,6 +3,7 @@ package com.eighttoten.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.eighttoten.domain.member.Mode;
 import com.eighttoten.dto.signup.SignUpRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +41,7 @@ class MemberRepositoryTest {
                 .gender(Gender.FEMALE)
                 .phoneNumber("01099920438")
                 .nickname("테스트유저4")
+                .mode(Mode.MILD)
                 .isAuthPhone(false)
                 .isAuthEmail(false)
                 .build();

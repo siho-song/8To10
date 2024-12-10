@@ -19,7 +19,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
         setHasDetailDescription(selectedEvent.extendedProps.detailDescription.length > 0);
-        setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);setDetailDescription(selectedEvent.extendedProps.detailDescription);
+        setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
         setIsDescriptionCreateMode(false);
         setIsDescriptionEditMode(false);
     }, [selectedEvent]);
@@ -63,6 +63,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
             updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
             setHasDetailDescription(true);
             setIsDescriptionEditMode(false);
+            setIsDescriptionCreateMode(false);
         } catch (error) {
             console.error(error.toString());
             console.error(error);
@@ -132,7 +133,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                                 <strong>개별 일정 메모</strong>
                             </h2>
                             <div className="detail-description-btns">
-                                <p className="detail-description-btn" onClick={handleEditDetailDescription}>수정</p>
+                                <p className="detail-description-btn normal" onClick={handleEditDetailDescription}>수정</p>
                                 <p className="detail-description-delete-btn" onClick={handleDelete}>삭제</p>
                             </div>
                         </div>
@@ -147,7 +148,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         </h2>
                         <hr className="event-details-contour"/>
                         <textarea
-                            className="detail-description-textarea"
+                            className="detail-description-textarea normal"
                             value={detailDescription}
                             onChange={handleInputChange}
                             cols="30"
@@ -155,7 +156,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         />
                         <div className="description-edit-btns">
                             <button
-                                className="description-edit-btn"
+                                className="description-edit-btn normal"
                                 onClick={handleDetailDescriptionSubmit}
                             >등록
                             </button>
@@ -174,7 +175,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         </h2>
                         <hr className="event-details-contour"/>
                         <textarea
-                            className="detail-description-textarea"
+                            className="detail-description-textarea normal"
                             value={detailDescription}
                             onChange={handleInputChange}
                             cols="30"
@@ -182,7 +183,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         />
                         <div className="description-edit-btns">
                             <button
-                                className="description-edit-btn"
+                                className="description-edit-btn normal"
                                 onClick={handleDetailDescriptionSubmit}
                             >등록
                             </button>
@@ -206,7 +207,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                 </div>
                 {!hasDetailDescription &&
                     <button
-                        className="create-detail-description"
+                        className="create-detail-description normal"
                         onClick={handleCreateDetailDescription}
                     >개별 메모 추가</button>
                 }

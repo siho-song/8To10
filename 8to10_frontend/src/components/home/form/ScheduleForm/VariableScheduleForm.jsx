@@ -61,8 +61,6 @@ function VariableScheduleForm({ onClose }) {
             end: endDateTime
         };
 
-        console.log("finalData : ", finalData);
-
         try {
             const url = '/schedule/variable';
             const response = await authenticatedApi.post(
