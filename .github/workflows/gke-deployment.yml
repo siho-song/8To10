@@ -20,43 +20,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Write application-test.yaml
-      - name: Add application-test.yaml
-        run: |
-          echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application-test.yaml
-
-      # 2. Set up Java JDK for Gradle
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-          cache: 'gradle'
-
-      # 4. Add execution permission to gradlew
-      - name: Grant execute permission to gradlew
-        run: chmod +x 8to10_backend/gradlew
-      - name: Clear Gradle Cache
-        run: rm -rf ~/.gradle/caches
-
-      - name: Build with Gradle
-        working-directory: 8to10_backend
-        run: ./gradlew clean build --refresh-dependencies
-
-  # CD Job: 실행 시 Push 이벤트에서만 동작
-  cd:
-    if: ${{ github.event_name == 'push' }}
-    name: Deploy to GKE
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
       - name: Add application-test.yaml
         run: |
           echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application-test.yaml
@@ -73,10 +39,19 @@ jobs:
       
       - name: Clear Gradle Cache
         run: rm -rf ~/.gradle/caches
-        
+
       - name: Build with Gradle
         working-directory: 8to10_backend
         run: ./gradlew clean build --refresh-dependencies --info
+
+  cd:
+    if: ${{ github.event_name == 'push' }}
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
         
       - name: Add application-prod.yaml
         run: |
@@ -97,22 +72,12 @@ jobs:
         run: |
           gcloud auth configure-docker asia-northeast3-docker.pkg.dev
       
-      - name: Debug GCP Auth
-        run: |
-          gcloud auth list
-          gcloud config list
-          
-      - name: Debug Secrets
-        run: |
-          echo "Project ID: ${{ secrets.GCP_PROJECT_ID }}"
-          echo "Service Account: ${{ secrets.GCP_SERVICE_ACCOUNT }}"
-          
       - name: Build and Push Docker Image
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
         run: |
-          docker build -t $IMAGE_NAME:$GITHUB_SHA -f 8to10_backend/Dockerfile 8to10_backend
-          docker push $IMAGE_NAME:$GITHUB_SHA   
+          docker build -t $IMAGE_NAME:latest -f 8to10_backend/Dockerfile 8to10_backend
+          docker push $IMAGE_NAME:latest
 
       - name: Set up kubectl
         env:
@@ -131,11 +96,12 @@ jobs:
           location: ${{ secrets.GKE_CLUSTER_REGION }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - name: Update Deployment
+      - name: Force Update Deployment with Latest Image
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
         run: |
-          echo "Current Image: $CURRENT_IMAGE"
-          kubectl set image deployment/8to10-deployment 8to10=$IMAGE_NAME:$GITHUB_SHA
+          echo "Triggering redeployment with :latest image"
+          kubectl set image deployment/8to10-deployment 8to10=$IMAGE_NAME:latest --record
+          kubectl rollout restart deployment/8to10-deployment
           kubectl rollout status deployment/8to10-deployment
           kubectl get services -o wide
