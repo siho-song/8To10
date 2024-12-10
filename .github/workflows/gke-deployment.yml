@@ -42,7 +42,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: 8to10_backend
-        run: ./gradlew clean build --refresh-dependencies --info
+        run: ./gradlew clean build --refresh-dependencies
 
   cd:
     if: ${{ github.event_name == 'push' }}
@@ -76,7 +76,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: 8to10_backend
-        run: ./gradlew clean build --refresh-dependencies --info   
+        run: ./gradlew clean build --refresh-dependencies   
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
