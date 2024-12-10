@@ -1,5 +1,6 @@
 package com.eighttoten.config;
 
+import com.eighttoten.handler.RedisChannelEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,6 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import com.eighttoten.handler.RedisChannelEventListener;
 
 @Configuration
 public class RedisConfig {

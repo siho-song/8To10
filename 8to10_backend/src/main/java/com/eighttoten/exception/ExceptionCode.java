@@ -39,6 +39,8 @@ public enum ExceptionCode {
 
     NOT_FOUND_NOTIFICATION(7001,"알림을 찾을 수 없습니다."),
 
+    INVALID_ACHIEVEMENT_AMOUNT(8001,"유효하지 않은 성취량 업데이트 입니다. (0<= 성취량 범위 <= 목표 성취량)"),
+
     NOT_FOUND_REFRESH_TOKEN(9001, "REFRESH TOKEN 을 찾을 수 없습니다"),
     INVALID_ACCESS_TOKEN(9002,"유효하지 않은 ACCESS TOKEN 입니다."),
     INVALID_REFRESH_TOKEN(9003,"유효하지 않은 REFRESH TOKEN 입니다."),

@@ -31,15 +31,12 @@ class BoardRepositoryCustomImplTest {
         cond.setSearchCond(SearchCond.WRITER);
         cond.setPageNum(0);
         cond.setPageSize(10);
-        cond.setKeyword("Nick");
+        cond.setKeyword("nick");
         cond.setSortCond(SortCondition.LIKE);
         Pageable pageable = PageRequest.of(cond.getPageNum(), cond.getPageSize());
 
         Page<BoardPageResponse> page = boardRepository.searchPage(cond, pageable);
         List<BoardPageResponse> content = page.getContent();
-        for (BoardPageResponse responseDto : content) {
-            System.out.println("responseDto = " + responseDto);
-        }
 
         assertThat(content.size()).isEqualTo(10);
         assertThat(page.getTotalElements()).isEqualTo(45L);

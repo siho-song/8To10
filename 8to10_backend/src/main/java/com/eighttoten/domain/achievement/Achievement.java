@@ -6,6 +6,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.eighttoten.domain.auditing.baseentity.BaseEntity;
 import com.eighttoten.domain.member.Member;
+import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,13 +37,20 @@ public class Achievement extends BaseEntity {
 
     public static Achievement createAchievement(
             Member member,
-            LocalDate achievementDate,
-            double achievementRate)
+            LocalDate achievementDate)
     {
         Achievement achievement = new Achievement();
         achievement.member = member;
         achievement.achievementDate = achievementDate;
-        achievement.achievementRate = achievementRate;
         return achievement;
+    }
+
+    public void setAchievementRate(List<NScheduleDetail> nScheduleDetails){
+        double achievementSum = nScheduleDetails.stream()
+                .mapToDouble(NScheduleDetail::getAchievementRate)
+                .sum();
+
+        int size = nScheduleDetails.size();
+        this.achievementRate = achievementSum / size;
     }
 }
