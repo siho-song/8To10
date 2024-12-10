@@ -40,21 +40,20 @@ const TodoList = () => {
 
     const handleTodoSubmit = async () => {
         for (const event of filteredEvents) {
-            if (!event.extendedProps.completeStatus && event.extendedProps.isComplete){
-                const data = formatTodoEventSubmit(event);
-                try {
-                    const url = "/schedule/normal/progress";
-                    const response = await authenticatedApi.patch(
-                        url,
-                        data,
-                        {
-                            apiEndPoint: API_ENDPOINT_NAMES.PATCH_N_SCHEDULE_PROGRESS,
-                        });
-                    updateExtendedProps(event.id, ['completeStatus'], [!event.extendedProps.completeStatus]);
-                } catch (error) {
-                    console.error(error.toString());
-                    console.error(error);
-                }
+            const data = formatTodoEventSubmit(event);
+            try {
+                const url = "/schedule/normal/progress";
+                const response = await authenticatedApi.patch(
+                    url,
+                    data,
+                    {
+                        apiEndPoint: API_ENDPOINT_NAMES.PATCH_N_SCHEDULE_PROGRESS,
+                    });
+
+                updateExtendedProps(event.id, ['completeStatus'], [event.extendedProps.isComplete]);
+            } catch (error) {
+                console.error(error.toString());
+                console.error(error);
             }
         }
     };
