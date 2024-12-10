@@ -61,7 +61,6 @@ export const formatVariableSchedule = (event) => {
 }
 
 export const formatFixedSchedule = (event) => {
-    console.log(event);
     return {
         id: generateEventIdWithParentId(event),
         groupId: event.parentId,
