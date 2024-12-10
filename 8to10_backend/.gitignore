@@ -16,7 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
+!**/src/test/resources/application.yaml
 ### IntelliJ IDEA ###
 **/.idea
 *.iws
@@ -38,7 +38,7 @@ out/
 
 ### app config ###
 **/src/main/**/*.yaml
-**/src/test/**/*.yaml
+**/src/test/**/application-test.yaml
 
 ### resources ###
 **/src/main/resources/static/lib/**
