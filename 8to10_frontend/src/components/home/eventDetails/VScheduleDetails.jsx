@@ -1,7 +1,29 @@
 import PropTypes from "prop-types";
-import {formatDateTime} from "@/helpers/TimeFormatter.js";
+import {extractDateInfo, formatDateTime} from "@/helpers/TimeFormatter.js";
+import {useEffect, useState} from "react";
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 
 const VScheduleDetails = ({selectedEvent, onClose}) => {
+
+    const {updateExtendedProps, updatedEventTime} = useCalendar();
+
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    const [title, setTitle] = useState(selectedEvent.title);
+    const [commonDescription, setCommonDescription] = useState(selectedEvent.extendedProps.commonDescription);
+
+    const startDateInfo = extractDateInfo(selectedEvent.start);
+    const endDateInfo = extractDateInfo(selectedEvent.end);
+    const [startDate, setStartDate] = useState(startDateInfo);
+    const [endDate, setEndDate] = useState(endDateInfo);
+
+    useEffect(() => {
+        setTitle(selectedEvent.title);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setStartDate(startDateInfo);
+        setEndDate(endDateInfo);
+        setIsEditMode(false);
+    }, [selectedEvent]);
 
     return (
         <div id="event-details-container-variable">
