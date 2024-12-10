@@ -31,7 +31,7 @@ dependencies {
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.postgresql:postgresql:42.6.0'
+    implementation 'org.postgresql:postgresql:42.7.2'
 
     // spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
