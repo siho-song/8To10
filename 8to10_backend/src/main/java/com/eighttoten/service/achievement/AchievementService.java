@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class AchievementService {
         return achievementRepository.findAllByDateWithMember(date);
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleProgressUpdate(ProgressUpdatedEvent event) {
         LocalDate date = event.getDate();
         Member member = event.getMember();
@@ -46,18 +48,9 @@ public class AchievementService {
                 member.getEmail());
 
         Achievement achievement = achievementRepository.findByMemberAndAchievementDate(member, date)
-                .orElse(Achievement.createAchievement(member, date, getAchievementRate(nScheduleDetails)));
+                .orElse(Achievement.createAchievement(member, date));
 
+        achievement.setAchievementRate(nScheduleDetails);
         achievementRepository.save(achievement);
-    }
-
-    private double getAchievementRate(List<NScheduleDetail> nScheduleDetails){
-        double achievementSum = nScheduleDetails.stream()
-                .mapToDouble(NScheduleDetail::getAchievementRate)
-                .sum();
-
-        int size = nScheduleDetails.size();
-
-        return achievementSum / size;
     }
 }
