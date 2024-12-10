@@ -38,23 +38,13 @@ jobs:
           distribution: 'zulu'
           cache: 'gradle'
 
-      # 3. Cache Gradle dependencies
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle','**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{github.job}}
       # 4. Add execution permission to gradlew
       - name: Grant execute permission to gradlew
         run: chmod +x 8to10_backend/gradlew
       # 5. Build with Gradle
       - name: Build with Gradle
         working-directory: 8to10_backend
-        run: ./gradlew clean build
+        run: ./gradlew clean build --refresh-dependencies
 
   # CD Job: 실행 시 Push 이벤트에서만 동작
   cd:
