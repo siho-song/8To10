@@ -14,7 +14,6 @@ on:
       - '8to10_backend/**'
 
 jobs:
-  # CI Job: 실행 시 Pull Request에서만 동작
   ci:
     if: ${{ github.event_name == 'pull_request' }}
     name: Build and Test
@@ -53,16 +52,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
         
-     # 2. Write application-test.yaml
       - name: Add application-test.yaml
         run: |
           echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application-test.yaml
 
-    # 2. Set up Java JDK for Gradle
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -70,32 +66,17 @@ jobs:
           distribution: 'zulu'
           cache: 'gradle'
 
-      # 3. Cache Gradle dependencies
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle','**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{github.job}}
-            
-      # 4. Add execution permission to gradlew
       - name: Grant execute permission to gradlew
         run: chmod +x 8to10_backend/gradlew
-      # 5. Build with Gradle
+
       - name: Build with Gradle
         working-directory: 8to10_backend
-        run: ./gradlew clean build
+        run: ./gradlew clean build --refresh-dependencies
         
-
-     # 6. Write application-prod.yaml from GitHub Secrets
       - name: Add application-prod.yaml
         run: |
           echo "${{ secrets.APPLICATION_PROD }}" > 8to10_backend/src/main/resources/application-prod.yaml
 
-      # 7. Authenticate to GCP
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
@@ -121,7 +102,6 @@ jobs:
           echo "Project ID: ${{ secrets.GCP_PROJECT_ID }}"
           echo "Service Account: ${{ secrets.GCP_SERVICE_ACCOUNT }}"
           
-      # 8. Build and Push Docker Image
       - name: Build and Push Docker Image
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
@@ -129,7 +109,6 @@ jobs:
           docker build -t $IMAGE_NAME:$GITHUB_SHA -f 8to10_backend/Dockerfile 8to10_backend
           docker push $IMAGE_NAME:$GITHUB_SHA   
 
-      # 9. Set up kubectl
       - name: Set up kubectl
         env:
           CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
@@ -147,7 +126,6 @@ jobs:
           location: ${{ secrets.GKE_CLUSTER_REGION }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      # 10. Update Deployment
       - name: Update Deployment
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/eighttoten-image-repo/8to10-app
