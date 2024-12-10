@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {extractDateInfo, formatDateInfo} from "@/helpers/TimeFormatter.js";
+import {createLocalDateTime, extractDateInfo, formatDateInfo} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
@@ -9,7 +9,7 @@ import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 
 const VScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {updateExtendedProps, updatedEventTime, deleteEvent} = useCalendar();
+    const {updateExtendedProps, updateProps, deleteEvent} = useCalendar();
 
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -23,12 +23,16 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [endDateError, setEndDateError] = useState("");
+
+
     useEffect(() => {
         setTitle(selectedEvent.title);
         setCommonDescription(selectedEvent.extendedProps.commonDescription);
         setStartDate(startDateInfo);
         setEndDate(endDateInfo);
         setIsEditMode(false);
+        setEndDateError("");
     }, [selectedEvent]);
 
     const handleDelete = async () => {
@@ -46,6 +50,19 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
         }
     }
 
+    const handleEditModeChange = () => {
+        setIsEditMode(true);
+    }
+
+    const handleDescriptionChange = (e) => {
+        const inputValue = e.target.value;
+        setCommonDescription(inputValue);
+    }
+
+    const handleTitleChange = (e) => {
+        const inputValue = e.target.value;
+        setTitle(inputValue);
+    }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -53,6 +70,48 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const handleCancel = () => {
+        setTitle(selectedEvent.title);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setStartDate(startDateInfo);
+        setEndDate(endDateInfo);
+        setIsEditMode(false);
+        setEndDateError("");
+    }
+
+    const handleEditSubmit = async () => {
+        try {
+            setEndDateError("");
+
+            const startDateTime = createLocalDateTime(startDate);
+            const endDateTime = createLocalDateTime(endDate);
+
+            if (new Date(startDateTime) >= new Date(endDateTime)) {
+                setEndDateError("종료 시간은 시작 시간 이후의 시간이어야 합니다.");
+                return;
+            }
+
+            const url = "/schedule/variable";
+            const response = await authenticatedApi.put(
+                url,
+                {
+                    id: selectedEvent.id,
+                    title: title,
+                    commonDescription: commonDescription,
+                    startDate: startDateTime,
+                    endDate: endDateTime,
+                },
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_V_SCHEDULE,}
+            );
+
+            updateExtendedProps(selectedEvent.id, ['commonDescription'], [commonDescription]);
+            updateProps(selectedEvent.id, ['title', 'start', 'end'], [title, startDateTime, endDateTime]);
+            setIsEditMode(false);
+        } catch (error) {
+            console.error(error.toString());
+            console.error(error);
+        }
+    }
 
     return (
         <>
@@ -63,7 +122,7 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                     <button className="close-event-details" onClick={onClose}>&times;</button>
                 </div>
                 <>
-                    {isEditMode ? (
+                    {!isEditMode ? (
                         <div className="event-detail-props">
                             <div className="event-detail-prop">
                                 <h2>
@@ -97,13 +156,12 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                             <div className="handle-variable">
                                 <button
                                     className="edit-variable"
-                                    onClick={() => {
-                                    }}
+                                    onClick={handleEditModeChange}
                                 >수정
                                 </button>
                                 <button
                                     className="delete-variable"
-                                    onClick={handleDelete}
+                                    onClick={openModal}
                                 >삭제
                                 </button>
                             </div>
@@ -115,41 +173,61 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                     일정 제목
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{title}</p>
+                                <input
+                                    type="text"
+                                    id="edit-schedule-title"
+                                    name="title"
+                                    placeholder="일정 제목"
+                                    maxLength="80"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                />
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
                                     <strong>시작 시간</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                {/*<TimeEditForm setDate={startDate} type={"start"}/>*/}
+                                <TimeEditForm
+                                    date={startDate}
+                                    setDate={setStartDate}
+                                    type={"start"}/>
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
                                     <strong>종료 시간</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{formatDateInfo(endDate)}</p>
+                                <TimeEditForm
+                                    date={endDate}
+                                    setDate={setEndDate}
+                                    type={"end"}/>
                             </div>
+                            {endDateError && <p className="error-message">{endDateError}</p>}
                             <div className="event-detail-prop">
                                 <h2>
                                     <strong>일정 메모</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{commonDescription}</p>
+                                <textarea
+                                    className="detail-description-textarea variable"
+                                    value={commonDescription}
+                                    onChange={handleDescriptionChange}
+                                    cols="30"
+                                    rows="3"
+                                />
                             </div>
 
                             <div className="handle-variable">
                                 <button
                                     className="edit-variable"
-                                    onClick={() => {
-                                    }}
-                                >수정
+                                    onClick={handleEditSubmit}
+                                >등록
                                 </button>
                                 <button
                                     className="delete-variable"
-                                    onClick={openModal}
-                                >삭제
+                                    onClick={handleCancel}
+                                >취소
                                 </button>
                             </div>
                         </div>
