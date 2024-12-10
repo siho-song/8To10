@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {formatDateTime, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
+import {formatDateInfo, formatDateTime, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
@@ -34,15 +34,6 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
     });
 
     const [endDateError, setEndDateError] = useState("");
-
-    const formatDateInfo = ({ date, period, hour, minute }) => {
-        const [year, month, day] = date.split('-').map(Number);
-        const ampm = period === 'AM' ? '오전' : '오후';
-        const hours = hour;
-        const minutes = minute < 10 ? `0${minute}` : minute; // 분을 2자리 형식으로
-
-        return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`;
-    }
 
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
