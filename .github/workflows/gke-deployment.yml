@@ -28,7 +28,7 @@ jobs:
       # 2. Write application-test.yaml
       - name: Add application-test.yaml
         run: |
-          echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application.yaml
+          echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application-test.yaml
 
       # 2. Set up Java JDK for Gradle
       - name: Set up JDK
@@ -70,7 +70,7 @@ jobs:
      # 2. Write application-prod.yaml from GitHub Secrets
       - name: Add application-prod.yaml
         run: |
-          echo "${{ secrets.APPLICATION_PROD }}" > 8to10_backend/src/main/resources/application.yaml
+          echo "${{ secrets.APPLICATION_PROD }}" > 8to10_backend/src/main/resources/application-prod.yaml
 
       # 2. Authenticate to GCP
       - name: Authenticate to GCP
