@@ -42,6 +42,12 @@ export const FullCalendarProvider = ({ children }) => {
         setEvents((prevEvents) => [...prevEvents, event]);
     };
 
+    const deleteEvent = (id) => {
+        setEvents((prevEvents) =>
+            prevEvents.filter((event) => event.id !== id)
+        );
+    };
+
     const updateExtendedProps = (id, keys, values) => {
         if (keys.length !== values.length) {
             console.error("Keys and values must have the same length.");
@@ -81,7 +87,7 @@ export const FullCalendarProvider = ({ children }) => {
     };
 
     return (
-        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps, updateEventTime }}>
+        <CalendarContext.Provider value={{ events, addEvent, updateExtendedProps, updateEventTime, deleteEvent }}>
             {children}
         </CalendarContext.Provider>
     );
