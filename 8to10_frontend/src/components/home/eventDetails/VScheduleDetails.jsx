@@ -5,6 +5,7 @@ import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import ConfirmDeleteModal from "@/components/modal/ConfirmDeleteModal.jsx";
+import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 
 const VScheduleDetails = ({selectedEvent, onClose}) => {
 
@@ -38,7 +39,6 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                 {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE,},
             )
             deleteEvent(selectedEvent.id);
-            closeModal();
             onClose();
         } catch(error) {
             console.error(error.toString());
@@ -122,7 +122,7 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                     <strong>시작 시간</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{formatDateInfo(startDate)}</p>
+                                {/*<TimeEditForm setDate={startDate} type={"start"}/>*/}
                             </div>
                             <div className="event-detail-prop">
                                 <h2>

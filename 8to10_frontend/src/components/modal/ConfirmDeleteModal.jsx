@@ -1,5 +1,6 @@
 import Modal from './Modal';
 import "@/styles/modal/ConfirmDeleteModal.css"
+import PropTypes from "prop-types";
 function ConfirmDeleteModal({ isOpen, onClose, onConfirm, itemName }) {
     const handleConfirm = () => {
         onConfirm();
@@ -21,6 +22,13 @@ function ConfirmDeleteModal({ isOpen, onClose, onConfirm, itemName }) {
             </div>
         </Modal>
     );
+}
+
+ConfirmDeleteModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    itemName: PropTypes.string.isRequired,
 }
 
 export default ConfirmDeleteModal;
