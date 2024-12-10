@@ -67,12 +67,40 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-     # 2. Write application-prod.yaml from GitHub Secrets
+    # 2. Set up Java JDK for Gradle
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      # 3. Cache Gradle dependencies
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle','**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{github.job}}
+            
+      # 4. Add execution permission to gradlew
+      - name: Grant execute permission to gradlew
+        run: chmod +x 8to10_backend/gradlew
+      # 5. Build with Gradle
+      - name: Build with Gradle
+        working-directory: 8to10_backend
+        run: ./gradlew clean build
+        
+
+     # 6. Write application-prod.yaml from GitHub Secrets
       - name: Add application-prod.yaml
         run: |
           echo "${{ secrets.APPLICATION_PROD }}" > 8to10_backend/src/main/resources/application-prod.yaml
 
-      # 2. Authenticate to GCP
+      # 7. Authenticate to GCP
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
@@ -84,7 +112,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           export_default_credentials: true
 
-      # 3. Build and Push Docker Image
+      # 8. Build and Push Docker Image
       - name: Build and Push Docker Image
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/8to10-image-repo/8to10-app
@@ -92,7 +120,7 @@ jobs:
           docker build -t $IMAGE_NAME:$GITHUB_SHA -f 8to10_backend/Dockerfile 8to10_backend
           docker push $IMAGE_NAME:$GITHUB_SHA   
 
-      # 4. Set up kubectl
+      # 9. Set up kubectl
       - name: Set up kubectl
         env:
           CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
@@ -100,7 +128,7 @@ jobs:
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
 
-      # 5. Update Deployment
+      # 10. Update Deployment
       - name: Update Deployment
         env:
           IMAGE_NAME: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/8to10-image-repo/8to10-app
