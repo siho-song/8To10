@@ -147,6 +147,16 @@ jobs:
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
 
+      - name: Install gke-gcloud-auth-plugin
+        uses: simenandre/setup-gke-gcloud-auth-plugin@v1
+      
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_CLUSTER_REGION }}
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
       # 10. Update Deployment
       - name: Update Deployment
         env:
