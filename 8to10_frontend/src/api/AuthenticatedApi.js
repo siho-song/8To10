@@ -9,9 +9,10 @@ import {
     setWithCredentials
 } from "@/helpers/AxiosHelper.js";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
+import {DEFAULT_URL} from "@/constants/ApiEndPoints.js";
 
 const authenticatedApi = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: DEFAULT_URL,
     timeout: 5000,
 });
 

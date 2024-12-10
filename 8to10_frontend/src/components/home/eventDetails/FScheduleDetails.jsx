@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {formatDateTime, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
+import {formatDateInfo, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
@@ -9,7 +9,7 @@ import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {updateExtendedProps, updateEventTime} = useCalendar();
+    const {updateExtendedProps, updateProps} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
@@ -35,36 +35,16 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
 
     const [endDateError, setEndDateError] = useState("");
 
-    const formatDateInfo = ({ date, period, hour, minute }) => {
-        const [year, month, day] = date.split('-').map(Number);
-        const ampm = period === 'AM' ? '오전' : '오후';
-        const hours = hour;
-        const minutes = minute < 10 ? `0${minute}` : minute; // 분을 2자리 형식으로
-
-        return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`;
-    }
-
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
         setHasDetailDescription(selectedEvent.extendedProps.detailDescription.length > 0);
         setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
         setIsDescriptionCreateMode(false);
         setIsItemEditMode(false);
+        setEndDateError("");
 
-        setStartDate({
-            date: startDateInfo.date,
-            period: startDateInfo.period,
-            hour: startDateInfo.hour,
-            minute: startDateInfo.minute,
-        });
-
-        setEndDate({
-            date: endDateInfo.date,
-            period: endDateInfo.period,
-            hour: endDateInfo.hour,
-            minute: endDateInfo.minute,
-        });
-
+        setStartDate(startDateInfo);
+        setEndDate(startDateInfo);
     }, [selectedEvent]);
 
 
@@ -137,7 +117,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             );
 
             updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
-            updateEventTime(selectedEvent.id, startDateTime, endDateTime)
+            updateProps(selectedEvent.id, ['start', 'end'], startDateTime, endDateTime);
             setIsItemEditMode(false);
             setHasDetailDescription(detailDescription.length > 0);
         } catch (error) {

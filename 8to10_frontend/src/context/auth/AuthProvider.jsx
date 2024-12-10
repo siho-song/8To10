@@ -13,9 +13,10 @@ function AuthProvider({ children }) {
     const logout = async (onLogout) => {
         try {
             const url = "/logout";
-            const response = await authenticatedApi.get(
+            const response = await authenticatedApi.post(
                 url,
-                {apiEndPoint: API_ENDPOINT_NAMES.LOGOUT}
+                {},
+                {apiEndPoint: API_ENDPOINT_NAMES.LOGOUT},
             );
         } catch (error) {
             console.error(error.toString());

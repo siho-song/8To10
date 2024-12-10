@@ -3,6 +3,7 @@ import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
 import PrivateHeader from "@/components/PrivateHeader.jsx";
+import customErrors from "@/api/CustomErrors.js";
 
 function PrivateRoute() {
     const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail, logout} = useAuth();
@@ -21,11 +22,11 @@ function PrivateRoute() {
                             setIsAuthenticated(true);
                             setEmail(email);
                         }
+                    } else {
+                        throw customErrors(0, 0, "토큰이 없습니다.");
                     }
                 } catch(error) {
-                    logout(() =>{
-                        console.log("로그아웃");
-                    });
+                    logout();
                     console.error(error.toString());
                     console.error(error);
                 } finally {
