@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
-import {extractDateInfo, formatDateTime} from "@/helpers/TimeFormatter.js";
+import {extractDateInfo, formatDateInfo} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import ConfirmDeleteModal from "@/components/modal/ConfirmDeleteModal.jsx";
 
 const VScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {updateExtendedProps, updatedEventTime} = useCalendar();
+    const {updateExtendedProps, updatedEventTime, deleteEvent} = useCalendar();
 
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -17,6 +20,8 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
     const [startDate, setStartDate] = useState(startDateInfo);
     const [endDate, setEndDate] = useState(endDateInfo);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     useEffect(() => {
         setTitle(selectedEvent.title);
         setCommonDescription(selectedEvent.extendedProps.commonDescription);
@@ -25,59 +30,141 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
         setIsEditMode(false);
     }, [selectedEvent]);
 
-    return (
-        <div id="event-details-container-variable">
-            <div
-                className="event-details-header-variable">
-                <h2>일정 상세보기</h2>
-                <button className="close-event-details" onClick={onClose}>&times;</button>
-            </div>
-            <div className="event-detail-props">
-                <div className="event-detail-prop">
-                    <h2>
-                        일정 제목
-                    </h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.title}</p>
-                </div>
-                <div className="event-detail-prop">
-                    <h2>
-                        <strong>시작 시간</strong>
-                    </h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{formatDateTime(selectedEvent.start)}</p>
-                </div>
-                <div className="event-detail-prop">
-                    <h2>
-                        <strong>종료 시간</strong>
-                    </h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{formatDateTime(selectedEvent.end)}</p>
-                </div>
-                <div className="event-detail-prop">
-                    <h2>
-                        <strong>일정 메모</strong>
-                    </h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.extendedProps.commonDescription}</p>
-                </div>
+    const handleDelete = async () => {
+        try {
+            const url = `/schedule/${selectedEvent.id}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE,},
+            )
+            deleteEvent(selectedEvent.id);
+            closeModal();
+            onClose();
+        } catch(error) {
+            console.error(error.toString());
+            console.error(error);
+        }
+    }
 
-                <div className="handle-variable">
-                    <button
-                        className="edit-variable"
-                        onClick={() => {
-                        }}
-                    >수정
-                    </button>
-                    <button
-                        className="delete-variable"
-                        onClick={() => {
-                        }}
-                    >삭제
-                    </button>
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    return (
+        <>
+            <div id="event-details-container-variable">
+                <div
+                    className="event-details-header-variable">
+                    <h2>일정 상세보기</h2>
+                    <button className="close-event-details" onClick={onClose}>&times;</button>
                 </div>
+                <>
+                    {isEditMode ? (
+                        <div className="event-detail-props">
+                            <div className="event-detail-prop">
+                                <h2>
+                                    일정 제목
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{title}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>시작 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{formatDateInfo(startDate)}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>종료 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{formatDateInfo(endDate)}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>일정 메모</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{commonDescription}</p>
+                            </div>
+
+                            <div className="handle-variable">
+                                <button
+                                    className="edit-variable"
+                                    onClick={() => {
+                                    }}
+                                >수정
+                                </button>
+                                <button
+                                    className="delete-variable"
+                                    onClick={handleDelete}
+                                >삭제
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="event-detail-props">
+                            <div className="event-detail-prop">
+                                <h2>
+                                    일정 제목
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{title}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>시작 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{formatDateInfo(startDate)}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>종료 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{formatDateInfo(endDate)}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>일정 메모</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{commonDescription}</p>
+                            </div>
+
+                            <div className="handle-variable">
+                                <button
+                                    className="edit-variable"
+                                    onClick={() => {
+                                    }}
+                                >수정
+                                </button>
+                                <button
+                                    className="delete-variable"
+                                    onClick={openModal}
+                                >삭제
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <ConfirmDeleteModal
+                        isOpen={isModalOpen}
+                        onClose={closeModal}
+                        onConfirm={handleDelete}
+                        itemName={selectedEvent.title}
+                    />
+                </>
             </div>
-        </div>
+        </>
+
     );
 }
 
