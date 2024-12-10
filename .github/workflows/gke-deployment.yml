@@ -66,6 +66,11 @@ jobs:
       # 1. Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
+        
+     # 2. Write application-test.yaml
+      - name: Add application-test.yaml
+        run: |
+          echo "${{ secrets.APPLICATION_TEST }}" > 8to10_backend/src/test/resources/application-test.yaml
 
     # 2. Set up Java JDK for Gradle
       - name: Set up JDK
