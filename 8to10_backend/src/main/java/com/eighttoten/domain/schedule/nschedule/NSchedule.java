@@ -2,27 +2,29 @@ package com.eighttoten.domain.schedule.nschedule;
 
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.domain.schedule.Schedule;
+import com.eighttoten.domain.schedule.ScheduleAble;
+import com.eighttoten.dto.schedule.request.nschedule.NScheduleSave;
+import com.eighttoten.dto.schedule.request.nschedule.NScheduleUpdate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.Schedule;
-import com.eighttoten.domain.schedule.ScheduleAble;
-import com.eighttoten.dto.schedule.request.nschedule.NScheduleSave;
-import com.eighttoten.dto.schedule.request.nschedule.NScheduleUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @DiscriminatorValue(value = "N")
+@Table(name = "n_schedule")
 public class NSchedule extends Schedule{
     @Column(nullable = false)
     private LocalTime bufferTime;

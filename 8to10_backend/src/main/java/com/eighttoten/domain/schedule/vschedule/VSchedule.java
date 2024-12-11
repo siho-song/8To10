@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import com.eighttoten.dto.schedule.request.vschedule.VScheduleUpdate;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @DiscriminatorValue(value = "V")
+@Table(name = "v_schedule")
 public class VSchedule extends Schedule implements ScheduleAble {
     public static VSchedule from(Member member, VScheduleSave dto){
         VSchedule vSchedule = new VSchedule();

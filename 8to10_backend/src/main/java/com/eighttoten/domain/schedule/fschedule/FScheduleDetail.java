@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ import com.eighttoten.dto.schedule.request.fschedule.FScheduleDetailUpdate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@Table(name = "f_schedule_detail")
 public class FScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "f_schedule_detail_id")
