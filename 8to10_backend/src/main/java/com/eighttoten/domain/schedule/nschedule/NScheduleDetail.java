@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Table(name = "n_schedule_detail")
 public class NScheduleDetail extends BaseEntity implements ScheduleAble {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "n_schedule_detail_id")

@@ -3,6 +3,7 @@ package com.eighttoten.service.schedule.timeslot;
 import static com.eighttoten.constant.AppConstant.WORK_END_TIME;
 import static com.eighttoten.constant.AppConstant.WORK_START_TIME;
 
+import com.eighttoten.domain.schedule.ScheduleAble;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -16,9 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.eighttoten.domain.schedule.ScheduleAble;
 
 @Service
 public class TimeSlotService {
@@ -55,7 +54,6 @@ public class TimeSlotService {
                     .values()
                     .stream()
                     .toList();
-
             List<TimeSlot> commonTimeSlots = findCommonTimeSlots(necessaryTime, allSlotsForDateEqualDay);
 
             if(!commonTimeSlots.isEmpty()) {
@@ -131,6 +129,10 @@ public class TimeSlotService {
     }
 
     private List<TimeSlot> findCommonTimeSlots(Duration necessaryTime, List<List<TimeSlot>> allSlotsForDays) {
+        if (allSlotsForDays.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         List<TimeSlot> finalList = new ArrayList<>(allSlotsForDays.get(0)); //최종리스트
 
         for (int i = 1; i < allSlotsForDays.size() ; i++) {
