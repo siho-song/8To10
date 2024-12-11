@@ -6,6 +6,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import com.eighttoten.dto.schedule.request.fschedule.FScheduleUpdate;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @DiscriminatorValue(value = "F")
+@Table(name = "f_schedule")
 public class FSchedule extends Schedule{
     @OneToMany(mappedBy = "fSchedule" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<FScheduleDetail> fScheduleDetails = new ArrayList<>();
