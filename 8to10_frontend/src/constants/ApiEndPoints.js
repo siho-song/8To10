@@ -1,6 +1,8 @@
 import {HTTP_METHODS} from "@/constants/HttpMethods.js";
 
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const API_ENDPOINTS_METHOD = {
     LOGIN: HTTP_METHODS.POST,
     SIGNUP: HTTP_METHODS.POST,
@@ -139,4 +141,4 @@ export const MULTIPART_ENDPOINTS = [
     API_ENDPOINT_NAMES.PUT_PROFILE_IMAGE,
 ]
 
-export const DEFAULT_URL = "http://35.241.28.118:80";
+export const DEFAULT_URL = apiUrl;
