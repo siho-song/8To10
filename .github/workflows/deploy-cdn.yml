@@ -23,6 +23,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Generate .env.production
+        working-directory: ./8to10_frontend
+        run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > .env.production
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -65,6 +70,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Generate .env.production
+        working-directory: ./8to10_frontend
+        run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > .env.production
 
       - name: Get npm cache directory
         id: npm-cache-dir
