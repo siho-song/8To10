@@ -22,7 +22,7 @@ public class ExecutionTimeAspect {
         Object result = joinPoint.proceed();
 
         long executionTime = System.currentTimeMillis() - start;
-        log.info("Method name : {} , executed in {} ms", joinPoint.getSignature(), executionTime);
+        log.trace("Method name : {} , executed in {} ms", joinPoint.getSignature(), executionTime);
         return result;
     }
 }
