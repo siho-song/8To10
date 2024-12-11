@@ -14,6 +14,7 @@ import com.eighttoten.utils.BearerAuthorizationUtils;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
+
+    @Value(value = "${cors.allowed-host}")
+    private String corsAllowedHost;
+
+    @Value(value = "${cors.allowed-port}")
+    private int corsAllowedPort;
 
     private static final String[] STATIC_RESOURCES_LOCATION = new String[]{
             "/css/**", "/resources/**",
@@ -71,10 +78,11 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        String allowedOrigin = "http://" + corsAllowedHost + ":" + corsAllowedPort;
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addExposedHeader("Authorization");
-        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin(allowedOrigin);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L);
