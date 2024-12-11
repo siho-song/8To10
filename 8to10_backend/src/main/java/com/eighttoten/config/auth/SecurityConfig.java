@@ -37,11 +37,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 public class SecurityConfig {
 
-    @Value(value = "${cors.allowed-host}")
-    private String corsAllowedHost;
-
-    @Value(value = "${cors.allowed-port}")
-    private int corsAllowedPort;
+    @Value(value = "${cors.allowed-origin}")
+    private String corsAllowedOrigin;
 
     private static final String[] STATIC_RESOURCES_LOCATION = new String[]{
             "/css/**", "/resources/**",
@@ -78,11 +75,10 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        String allowedOrigin = "http://" + corsAllowedHost + ":" + corsAllowedPort;
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addExposedHeader("Authorization");
-        config.addAllowedOrigin(allowedOrigin);
+        config.addAllowedOrigin(corsAllowedOrigin);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L);
