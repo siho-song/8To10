@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/signup/**", "/", "/error","/renew","/actuator/**")
+                        .requestMatchers("/signup/**", "/", "/error","/renew","/actuator/**","/health")
                         .permitAll()
                         .requestMatchers(STATIC_RESOURCES_LOCATION)
                         .permitAll()

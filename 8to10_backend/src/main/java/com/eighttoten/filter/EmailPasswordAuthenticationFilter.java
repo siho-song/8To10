@@ -1,6 +1,7 @@
 package com.eighttoten.filter;
 
 import com.eighttoten.exception.AuthException;
+import com.eighttoten.exception.BadRequestException;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.handler.AuthFilterExceptionHandler;
 import jakarta.servlet.FilterChain;
@@ -55,7 +56,9 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     private UsernamePasswordAuthenticationToken getAuthRequest(HttpServletRequest request) {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
+        if(email == null || password == null){
+            throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
+        }
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 }
