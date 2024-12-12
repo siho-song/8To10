@@ -3,11 +3,9 @@ import {useAuth} from "@/context/auth/UseAuth.jsx";
 import {useEffect} from "react";
 import {refreshAccessToken} from "@/helpers/TokenManager.js";
 import PrivateHeader from "@/components/PrivateHeader.jsx";
-import customErrors from "@/api/CustomErrors.js";
 
 function PrivateRoute() {
     const {isAuthenticated, setIsAuthenticated, loading, setLoading, setEmail, logout} = useAuth();
-
     useEffect(() => {
         const refreshAuthentication = async () => {
             if (!isAuthenticated) {
