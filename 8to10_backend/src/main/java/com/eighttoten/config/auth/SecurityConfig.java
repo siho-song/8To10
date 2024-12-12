@@ -11,6 +11,7 @@ import com.eighttoten.repository.member.MemberRepository;
 import com.eighttoten.service.auth.AuthService;
 import com.eighttoten.service.auth.MemberDetailsService;
 import com.eighttoten.utils.BearerAuthorizationUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/signup/**", "/", "/error","/renew","/actuator/**","/health")
+                        .requestMatchers("/signup/**", "/", "/error","/renew","/actuator/**","/health","/notification/subscribe")
                         .permitAll()
                         .requestMatchers(STATIC_RESOURCES_LOCATION)
                         .permitAll()
@@ -68,6 +69,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .logout(logout->
                         logout.logoutUrl("/logout")
+                                .logoutSuccessHandler(((request, response, authentication) -> {
+                                            response.setStatus(HttpServletResponse.SC_OK);
+                                            response.sendRedirect("/");
+                                }))
                 )
                 .addFilterBefore(emailPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
