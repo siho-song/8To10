@@ -2,6 +2,11 @@ package com.eighttoten.service.notification;
 
 import static com.eighttoten.exception.ExceptionCode.FAILED_SSE_NOTIFICATION_SEND;
 
+import com.eighttoten.domain.member.Member;
+import com.eighttoten.domain.notification.Notification;
+import com.eighttoten.dto.NotificationResponse;
+import com.eighttoten.exception.SseSendException;
+import com.eighttoten.repository.notification.SseEmitterRepository;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -12,17 +17,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.notification.Notification;
-import com.eighttoten.dto.NotificationResponse;
-import com.eighttoten.exception.SseSendException;
-import com.eighttoten.repository.notification.SseEmitterRepository;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class SseEmitterService {
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+    private static final Long DEFAULT_TIMEOUT = 2 * 60L * 1000 * 60;
 
     private final SseEmitterRepository sseEmitterRepository;
 
