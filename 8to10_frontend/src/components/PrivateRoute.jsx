@@ -22,11 +22,8 @@ function PrivateRoute() {
                             setIsAuthenticated(true);
                             setEmail(email);
                         }
-                    } else {
-                        throw customErrors(0, 0, "토큰이 없습니다.");
                     }
                 } catch(error) {
-                    logout();
                     console.error(error.toString());
                     console.error(error);
                 } finally {
