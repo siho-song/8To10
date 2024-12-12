@@ -3,14 +3,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import {useNavigate} from "react-router-dom";
 import {BASE_URL, NOTIFICATION_TYPES} from "@/constants/NotificationTypes.js";
 import PropTypes from "prop-types";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
-const NotificationItem = ({notification, onRemove, setUnreadCount}) => {
+const NotificationItem = ({notification, onRemove, setRead, setUnreadCount}) => {
     const navigate = useNavigate();
     const [isRead, setIsRead] = useState(notification.isRead);
 
-    // TODO 서버에 읽음 확인 요청
-    const handleNotificationItemClick = () => {
-        const { notificationType, targetUrl, relatedEntityId } = notification;
+    const handleNotificationItemClick = async () => {
+        const { entityId, notificationType, targetUrl, relatedEntityId } = notification;
 
         let basePath = "";
         if (notificationType === NOTIFICATION_TYPES.REPLY_ADD) {
@@ -19,8 +20,18 @@ const NotificationItem = ({notification, onRemove, setUnreadCount}) => {
             basePath = BASE_URL.NESTED_REPLY_ADD;
         }
 
+        const url = `/notification/${entityId}`
+        const response = await authenticatedApi.put(
+            url,
+            {},
+            {apiEndPoint: API_ENDPOINT_NAMES.PUT_READ_NOTIFICATION,}
+        )
+
+        console.log(response);
+
         setUnreadCount((prevCount) => prevCount - 1);
         setIsRead(!isRead);
+        setRead(entityId);
 
         if (basePath) {
             const finalPath = `${basePath}${targetUrl}`;
@@ -31,7 +42,7 @@ const NotificationItem = ({notification, onRemove, setUnreadCount}) => {
     return (
         <div
             className={`notification-item ${isRead ? "read" : "unread"}`}
-            onClick={() => handleNotificationItemClick(notification)}
+            onClick={handleNotificationItemClick}
         >
             <div>
                 <p><strong>{notification.message}</strong></p>
@@ -41,7 +52,7 @@ const NotificationItem = ({notification, onRemove, setUnreadCount}) => {
                 className="notification-remove-button"
                 onClick={(e) => {
                     e.stopPropagation();
-                    onRemove(notification.relatedEntityId);
+                    onRemove(notification.entityId);
                 }}
             >
                 <CloseIcon/>
@@ -52,6 +63,7 @@ const NotificationItem = ({notification, onRemove, setUnreadCount}) => {
 
 NotificationItem.propTypes = {
     notification: PropTypes.shape({
+        entityId: PropTypes.number,
         message: PropTypes.string,
         notificationType: PropTypes.string,
         relatedEntityId: PropTypes.number,
@@ -60,6 +72,7 @@ NotificationItem.propTypes = {
         receivedAt: PropTypes.string,
     }),
     onRemove: PropTypes.func,
+    setRead: PropTypes.func,
     setUnreadCount: PropTypes.func,
 }
 

@@ -69,7 +69,7 @@
 
 /* 읽은 알림 스타일 */
 .notification-item.read {
-    background-color: #868e96;
+    background-color: #aaaaaa;
 }
 
 .notification-item:hover {

@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import NotificationItem from "@/components/notification/NotificationItem.jsx";
 
-const NotificationPopup = ({ notifications, onClose, onRemove, setUnreadCount }) => {
+const NotificationPopup = ({ notifications, onClose, setRead, onRemove, setUnreadCount }) => {
     return (
         <div className="notification-popup">
             <div className="notification-popup-header">
@@ -17,6 +17,7 @@ const NotificationPopup = ({ notifications, onClose, onRemove, setUnreadCount })
                         <NotificationItem
                             key={index}
                             notification={notification}
+                            setRead={setRead}
                             onRemove={onRemove}
                             setUnreadCount={setUnreadCount}
                         />
@@ -32,6 +33,7 @@ const NotificationPopup = ({ notifications, onClose, onRemove, setUnreadCount })
 NotificationPopup.propTypes = {
     notifications: PropTypes.arrayOf(
         PropTypes.shape({
+            entityId: PropTypes.number,
             message: PropTypes.string,
             notificationType: PropTypes.string,
             relatedEntityId: PropTypes.number,
@@ -41,6 +43,7 @@ NotificationPopup.propTypes = {
         }),
     ),
     onClose: PropTypes.func,
+    setRead: PropTypes.func,
     onRemove: PropTypes.func,
     setUnreadCount: PropTypes.func,
 }

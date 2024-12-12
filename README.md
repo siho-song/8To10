@@ -17,7 +17,7 @@
 <p><strong>즉흥형(P) 이지만 계획형(J) 처럼 계획적으로 살고 싶은 당신 !</strong><br>
 <p><strong>일정을 계획하고 싶지만 계획하기 귀찮은 당신 !</strong><br>
 
-<strong>EightToTen</strong>이 여러분의 일정 계획과 목표 달성을 지원합니다! 🎉</p>
+<strong>8To10</strong>이 여러분의 일정 계획과 목표 달성을 지원합니다! 🎉</p>
 
 <br/>
 <h3>✨ 8To10의 주요 기능</h3>
@@ -103,7 +103,8 @@
 ---
 
 ### ⚙️ Backend
-![BE](https://github.com/user-attachments/assets/85e4b929-9e5f-4e0d-9851-12bfae3d2ff2)
+
+<img width="475" src="https://github.com/user-attachments/assets/85e4b929-9e5f-4e0d-9851-12bfae3d2ff2">
 
 ### 🎨 Frontend
 
