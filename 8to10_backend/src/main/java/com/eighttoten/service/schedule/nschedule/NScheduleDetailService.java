@@ -1,5 +1,6 @@
 package com.eighttoten.service.schedule.nschedule;
 
+import static com.eighttoten.exception.ExceptionCode.*;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
 
@@ -8,13 +9,12 @@ import com.eighttoten.domain.schedule.nschedule.NSchedule;
 import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
 import com.eighttoten.dto.schedule.request.nschedule.NScheduleDetailUpdate;
 import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest;
+import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest.ProgressUpdate;
 import com.eighttoten.exception.BadRequestException;
-import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.MismatchException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.repository.schedule.nschedule.NScheduleDetailRepository;
 import com.eighttoten.service.event.ProgressUpdatedEvent;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -78,29 +78,35 @@ public class NScheduleDetailService {
     }
 
     @Transactional
-    public void updateProgress(Member member, ProgressUpdateRequest progressUpdateRequest) {
-        LocalDate date = progressUpdateRequest.getDate();
-        NScheduleDetail nScheduleDetail = findById(progressUpdateRequest.getScheduleDetailId());
+    public void updateProgressList(Member member, ProgressUpdateRequest progressUpdateRequest) {
+        List<ProgressUpdate> progressUpdates = progressUpdateRequest.getProgressUpdates();
+        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByIds(progressUpdateRequest.fetchIds());
+        progressUpdates.forEach(progressUpdate -> updateProgress(progressUpdate,nScheduleDetails));
+        publisher.publishEvent(ProgressUpdatedEvent.createdEvent(member,progressUpdateRequest.getDate()));
+    }
+
+    private void updateProgress(ProgressUpdate progressUpdate,List<NScheduleDetail> nScheduleDetails) {
+        NScheduleDetail nScheduleDetail = nScheduleDetails.stream()
+                .filter(nd -> nd.getId().equals(progressUpdate.getScheduleDetailId()))
+                .findFirst().orElseThrow(()->new BadRequestException(NOT_EXIST_N_DETAIL));
 
         int dailyAmount = nScheduleDetail.getDailyAmount();
-        int newAchievementAmount = progressUpdateRequest.getAchievedAmount();
+        int newAchievementAmount = progressUpdate.getAchievedAmount();
 
         if (dailyAmount == 0) {
-            nScheduleDetail.updateCompleteStatus(progressUpdateRequest.isComplete());
+            nScheduleDetail.updateCompleteStatus(progressUpdate.isCompleteStatus());
         }
 
         if (isValidAchievementAmount(newAchievementAmount, dailyAmount)) {
             nScheduleDetail.updateAchievedAmount(newAchievementAmount);
             nScheduleDetail.updateCompleteStatus(nScheduleDetail.getAchievedAmount() == dailyAmount);
         } else {
-            throw new BadRequestException(ExceptionCode.INVALID_ACHIEVEMENT_AMOUNT);
+            throw new BadRequestException(INVALID_ACHIEVEMENT_AMOUNT);
         }
-
-        publisher.publishEvent(ProgressUpdatedEvent.createdEvent(member,date));
     }
 
     private boolean isValidAchievementAmount(int newAchievementAmount, int dailyAmount) {
-        return newAchievementAmount >= 0 && newAchievementAmount <= dailyAmount;
+        return newAchievementAmount >= 0 && dailyAmount > 0 && newAchievementAmount <= dailyAmount;
     }
 
     private double getDailyAmountSum(List<NScheduleDetail> nScheduleDetails) {
