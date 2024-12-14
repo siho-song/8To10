@@ -64,7 +64,7 @@ class VScheduleControllerTest {
     void update() throws Exception {
 
         VScheduleUpdate vScheduleUpdate = new VScheduleUpdate();
-        vScheduleUpdate.setId(7L);
+        vScheduleUpdate.setId(8L);
         vScheduleUpdate.setTitle("수정된 변동일정");
         vScheduleUpdate.setCommonDescription("수정된 변동일정 입니다.");
         vScheduleUpdate.setStartDate(LocalDateTime.now());

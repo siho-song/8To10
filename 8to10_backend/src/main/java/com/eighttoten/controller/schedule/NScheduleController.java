@@ -69,7 +69,7 @@ public class NScheduleController {
             @CurrentMember Member member,
             @RequestBody @Valid ProgressUpdateRequest progressUpdateRequest)
     {
-        nScheduleDetailService.updateProgress(member, progressUpdateRequest);
+        nScheduleDetailService.updateProgressList(member, progressUpdateRequest);
         return ResponseEntity.noContent().build();
     }
 
