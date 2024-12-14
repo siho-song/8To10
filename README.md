@@ -2,7 +2,7 @@
 <p align="middle" >
   <img width="300px;" src="https://github.com/siho-song/schedule-management/blob/65cb2e630e49a754306ccbbff8f313da1d08296e/8to10_frontend/src/assets/images/logo.png?raw=true"/>
 </p>
-<h1 align="middle">EightToTen</h1>
+<h1 align="middle">8To10</h1>
 <p align="middle">계획은 제가, 실천은 당신이!</p>
 <p align="middle"><strong>더 간편하게, 더 꾸준하게. 함께 시작해요.</strong></p>
 
@@ -13,12 +13,14 @@
 
 <hr>
 
-<h3>🎯 EightToTen - 계획을 짜드립니다! 대신 지키셔야 합니다?</h3>
-<p><strong>바쁜 현대인의 삶 속에서 계획 세우는 일이 어렵게 느껴지시나요?</strong><br>
-<strong>EightToTen</strong>이 여러분의 일정 관리와 목표 달성을 지원합니다! 🎉</p>
+<h3>🎯 8To10 - 계획을 짜드립니다! 대신 지키셔야 합니다?</h3>
+<p><strong>즉흥형(P) 이지만 계획형(J) 처럼 계획적으로 살고 싶은 당신 !</strong><br>
+<p><strong>일정을 계획하고 싶지만 계획하기 귀찮은 당신 !</strong><br>
+
+<strong>EightToTen</strong>이 여러분의 일정 계획과 목표 달성을 지원합니다! 🎉</p>
 
 <br/>
-<h3>✨ EightToTen의 주요 기능</h3>
+<h3>✨ 8To10의 주요 기능</h3>
 <ul>
   <li>🗓️ <strong>자동 일정 생성</strong><br>
   최소한의 정보만 입력하면, 실천 가능한 일정을 자동으로 생성해드립니다.</li>
@@ -44,21 +46,21 @@
   갑작스레 생길 수 있는 약속, 과제, 행사 같은 일정을 <span style="color: #e74c3c;">변동 일정</span>으로 관리해보세요.<br>
   변동 일정은 유연하게 추가하고 수정할 수 있어요!</li>
 </ul>
-<p><strong>EightToTen</strong>과 함께라면, 더 이상 일정 관리에 스트레스를 받지 않아도 됩니다.<br>
+<p><strong>8To10</strong>과 함께라면, 더 이상 일정 계획에 스트레스를 받지 않아도 됩니다.<br>
 당신의 시간을 더 가치 있게 만들어보세요! 🎉</p>
 
 <br/>
 
 <h3>💡 우리의 슬로건</h3>
 <p><strong>"계획을 짜드립니다! 대신 지키셔야 합니다."</strong><br>
-<strong>EightToTen</strong>은 단순한 도구를 넘어, 여러분의 일상과 목표를 바꾸는 동반자가 되고자 합니다.</p>
+<strong>8To10</strong>은 단순한 도구를 넘어, 여러분의 일상과 목표를 바꾸는 동반자가 되고자 합니다.</p>
 
 <br/>
 
 <div style="display:flex;justify-content: space-between;">
     <div>
         <h3>🚀 지금 시작해보세요!</h3>
-        <p><strong>EightToTen</strong>과 함께라면 누구나 꾸준함의 가치를 느끼고, 자신을 변화시킬 수 있습니다.</p>
+        <p><strong>8To10</strong>과 함께라면 누구나 꾸준함의 가치를 느끼고, 자신을 변화시킬 수 있습니다.</p>
     </div>
 
 [//]: # (    <a href="http://www.naver.com/" style="height: 50px;line-height: 30px;margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: #fff; text-decoration: none; border-radius: 5px;">👉 지금 체험하러 가기</a>)
@@ -94,20 +96,27 @@
 <br>
 ![MypageDetail](https://github.com/user-attachments/assets/5cb436ae-a4cd-4900-99ab-284fd3a7f85c)
 
-
+## 👀 시스템 아키텍처
+![image](https://github.com/user-attachments/assets/ca66b776-3193-4842-ac3a-aa32b8e302f9)
 ## 🛠 기술 스택
 
 ---
 
 ### ⚙️ Backend
-
-<img width="300px;" src="https://github.com/user-attachments/assets/c29e9e64-cba1-4aa3-816a-92a5d7d081f1"/>
+![BE](https://github.com/user-attachments/assets/85e4b929-9e5f-4e0d-9851-12bfae3d2ff2)
 
 ### 🎨 Frontend
 
-<img width="300px;" src="https://github.com/user-attachments/assets/42a84ac8-976b-43ed-b003-42b53421c90a"/>
+<img width="220px;" src="https://github.com/user-attachments/assets/15b6482c-256f-4f7f-bb56-829b3a8cecac"/>
 
-[//]: # (## 🌐 서비스 요청 흐름)
+### 💿 Database
+<img width="99px;" src="https://github.com/user-attachments/assets/cdfb786c-8e40-4538-8c3c-0ac983df2e97"/>
+
+### 🦴 Infrastructure
+<img width="100px;" src="https://github.com/user-attachments/assets/6b61d497-ace0-46fd-9d2b-14733d0d95de"/>
+
+## 🌐 API 명세서
+https://puddle-revolve-056.notion.site/8To10-API-78c5b374093244aea9e0656e6a08d4f8
 
 [//]: # ()
 [//]: # (---)
@@ -126,7 +135,7 @@
 [//]: # ()
 [//]: # (---)
 
-### ERD
+## 📃 ERD
 ![ERD diagram](https://github.com/user-attachments/assets/3a95beb3-72f5-4a05-a7e0-1855bf556051)
 링크 - [ERD](https://www.erdcloud.com/d/2DYRimZu7tKGfzqg8)
 

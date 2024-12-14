@@ -16,6 +16,7 @@ public class NScheduleResponse extends ScheduleResponse {
     private Long parentId;
     private String detailDescription;
     private int dailyAmount;
+    private int achievedAmount;
     private LocalTime bufferTime;
     private boolean completeStatus;
 
@@ -34,5 +35,6 @@ public class NScheduleResponse extends ScheduleResponse {
         this.dailyAmount = nScheduleDetail.getDailyAmount();
         this.detailDescription = nScheduleDetail.getDetailDescription();
         this.bufferTime = nSchedule.getBufferTime();
+        this.achievedAmount = nScheduleDetail.getAchievedAmount();
     }
 }
