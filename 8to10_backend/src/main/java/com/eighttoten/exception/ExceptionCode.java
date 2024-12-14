@@ -19,7 +19,7 @@ public enum ExceptionCode {
     NOT_FOUND_N_SCHEDULE(3001, "일반일정을 찾을 수 없습니다"),
     INVALID_N_SCHEDULE_CREATION(3002, "일반 일정을 생성할 수 없습니다. 일정을 조율해주세요."),
     NOT_FOUND_N_DETAIL(3011, "일반일정을 세부사항을 찾을 수 없습니다"),
-    NOT_EXIST_N_DETAIL(3011, "업데이트 하려는 일반일정이 존재하지 않습니다."),
+    NOT_EXIST_N_DETAIL(3012, "업데이트 하려는 일반일정이 존재하지 않습니다."),
 
 
     NOT_EQUAL_BOARD(4001, "부모댓글의 게시글과 대댓글의 게시글이 일치하지 않습니다."),
