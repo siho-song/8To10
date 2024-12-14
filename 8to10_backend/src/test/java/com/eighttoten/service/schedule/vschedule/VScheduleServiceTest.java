@@ -45,7 +45,7 @@ class VScheduleServiceTest {
     @DisplayName("변동일정 수정 서비스 테스트")
     void update() {
         VScheduleUpdate vScheduleUpdate = new VScheduleUpdate();
-        vScheduleUpdate.setId(7L);
+        vScheduleUpdate.setId(8L);
         vScheduleUpdate.setTitle("수정된 변동일정");
         vScheduleUpdate.setCommonDescription("수정된 변동일정 입니다.");
         vScheduleUpdate.setStartDate(LocalDateTime.now());
@@ -54,7 +54,7 @@ class VScheduleServiceTest {
 
         vScheduleService.update(member, vScheduleUpdate);
 
-        Schedule schedule = scheduleService.findById(7L);
+        Schedule schedule = scheduleService.findById(8L);
         assertThat(schedule.getTitle()).isEqualTo(vScheduleUpdate.getTitle());
         assertThat(schedule.getStartDate()).isEqualTo(vScheduleUpdate.getStartDate());
     }

@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest.ProgressUpdate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -135,14 +137,15 @@ public class NScheduleControllerTest {
     @DisplayName("일반일정 자식일정 일정 진행상태 업데이트")
     public void updateProgress() throws Exception {
         ProgressUpdateRequest progressUpdateRequest = ProgressUpdateRequest.builder()
-                .date(LocalDate.of(2024,5,1))
-                .scheduleDetailId(1L)
-                .isComplete(true)
-                .achievedAmount(10)
-                .build();
+                .date(LocalDate.of(2024, 5, 1))
+                .progressUpdates(List.of(ProgressUpdate.builder()
+                        .scheduleDetailId(1L)
+                        .completeStatus(true)
+                        .achievedAmount(10)
+                        .build())
+                ).build();
 
         String dto = objectMapper.writeValueAsString(progressUpdateRequest);
-
         mockMvc.perform(patch("/schedule/normal/progress")
                 .header("Authorization","Bearer " + token)
                 .content(dto)

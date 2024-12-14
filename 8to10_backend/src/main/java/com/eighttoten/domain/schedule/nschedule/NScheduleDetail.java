@@ -85,6 +85,9 @@ public class NScheduleDetail extends BaseEntity implements ScheduleAble {
         if(completeStatus){
             return 1;
         }
+        if(dailyAmount == 0){
+            return 0;
+        }
         return (double) achievedAmount / dailyAmount;
     }
 }
