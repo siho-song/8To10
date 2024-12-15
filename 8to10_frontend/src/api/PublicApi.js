@@ -28,7 +28,7 @@ publicApi.interceptors.response.use((response) => {
     if (response && response.data) {
         throw new CustomErrors(response.status, response.data.code, response.data.message);
     } else {
-        throw new CustomErrors(0, 'NETWORK_ERROR', '네트워크 오류가 발생했습니다.');
+        throw new CustomErrors(0, 'NETWORK_ERROR', "네트워크 연결이 불안정합니다. 인터넷 연결을 확인하고 다시 시도해 주세요.");
     }
 });
 

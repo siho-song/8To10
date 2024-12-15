@@ -11,13 +11,8 @@ const TodoListHeader = ({currentDate, changeCurrentDate}) => {
 
     const handleNextDateClick = () => {
         const nextDate = new Date(currentDate);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (nextDate < today) {
-            nextDate.setDate(nextDate.getDate() + 1);
-            changeCurrentDate(nextDate);
-        }
+        nextDate.setDate(nextDate.getDate() + 1);
+        changeCurrentDate(nextDate);
     }
 
     return (

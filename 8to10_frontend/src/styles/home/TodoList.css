@@ -1,4 +1,5 @@
 .todo-container {
+    position: relative;
     background-color: #dffcdf; /* 밝고 깔끔한 배경색 */
     padding: 20px;
     border: 1px solid #e0e0e0;
@@ -118,6 +119,7 @@
     background: #e0e0e0;
     border: none;
     border-radius: 50%;
+    max-width: 24px;
     width: 24px;
     height: 24px;
     cursor: pointer;
@@ -127,6 +129,16 @@
     font-size: 16px;
     color: #666;
     transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+.check-button:disabled,
+.check-button:disabled:hover,
+.check-button:disabled:focus {
+    background-color: #a2a2a2;
+    color: white;
+    transform:scale(1);
+    pointer-events: none;
 }
 
 .check-button:hover {
@@ -154,3 +166,49 @@
     background-color: #45a049;
     transform: scale(1.05);
 }
+
+.submit-todo-btn:disabled,
+.submit-todo-btn:disabled:hover,
+.submit-todo-btn:disabled:focus {
+    pointer-events: none;
+    background-color: #a2a2a2;
+    color: white;
+    transform:scale(1);
+}
+
+/* styles/TodoList.css */
+
+/* 툴팁 스타일 */
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15vw;
+    transform: translate(-50%, -50%);
+    padding: 16px 32px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 16px;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeInOut 3s; /* 애니메이션 효과 추가 */
+}
+
+/* 툴팁 페이드 애니메이션 */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+

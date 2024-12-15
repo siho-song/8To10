@@ -6,7 +6,7 @@ import "@/styles/home/TodoList.css";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {formatDate} from "@/helpers/TimeFormatter.js";
 import TodoItemsList from "@/components/home/todoList/TodoItemsList.jsx";
-import {formatTodoEventSubmit} from "@/helpers/ScheduleFormatter.js";
+import {formatTodoEventsSubmit} from "@/helpers/ScheduleFormatter.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 
 const TodoList = () => {
@@ -17,6 +17,8 @@ const TodoList = () => {
 
     const [currentDate, setCurrentDate] = useState(today);
     const [filteredEvents, setFilteredEvents] = useState([]);
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [isCurrentDate, setIsCurrentDate] = useState(formatDate(currentDate) === formatDate(today));
 
     useEffect(() => {
         if (!events) return(<p>로딩중....</p>);
@@ -29,34 +31,48 @@ const TodoList = () => {
             });
             return filtered.sort((a, b) => new Date(a.start) - new Date(b.start));
         };
-
+        setIsCurrentDate(formatDate(currentDate) === formatDate(today));
         setFilteredEvents(filterNormalEventsByDate());
     }, [events, currentDate]);
 
     const changeCurrentDate = (date) => {
         const newDate = new Date(date);
         setCurrentDate(newDate);
+        setIsCurrentDate(formatDate(currentDate) === formatDate(today));
     };
 
     const handleTodoSubmit = async () => {
-        for (const event of filteredEvents) {
-            const data = formatTodoEventSubmit(event);
-            try {
-                const url = "/schedule/normal/progress";
-                const response = await authenticatedApi.patch(
-                    url,
-                    data,
-                    {
-                        apiEndPoint: API_ENDPOINT_NAMES.PATCH_N_SCHEDULE_PROGRESS,
-                    });
+        if (!isCurrentDate) {
+            return;
+        }
+        let success = true;
 
+        const url = "/schedule/normal/progress";
+        const data = formatTodoEventsSubmit(currentDate, filteredEvents);
+
+        const response = await authenticatedApi.patch(
+            url,
+            data,
+            {apiEndPoint: API_ENDPOINT_NAMES.PATCH_N_SCHEDULE_PROGRESS}
+        );
+
+        if (!response.ok) {
+            success = false;
+        }
+
+        if (success) {
+            setShowTooltip(true);
+            setTimeout(() => setShowTooltip(false), 800);
+            for (let event of filteredEvents) {
                 updateExtendedProps(event.id, ['completeStatus'], [event.extendedProps.isComplete]);
-            } catch (error) {
-                console.error(error.toString());
-                console.error(error);
             }
         }
     };
+
+    const handleDisabledSubmit = () => {
+        setShowTooltip(true);
+        setTimeout(() => setShowTooltip(false), 800);
+    }
 
     return (
         <div className="todo-container">
@@ -66,14 +82,31 @@ const TodoList = () => {
                 changeCurrentDate={changeCurrentDate}
             />
             <TodoItemsList
+                currentDate={currentDate}
                 filteredEvents={filteredEvents}
             />
-            <button
-                className="submit-todo-btn"
-                onClick={handleTodoSubmit}
+            <div
+                className="submit-todo"
+                onClick={handleDisabledSubmit}
             >
-                제출
-            </button>
+                <button
+                    className="submit-todo-btn"
+                    onClick={handleTodoSubmit}
+                    disabled={!isCurrentDate}
+                >
+                    제출
+                </button>
+            </div>
+            {(showTooltip && isCurrentDate)&&(
+                <div className="tooltip">
+                    제출이 완료되었습니다.
+                </div>
+            )}
+            {(showTooltip && !isCurrentDate)&& (
+                <div className="tooltip">
+                    오늘의 일정만 업데이트할 수 있습니다.
+                </div>
+            )}
         </div>
     );
 };
