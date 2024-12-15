@@ -114,7 +114,7 @@
 <img width="99px;" src="https://github.com/user-attachments/assets/cdfb786c-8e40-4538-8c3c-0ac983df2e97"/>
 
 ### 🦴 Infrastructure
-<img width="100px;" src="https://github.com/user-attachments/assets/6b61d497-ace0-46fd-9d2b-14733d0d95de"/>
+<img width="220px;" src="https://github.com/user-attachments/assets/1e101c3f-1911-413d-af67-2b858a8b7641"/>
 
 ## 🌐 API 명세서
 https://puddle-revolve-056.notion.site/8To10-API-78c5b374093244aea9e0656e6a08d4f8
