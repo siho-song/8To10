@@ -20,10 +20,9 @@ const UserStatsCard = () => {
                 );
 
                 const data = response.data;
-
                 setNickname(data.nickname);
                 setRole(data.role);
-                setAchievementRate(data.achievementRate);
+                setAchievementRate(Math.floor(data.achievementRate * 100));
             } catch(error) {
                 console.error(error.toString());
                 console.error(error);
