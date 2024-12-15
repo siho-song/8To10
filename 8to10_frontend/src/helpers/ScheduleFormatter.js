@@ -1,3 +1,5 @@
+import {formatDate} from "@/helpers/TimeFormatter.js";
+
 export const generateEventIdWithParentId = (event) => {
     if (event.parentId) {
         return `${event.parentId}-${event.id}`;
@@ -40,7 +42,7 @@ export const formatNormalSchedule = (event) => {
             completeStatus: event.completeStatus,
             isComplete: event.completeStatus,
             dailyAmount : event.dailyAmount,
-            achievedAmount: achievedAmount,
+            achievedAmount: event.achievedAmount,
             originId: event.id,
         }
     };
@@ -77,15 +79,27 @@ export const formatFixedSchedule = (event) => {
     };
 }
 
-export const formatTodoEventSubmit = (event) => {
+export const formatTodoEvent = (event) => {
     if (!event) return {};
 
     return {
         scheduleDetailId: event.extendedProps.originId,
-        date: event.start.split("T")[0],
-        isComplete: event.extendedProps.isComplete,
+        completeStatus: event.extendedProps.isComplete,
         ...(event.extendedProps.dailyAmount && {
             achievedAmount: event.extendedProps.achievedAmount,
         }),
     };
+};
+
+export const formatTodoEventsSubmit = (date, events) => {
+    if (!events) return {};
+    const data = {
+        date: formatDate(date),
+        progressUpdates: [],
+    };
+
+    for (let event of events) {
+        data.progressUpdates.push(formatTodoEvent(event));
+    }
+    return data;
 };
