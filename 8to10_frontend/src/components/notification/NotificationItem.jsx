@@ -27,8 +27,6 @@ const NotificationItem = ({notification, onRemove, setRead, setUnreadCount}) => 
             {apiEndPoint: API_ENDPOINT_NAMES.PUT_READ_NOTIFICATION,}
         )
 
-        console.log(response);
-
         setUnreadCount((prevCount) => prevCount - 1);
         setIsRead(!isRead);
         setRead(entityId);

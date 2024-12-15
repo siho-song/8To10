@@ -116,7 +116,6 @@ const Notification = () => {
             url,
             {apiEndPoint: API_ENDPOINT_NAMES.DELETE_NOTIFICATION,}
         )
-        console.log(response);
 
         setNotifications(updatedNotifications);
         localStorage.setItem("notifications", JSON.stringify(updatedNotifications));
