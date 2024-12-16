@@ -2,6 +2,7 @@ package com.eighttoten.repository.board;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.eighttoten.community.domain.repository.BoardRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -12,11 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.board.Board;
-import com.eighttoten.dto.board.BoardPageResponse;
-import com.eighttoten.dto.board.BoardPageRequest;
-import com.eighttoten.dto.board.SearchCond;
-import com.eighttoten.dto.board.SortCondition;
+import com.eighttoten.community.domain.Board;
+import com.eighttoten.community.dto.BoardPageResponse;
+import com.eighttoten.community.dto.BoardPageRequest;
+import com.eighttoten.community.domain.SearchCond;
+import com.eighttoten.community.domain.SortCondition;
 
 @SpringBootTest
 class BoardRepositoryCustomImplTest {

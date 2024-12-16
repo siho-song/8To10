@@ -3,16 +3,18 @@ package com.eighttoten.service.schedule.nschedule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.nschedule.NSchedule;
-import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
-import com.eighttoten.dto.schedule.request.nschedule.NScheduleDetailUpdate;
-import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest;
-import com.eighttoten.dto.schedule.request.nschedule.ProgressUpdateRequest.ProgressUpdate;
-import com.eighttoten.exception.NotFoundEntityException;
-import com.eighttoten.provider.TokenProvider;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.NSchedule;
+import com.eighttoten.schedule.domain.NScheduleDetail;
+import com.eighttoten.schedule.dto.request.NormalDetailUpdateRequest;
+import com.eighttoten.schedule.dto.request.ProgressUpdateRequest;
+import com.eighttoten.schedule.dto.request.ProgressUpdateRequest.ProgressUpdate;
+import com.eighttoten.global.exception.NotFoundEntityException;
+import com.eighttoten.infrastructure.TokenProvider;
+import com.eighttoten.member.service.MemberService;
+import com.eighttoten.schedule.service.NScheduleDetailService;
+import com.eighttoten.schedule.service.NScheduleService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,7 +58,7 @@ class NScheduleDetailServiceTest {
         Member member = memberService.getAuthenticatedMember();
         long id = 1L;
         String detailDescription = "수정된 메모";
-        NScheduleDetailUpdate dto = NScheduleDetailUpdate.builder()
+        NormalDetailUpdateRequest dto = NormalDetailUpdateRequest.builder()
                 .id(id)
                 .detailDescription(detailDescription)
                 .build();

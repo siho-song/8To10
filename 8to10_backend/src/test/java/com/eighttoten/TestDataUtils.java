@@ -1,13 +1,13 @@
 package com.eighttoten;
 
-import com.eighttoten.domain.board.Board;
-import com.eighttoten.domain.board.BoardScrap;
-import com.eighttoten.domain.board.reply.Reply;
-import com.eighttoten.domain.member.Gender;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.member.Mode;
-import com.eighttoten.dto.board.BoardSaveRequest;
-import com.eighttoten.dto.signup.SignUpRequest;
+import com.eighttoten.community.domain.Board;
+import com.eighttoten.community.domain.BoardScrap;
+import com.eighttoten.community.domain.Reply;
+import com.eighttoten.member.domain.Gender;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.member.domain.Mode;
+import com.eighttoten.community.dto.BoardSaveRequest;
+import com.eighttoten.member.dto.request.SignUpRequest;
 
 public class TestDataUtils {
     public static Member createTestMember() {

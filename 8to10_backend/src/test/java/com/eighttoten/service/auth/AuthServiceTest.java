@@ -9,7 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.eighttoten.repository.auth.AuthRedisRepository;
+import com.eighttoten.auth.service.AuthService;
+import com.eighttoten.auth.domain.AuthRedisRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +19,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.eighttoten.domain.auth.Auth;
-import com.eighttoten.exception.InvalidTokenException;
-import com.eighttoten.provider.TokenProvider;
-import com.eighttoten.utils.BearerAuthorizationUtils;
+import com.eighttoten.auth.domain.Auth;
+import com.eighttoten.global.exception.InvalidTokenException;
+import com.eighttoten.infrastructure.TokenProvider;
+import com.eighttoten.global.utils.BearerAuthorizationUtils;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("인증 서비스 테스트")

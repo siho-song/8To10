@@ -3,8 +3,8 @@ package com.eighttoten.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.eighttoten.domain.member.Mode;
-import com.eighttoten.dto.signup.SignUpRequest;
+import com.eighttoten.member.domain.Mode;
+import com.eighttoten.member.dto.request.SignUpRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Gender;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.repository.member.MemberRepository;
+import com.eighttoten.member.domain.Gender;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.member.domain.repository.MemberRepository;
 
 @SpringBootTest
 @Transactional

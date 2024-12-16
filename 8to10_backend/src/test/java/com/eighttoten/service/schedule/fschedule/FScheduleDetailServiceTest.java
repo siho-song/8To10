@@ -3,6 +3,8 @@ package com.eighttoten.service.schedule.fschedule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.eighttoten.schedule.service.FScheduleDetailService;
+import com.eighttoten.schedule.service.FScheduleService;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,13 +19,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.fschedule.FSchedule;
-import com.eighttoten.domain.schedule.fschedule.FScheduleDetail;
-import com.eighttoten.dto.schedule.request.fschedule.FScheduleDetailUpdate;
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.exception.NotFoundEntityException;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.FSchedule;
+import com.eighttoten.schedule.domain.FScheduleDetail;
+import com.eighttoten.schedule.dto.request.FixDetailUpdateRequest;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.global.exception.NotFoundEntityException;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -82,14 +84,14 @@ class FScheduleDetailServiceTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
         LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
         String detailDescription = "수정된 메모";
-        FScheduleDetailUpdate fScheduleDetailUpdate = FScheduleDetailUpdate.builder()
+        FixDetailUpdateRequest fixDetailUpdateRequest = FixDetailUpdateRequest.builder()
                 .id(id)
                 .detailDescription(detailDescription)
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
 
-        fScheduleDetailService.update(member,fScheduleDetailUpdate);
+        fScheduleDetailService.update(member, fixDetailUpdateRequest);
 
         FScheduleDetail fScheduleDetail = fScheduleDetailService.findById(id);
 
@@ -106,14 +108,14 @@ class FScheduleDetailServiceTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
         LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
         String detailDescription = "수정된 메모";
-        FScheduleDetailUpdate fScheduleDetailUpdate = FScheduleDetailUpdate.builder()
+        FixDetailUpdateRequest fixDetailUpdateRequest = FixDetailUpdateRequest.builder()
                 .id(id)
                 .detailDescription(detailDescription)
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
 
-        assertThatThrownBy(() -> fScheduleDetailService.update(member, fScheduleDetailUpdate)).isInstanceOf(
+        assertThatThrownBy(() -> fScheduleDetailService.update(member, fixDetailUpdateRequest)).isInstanceOf(
                 RuntimeException.class);
     }
 }

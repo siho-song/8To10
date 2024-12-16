@@ -2,6 +2,7 @@ package com.eighttoten.service.schedule;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.eighttoten.schedule.service.ScheduleService;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +14,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.fschedule.FScheduleDetail;
-import com.eighttoten.domain.schedule.nschedule.NScheduleDetail;
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.FScheduleDetail;
+import com.eighttoten.schedule.domain.NScheduleDetail;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @DisplayName("일정 공통 서비스 테스트")

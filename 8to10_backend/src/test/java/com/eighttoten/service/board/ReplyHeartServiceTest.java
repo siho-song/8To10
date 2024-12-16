@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.board.reply.Reply;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.exception.NotFoundEntityException;
-import com.eighttoten.service.member.MemberService;
-import com.eighttoten.service.board.reply.ReplyHeartService;
-import com.eighttoten.service.board.reply.ReplyService;
+import com.eighttoten.community.domain.Reply;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.global.exception.NotFoundEntityException;
+import com.eighttoten.member.service.MemberService;
+import com.eighttoten.community.service.ReplyHeartService;
+import com.eighttoten.community.service.ReplyService;
 
 @SpringBootTest
 @DisplayName("댓글 좋아요 서비스")
