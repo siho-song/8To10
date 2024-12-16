@@ -1,7 +1,7 @@
 package com.eighttoten.validator.signup;
 
 import org.junit.jupiter.api.Test;
-import com.eighttoten.validator.signup.fielderror.PasswordValidator;
+import com.eighttoten.member.validator.PasswordValidator;
 
 class PasswordValidatorTest {
     @Test

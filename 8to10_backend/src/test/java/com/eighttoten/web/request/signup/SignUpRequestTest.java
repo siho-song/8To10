@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.eighttoten.dto.signup.SignUpRequest;
+import com.eighttoten.member.dto.request.SignUpRequest;
 
 
 @SpringBootTest

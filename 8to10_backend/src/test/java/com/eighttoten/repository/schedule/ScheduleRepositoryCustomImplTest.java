@@ -1,5 +1,6 @@
 package com.eighttoten.repository.schedule;
 
+import com.eighttoten.schedule.domain.repository.ScheduleRepository;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
@@ -7,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.Schedule;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.Schedule;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @Transactional

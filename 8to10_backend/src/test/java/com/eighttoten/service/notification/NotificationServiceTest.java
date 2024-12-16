@@ -2,6 +2,7 @@ package com.eighttoten.service.notification;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.eighttoten.notification.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.notification.Notification;
-import com.eighttoten.repository.notification.NotificationRepository;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.notification.domain.Notification;
+import com.eighttoten.notification.domain.repository.NotificationRepository;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @DisplayName("알림 서비스 테스트")

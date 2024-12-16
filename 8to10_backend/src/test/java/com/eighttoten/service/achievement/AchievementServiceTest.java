@@ -1,5 +1,6 @@
 package com.eighttoten.service.achievement;
 
+import com.eighttoten.achievement.service.AchievementService;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -8,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.achievement.Achievement;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.achievement.domain.Achievement;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @Transactional

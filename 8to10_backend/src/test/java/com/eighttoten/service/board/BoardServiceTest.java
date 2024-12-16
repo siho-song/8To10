@@ -2,6 +2,7 @@ package com.eighttoten.service.board;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.eighttoten.community.service.BoardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.dto.board.BoardSearchResponse;
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.exception.NotFoundEntityException;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.community.dto.BoardSearchResponse;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.global.exception.NotFoundEntityException;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @Transactional

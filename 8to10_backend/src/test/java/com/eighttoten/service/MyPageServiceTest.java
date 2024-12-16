@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.eighttoten.TestDataUtils;
+import com.eighttoten.member.service.MultipartFileStorageService;
+import com.eighttoten.member.service.MyPageService;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -15,19 +17,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
-import com.eighttoten.domain.board.Board;
-import com.eighttoten.domain.board.BoardScrap;
-import com.eighttoten.domain.board.reply.Reply;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.dto.Result;
-import com.eighttoten.dto.mypage.MemberBoardsResponse;
-import com.eighttoten.dto.mypage.MemberRepliesResponse;
-import com.eighttoten.dto.mypage.ProfileResponse;
-import com.eighttoten.dto.mypage.ScrappedBoardResponse;
-import com.eighttoten.service.board.BoardScrapService;
-import com.eighttoten.service.board.BoardService;
-import com.eighttoten.service.board.reply.ReplyService;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.community.domain.Board;
+import com.eighttoten.community.domain.BoardScrap;
+import com.eighttoten.community.domain.Reply;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.global.dto.Result;
+import com.eighttoten.member.dto.response.MemberBoardsResponse;
+import com.eighttoten.member.dto.response.MemberRepliesResponse;
+import com.eighttoten.member.dto.response.ProfileResponse;
+import com.eighttoten.member.dto.response.ScrappedBoardResponse;
+import com.eighttoten.community.service.BoardScrapService;
+import com.eighttoten.community.service.BoardService;
+import com.eighttoten.community.service.ReplyService;
+import com.eighttoten.member.service.MemberService;
 
 @SpringBootTest
 @DisplayName("마이페이지 서비스 테스트")
