@@ -136,14 +136,22 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                     <strong>시작 시간</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{formatDateInfo(startDate)}</p>
+                                <TimeEditForm
+                                    date={startDate}
+                                    setDate={setStartDate}
+                                    type={"start"}
+                                    isDisabled={true}/>
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
                                     <strong>종료 시간</strong>
                                 </h2>
                                 <hr className="event-detail-contour"/>
-                                <p>{formatDateInfo(endDate)}</p>
+                                <TimeEditForm
+                                    date={endDate}
+                                    setDate={setEndDate}
+                                    type={"end"}
+                                    isDisabled={true}/>
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
@@ -191,7 +199,8 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                 <TimeEditForm
                                     date={startDate}
                                     setDate={setStartDate}
-                                    type={"start"}/>
+                                    type={"start"}
+                                    isDisabled={false}/>
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
@@ -201,7 +210,8 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                 <TimeEditForm
                                     date={endDate}
                                     setDate={setEndDate}
-                                    type={"end"}/>
+                                    type={"end"}
+                                    isDisabled={false}/>
                             </div>
                             {endDateError && <p className="error-message">{endDateError}</p>}
                             <div className="event-detail-prop">

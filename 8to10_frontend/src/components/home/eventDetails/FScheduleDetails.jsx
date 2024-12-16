@@ -44,7 +44,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
         setEndDateError("");
 
         setStartDate(startDateInfo);
-        setEndDate(startDateInfo);
+        setEndDate(endDateInfo);
     }, [selectedEvent]);
 
 
@@ -181,30 +181,13 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                 <button className="close-event-details" onClick={onClose}>&times;</button>
             </div>
             <div className="event-detail-props">
-                <div className="event-detail-prop">
-                    <h2>일정 제목</h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.title}</p>
-                </div>
                 {!isItemEditMode ? (
                     <>
                         <div className="event-detail-prop">
-                            <h2>
-                                <strong>시작 시간</strong>
-                            </h2>
+                            <h2>일정 제목</h2>
                             <hr className="event-detail-contour"/>
-                            <p>{formatDateInfo(startDate)}</p>
+                            <p>{selectedEvent.title}</p>
                         </div>
-                        <div className="event-detail-prop">
-                            <h2>
-                                <strong>종료 시간</strong>
-                            </h2>
-                            <hr className="event-detail-contour"/>
-                            <p>{formatDateInfo(endDate)}</p>
-                        </div>
-                    </>
-                ) : (
-                    <>
                         <div className="event-detail-prop">
                             <h2>
                                 <strong>시작 시간</strong>
@@ -214,6 +197,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                 type={"start"}
                                 date={startDate}
                                 setDate={setStartDate}
+                                isDisabled={true}
                             />
                         </div>
                         <div className="event-detail-prop">
@@ -225,6 +209,39 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                 type={"end"}
                                 date={endDate}
                                 setDate={setEndDate}
+                                isDisabled={true}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="event-detail-prop">
+                            <h2>일정 제목</h2>
+                            <hr className="event-detail-contour"/>
+                            <p>{selectedEvent.title}</p>
+                        </div>
+                        <div className="event-detail-prop">
+                            <h2>
+                                <strong>시작 시간</strong>
+                            </h2>
+                            <hr className="event-detail-contour"/>
+                            <TimeEditForm
+                                type={"start"}
+                                date={startDate}
+                                setDate={setStartDate}
+                                isDisabled={false}
+                            />
+                        </div>
+                        <div className="event-detail-prop">
+                            <h2>
+                                <strong>종료 시간</strong>
+                            </h2>
+                            <hr className="event-detail-contour"/>
+                            <TimeEditForm
+                                type={"end"}
+                                date={endDate}
+                                setDate={setEndDate}
+                                isDisabled={false}
                             />
                         </div>
                         {endDateError && <p className="error-message">{endDateError}</p>}
@@ -236,11 +253,6 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             <strong>공통 일정 메모</strong>
                         </h2>
                         <hr className="event-detail-contour"/>
-                        {isItemEditMode &&
-                            <div className="common-description-edit-message">
-                                <span>공통 일정 메모 수정은 일정 수정 페이지에서 가능합니다.</span>
-                            </div>
-                        }
                         <p>{selectedEvent.extendedProps.commonDescription}</p>
                     </div>
                 }
