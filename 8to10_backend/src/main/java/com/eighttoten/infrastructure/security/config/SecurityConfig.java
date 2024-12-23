@@ -12,7 +12,11 @@ import com.eighttoten.infrastructure.security.provider.CustomAuthenticationProvi
 import com.eighttoten.infrastructure.security.service.MemberDetailsService;
 import com.eighttoten.member.domain.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,7 +87,9 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addExposedHeader("Authorization");
-        config.addAllowedOrigin(corsAllowedOrigin);
+        config.setAllowedOrigins(Arrays.stream(corsAllowedOrigin.split(","))
+                .map(String::trim)
+                .toList());
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L);
