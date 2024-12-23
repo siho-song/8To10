@@ -87,8 +87,43 @@ export const FullCalendarProvider = ({children}) => {
         )
     }
 
+    const updatePropsByGroupId = (groupId, keys, values) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                event.groupId === groupId
+                    ? {
+                        ...event,
+                        ...keys.reduce((acc, key, index) => {
+                            acc[key] = values[index];
+                            return acc;
+                        }, {}),
+                    }
+                    : event
+            )
+        );
+    };
+
+    const updateExtendedPropsByGroupId = (groupId, keys, values) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                event.groupId === groupId
+                    ? {
+                        ...event,
+                        extendedProps: {
+                            ...event.extendedProps,
+                            ...keys.reduce((acc, key, index) => {
+                                acc[key] = values[index];
+                                return acc;
+                            }, {}),
+                        },
+                    }
+                    : event
+            )
+        );
+    };
+
     return (
-        <CalendarContext.Provider value={{events, addEvent, updateExtendedProps, updateProps, deleteEvent}}>
+        <CalendarContext.Provider value={{events, addEvent, updateExtendedProps, updateProps, deleteEvent, updatePropsByGroupId, updateExtendedPropsByGroupId}}>
             {children}
         </CalendarContext.Provider>
     );
