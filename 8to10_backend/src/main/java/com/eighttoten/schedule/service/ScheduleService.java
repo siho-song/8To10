@@ -31,7 +31,7 @@ public class ScheduleService {
         return scheduleRepository.findAllBetweenStartAndEnd(
                 member,
                 LocalDateTime.of(start, LocalTime.of(0, 0)),
-                LocalDateTime.of(end, LocalTime.of(0, 0)));
+                LocalDateTime.of(end, LocalTime.of(23, 59)));
     }
 
     public List<Schedule> findAllWithDetailByMember(Member member) {
