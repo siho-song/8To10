@@ -2,6 +2,7 @@ package com.eighttoten.service.schedule.fschedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.eighttoten.schedule.service.FScheduleService;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.ScheduleAble;
-import com.eighttoten.domain.schedule.fschedule.FSchedule;
-import com.eighttoten.dto.schedule.request.fschedule.FScheduleSave;
-import com.eighttoten.dto.schedule.request.fschedule.FScheduleUpdate;
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.provider.TokenProvider;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.ScheduleAble;
+import com.eighttoten.schedule.domain.FSchedule;
+import com.eighttoten.schedule.dto.request.FScheduleSaveRequestRequest;
+import com.eighttoten.schedule.dto.request.FScheduleUpdateRequest;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.infrastructure.TokenProvider;
+import com.eighttoten.member.service.MemberService;
 
 @DisplayName("고정일정 서비스 테스트")
 @SpringBootTest
@@ -48,7 +49,7 @@ class FScheduleServiceTest {
     @Test
     @DisplayName("고정일정 생성 - 자식 고정일정을 생성한다.")
     void addDetailsForEachEvent() {
-        FScheduleSave fScheduleSave = FScheduleSave.builder()
+        FScheduleSaveRequestRequest fScheduleSaveRequest = FScheduleSaveRequestRequest.builder()
                 .title("테스트 title ")
                 .commonDescription("테스트 commonDescription")
                 .startDate(LocalDate.of(2024,9,3))
@@ -60,9 +61,9 @@ class FScheduleServiceTest {
                 .build();
 
         Member member = memberService.getAuthenticatedMember();
-        FSchedule fSchedule = FSchedule.from(member, fScheduleSave);
+        FSchedule fSchedule = FSchedule.from(member, fScheduleSaveRequest);
 
-        fScheduleService.addDetails(fSchedule, fScheduleSave);
+        fScheduleService.addDetails(fSchedule, fScheduleSaveRequest);
         List<ScheduleAble> scheduleAbles = fSchedule.getScheduleAbles();
         assertThat(scheduleAbles.size()).isEqualTo(8);
     }
@@ -73,7 +74,7 @@ class FScheduleServiceTest {
         Long id = 1L;
         String title = "고정일정 제목 수정";
         String commonDescription = "고정일정 메모 수정";
-        FScheduleUpdate fScheduleUpdate = FScheduleUpdate.builder()
+        FScheduleUpdateRequest fScheduleUpdateRequest = FScheduleUpdateRequest.builder()
                 .id(id)
                 .title(title)
                 .commonDescription(commonDescription)
@@ -81,7 +82,7 @@ class FScheduleServiceTest {
 
         Member member = memberService.getAuthenticatedMember();
 
-        fScheduleService.update(member,fScheduleUpdate);
+        fScheduleService.update(member, fScheduleUpdateRequest);
 
         FSchedule fSchedule = fScheduleService.findById(id);
 

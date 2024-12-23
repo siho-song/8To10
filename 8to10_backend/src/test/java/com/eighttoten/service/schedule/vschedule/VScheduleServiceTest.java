@@ -2,6 +2,7 @@ package com.eighttoten.service.schedule.vschedule;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.eighttoten.schedule.service.VScheduleService;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,12 +13,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.domain.schedule.Schedule;
-import com.eighttoten.dto.schedule.request.vschedule.VScheduleUpdate;
-import com.eighttoten.domain.auth.MemberDetails;
-import com.eighttoten.service.member.MemberService;
-import com.eighttoten.service.schedule.ScheduleService;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.schedule.domain.Schedule;
+import com.eighttoten.schedule.dto.request.VScheduleUpdateRequest;
+import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.member.service.MemberService;
+import com.eighttoten.schedule.service.ScheduleService;
 
 @SpringBootTest
 @DisplayName("변동일정 서비스 테스트")
@@ -44,18 +45,18 @@ class VScheduleServiceTest {
     @Test
     @DisplayName("변동일정 수정 서비스 테스트")
     void update() {
-        VScheduleUpdate vScheduleUpdate = new VScheduleUpdate();
-        vScheduleUpdate.setId(8L);
-        vScheduleUpdate.setTitle("수정된 변동일정");
-        vScheduleUpdate.setCommonDescription("수정된 변동일정 입니다.");
-        vScheduleUpdate.setStartDate(LocalDateTime.now());
-        vScheduleUpdate.setEndDate(LocalDateTime.now().plusHours(2L));
+        VScheduleUpdateRequest vScheduleUpdateRequest = new VScheduleUpdateRequest();
+        vScheduleUpdateRequest.setId(8L);
+        vScheduleUpdateRequest.setTitle("수정된 변동일정");
+        vScheduleUpdateRequest.setCommonDescription("수정된 변동일정 입니다.");
+        vScheduleUpdateRequest.setStartDate(LocalDateTime.now());
+        vScheduleUpdateRequest.setEndDate(LocalDateTime.now().plusHours(2L));
         Member member = memberService.getAuthenticatedMember();
 
-        vScheduleService.update(member, vScheduleUpdate);
+        vScheduleService.update(member, vScheduleUpdateRequest);
 
         Schedule schedule = scheduleService.findById(8L);
-        assertThat(schedule.getTitle()).isEqualTo(vScheduleUpdate.getTitle());
-        assertThat(schedule.getStartDate()).isEqualTo(vScheduleUpdate.getStartDate());
+        assertThat(schedule.getTitle()).isEqualTo(vScheduleUpdateRequest.getTitle());
+        assertThat(schedule.getStartDate()).isEqualTo(vScheduleUpdateRequest.getStartDate());
     }
 }

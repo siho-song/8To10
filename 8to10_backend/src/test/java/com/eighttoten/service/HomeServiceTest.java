@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import com.eighttoten.home.HomeService;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -14,11 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.domain.achievement.Achievement;
-import com.eighttoten.domain.member.Member;
-import com.eighttoten.dto.UserStatsResponse;
-import com.eighttoten.service.achievement.AchievementService;
-import com.eighttoten.service.member.MemberService;
+import com.eighttoten.achievement.domain.Achievement;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.home.UserStatsResponse;
+import com.eighttoten.achievement.service.AchievementService;
+import com.eighttoten.member.service.MemberService;
 
 @Slf4j
 @SpringBootTest
