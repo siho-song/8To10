@@ -81,8 +81,8 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
                 .select(qVSchedule)
                 .from(qVSchedule)
                 .where(qVSchedule.member.eq(member)
-                        .and(qVSchedule.startDate.between(start, end))
-                        .and(qVSchedule.endDate.between(start, end)))
+                        .and(qVSchedule.endDate.goe(start))
+                        .and(qVSchedule.startDate.loe(end)))
                 .fetch();
 
         schedules.addAll(vSchedules);
@@ -95,8 +95,8 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
                 .leftJoin(qFSchedule.fScheduleDetails, qfScheduleDetail)
                 .fetchJoin()
                 .where(qFSchedule.member.eq(member)
-                        .and(qFSchedule.startDate.between(start, end))
-                        .and(qFSchedule.endDate.between(start, end)))
+                        .and(qFSchedule.endDate.goe(start))
+                        .and(qFSchedule.startDate.loe(end)))
                 .fetch();
         schedules.addAll(fSchedules);
 
@@ -108,8 +108,8 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom{
                 .leftJoin(qNSchedule.nScheduleDetails, qnScheduleDetail)
                 .fetchJoin()
                 .where(qNSchedule.member.eq(member)
-                        .and(qNSchedule.startDate.between(start, end))
-                        .and(qNSchedule.endDate.between(start, end)))
+                        .and(qNSchedule.endDate.goe(start))
+                        .and(qNSchedule.startDate.loe(end)))
                 .fetch();
         schedules.addAll(nSchedules);
         return schedules;
