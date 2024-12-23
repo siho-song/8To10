@@ -75,7 +75,6 @@ public class TimeSlotService {
 
     private List<TimeSlot> findSlotsForDate(List<ScheduleAble> sortedScheduleAbles) {
         List<TimeSlot> timeSlots = new ArrayList<>();
-
         if (sortedScheduleAbles.isEmpty()) {
             return addTotalWorkTime();
         }
@@ -96,7 +95,10 @@ public class TimeSlotService {
             beforeScheduleEnd = nextScheduleEnd;
         }
 
-        LocalTime lastScheduleEnd = sortedScheduleAbles.get(sortedScheduleAbles.size() - 1).getEndDate().toLocalTime();
+        LocalTime lastScheduleEnd = sortedScheduleAbles.stream()
+                .map(scheduleAble -> scheduleAble.getEndDate().toLocalTime())
+                .max(LocalTime::compareTo).get(); // 종료 시간 기준 가장 늦은 시간
+
         if (isTimeSlotAvailable(lastScheduleEnd, WORK_END_TIME)) {
             timeSlots.add(new TimeSlot(lastScheduleEnd, WORK_END_TIME));
         }
