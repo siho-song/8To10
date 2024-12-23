@@ -4,6 +4,7 @@ import static com.eighttoten.global.exception.ExceptionCode.INVALID_N_SCHEDULE_C
 import static com.eighttoten.global.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
 import static com.eighttoten.global.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
 
+import com.eighttoten.global.constant.AppConstant;
 import com.eighttoten.global.exception.BadRequestException;
 import com.eighttoten.global.exception.MismatchException;
 import com.eighttoten.global.exception.NotFoundEntityException;
@@ -58,7 +59,7 @@ public class NScheduleService {
         List<ScheduleAble> scheduleAbles = scheduleService.getAllScheduleAbles(schedules);
 
         Map<LocalDate, List<TimeSlot>> slotMap = timeSlotService.findAllBetweenStartAndEnd(
-                getSortedScheduleAbleMap(scheduleAbles), startDate, endDate
+                getSortedAfter8AMScheduleAbleMap(scheduleAbles), startDate, endDate
         );
 
         Map<DayOfWeek, List<TimeSlot>> availableSlotMap = timeSlotService
@@ -91,14 +92,27 @@ public class NScheduleService {
         nSchedule.update(nScheduleUpdateRequest);
     }
 
-    private Map<LocalDate, List<ScheduleAble>> getSortedScheduleAbleMap(List<ScheduleAble> scheduleAbles) {
+    private Map<LocalDate, List<ScheduleAble>> getSortedAfter8AMScheduleAbleMap(List<ScheduleAble> scheduleAbles) {
+        LocalTime startTime = AppConstant.WORK_START_TIME;
+        LocalTime endTime = AppConstant.WORK_END_TIME;
 
         return scheduleAbles.stream()
-                .collect(Collectors.groupingBy(scheduleAble -> scheduleAble.getStartDate().toLocalDate(),
-                        Collectors.collectingAndThen(Collectors.toList(), list -> {
-                            list.sort(Comparator.comparing(ScheduleAble::getStartDate));
-                            return list;
-                        })));
+                .filter(scheduleAble -> isWithinTimeRange(scheduleAble, startTime, endTime))
+                .collect(Collectors.groupingBy(
+                        scheduleAble -> scheduleAble.getStartDate().toLocalDate(),
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> {
+                                    list.sort(Comparator.comparing(ScheduleAble::getStartDate));
+                                    return list;
+                                }
+                        )
+                ));
+    }
+
+    private boolean isWithinTimeRange(ScheduleAble scheduleAble, LocalTime startTime, LocalTime endTime) {
+        LocalTime scheduleEnd = scheduleAble.getEndDate().toLocalTime();
+        return !scheduleEnd.isBefore(startTime) && !scheduleEnd.isAfter(endTime);
     }
 
     private List<DayOfWeek> selectRandomDays(
