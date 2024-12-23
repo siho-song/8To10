@@ -40,12 +40,27 @@ function handleDateClick(calendar, info) {
 function FullCalendarView() {
     const calendarRef = useRef(null);
     const { events } = useCalendar();
-    const [selectedEvent, setSelectedEvent] = useState(null);  // 선택된 이벤트 상태 관리
-    const [showScheduleForm, setShowScheduleForm] = useState(false); // 일정 폼 상태 관리
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [showScheduleForm, setShowScheduleForm] = useState(false);
 
     const handleEventClick = (info) => {
+        setSelectedGroupId(info.event.groupId);
         setShowScheduleForm(false);
         displayEventDetailsInSidebar(info.event);
+    };
+
+    const highlightGroupEvents = (groupId) => {
+        const calendarApi = calendarRef.current.getApi();
+        const allEvents = calendarApi.getEvents();
+
+        allEvents.forEach((event) => {
+            if (event.groupId === groupId) {
+                event.setProp('classNames', ['highlighted']);
+            } else {
+                event.setProp('classNames', []); // Reset other events
+            }
+        });
     };
 
     const displayEventDetailsInSidebar = (event) => {
@@ -63,6 +78,16 @@ function FullCalendarView() {
     const handleClose = () => {
         setSelectedEvent(null);
         setShowScheduleForm(false);
+        setSelectedGroupId(null);
+    };
+
+    const resetEventHighlights = () => {
+        const calendarApi = calendarRef.current.getApi();
+        const allEvents = calendarApi.getEvents();
+
+        allEvents.forEach((event) => {
+            event.setProp('classNames', []); // Reset highlights
+        });
     };
 
     useEffect(() => {
@@ -99,6 +124,9 @@ function FullCalendarView() {
                         titleRangeSeparator=" - "
                         dateClick={(info) => handleDateClick(calendarRef.current.getApi(), info)}
                         eventClick={handleEventClick}
+                        eventClassNames={(event) =>
+                            event.event.groupId === selectedGroupId ? ['highlighted'] : []
+                        }
                         selectable={true}
                     />
                 </div>
