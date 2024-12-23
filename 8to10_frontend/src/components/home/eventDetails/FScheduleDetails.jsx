@@ -10,7 +10,7 @@ import ScheduleDeleteModal from "@/components/modal/ScheduleDeleteModal.jsx";
 import {validateDateTime, validateTitle} from "@/components/home/eventDetails/ValidateEventDetails.js";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
-    const {updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
@@ -196,8 +196,6 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             data,
             {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
         );
-
-        // updateExtendedProps(selectedEvent.id, ['commonDescription'], [commonDescription]);
         updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
         setHasCommonDescription(true);
         setIsCommonDescriptionCreateMode(false);
@@ -222,33 +220,82 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
         setIsDetailDescriptionCreateMode(false);
     }
 
-            console.error(error);
-        }
+    const handleDeleteButtonClick = () => {
+        openModal();
     }
 
-    const handleDelete = async () => {
+    const handleTotalDelete = async() => {
         try {
-            const url = "/schedule/fixed/detail";
-            const response = await authenticatedApi.patch(
+            const url = `/schedule/${selectedEvent.extendedProps.parentId}`;
+            await authenticatedApi.delete(
                 url,
-                {
-                    id: selectedEvent.extendedProps.originId,
-                    startDate: formatDateToLocalDateTime(selectedEvent.start),
-                    endDate: formatDateToLocalDateTime(selectedEvent.end),
-                    detailDescription: "",
-                },
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE}
             );
-
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [""]);
-            setHasDetailDescription(false);
-            setDetailDescription("");
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsByGroupId(parseInt(selectedEvent.groupId));
+            closeModal();
+            onClose();
+        } catch (e) {
+            console.error(e);
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
 
+    const handleTotalDeleteFromNow = async () => {
+        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+        console.log(currentEventCounts);
+
+        if (currentEventCounts === 1) {
+            await handleTotalDelete();
+            return;
+        }
+
+        try {
+            const url = `/schedule/fixed/detail?parentId=${selectedEvent.extendedProps.parentId}&startDate=${formatDateToLocalDateTime(selectedEvent.start)}`;
+            console.log(url);
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE},
+            );
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
+            closeModal();
+            onClose();
+        } catch (e) {
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+
+    }
+
+    const handleItemDelete = async () => {
+        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+
+        if (currentEventCounts === 1) {
+            await handleTotalDelete();
+            return;
+        }
+        try {
+            const url = `/schedule/fixed/detail/${selectedEvent.extendedProps.originId}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_ITEM},
+            );
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEvent(selectedEvent.id);
+            closeModal();
+            onClose();
+        } catch (e) {
+            console.error(e);
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+    }
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <>
@@ -341,7 +388,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             {!hasCommonDescription && !isCommonDescriptionCreateMode && !isItemEditMode &&
                                 <div className="description-btns">
                                     <div className="description-btns">
-                                        <p className="description-btn fixed" onClick={handleCreateCommonDescription}>수정</p>
+                                        <p className="description-btn fixed"
+                                           onClick={handleCreateCommonDescription}>수정</p>
                                     </div>
                                 </div>
                             }
@@ -385,7 +433,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             {!hasDetailDescription && !isDetailDescriptionCreateMode && !isItemEditMode &&
                                 <div className="description-btns">
                                     <div className="description-btns">
-                                        <p className="description-btn fixed" onClick={handleCreateDetailDescription}>수정</p>
+                                        <p className="description-btn fixed"
+                                           onClick={handleCreateDetailDescription}>수정</p>
                                     </div>
                                 </div>
                             }
@@ -453,6 +502,14 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                     }
 
                 </div>
+
+                <ScheduleDeleteModal
+                    onClose={closeModal}
+                    isOpen={isModalOpen}
+                    onDeleteSingle={handleItemDelete}
+                    onDeleteAllFromNow={handleTotalDeleteFromNow}
+                    onDeleteAll={handleTotalDelete}
+                />
             </div>
         </>
     );
