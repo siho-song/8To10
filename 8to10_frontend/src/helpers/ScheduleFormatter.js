@@ -75,6 +75,7 @@ export const formatFixedSchedule = (event) => {
             commonDescription: event.commonDescription,
             detailDescription: event.detailDescription || "",
             originId: event.id,
+            parentId: event.parentId,
         },
     };
 }

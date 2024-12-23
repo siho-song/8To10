@@ -92,7 +92,6 @@ TimeEditForm.propTypes = {
     }),
     setDate: PropTypes.func.isRequired,
     isDisabled: PropTypes.bool.isRequired,
-
 }
 
 export default TimeEditForm;
