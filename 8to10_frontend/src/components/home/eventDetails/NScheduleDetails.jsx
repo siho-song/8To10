@@ -108,14 +108,22 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         <strong>시작 시간</strong>
                     </h2>
                     <hr className="event-detail-contour"/>
-                    <p>{formatDateTime(selectedEvent.start)}</p>
+                    <TimeEditForm
+                        date={extractDateInfo(selectedEvent.start)}
+                        setDate={()=>{}}
+                        type={"start"}
+                        isDisabled={true}/>
                 </div>
                 <div className="event-detail-prop">
                     <h2>
                         <strong>종료 시간</strong>
                     </h2>
                     <hr className="event-detail-contour"/>
-                    <p>{formatDateTime(selectedEvent.end)}</p>
+                    <TimeEditForm
+                        date={extractDateInfo(selectedEvent.end)}
+                        setDate={()=>{}}
+                        type={"end"}
+                        isDisabled={true}/>
                 </div>
                 {hasCommonDescription &&
                     <div className="event-detail-prop">
@@ -219,6 +227,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
 NScheduleDetails.propTypes = {
     selectedEvent: PropTypes.shape({
         id: PropTypes.string.isRequired,
+        groupId: PropTypes.string,
         title: PropTypes.string.isRequired,
         start: PropTypes.instanceOf(Date).isRequired,
         end: PropTypes.instanceOf(Date).isRequired,

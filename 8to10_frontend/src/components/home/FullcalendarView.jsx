@@ -37,31 +37,57 @@ function handleDateClick(calendar, info) {
     calendar.changeView('timeGridWeek', info.dateStr);
 }
 
-function Calendar() {
+function FullCalendarView() {
     const calendarRef = useRef(null);
     const { events } = useCalendar();
-    const [selectedEvent, setSelectedEvent] = useState(null);  // 선택된 이벤트 상태 관리
-    const [showScheduleForm, setShowScheduleForm] = useState(false); // 일정 폼 상태 관리
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [showScheduleForm, setShowScheduleForm] = useState(false);
 
     const handleEventClick = (info) => {
+        setSelectedGroupId(info.event.groupId);
         setShowScheduleForm(false);
         displayEventDetailsInSidebar(info.event);
     };
 
+    const highlightGroupEvents = (groupId) => {
+        const calendarApi = calendarRef.current.getApi();
+        const allEvents = calendarApi.getEvents();
+
+        allEvents.forEach((event) => {
+            if (event.groupId === groupId) {
+                event.setProp('classNames', ['highlighted']);
+            } else {
+                event.setProp('classNames', []); // Reset other events
+            }
+        });
+    };
+
     const displayEventDetailsInSidebar = (event) => {
-        const selectedEvent = {
+        const selected = {
             id: event.id,
             title: event.title,
             start: event.start,
             end: event.end,
+            groupId: event.groupId || null,
             extendedProps: event.extendedProps
         };
-        setSelectedEvent(selectedEvent);
+        setSelectedEvent(selected);
     };
 
     const handleClose = () => {
         setSelectedEvent(null);
         setShowScheduleForm(false);
+        setSelectedGroupId(null);
+    };
+
+    const resetEventHighlights = () => {
+        const calendarApi = calendarRef.current.getApi();
+        const allEvents = calendarApi.getEvents();
+
+        allEvents.forEach((event) => {
+            event.setProp('classNames', []); // Reset highlights
+        });
     };
 
     useEffect(() => {
@@ -71,6 +97,12 @@ function Calendar() {
             window.removeEventListener('resize', resizeListener);
         };
     }, []);
+
+    useEffect(()=> {
+        if (calendarRef.current) {
+            calendarRef.current.getApi().refetchEvents();
+        }
+    }, [events])
 
     return (
         <div className="main-container">
@@ -92,6 +124,9 @@ function Calendar() {
                         titleRangeSeparator=" - "
                         dateClick={(info) => handleDateClick(calendarRef.current.getApi(), info)}
                         eventClick={handleEventClick}
+                        eventClassNames={(event) =>
+                            event.event.groupId === selectedGroupId ? ['highlighted'] : []
+                        }
                         selectable={true}
                     />
                 </div>
@@ -109,4 +144,4 @@ function Calendar() {
     );
 }
 
-export default Calendar;
+export default FullCalendarView;

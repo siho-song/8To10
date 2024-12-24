@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/auth/UseAuth.jsx';
 
@@ -12,7 +12,7 @@ function Login() {
 
     const [inputEmail, setInputEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { errorMessage } = useAuth();
+    const [errorMessage, setErrorMessage] = useState("");
 
     const {isAuthenticated, setIsAuthenticated, setLoading, setEmail } = useAuth();
 
@@ -31,16 +31,17 @@ function Login() {
             },{
                 apiEndPoint: API_ENDPOINT_NAMES.LOGIN,
             });
-
             const accessToken = response.headers['authorization'];
             localStorage.setItem('Authorization', parseBearerToken(accessToken));
             localStorage.setItem('Email', inputEmail);
             setIsAuthenticated(true);
             setEmail(inputEmail);
+            setErrorMessage("");
         } catch (error) {
+            setIsAuthenticated(false);
+            setErrorMessage(error.message);
             console.error(error.toString());
             console.error(error);
-            setIsAuthenticated(false);
         } finally {
             setLoading(false);
         }

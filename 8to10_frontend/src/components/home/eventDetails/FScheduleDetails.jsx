@@ -1,25 +1,32 @@
 import PropTypes from "prop-types";
-import {formatDateInfo, formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
+import {formatDateToLocalDateTime} from "@/helpers/TimeFormatter.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {createLocalDateTime, extractDateInfo} from "@/helpers/TimeFormatter.js";
 import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
+import ScheduleDeleteModal from "@/components/modal/ScheduleDeleteModal.jsx";
+import {validateDateTime, validateTitle} from "@/components/home/eventDetails/ValidateEventDetails.js";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
-
-    const {updateExtendedProps, updateProps} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
+    const [commonDescription, setCommonDescription] = useState("");
     const [hasCommonDescription, setHasCommonDescription] = useState(false);
-    const [isDescriptionCreateMode, setIsDescriptionCreateMode] = useState(false);
+
+    const [isDetailDescriptionCreateMode, setIsDetailDescriptionCreateMode] = useState(false);
+    const [isCommonDescriptionCreateMode, setIsCommonDescriptionCreateMode] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [isItemEditMode, setIsItemEditMode] = useState(false);
+
     const startDateInfo = extractDateInfo(selectedEvent.start);
     const endDateInfo = extractDateInfo(selectedEvent.end);
-
+    const [title, setTitle] = useState(selectedEvent.title);
     const [startDate, setStartDate] = useState({
         date: startDateInfo.date,
         period: startDateInfo.period,
@@ -33,44 +40,88 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
         minute: endDateInfo.minute,
     });
 
-    const [endDateError, setEndDateError] = useState("");
+    const [titleError, setTitleError] = useState("");
+    const [dateError, setDateError] = useState("");
 
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
         setHasDetailDescription(selectedEvent.extendedProps.detailDescription.length > 0);
         setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
-        setIsDescriptionCreateMode(false);
+        setIsDetailDescriptionCreateMode(false);
+        setIsCommonDescriptionCreateMode(false);
         setIsItemEditMode(false);
-        setEndDateError("");
+        setDateError("");
+        setTitleError("");
 
+        setIsModalOpen(false);
+        setTitle(selectedEvent.title);
         setStartDate(startDateInfo);
-        setEndDate(startDateInfo);
+        setEndDate(endDateInfo);
     }, [selectedEvent]);
 
 
-    const handleInputChange = (e) => {
+    const handleDetailDescriptionChange = (e) => {
         const inputValue = e.target.value;
-        setDetailDescription(inputValue)
+        setDetailDescription(inputValue);
     }
 
-    const handleCreateDetailDescription = async () => {
-        setHasDetailDescription(false);
-        setIsDescriptionCreateMode(true);
+    const handleCommonDescriptionChange = (e) => {
+        const inputValue = e.target.value;
+        setCommonDescription(inputValue);
+    }
+
+    const handleTitleChange = (e) => {
+        const inputValue = e.target.value;
+        validateTitle(inputValue, setTitleError);
+        setTitle(inputValue);
+    }
+
+    const handleStartDateChange = (updatedStartDate) => {
+        setStartDate(updatedStartDate);
+        const startDateTime = createLocalDateTime(updatedStartDate);
+        const endDateTime = createLocalDateTime(endDate);
+        validateDateTime(startDateTime, endDateTime, setDateError);
+    };
+
+    const handleEndDateChange = (updatedEndDate) => {
+        setEndDate(updatedEndDate);
+        const startDateTime = createLocalDateTime(startDate);
+        const endDateTime = createLocalDateTime(updatedEndDate);
+        validateDateTime(startDateTime, endDateTime, setDateError);
+    };
+
+
+    const handleCreateDetailDescription = () => {
+        setIsDetailDescriptionCreateMode(true);
+    }
+
+    const handleCreateCommonDescription = () => {
+        setIsCommonDescriptionCreateMode(true);
     }
 
     const handleItemEditButtonClick = () => {
         setIsItemEditMode(true);
     }
 
-    const handleCreateCancel = () => {
+    const handleDetailCreateCancel = () => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
-        setIsDescriptionCreateMode(false);
+        setIsDetailDescriptionCreateMode(false);
+    }
+
+    const handleCommonCreateCancel = () => {
+        setCommonDescription(selectedEvent.extendedProps.detailDescription);
+        setIsCommonDescriptionCreateMode(false);
     }
 
     const handleEditCancel = () => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
         const startDateInfo = extractDateInfo(selectedEvent.start);
         const endDateInfo = extractDateInfo(selectedEvent.end);
+
+        setTitle(selectedEvent.title);
+        setTitleError("")
 
         setStartDate({
             date: startDateInfo.date,
@@ -85,266 +136,389 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             hour: endDateInfo.hour,
             minute: endDateInfo.minute,
         });
+        setDateError("");
         setIsItemEditMode(false);
     }
 
     const handleItemEditSubmit = async () => {
-        try {
-            setEndDateError("");
+        const startDateTime = createLocalDateTime(startDate);
+        const endDateTime = createLocalDateTime(endDate);
 
-            const startDateTime = createLocalDateTime(startDate);
-            const endDateTime = createLocalDateTime(endDate);
-
-            if (new Date(startDateTime) >= new Date(endDateTime)) {
-                setEndDateError("종료 시간은 시작 시간 이후의 시간이어야 합니다.");
-                return;
-            }
-
-            setEndDateError("");
-
-            const url = "/schedule/fixed/detail";
-            const data = {
-                id: selectedEvent.extendedProps.originId,
-                startDate: startDateTime,
-                endDate: endDateTime,
-                detailDescription: detailDescription,
-            };
-
-            const response = await authenticatedApi.patch(
-                url,
-                data,
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,}
-            );
-
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
-            updateProps(selectedEvent.id, ['start', 'end'], startDateTime, endDateTime);
-            setIsItemEditMode(false);
-            setHasDetailDescription(detailDescription.length > 0);
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+        if (!validateTitle(title, setTitleError) || !validateDateTime(startDateTime, endDateTime, setDateError)) {
+            return;
         }
+
+        const urlOfItemData = "/schedule/fixed/detail";
+        const urlOfTotalData = "/schedule/fixed"
+        const itemData = {
+            id: selectedEvent.extendedProps.originId,
+            startDate: startDateTime,
+            endDate: endDateTime,
+            detailDescription: detailDescription,
+        };
+        const totalData = {
+            id: selectedEvent.extendedProps.parentId,
+            title: title,
+            commonDescription: commonDescription,
+        }
+
+        await authenticatedApi.patch(
+            urlOfItemData,
+            itemData,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,}
+        );
+        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
+        updateProps(selectedEvent.id, ['start', 'end'], [startDateTime, endDateTime]);
+        setHasDetailDescription(detailDescription.length > 0);
+
+        await authenticatedApi.put(
+            urlOfTotalData,
+            totalData,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
+        )
+        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription])
+        setHasCommonDescription(commonDescription.length > 0);
+        updatePropsByGroupId(parseInt(selectedEvent.groupId), ['title'], [title]);
+
+        setIsItemEditMode(false);
+    }
+
+    const handleCommonDescriptionSubmit = async () => {
+        const url = "/schedule/fixed";
+        const data = {
+            id: selectedEvent.extendedProps.parentId,
+            title: selectedEvent.title,
+            commonDescription: commonDescription,
+        }
+
+        await authenticatedApi.put(
+            url,
+            data,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
+        );
+        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
+        setHasCommonDescription(true);
+        setIsCommonDescriptionCreateMode(false);
     }
 
     const handleDetailDescriptionSubmit = async () => {
-        try {
-            const url = "/schedule/fixed/detail";
-            const data = {
-                id: selectedEvent.extendedProps.originId,
-                startDate: formatDateToLocalDateTime(selectedEvent.start),
-                endDate: formatDateToLocalDateTime(selectedEvent.end),
-                detailDescription: detailDescription,
-            };
+        const url = "/schedule/fixed/detail";
+        const data = {
+            id: selectedEvent.extendedProps.originId,
+            startDate: formatDateToLocalDateTime(selectedEvent.start),
+            endDate: formatDateToLocalDateTime(selectedEvent.end),
+            detailDescription: detailDescription,
+        };
 
-            const response = await authenticatedApi.patch(
+        await authenticatedApi.patch(
+            url,
+            data,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
+        );
+        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
+        setHasDetailDescription(true);
+        setIsDetailDescriptionCreateMode(false);
+    }
+
+    const handleDeleteButtonClick = () => {
+        openModal();
+    }
+
+    const handleTotalDelete = async() => {
+        try {
+            const url = `/schedule/${selectedEvent.extendedProps.parentId}`;
+            await authenticatedApi.delete(
                 url,
-                data,
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE}
             );
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
-            setHasDetailDescription(true);
-            setIsDescriptionCreateMode(false);
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsByGroupId(parseInt(selectedEvent.groupId));
+            closeModal();
+            onClose();
+        } catch (e) {
+            console.error(e);
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
 
-    const handleDelete = async () => {
-        try {
-            const url = "/schedule/fixed/detail";
-            const response = await authenticatedApi.patch(
-                url,
-                {
-                    id: selectedEvent.extendedProps.originId,
-                    startDate: formatDateToLocalDateTime(selectedEvent.start),
-                    endDate: formatDateToLocalDateTime(selectedEvent.end),
-                    detailDescription: "",
-                },
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
-            );
+    const handleTotalDeleteFromNow = async () => {
+        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+        console.log(currentEventCounts);
 
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [""]);
-            setHasDetailDescription(false);
-            setDetailDescription("");
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+        if (currentEventCounts === 1) {
+            await handleTotalDelete();
+            return;
+        }
+
+        try {
+            const url = `/schedule/fixed/detail?parentId=${selectedEvent.extendedProps.parentId}&startDate=${formatDateToLocalDateTime(selectedEvent.start)}`;
+            console.log(url);
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE},
+            );
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
+            closeModal();
+            onClose();
+        } catch (e) {
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+
+    }
+
+    const handleItemDelete = async () => {
+        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+
+        if (currentEventCounts === 1) {
+            await handleTotalDelete();
+            return;
+        }
+        try {
+            const url = `/schedule/fixed/detail/${selectedEvent.extendedProps.originId}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_ITEM},
+            );
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEvent(selectedEvent.id);
+            closeModal();
+            onClose();
+        } catch (e) {
+            console.error(e);
+            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
-        <div id="event-details-container-fixed">
-            <div className="event-details-header-fixed">
-                <h2>일정 상세보기</h2>
-                <button className="close-event-details" onClick={onClose}>&times;</button>
-            </div>
-            <div className="event-detail-props">
-                <div className="event-detail-prop">
-                    <h2>일정 제목</h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.title}</p>
+        <>
+            <div id="event-details-container-fixed">
+                <div className="event-details-header-fixed">
+                    <h2>일정 상세보기</h2>
+                    <button className="close-event-details" onClick={onClose}>&times;</button>
                 </div>
-                {!isItemEditMode ? (
-                    <>
-                        <div className="event-detail-prop">
-                            <h2>
-                                <strong>시작 시간</strong>
-                            </h2>
-                            <hr className="event-detail-contour"/>
-                            <p>{formatDateInfo(startDate)}</p>
-                        </div>
-                        <div className="event-detail-prop">
-                            <h2>
-                                <strong>종료 시간</strong>
-                            </h2>
-                            <hr className="event-detail-contour"/>
-                            <p>{formatDateInfo(endDate)}</p>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="event-detail-prop">
-                            <h2>
-                                <strong>시작 시간</strong>
-                            </h2>
-                            <hr className="event-detail-contour"/>
-                            <TimeEditForm
-                                type={"start"}
-                                date={startDate}
-                                setDate={setStartDate}
-                            />
-                        </div>
-                        <div className="event-detail-prop">
-                            <h2>
-                                <strong>종료 시간</strong>
-                            </h2>
-                            <hr className="event-detail-contour"/>
-                            <TimeEditForm
-                                type={"end"}
-                                date={endDate}
-                                setDate={setEndDate}
-                            />
-                        </div>
-                        {endDateError && <p className="error-message">{endDateError}</p>}
-                    </>
-                )}
-                {hasCommonDescription &&
+                <div className="event-detail-props">
+                    {!isItemEditMode ? (
+                        <>
+                            <div className="event-detail-prop">
+                                <h2>일정 제목</h2>
+                                <hr className="event-detail-contour"/>
+                                <p>{title}</p>
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>시작 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <TimeEditForm
+                                    type={"start"}
+                                    date={startDate}
+                                    setDate={handleStartDateChange}
+                                    isDisabled={true}
+                                />
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>종료 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <TimeEditForm
+                                    type={"end"}
+                                    date={endDate}
+                                    setDate={handleEndDateChange}
+                                    isDisabled={true}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="event-detail-prop">
+                                <h2>일정 제목</h2>
+                                <hr className="event-detail-contour"/>
+                                <input
+                                    type="text"
+                                    id="edit-schedule-title-fixed"
+                                    name="title"
+                                    placeholder="일정 제목"
+                                    maxLength="80"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                />
+                                {titleError && <p className="error-message">{titleError}</p>}
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>시작 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <TimeEditForm
+                                    type={"start"}
+                                    date={startDate}
+                                    setDate={handleStartDateChange}
+                                    isDisabled={false}
+                                />
+                            </div>
+                            <div className="event-detail-prop">
+                                <h2>
+                                    <strong>종료 시간</strong>
+                                </h2>
+                                <hr className="event-detail-contour"/>
+                                <TimeEditForm
+                                    type={"end"}
+                                    date={endDate}
+                                    setDate={handleEndDateChange}
+                                    isDisabled={false}
+                                />
+                            </div>
+                            {dateError && <p className="error-message">{dateError}</p>}
+                        </>
+                    )}
                     <div className="event-detail-prop">
-                        <h2>
-                            <strong>공통 일정 메모</strong>
-                        </h2>
-                        <hr className="event-detail-contour"/>
-                        {isItemEditMode &&
-                            <div className="common-description-edit-message">
-                                <span>공통 일정 메모 수정은 일정 수정 페이지에서 가능합니다.</span>
+                        <div className="description-header">
+                            <h2>
+                                <strong>일정 공통 메모</strong>
+                            </h2>
+                            {!hasCommonDescription && !isCommonDescriptionCreateMode && !isItemEditMode &&
+                                <div className="description-btns">
+                                    <div className="description-btns">
+                                        <p className="description-btn fixed"
+                                           onClick={handleCreateCommonDescription}>수정</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <hr className="event-details-contour"/>
+                        {isItemEditMode || isCommonDescriptionCreateMode ? (
+                            <textarea
+                                className="description-textarea fixed"
+                                value={commonDescription}
+                                onChange={handleCommonDescriptionChange}
+                                placeholder={"일정 공통 메모를 입력해주세요."}
+                                cols="30"
+                                rows="3"
+                            />
+                        ) : hasCommonDescription ? (
+                            <p>{commonDescription}</p>
+                        ) : (
+                            <p className="no-description">등록된 일정 공통 메모가 없습니다.</p>
+                        )}
+                        {isCommonDescriptionCreateMode &&
+                            <div className="description-edit-btns">
+                                <button
+                                    className="description-edit-btn fixed"
+                                    onClick={handleCommonDescriptionSubmit}
+                                >등록
+                                </button>
+                                <button
+                                    className="description-cancel-btn"
+                                    onClick={handleCommonCreateCancel}
+                                >취소
+                                </button>
                             </div>
                         }
-                        <p>{selectedEvent.extendedProps.commonDescription}</p>
                     </div>
-                }
-                {(hasDetailDescription && (!isItemEditMode && !isDescriptionCreateMode)) &&
-                    <div className="event-detail-prop">
-                        <div className="detail-description-header">
-                            <h2>
-                                <strong>개별 일정 메모</strong>
-                            </h2>
-                            <div className="detail-description-btns">
-                                <p
-                                    className="detail-description-delete-btn"
-                                    onClick={handleDelete}
-                                >삭제</p>
-                            </div>
-                        </div>
-                        <hr className="event-details-contour"/>
-                        <p>{detailDescription}</p>
-                    </div>
-                }
-                {isDescriptionCreateMode &&
-                    <div className="event-detail-prop">
-                        <h2>
-                            <strong>개별 메모 추가</strong>
-                        </h2>
-                        <hr className="event-details-contour"/>
-                        <textarea
-                            className="detail-description-textarea fixed"
-                            value={detailDescription}
-                            onChange={handleInputChange}
-                            cols="30"
-                            rows="3"
-                        />
-                        <div className="description-edit-btns">
-                            <button
-                                className="description-edit-btn fixed"
-                                onClick={handleDetailDescriptionSubmit}
-                            >등록
-                            </button>
-                            <button
-                                className="description-cancel-btn"
-                                onClick={handleCreateCancel}
-                            >취소
-                            </button>
-                        </div>
-                    </div>
-                }
-                {(isItemEditMode && hasDetailDescription) &&
-                    <div className="event-detail-prop">
-                        <h2>
-                            <strong>개별 메모 수정</strong>
-                        </h2>
-                        <hr className="event-details-contour"/>
-                        <textarea
-                            className="detail-description-textarea fixed"
-                            value={detailDescription}
-                            onChange={handleInputChange}
-                            cols="30"
-                            rows="3"
-                        />
-                    </div>
-                }
-                <div>
 
-                </div>
-                {isItemEditMode &&
-                    <button
-                        className="fixed-edit-btn"
-                        onClick={handleItemEditSubmit}
-                    >
-                        수정
-                    </button>
-                }
-                {(!hasDetailDescription && !isDescriptionCreateMode && !isItemEditMode) &&
-                    <button
-                        className="create-detail-description fixed"
-                        onClick={handleCreateDetailDescription}
-                    >개별 메모 추가</button>
-                }
-                {!isDescriptionCreateMode &&
-                    <>
-                        {!isItemEditMode ? (
+                    <div className="event-detail-prop">
+                        <div className="description-header">
+                            <h2>
+                                <strong>일정 개별 메모</strong>
+                            </h2>
+                            {!hasDetailDescription && !isDetailDescriptionCreateMode && !isItemEditMode &&
+                                <div className="description-btns">
+                                    <div className="description-btns">
+                                        <p className="description-btn fixed"
+                                           onClick={handleCreateDetailDescription}>수정</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <hr className="event-details-contour"/>
+                        {isItemEditMode || isDetailDescriptionCreateMode ? (
+                            <textarea
+                                className="description-textarea fixed"
+                                value={detailDescription}
+                                onChange={handleDetailDescriptionChange}
+                                placeholder={"일정 개별 메모를 입력해주세요."}
+                                cols="30"
+                                rows="3"
+                            />
+                        ) : hasDetailDescription ? (
+                            <p>{detailDescription}</p>
+                        ) : (
+                            <p className="no-description">등록된 일정 개별 메모가 없습니다.</p>
+                        )}
+                        {isDetailDescriptionCreateMode &&
+                            <div className="description-edit-btns">
+                                <button
+                                    className="description-edit-btn fixed"
+                                    onClick={handleDetailDescriptionSubmit}
+                                >등록
+                                </button>
+                                <button
+                                    className="description-cancel-btn"
+                                    onClick={handleDetailCreateCancel}
+                                >취소
+                                </button>
+                            </div>
+                        }
+                    </div>
+                    {(!isItemEditMode && !(isDetailDescriptionCreateMode || isCommonDescriptionCreateMode)) &&
+                        <>
                             <button
                                 className="fixed-edit-btn"
                                 onClick={handleItemEditButtonClick}>
                                 수정
                             </button>
-                        ) : (
+                            <button
+                                className="fixed-edit-cancel-btn"
+                                onClick={handleDeleteButtonClick}>
+                                삭제
+                            </button>
+                        </>
+
+                    }
+                    {isItemEditMode &&
+                        <>
+                            <button
+                                className="fixed-edit-btn"
+                                onClick={handleItemEditSubmit}
+                                disabled={!!titleError || !!dateError}>
+                                수정
+                            </button>
+
                             <button
                                 className="fixed-edit-cancel-btn"
                                 onClick={handleEditCancel}>
                                 취소
                             </button>
-                        )}
-                    </>
-                }
+                        </>
+                    }
+
+                </div>
+
+                <ScheduleDeleteModal
+                    onClose={closeModal}
+                    isOpen={isModalOpen}
+                    onDeleteSingle={handleItemDelete}
+                    onDeleteAllFromNow={handleTotalDeleteFromNow}
+                    onDeleteAll={handleTotalDelete}
+                />
             </div>
-        </div>
+        </>
     );
 }
 
 FScheduleDetails.propTypes = {
     selectedEvent: PropTypes.shape({
         id: PropTypes.string.isRequired,
+        groupId: PropTypes.string,
         title: PropTypes.string.isRequired,
         start: PropTypes.instanceOf(Date).isRequired,
         end: PropTypes.instanceOf(Date).isRequired,
@@ -353,6 +527,7 @@ FScheduleDetails.propTypes = {
             commonDescription: PropTypes.string,
             detailDescription: PropTypes.string,
             originId: PropTypes.number,
+            parentId: PropTypes.number,
         }),
     }),
     onClose: PropTypes.func.isRequired,

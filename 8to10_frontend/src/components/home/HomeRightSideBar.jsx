@@ -59,6 +59,7 @@ function HomeSidebarRight({ selectedEvent, onClose, showScheduleForm, onShowForm
 HomeSidebarRight.propTypes = {
     selectedEvent: PropTypes.shape({
         id: PropTypes.string.isRequired,
+        groupId: PropTypes.string,
         title: PropTypes.string.isRequired,
         start: PropTypes.instanceOf(Date).isRequired,
         end: PropTypes.instanceOf(Date).isRequired,

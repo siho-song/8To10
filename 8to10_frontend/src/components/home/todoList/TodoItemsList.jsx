@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import TodoItem from "@/components/home/todoList/TodoItem.jsx";
 
-const TodoItemsList = ({filteredEvents}) => {
+const TodoItemsList = ({currentDate, filteredEvents}) => {
     return (
         <div id="todo-list-container">
             {filteredEvents.length > 0 ? (
                 filteredEvents.map((event) => (
                     <TodoItem
                         key={event.id}
+                        currentDate={currentDate}
                         event={event}
                     />
                 ))
@@ -19,6 +20,7 @@ const TodoItemsList = ({filteredEvents}) => {
 }
 
 TodoItemsList.propTypes = {
+    currentDate: PropTypes.instanceOf(Date).isRequired,
     filteredEvents: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

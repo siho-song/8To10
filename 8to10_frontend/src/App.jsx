@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
 import "./styles/Styles.css";
 
@@ -22,10 +22,9 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/signup/complete" element={<SignUpComplete />} />
-                    <Route path="/" element={<Login />} />
                     <Route element={<PrivateRoute />}>
                         <Route
                             path="/home"
@@ -40,6 +39,8 @@ function App() {
                         <Route path="/community/board/edit/:postId" element={<Post isEditMode={true}/>}/>
                         <Route path="/community/board/:id" element={<BoardPost />}/>
                     </Route>
+
+                    <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </Router>
         </AuthProvider>

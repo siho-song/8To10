@@ -42,13 +42,13 @@
 }
 
 .confirm-delete-modal-cancel-btn {
-    background-color: #f0ad4e;
+    background-color: #aaa;
     color: #ffffff;
     transition: background-color 0.3s ease;
 }
 
 .confirm-delete-modal-cancel-btn:hover {
-    background-color: #ec971f;
+    background-color: #a2a2a2;
 }
 
 /* 모달 닫기 버튼 */

@@ -42,6 +42,8 @@ export const validateNickname = async (nickname) => {
     const isDuplicated = await isDuplicatedNickname(nickname);
     if (isDuplicated) {
         return NICKNAME_FIELD_MESSAGE.DUPLICATED;
+    } else if (isDuplicated === undefined) {
+        return NICKNAME_FIELD_MESSAGE.NETWORK_ERROR;
     }
     return null;
 };
@@ -81,6 +83,8 @@ export const validateEmail = async (emailId, emailDomain, customDomain = "") => 
     const isDuplicated = await isDuplicatedEmail(email);
     if (isDuplicated) {
         return EMAIL_FIELD_MESSAGE.DUPLICATED;
+    } else if (isDuplicated === undefined) {
+        return EMAIL_FIELD_MESSAGE.NETWORK_ERROR;
     }
 
     return "";
@@ -139,4 +143,8 @@ export function validateConfirmationPassword(password, confirmationPassword) {
     }
 
     return "";
+}
+
+export function validateSubmit() {
+
 }

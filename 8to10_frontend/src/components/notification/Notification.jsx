@@ -6,23 +6,36 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import "@/styles/notification/Notification.css";
 import NotificationPopup from "@/components/notification/NotificationPopup.jsx";
 import {formatDateTime} from "@/helpers/TimeFormatter.js";
+import authenticatedApi from "@/api/AuthenticatedApi.js";
+import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
+import {useLocation} from "react-router-dom";
 
 const Notification = () => {
 
+    const location = useLocation();
+
     const [notifications, setNotifications] = useState(JSON.parse(localStorage.getItem('notifications')) || []);
-    const [unreadCount, setUnreadCount] = useState(notifications.length);
+    const [unreadCount, setUnreadCount] = useState(
+        notifications.filter(notification => !notification.isRead).length
+    );
     const [isPopupVisible, setPopupVisible] = useState(false);
     const eventSourceRef = useRef(null);
+    const retryCountRef = useRef(0);
+
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
+    const DEFAULT_RETRY_MESSAGE = "No activity within";
 
     const startNotificationConnection = () => {
         const accessToken = localStorage.getItem('Authorization');
         const lastEventId = localStorage.getItem('Last-Event-ID') || null;
+        const MAX_RETRIES = 3;
+        const BACKOFF = 5000;
 
-        eventSourceRef.current = new EventSourcePolyfill("/api/notification/subscribe", {
+        eventSourceRef.current = new EventSourcePolyfill(`${API_BASE_URL}/notification/subscribe`, {
             headers: {
                 Authorization: buildBearerToken(accessToken),
                 ...(lastEventId && { "Last-Event-ID": lastEventId }),
-            }
+            },
         });
 
         eventSourceRef.current.onopen = () => {
@@ -44,7 +57,7 @@ const Notification = () => {
 
             const currentNotifications = [...notifications];
             const isDuplicate = currentNotifications.some(
-                (notification) => notification.relatedEntityId === newNotification.relatedEntityId
+                (notification) => notification.entityId === newNotification.entityId
             );
 
             const updatedNotifications = isDuplicate
@@ -56,29 +69,40 @@ const Notification = () => {
             setUnreadCount((prevCount) => prevCount + 1);
         });
 
-        eventSourceRef.current.onerror = (e) => {
-            console.error("SSE 연결 에러 : ", e);
+        eventSourceRef.current.onerror = (event) => {
             if (eventSourceRef.current) eventSourceRef.current.close();
-            setTimeout(() => startNotificationConnection(), 5000);
+
+            if (event.error.message.includes(DEFAULT_RETRY_MESSAGE)) {
+                setTimeout(() => startNotificationConnection(), BACKOFF);
+            }
+            else {
+                retryCountRef.current += 1;
+
+                if (retryCountRef.current > MAX_RETRIES) {
+                    console.error("최대 재시도 횟수를 초과했습니다.");
+                    return;
+                }
+
+                const backoffDelay = BACKOFF * Math.pow(5, retryCountRef.current);
+                setTimeout(() => startNotificationConnection(), backoffDelay);
+            }
         }
     }
 
     const handleNotificationClick = () => {
-        setPopupVisible(!isPopupVisible);
+        setPopupVisible(true);
     };
 
     const handlePopupClose = () => {
         setPopupVisible(false);
     };
 
-    // TODO 알림에서 notificationId 값 받아오면 이거 가지고 서버에 요청 날리는 메소드 구현
-    // 인자는 notificationId로 수정하고, updatedNotifications도 수정
-    const handleNotificationRemove = (relatedEntityId) => {
+    const handleNotificationRemove = async (entityId) => {
         let isRead = false;
 
         const updatedNotifications = notifications.filter(
             (notification) => {
-                const shouldInclude = notification.relatedEntityId !== relatedEntityId;
+                const shouldInclude = notification.entityId !== entityId;
                 if (!shouldInclude) {
                     isRead = notification.isRead;
                 }
@@ -86,18 +110,31 @@ const Notification = () => {
             }
         );
 
+
+        const url = `/notification/${entityId}`
+        const response = await authenticatedApi.delete(
+            url,
+            {apiEndPoint: API_ENDPOINT_NAMES.DELETE_NOTIFICATION,}
+        )
+
         setNotifications(updatedNotifications);
         localStorage.setItem("notifications", JSON.stringify(updatedNotifications));
 
-        // try {
-        //     const url = `/notification/${relatedEntityId}`
-        // } catch (error) {
-        //     console.log(error.toString());
-        //     console.log(error);
-        // }
         if (!isRead){
             setUnreadCount((prevCount) => prevCount - 1);
         }
+    };
+
+    const markNotificationAsRead = (entityId) => {
+        const updatedNotifications = notifications.map((notification) => {
+            if (notification.entityId === entityId) {
+                return { ...notification, isRead: true };
+            }
+            return notification;
+        });
+
+        setNotifications(updatedNotifications);
+        localStorage.setItem("notifications", JSON.stringify(updatedNotifications));
     };
 
     useEffect(() => {
@@ -110,6 +147,10 @@ const Notification = () => {
             }
         };
     }, []);
+
+    useEffect(() => {
+        handlePopupClose();
+    }, [location]);
 
     return (
         <div className="image-container" data-alt="알림">
@@ -124,6 +165,7 @@ const Notification = () => {
                 <NotificationPopup
                     notifications={notifications}
                     onClose={handlePopupClose}
+                    setRead={markNotificationAsRead}
                     onRemove={handleNotificationRemove}
                     setUnreadCount={setUnreadCount}
                 />

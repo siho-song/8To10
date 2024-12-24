@@ -48,6 +48,23 @@ export const FullCalendarProvider = ({children}) => {
         );
     };
 
+    const deleteEventsByGroupId = (groupId) => {
+        setEvents((prevEvents) =>
+            prevEvents.filter((event) => event.groupId !== groupId)
+        );
+    }
+
+    const deleteEventsAfterDateByGroupId = (groupId, date) => {
+        setEvents((prevEvents) =>
+            prevEvents.filter((event) => {
+                if (event.groupId !== groupId) return true;
+                console.log("event.start : ", event.start);
+                const eventDate = new Date(event.start);
+                return eventDate < date;
+            })
+        );
+    };
+
     const updateExtendedProps = (id, keys, values) => {
         if (keys.length !== values.length) {
             console.error("Keys and values must have the same length.");
@@ -71,6 +88,7 @@ export const FullCalendarProvider = ({children}) => {
             )
         );
     };
+
     const updateProps = (id, keys, values) => {
         setEvents((prevEvents) =>
             prevEvents.map((event) =>
@@ -87,8 +105,58 @@ export const FullCalendarProvider = ({children}) => {
         )
     }
 
+    const updatePropsByGroupId = (groupId, keys, values) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                event.groupId === groupId
+                    ? {
+                        ...event,
+                        ...keys.reduce((acc, key, index) => {
+                            acc[key] = values[index];
+                            return acc;
+                        }, {}),
+                    }
+                    : event
+            )
+        );
+    };
+
+    const updateExtendedPropsByGroupId = (groupId, keys, values) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) =>
+                event.groupId === groupId
+                    ? {
+                        ...event,
+                        extendedProps: {
+                            ...event.extendedProps,
+                            ...keys.reduce((acc, key, index) => {
+                                acc[key] = values[index];
+                                return acc;
+                            }, {}),
+                        },
+                    }
+                    : event
+            )
+        );
+    };
+
+    const countEventsByGroupId = (groupId) => {
+        return events.filter(event => event.groupId === groupId).length;
+    };
+
     return (
-        <CalendarContext.Provider value={{events, addEvent, updateExtendedProps, updateProps, deleteEvent}}>
+        <CalendarContext.Provider value={
+            {events,
+                addEvent,
+                updateExtendedProps,
+                updateProps,
+                deleteEvent,
+                deleteEventsByGroupId,
+                deleteEventsAfterDateByGroupId,
+                updatePropsByGroupId,
+                updateExtendedPropsByGroupId,
+                countEventsByGroupId,
+            }}>
             {children}
         </CalendarContext.Provider>
     );
