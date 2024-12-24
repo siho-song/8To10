@@ -121,6 +121,7 @@ function SignUp() {
     const handleNicknameVerification = async () => {
         const error = await validateNickname(formData.nickname);
         if (error) {
+            setNicknameVerified(false);
             setErrors({ ...errors, nickname: error });
         } else {
             setNicknameVerified(true);
@@ -131,6 +132,7 @@ function SignUp() {
     const handleEmailVerification = async () => {
         const error = await validateEmail(formData.emailId, formData.emailDomain, formData.customDomain);
         if (error) {
+            setEmailVerified(false);
             setErrors({ ...errors, email: error });
         } else {
             setEmailVerified(true);

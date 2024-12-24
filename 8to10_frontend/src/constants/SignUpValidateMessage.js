@@ -17,6 +17,7 @@ export const NICKNAME_FIELD_MESSAGE = {
     KOREAN_LENGTH_CONSTRAINT: "한글 닉네임은 2~12자 이내여야 합니다.",
     LENGTH_CONSTRAINT: "영문 닉네임은 20자 이내여야 합니다.",
     DUPLICATED: "사용중인 닉네임 입니다. 다른 닉네임을 입력해주세요.",
+    NETWORK_ERROR: "현재 네트워크 상태가 원활하지 않아 닉네임 중복 확인을 할 수 없습니다. 잠시 후 다시 시도해주세요."
 }
 
 export const EMAIL_FIELD_MESSAGE = {
@@ -24,6 +25,7 @@ export const EMAIL_FIELD_MESSAGE = {
     EMAIL_DOMAIN_EMPTY: "이메일 도메인을 입력해주세요.",
     EMAIL_INVALID_DOMAIN: "올바른 이메일 도메인을 입력해 주세요. 예: example.com",
     DUPLICATED: "사용 중인 이메일입니다. 다른 이메일을 입력해주세요",
+    NETWORK_ERROR: "현재 네트워크 상태가 원활하지 않아 이메일 중복 확인을 할 수 없습니다. 잠시 후 다시 시도해주세요."
 }
 
 export const PHONE_NUMBER_FIELD_MESSAGE = {
