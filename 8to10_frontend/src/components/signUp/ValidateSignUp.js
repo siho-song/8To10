@@ -144,7 +144,3 @@ export function validateConfirmationPassword(password, confirmationPassword) {
 
     return "";
 }
-
-export function validateSubmit() {
-
-}

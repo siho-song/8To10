@@ -6,13 +6,14 @@ import {
     validatePassword,
     validateName,
     validateConfirmationPassword
-} from './validateSignUp';
+} from './ValidateSignUp.js';
 import PublicHeader from "@/components/PublicHeader.jsx";
 
 import "@/styles/signUp/SignUp.css";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {useNavigate} from "react-router-dom";
+import {SUBMIT_MESSAGE} from "@/constants/SignUpValidateMessage.js";
 
 function SignUp() {
 
@@ -34,6 +35,8 @@ function SignUp() {
     const [errors, setErrors] = useState({});
     const [isNicknameVerified, setNicknameVerified] = useState(false);
     const [isEmailVerified, setEmailVerified] = useState(false);
+
+    const [submitError, setSubmitError] = useState("");
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -112,6 +115,7 @@ function SignUp() {
 
                 navigate("/signup/complete");
             } catch (error) {
+                setSubmitError(SUBMIT_MESSAGE.ERROR);
                 console.error(error.toString());
                 console.error(error);
             }
@@ -335,6 +339,7 @@ function SignUp() {
                         {errors.userMode && <span className="signup-error">{errors.userMode}</span>}
                     </div>
 
+                    {submitError && <p className="error-message">{submitError}</p>}
                     <button
                         className="signup-form-button"
                         onClick={handleSubmit}

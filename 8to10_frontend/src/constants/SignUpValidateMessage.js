@@ -39,3 +39,7 @@ export const PASSWORD_FIELD_MESSAGE = {
     EMPTY_CONFIRMATION_PASSWORD: "비밀번호 확인을 입력해 주세요.",
     CONFIRMATION_PASSWORD_MISMATCH: "비밀번호와 비밀번호 확인이 일치하지 않습니다."
 }
+
+export const SUBMIT_MESSAGE = {
+    ERROR: "회원가입에 실패했습니다. 입력 정보를 확인한 후 다시 시도해주세요.",
+}
