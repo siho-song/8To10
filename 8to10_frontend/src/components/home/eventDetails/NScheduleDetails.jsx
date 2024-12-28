@@ -1,95 +1,165 @@
 import PropTypes from "prop-types";
-import {formatBufferTime, formatDateTime} from "@/helpers/TimeFormatter.js";
+import {extractDateInfo, formatBufferTime, formatDate, formatDateTime} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
+import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
+import {validateTitle} from "@/components/home/eventDetails/ValidateEventDetails.js";
 
 const NScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {updateExtendedProps} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updatePropsByGroupId, updateExtendedPropsByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
+    const [commonDescription, setCommonDescription] = useState("");
     const [hasCommonDescription, setHasCommonDescription] = useState(false);
 
-    const [isDescriptionEditMode, setIsDescriptionEditMode] = useState(false);
-    const [isDescriptionCreateMode, setIsDescriptionCreateMode] = useState(false);
+    const [isDetailDescriptionEditMode, setIsDetailDescriptionEditMode] = useState(false);
+    const [isCommonDescriptionEditMode, setIsCommonDescriptionEditMode] = useState(false);
+
+    const [title, setTitle] = useState(selectedEvent.title);
+    const [isItemEditMode, setIsItemEditMode] = useState(false);
+
+    const [titleError, setTitleError] = useState("");
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+
         setHasDetailDescription(selectedEvent.extendedProps.detailDescription.length > 0);
         setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
-        setIsDescriptionCreateMode(false);
-        setIsDescriptionEditMode(false);
+
+        setIsDetailDescriptionEditMode(false);
+        setIsCommonDescriptionEditMode(false);
+        setIsItemEditMode(false);
+
+        setTitleError("");
+
+        setTitle(selectedEvent.title);
     }, [selectedEvent]);
 
-    const handleInputChange = (e) => {
+    const handleDetailDescriptionChange = (e) => {
         const inputValue = e.target.value;
-        setDetailDescription(inputValue)
+        setDetailDescription(inputValue);
     }
 
-    const handleCreateDetailDescription = async () => {
-        setHasDetailDescription(false);
-        setIsDescriptionCreateMode(true);
+    const handleCommonDescriptionChange = (e) => {
+        const inputValue = e.target.value;
+        setCommonDescription(inputValue);
     }
 
-    const handleEditDetailDescription = async () => {
-        setIsDescriptionEditMode(true);
+    const handleTitleChange = (e) => {
+        const inputValue = e.target.value;
+        validateTitle(inputValue, setTitleError);
+        setTitle(inputValue);
     }
 
-    const handleCreateCancel = () => {
+    const handleEditDetailDescription = () => {
+        setIsDetailDescriptionEditMode(true);
+    }
+
+    const handleEditCommonDescription = () => {
+        setIsCommonDescriptionEditMode(true);
+    }
+
+    const handleDetailEditCancel = () => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
-        setIsDescriptionCreateMode(false);
+        setIsDetailDescriptionEditMode(false);
+    }
+
+    const handleCommonEditCancel = () => {
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setIsCommonDescriptionEditMode(false);
+    }
+
+    const handleItemEditButtonClick = () => {
+        setIsItemEditMode(true);
     }
 
     const handleEditCancel = () => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
-        setIsDescriptionEditMode(false);
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setTitle(selectedEvent.title);
+        setTitleError("");
+        setIsItemEditMode(false);
     }
 
     const handleDetailDescriptionSubmit = async () => {
-        try {
-            const url = "/schedule/normal/detail";
-            const response = await authenticatedApi.put(
-                url,
-                {
-                    id: selectedEvent.extendedProps.originId,
-                    detailDescription: detailDescription,
-                },
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE_ITEM,},
-            );
-
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
-            setHasDetailDescription(true);
-            setIsDescriptionEditMode(false);
-            setIsDescriptionCreateMode(false);
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+        const url = "/schedule/normal/detail";
+        const data = {
+            id: selectedEvent.extendedProps.originId,
+            detailDescription: detailDescription,
         }
+        const response = await authenticatedApi.put(
+            url,
+            data,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE_ITEM,},
+        );
+
+        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
+        setHasDetailDescription(detailDescription.length > 0);
+        setIsDetailDescriptionEditMode(false);
     }
 
-    const handleDelete = async () => {
-        try {
-            const url = "/schedule/normal/detail";
-            const response = await authenticatedApi.put(
-                url,
-                {
-                    id: selectedEvent.extendedProps.originId,
-                    detailDescription: "",
-                },
-                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE_ITEM,},
-            );
-
-            updateExtendedProps(selectedEvent.id, ['detailDescription'], [""]);
-            setHasDetailDescription(false);
-            setDetailDescription("");
-        } catch (error) {
-            console.error(error.toString());
-            console.error(error);
+    const handleCommonDescriptionSubmit = async () => {
+        const url = "/schedule/normal";
+        const data = {
+            id:selectedEvent.extendedProps.parentId,
+            title: title,
+            commonDescription: commonDescription,
         }
+        const response = await authenticatedApi.put(
+            url,
+            data,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE},
+        );
+
+        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
+        setHasCommonDescription(commonDescription.length > 0);
+        setIsCommonDescriptionEditMode(false);
     }
+
+    const handleItemEditSubmit = async () => {
+        if (!validateTitle(title, setTitleError)) {
+            return;
+        }
+
+        const urlOfItemData = "/schedule/normal/detail";
+        const urlOfTotalData = "/schedule/normal";
+        const itemData = {
+            id: selectedEvent.extendedProps.originId,
+            detailDescription: detailDescription,
+        }
+        const totalData = {
+            id: selectedEvent.extendedProps.parentId,
+            title: title,
+            commonDescription: commonDescription,
+        }
+
+        const responseOfItemData = await authenticatedApi.put(
+            urlOfItemData,
+            itemData,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE_ITEM,},
+        );
+        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
+        setHasDetailDescription(detailDescription.length > 0);
+
+        const responseOfTotalData = await authenticatedApi.put(
+            urlOfTotalData,
+            totalData,
+            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_N_SCHEDULE,},
+        );
+        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
+        setHasCommonDescription(commonDescription.length > 0);
+        updatePropsByGroupId(parseInt(selectedEvent.groupId), ['title'], [title]);
+
+        setIsItemEditMode(false);
+    }
+
 
     return (
         <div id="event-details-container-normal">
@@ -98,11 +168,28 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                 <button className="close-event-details" onClick={onClose}>&times;</button>
             </div>
             <div className="event-detail-props">
-                <div className="event-detail-prop">
-                    <h2>일정 제목</h2>
-                    <hr className="event-detail-contour"/>
-                    <p>{selectedEvent.title}</p>
-                </div>
+                {!isItemEditMode ? (
+                    <div className="event-detail-prop">
+                        <h2>일정 제목</h2>
+                        <hr className="event-detail-contour"/>
+                        <p>{title}</p>
+                    </div>
+                ) : (
+                    <div className="event-detail-prop">
+                        <h2>일정 제목</h2>
+                        <hr className="event-detail-contour"/>
+                        <input
+                            type="text"
+                            id="edit-schedule-title-normal"
+                            name="title"
+                            placeholder="일정 제목"
+                            maxLength="80"
+                            value={title}
+                            onChange={handleTitleChange}
+                        />
+                        {titleError && <p className="error-message">{titleError}</p>}
+                    </div>
+                )}
                 <div className="event-detail-prop">
                     <h2>
                         <strong>시작 시간</strong>
@@ -110,7 +197,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <hr className="event-detail-contour"/>
                     <TimeEditForm
                         date={extractDateInfo(selectedEvent.start)}
-                        setDate={()=>{}}
+                        setDate={() => {}}
                         type={"start"}
                         isDisabled={true}/>
                 </div>
@@ -121,47 +208,84 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <hr className="event-detail-contour"/>
                     <TimeEditForm
                         date={extractDateInfo(selectedEvent.end)}
-                        setDate={()=>{}}
+                        setDate={() => {}}
                         type={"end"}
                         isDisabled={true}/>
                 </div>
-                {hasCommonDescription &&
-                    <div className="event-detail-prop">
+                <div className="event-detail-prop">
+                    <div className="description-header">
                         <h2>
-                            <strong>공통 일정 메모</strong>
+                            <strong>일정 공통 메모</strong>
                         </h2>
-                        <hr className="event-detail-contour"/>
-                        <p>{selectedEvent.extendedProps.commonDescription}</p>
-                    </div>
-                }
-                {(hasDetailDescription && (!isDescriptionEditMode && !isDescriptionCreateMode)) &&
-                    <div className="event-detail-prop">
-                        <div className="detail-description-header">
-                            <h2>
-                                <strong>개별 일정 메모</strong>
-                            </h2>
-                            <div className="detail-description-btns">
-                                <p className="detail-description-btn normal" onClick={handleEditDetailDescription}>수정</p>
-                                <p className="detail-description-delete-btn" onClick={handleDelete}>삭제</p>
+                        {!hasCommonDescription && !isCommonDescriptionEditMode && !isItemEditMode &&
+                            <div className="description-btns">
+                                <div className="description-btns">
+                                    <p className="description-btn normal"
+                                       onClick={handleEditCommonDescription}>수정</p>
+                                </div>
                             </div>
+                        }
+                    </div>
+                    <hr className="event-details-contour"/>
+                    {isItemEditMode || isCommonDescriptionEditMode ? (
+                        <textarea
+                            className="description-textarea normal"
+                            value={commonDescription}
+                            onChange={handleCommonDescriptionChange}
+                            placeholder={"일정 공통 메모를 입력해주세요."}
+                            cols="30"
+                            rows="3"
+                        />
+                    ) : hasCommonDescription ? (
+                        <p>{commonDescription}</p>
+                    ) : (
+                        <p className="no-description">등록된 일정 공통 메모가 없습니다.</p>
+                    )}
+                    {isCommonDescriptionEditMode &&
+                        <div className="description-edit-btns">
+                            <button
+                                className="description-edit-btn normal"
+                                onClick={handleCommonDescriptionSubmit}
+                            >등록
+                            </button>
+                            <button
+                                className="description-cancel-btn"
+                                onClick={handleCommonEditCancel}
+                            >취소
+                            </button>
                         </div>
-                        <hr className="event-details-contour"/>
+                    }
+                </div>
+                <div className="event-detail-prop">
+                    <div className="description-header">
+                        <h2>
+                            <strong>일정 개별 메모</strong>
+                        </h2>
+                        {!hasDetailDescription && !isDetailDescriptionEditMode && !isItemEditMode &&
+                            <div className="description-btns">
+                                <div className="description-btns">
+                                    <p className="description-btn normal"
+                                       onClick={handleEditDetailDescription}>수정</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <hr className="event-details-contour"/>
+                    {isItemEditMode || isDetailDescriptionEditMode ? (
+                        <textarea
+                            className="description-textarea normal"
+                            value={detailDescription}
+                            onChange={handleDetailDescriptionChange}
+                            placeholder={"일정 개별 메모를 입력해주세요."}
+                            cols="30"
+                            rows="3"
+                        />
+                    ) : hasDetailDescription ? (
                         <p>{detailDescription}</p>
-                    </div>
-                }
-                {isDescriptionCreateMode &&
-                    <div className="event-detail-prop">
-                        <h2>
-                            <strong>개별 메모 추가</strong>
-                        </h2>
-                        <hr className="event-details-contour"/>
-                        <textarea
-                            className="detail-description-textarea normal"
-                            value={detailDescription}
-                            onChange={handleInputChange}
-                            cols="30"
-                            rows="5"
-                        />
+                    ) : (
+                        <p className="no-description">등록된 일정 개별 메모가 없습니다.</p>
+                    )}
+                    {isDetailDescriptionEditMode &&
                         <div className="description-edit-btns">
                             <button
                                 className="description-edit-btn normal"
@@ -170,39 +294,12 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                             </button>
                             <button
                                 className="description-cancel-btn"
-                                onClick={handleCreateCancel}
+                                onClick={handleDetailEditCancel}
                             >취소
                             </button>
                         </div>
-                    </div>
-                }
-                {isDescriptionEditMode &&
-                    <div className="event-detail-prop">
-                        <h2>
-                            <strong>개별 메모 수정</strong>
-                        </h2>
-                        <hr className="event-details-contour"/>
-                        <textarea
-                            className="detail-description-textarea normal"
-                            value={detailDescription}
-                            onChange={handleInputChange}
-                            cols="30"
-                            rows="5"
-                        />
-                        <div className="description-edit-btns">
-                            <button
-                                className="description-edit-btn normal"
-                                onClick={handleDetailDescriptionSubmit}
-                            >등록
-                            </button>
-                            <button
-                                className="description-cancel-btn"
-                                onClick={handleEditCancel}
-                            >취소
-                            </button>
-                        </div>
-                    </div>
-                }
+                    }
+                </div>
                 <div className="event-detail-prop">
                     <h2><strong>일일 목표 달성 량</strong></h2>
                     <hr className="event-details-contour"/>
@@ -213,11 +310,36 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     <hr className="event-details-contour"/>
                     <p>{formatBufferTime(selectedEvent.extendedProps.bufferTime)}</p>
                 </div>
-                {!hasDetailDescription &&
-                    <button
-                        className="create-detail-description normal"
-                        onClick={handleCreateDetailDescription}
-                    >개별 메모 추가</button>
+                {(!isItemEditMode && !(isDetailDescriptionEditMode || isCommonDescriptionEditMode)) &&
+                    <>
+                        <button
+                            className="normal-edit-btn"
+                            onClick={handleItemEditButtonClick}>
+                            수정
+                        </button>
+                        <button
+                            className="edit-cancel-btn"
+                            onClick={() => {}}>
+                            삭제
+                        </button>
+                    </>
+
+                }
+                {isItemEditMode &&
+                    <>
+                        <button
+                            className="normal-edit-btn"
+                            onClick={handleItemEditSubmit}
+                            disabled={!!titleError}>
+                            수정
+                        </button>
+
+                        <button
+                            className="edit-cancel-btn"
+                            onClick={handleEditCancel}>
+                            취소
+                        </button>
+                    </>
                 }
             </div>
         </div>
