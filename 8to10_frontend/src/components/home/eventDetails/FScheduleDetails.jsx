@@ -14,7 +14,7 @@ import {
 } from "@/components/home/eventDetails/ValidateEventDetails.js";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
-    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId, getEarliestStartByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
@@ -263,15 +263,14 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             closeModal();
             onClose();
         } catch (e) {
-            console.error(e);
-            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
 
     const handleTotalDeleteFromNow = async () => {
-        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+        const earliestStart = getEarliestStartByGroupId(parseInt(selectedEvent.groupId));
 
-        if (currentEventCounts === 1) {
+        if (formatDateToLocalDateTime(selectedEvent.start) === earliestStart) {
             await handleTotalDelete();
             return;
         }
@@ -280,7 +279,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             const url = `/schedule/fixed/detail?parentId=${selectedEvent.extendedProps.parentId}&startDate=${formatDateToLocalDateTime(selectedEvent.start)}`;
             const response = await authenticatedApi.delete(
                 url,
-                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE},
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_FROM_NOW},
             );
             alert("일정을 성공적으로 삭제했습니다.");
             deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
@@ -310,7 +309,6 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             closeModal();
             onClose();
         } catch (e) {
-            console.error(e);
             alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }

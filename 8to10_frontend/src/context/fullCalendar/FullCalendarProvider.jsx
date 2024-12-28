@@ -144,6 +144,21 @@ export const FullCalendarProvider = ({children}) => {
         return events.filter(event => event.groupId === groupId).length;
     };
 
+    const getEarliestStartByGroupId = (groupId) => {
+        const groupEvents = events.filter(event => event.groupId === groupId);
+        if (groupEvents.length === 0) {
+            console.warn(`No events found for groupId: ${groupId}`);
+            return null;
+        }
+        const earliestEvent = groupEvents.reduce((earliest, event) => {
+            const eventStart = new Date(event.start);
+            const earliestStart = new Date(earliest.start);
+            return eventStart < earliestStart ? event : earliest;
+        });
+        return earliestEvent.start;
+    };
+
+
     return (
         <CalendarContext.Provider value={
             {events,
@@ -156,6 +171,7 @@ export const FullCalendarProvider = ({children}) => {
                 updatePropsByGroupId,
                 updateExtendedPropsByGroupId,
                 countEventsByGroupId,
+                getEarliestStartByGroupId,
             }}>
             {children}
         </CalendarContext.Provider>
