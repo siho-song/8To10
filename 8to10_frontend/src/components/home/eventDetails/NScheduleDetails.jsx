@@ -1,15 +1,22 @@
 import PropTypes from "prop-types";
-import {extractDateInfo, formatBufferTime, formatDate, formatDateTime} from "@/helpers/TimeFormatter.js";
+import {
+    extractDateInfo,
+    formatBufferTime,
+    formatDate,
+    formatDateTime,
+    formatDateToLocalDateTime
+} from "@/helpers/TimeFormatter.js";
 import {useEffect, useState} from "react";
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 import {validateTitle} from "@/components/home/eventDetails/ValidateEventDetails.js";
+import ScheduleDeleteModal from "@/components/modal/ScheduleDeleteModal.jsx";
 
 const NScheduleDetails = ({selectedEvent, onClose}) => {
 
-    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updatePropsByGroupId, updateExtendedPropsByGroupId} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId, getEarliestStartByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
@@ -36,6 +43,8 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
         setIsDetailDescriptionEditMode(false);
         setIsCommonDescriptionEditMode(false);
         setIsItemEditMode(false);
+
+        setIsModalOpen(false);
 
         setTitleError("");
 
@@ -160,6 +169,80 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
         setIsItemEditMode(false);
     }
 
+    const handleDeleteButtonClick = () => {
+        openModal();
+    }
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleTotalDelete = async () => {
+        try {
+            const url = `/schedule/${selectedEvent.extendedProps.parentId}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE,},
+            );
+
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsByGroupId(parseInt(selectedEvent.groupId));
+            closeModal();
+            onClose();
+        } catch(e) {
+            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+    }
+
+    const handleTotalDeleteFromNow = async () => {
+        const earliestStart = getEarliestStartByGroupId(parseInt(selectedEvent.groupId));
+
+        if (formatDateToLocalDateTime(selectedEvent.start) === earliestStart) {
+            await handleTotalDelete();
+            return;
+        }
+
+        try {
+            const url = `/schedule/normal/detail?parentId=${selectedEvent.extendedProps.parentId}&startDate=${formatDateToLocalDateTime(selectedEvent.start)}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_N_SCHEDULE_FROM_NOW,},
+            );
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
+            closeModal();
+            onClose();
+        } catch (e) {
+            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+    }
+
+    const handleItemDelete = async () => {
+        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
+
+        if (currentEventCounts === 1) {
+            await handleTotalDelete();
+            return;
+        }
+
+        try {
+            const url = `/schedule/normal/detail/${selectedEvent.extendedProps.originId}`;
+            const response = await authenticatedApi.delete(
+                url,
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_N_SCHEDULE_FROM_NOW,},
+            );
+
+            alert("일정을 성공적으로 삭제했습니다.");
+            deleteEvent(selectedEvent.id);
+            closeModal();
+            onClose();
+        } catch (e) {
+            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
+        }
+    }
 
     return (
         <div id="event-details-container-normal">
@@ -319,7 +402,7 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                         </button>
                         <button
                             className="edit-cancel-btn"
-                            onClick={() => {}}>
+                            onClick={handleDeleteButtonClick}>
                             삭제
                         </button>
                     </>
@@ -342,6 +425,13 @@ const NScheduleDetails = ({selectedEvent, onClose}) => {
                     </>
                 }
             </div>
+            <ScheduleDeleteModal
+                onClose={closeModal}
+                isOpen={isModalOpen}
+                onDeleteSingle={handleItemDelete}
+                onDeleteAllFromNow={handleTotalDeleteFromNow}
+                onDeleteAll={handleTotalDelete}
+            />
         </div>
     );
 }
