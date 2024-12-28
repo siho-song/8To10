@@ -30,6 +30,16 @@ function TimeEditForm({ type, date, setDate, isDisabled }) {
         });
     };
 
+    const getMinDate = () => {
+        const currentYear = new Date().getFullYear();
+        return `${currentYear - 10}-01-01`;
+    };
+
+    const getMaxDate = () => {
+        const currentYear = new Date().getFullYear();
+        return `${currentYear + 10}-12-31`;
+    };
+
     return (
         <div>
             <div className="form-group">
@@ -40,6 +50,8 @@ function TimeEditForm({ type, date, setDate, isDisabled }) {
                     name={type + "Date"}
                     value={date.date}
                     onChange={handleDateChange}
+                    min={getMinDate()}
+                    max={getMaxDate()}
                     disabled={isDisabled}
                 />
             </div>
