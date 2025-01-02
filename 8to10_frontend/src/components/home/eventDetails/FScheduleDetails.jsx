@@ -7,18 +7,22 @@ import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {createLocalDateTime, extractDateInfo} from "@/helpers/TimeFormatter.js";
 import TimeEditForm from "@/components/home/eventDetails/TimeEditForm.jsx";
 import ScheduleDeleteModal from "@/components/modal/ScheduleDeleteModal.jsx";
-import {validateDateTime, validateTitle} from "@/components/home/eventDetails/ValidateEventDetails.js";
+import {
+    isStartDateBeforeEndDate,
+    validateDateInput,
+    validateTitle
+} from "@/components/home/eventDetails/ValidateEventDetails.js";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
-    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId} = useCalendar();
+    const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId, getEarliestStartByGroupId} = useCalendar();
 
     const [detailDescription, setDetailDescription] = useState("");
     const [hasDetailDescription, setHasDetailDescription] = useState(false);
     const [commonDescription, setCommonDescription] = useState("");
     const [hasCommonDescription, setHasCommonDescription] = useState(false);
 
-    const [isDetailDescriptionCreateMode, setIsDetailDescriptionCreateMode] = useState(false);
-    const [isCommonDescriptionCreateMode, setIsCommonDescriptionCreateMode] = useState(false);
+    const [isDetailDescriptionEditMode, setIsDetailDescriptionEditMode] = useState(false);
+    const [isCommonDescriptionEditMode, setIsCommonDescriptionEditMode] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,20 +45,28 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
     });
 
     const [titleError, setTitleError] = useState("");
-    const [dateError, setDateError] = useState("");
+    const [dateObjectError, setDateObjectError] = useState("");
+    const [startDateError, setStartDateError] = useState("");
+    const [endDateError, setEndDateError] = useState("");
 
     useEffect(() => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
-        setCommonDescription(selectedEvent.extendedProps.commonDescription);
         setHasDetailDescription(selectedEvent.extendedProps.detailDescription.length > 0);
+
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
         setHasCommonDescription(selectedEvent.extendedProps.commonDescription.length > 0);
-        setIsDetailDescriptionCreateMode(false);
-        setIsCommonDescriptionCreateMode(false);
+
+        setIsDetailDescriptionEditMode(false);
+        setIsCommonDescriptionEditMode(false);
         setIsItemEditMode(false);
-        setDateError("");
+
+        setDateObjectError("");
         setTitleError("");
+        setStartDateError("");
+        setEndDateError("");
 
         setIsModalOpen(false);
+
         setTitle(selectedEvent.title);
         setStartDate(startDateInfo);
         setEndDate(endDateInfo);
@@ -79,39 +91,48 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
 
     const handleStartDateChange = (updatedStartDate) => {
         setStartDate(updatedStartDate);
-        const startDateTime = createLocalDateTime(updatedStartDate);
-        const endDateTime = createLocalDateTime(endDate);
-        validateDateTime(startDateTime, endDateTime, setDateError);
+
+        if (validateDateInput(updatedStartDate, setStartDateError)) {
+            const startDateTime = createLocalDateTime(updatedStartDate);
+            const endDateTime = createLocalDateTime(endDate);
+
+            isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        }
     };
 
     const handleEndDateChange = (updatedEndDate) => {
         setEndDate(updatedEndDate);
-        const startDateTime = createLocalDateTime(startDate);
-        const endDateTime = createLocalDateTime(updatedEndDate);
-        validateDateTime(startDateTime, endDateTime, setDateError);
+
+        if (validateDateInput(updatedEndDate, setEndDateError)) {
+            const startDateTime = createLocalDateTime(startDate);
+            const endDateTime = createLocalDateTime(updatedEndDate);
+
+            isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        }
     };
 
 
-    const handleCreateDetailDescription = () => {
-        setIsDetailDescriptionCreateMode(true);
+
+    const handleEditDetailDescription = () => {
+        setIsDetailDescriptionEditMode(true);
     }
 
-    const handleCreateCommonDescription = () => {
-        setIsCommonDescriptionCreateMode(true);
+    const handleEditCommonDescription = () => {
+        setIsCommonDescriptionEditMode(true);
     }
 
     const handleItemEditButtonClick = () => {
         setIsItemEditMode(true);
     }
 
-    const handleDetailCreateCancel = () => {
+    const handleDetailEditCancel = () => {
         setDetailDescription(selectedEvent.extendedProps.detailDescription);
-        setIsDetailDescriptionCreateMode(false);
+        setIsDetailDescriptionEditMode(false);
     }
 
-    const handleCommonCreateCancel = () => {
-        setCommonDescription(selectedEvent.extendedProps.detailDescription);
-        setIsCommonDescriptionCreateMode(false);
+    const handleCommonEditCancel = () => {
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setIsCommonDescriptionEditMode(false);
     }
 
     const handleEditCancel = () => {
@@ -136,7 +157,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             hour: endDateInfo.hour,
             minute: endDateInfo.minute,
         });
-        setDateError("");
+        setDateObjectError("");
         setIsItemEditMode(false);
     }
 
@@ -144,12 +165,18 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
         const startDateTime = createLocalDateTime(startDate);
         const endDateTime = createLocalDateTime(endDate);
 
-        if (!validateTitle(title, setTitleError) || !validateDateTime(startDateTime, endDateTime, setDateError)) {
+        if (!validateTitle(title, setTitleError)
+            || !validateDateInput(startDate, setStartDateError)
+            || !validateDateInput(endDate, setEndDateError)) {
+            return;
+        }
+
+        if (!isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError)) {
             return;
         }
 
         const urlOfItemData = "/schedule/fixed/detail";
-        const urlOfTotalData = "/schedule/fixed"
+        const urlOfTotalData = "/schedule/fixed";
         const itemData = {
             id: selectedEvent.extendedProps.originId,
             startDate: startDateTime,
@@ -197,8 +224,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
         );
         updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
-        setHasCommonDescription(true);
-        setIsCommonDescriptionCreateMode(false);
+        setHasCommonDescription(commonDescription.length > 0);
+        setIsCommonDescriptionEditMode(false);
     }
 
     const handleDetailDescriptionSubmit = async () => {
@@ -216,8 +243,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
         );
         updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
-        setHasDetailDescription(true);
-        setIsDetailDescriptionCreateMode(false);
+        setHasDetailDescription(detailDescription.length > 0);
+        setIsDetailDescriptionEditMode(false);
     }
 
     const handleDeleteButtonClick = () => {
@@ -236,26 +263,23 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             closeModal();
             onClose();
         } catch (e) {
-            console.error(e);
-            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
 
     const handleTotalDeleteFromNow = async () => {
-        const currentEventCounts = countEventsByGroupId(parseInt(selectedEvent.groupId));
-        console.log(currentEventCounts);
+        const earliestStart = getEarliestStartByGroupId(parseInt(selectedEvent.groupId));
 
-        if (currentEventCounts === 1) {
+        if (formatDateToLocalDateTime(selectedEvent.start) === earliestStart) {
             await handleTotalDelete();
             return;
         }
 
         try {
             const url = `/schedule/fixed/detail?parentId=${selectedEvent.extendedProps.parentId}&startDate=${formatDateToLocalDateTime(selectedEvent.start)}`;
-            console.log(url);
             const response = await authenticatedApi.delete(
                 url,
-                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE},
+                {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_FROM_NOW},
             );
             alert("일정을 성공적으로 삭제했습니다.");
             deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
@@ -285,7 +309,6 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             closeModal();
             onClose();
         } catch (e) {
-            console.error(e);
             alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
         }
     }
@@ -364,6 +387,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                     setDate={handleStartDateChange}
                                     isDisabled={false}
                                 />
+                                {startDateError && <p className="error-message">{startDateError}</p>}
                             </div>
                             <div className="event-detail-prop">
                                 <h2>
@@ -376,8 +400,9 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                     setDate={handleEndDateChange}
                                     isDisabled={false}
                                 />
+                                {endDateError && <p className="error-message">{endDateError}</p>}
                             </div>
-                            {dateError && <p className="error-message">{dateError}</p>}
+                            {dateObjectError && <p className="error-message">{dateObjectError}</p>}
                         </>
                     )}
                     <div className="event-detail-prop">
@@ -385,17 +410,17 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             <h2>
                                 <strong>일정 공통 메모</strong>
                             </h2>
-                            {!hasCommonDescription && !isCommonDescriptionCreateMode && !isItemEditMode &&
+                            {!hasCommonDescription && !isCommonDescriptionEditMode && !isItemEditMode &&
                                 <div className="description-btns">
                                     <div className="description-btns">
                                         <p className="description-btn fixed"
-                                           onClick={handleCreateCommonDescription}>수정</p>
+                                           onClick={handleEditCommonDescription}>수정</p>
                                     </div>
                                 </div>
                             }
                         </div>
                         <hr className="event-details-contour"/>
-                        {isItemEditMode || isCommonDescriptionCreateMode ? (
+                        {isItemEditMode || isCommonDescriptionEditMode ? (
                             <textarea
                                 className="description-textarea fixed"
                                 value={commonDescription}
@@ -409,7 +434,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                         ) : (
                             <p className="no-description">등록된 일정 공통 메모가 없습니다.</p>
                         )}
-                        {isCommonDescriptionCreateMode &&
+                        {isCommonDescriptionEditMode &&
                             <div className="description-edit-btns">
                                 <button
                                     className="description-edit-btn fixed"
@@ -418,7 +443,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                 </button>
                                 <button
                                     className="description-cancel-btn"
-                                    onClick={handleCommonCreateCancel}
+                                    onClick={handleCommonEditCancel}
                                 >취소
                                 </button>
                             </div>
@@ -430,17 +455,17 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             <h2>
                                 <strong>일정 개별 메모</strong>
                             </h2>
-                            {!hasDetailDescription && !isDetailDescriptionCreateMode && !isItemEditMode &&
+                            {!hasDetailDescription && !isDetailDescriptionEditMode && !isItemEditMode &&
                                 <div className="description-btns">
                                     <div className="description-btns">
                                         <p className="description-btn fixed"
-                                           onClick={handleCreateDetailDescription}>수정</p>
+                                           onClick={handleEditDetailDescription}>수정</p>
                                     </div>
                                 </div>
                             }
                         </div>
                         <hr className="event-details-contour"/>
-                        {isItemEditMode || isDetailDescriptionCreateMode ? (
+                        {isItemEditMode || isDetailDescriptionEditMode ? (
                             <textarea
                                 className="description-textarea fixed"
                                 value={detailDescription}
@@ -454,7 +479,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                         ) : (
                             <p className="no-description">등록된 일정 개별 메모가 없습니다.</p>
                         )}
-                        {isDetailDescriptionCreateMode &&
+                        {isDetailDescriptionEditMode &&
                             <div className="description-edit-btns">
                                 <button
                                     className="description-edit-btn fixed"
@@ -463,13 +488,13 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                 </button>
                                 <button
                                     className="description-cancel-btn"
-                                    onClick={handleDetailCreateCancel}
+                                    onClick={handleDetailEditCancel}
                                 >취소
                                 </button>
                             </div>
                         }
                     </div>
-                    {(!isItemEditMode && !(isDetailDescriptionCreateMode || isCommonDescriptionCreateMode)) &&
+                    {(!isItemEditMode && !(isDetailDescriptionEditMode || isCommonDescriptionEditMode)) &&
                         <>
                             <button
                                 className="fixed-edit-btn"
@@ -477,7 +502,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                                 수정
                             </button>
                             <button
-                                className="fixed-edit-cancel-btn"
+                                className="edit-cancel-btn"
                                 onClick={handleDeleteButtonClick}>
                                 삭제
                             </button>
@@ -489,12 +514,12 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             <button
                                 className="fixed-edit-btn"
                                 onClick={handleItemEditSubmit}
-                                disabled={!!titleError || !!dateError}>
+                                disabled={!!titleError || !!dateObjectError || !!startDateError || !!endDateError}>
                                 수정
                             </button>
 
                             <button
-                                className="fixed-edit-cancel-btn"
+                                className="edit-cancel-btn"
                                 onClick={handleEditCancel}>
                                 취소
                             </button>
