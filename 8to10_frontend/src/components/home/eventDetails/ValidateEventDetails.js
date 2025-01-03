@@ -11,7 +11,6 @@ export const validateTitle = (title, setErrorMessage) => {
 }
 
 export const isStartDateBeforeEndDate = (startDateTime, endDateTime, setDateErrorMessage) => {
-    console.log("check");
     const start = new Date(startDateTime);
     const end = new Date(endDateTime);
     if (!(start < end)) {

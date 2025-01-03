@@ -31,18 +31,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
     const startDateInfo = extractDateInfo(selectedEvent.start);
     const endDateInfo = extractDateInfo(selectedEvent.end);
     const [title, setTitle] = useState(selectedEvent.title);
-    const [startDate, setStartDate] = useState({
-        date: startDateInfo.date,
-        period: startDateInfo.period,
-        hour: startDateInfo.hour,
-        minute: startDateInfo.minute,
-    });
-    const [endDate, setEndDate] = useState({
-        date: endDateInfo.date,
-        period: endDateInfo.period,
-        hour: endDateInfo.hour,
-        minute: endDateInfo.minute,
-    });
+    const [startDate, setStartDate] = useState(startDateInfo);
+    const [endDate, setEndDate] = useState(endDateInfo);
 
     const [titleError, setTitleError] = useState("");
     const [dateObjectError, setDateObjectError] = useState("");
@@ -97,6 +87,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             const endDateTime = createLocalDateTime(endDate);
 
             isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        } else {
+            setDateObjectError("");
         }
     };
 
@@ -108,10 +100,10 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             const endDateTime = createLocalDateTime(updatedEndDate);
 
             isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        } else {
+            setDateObjectError("");
         }
     };
-
-
 
     const handleEditDetailDescription = () => {
         setIsDetailDescriptionEditMode(true);
