@@ -51,6 +51,7 @@ export const formatNormalSchedule = (event) => {
 export const formatVariableSchedule = (event) => {
     return {
         id: generateEventIdWithParentId(event),
+        groupId: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
