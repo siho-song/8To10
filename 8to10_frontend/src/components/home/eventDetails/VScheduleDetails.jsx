@@ -11,12 +11,14 @@ import {
     validateDateInput,
     validateTitle
 } from "@/components/home/eventDetails/ValidateEventDetails.js";
+import {EVENT_DETAILS_VALIDATE_MESSAGE} from "@/constants/ScheduleValidateMessage.js";
 
 const VScheduleDetails = ({selectedEvent, onClose}) => {
 
     const {updateExtendedProps, updateProps, deleteEvent} = useCalendar();
 
     const [isEditMode, setIsEditMode] = useState(false);
+    const [isDescriptionEditMode, setIsDescriptionEditMode] = useState(false);
 
     const [title, setTitle] = useState(selectedEvent.title);
     const [commonDescription, setCommonDescription] = useState(selectedEvent.extendedProps.commonDescription);
@@ -42,6 +44,7 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
         setEndDate(endDateInfo);
 
         setIsEditMode(false);
+        setIsDescriptionEditMode(false);
         setTitleError("");
         setDateObjectError("");
         setStartDateError("");
@@ -57,16 +60,20 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                 url,
                 {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE,},
             )
-            alert("일정을 성공적으로 삭제했습니다.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_SUCCESS);
             deleteEvent(selectedEvent.id);
             onClose();
         } catch(e) {
-            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_FAIL);
         }
     }
 
     const handleEditModeChange = () => {
         setIsEditMode(true);
+    }
+
+    const handleEditDescription = () => {
+        setIsDescriptionEditMode(true);
     }
 
     const handleDescriptionChange = (e) => {
@@ -126,6 +133,39 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
         setEndDateError("");
     }
 
+    const handleDescriptionEditCancel = () => {
+        setCommonDescription(selectedEvent.extendedProps.commonDescription);
+        setIsDescriptionEditMode(false);
+    }
+
+    const handleDescriptionEditSubmit = async () => {
+        try {
+            const startDateTime = createLocalDateTime(startDate);
+            const endDateTime = createLocalDateTime(endDate);
+
+            const url = "/schedule/variable";
+            const respones = await authenticatedApi.put(
+                url,
+                {
+                    id: selectedEvent.id,
+                    title: title,
+                    commonDescription: commonDescription,
+                    startDate: startDateTime,
+                    endDate: endDateTime,
+                },
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_V_SCHEDULE,},
+            )
+
+            updateExtendedProps(selectedEvent.id, ['commonDescription'], [commonDescription]);
+            setHasCommonDescription(commonDescription.length > 0);
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_SUCCESS);
+            setIsDescriptionEditMode(false);
+        } catch (e) {
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_FAIL);
+        }
+
+    }
+
     const handleEditSubmit = async () => {
         setDateObjectError("");
 
@@ -141,24 +181,29 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
         if(!isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError)) {
             return;
         }
+        try {
+            const url = "/schedule/variable";
+            const response = await authenticatedApi.put(
+                url,
+                {
+                    id: selectedEvent.id,
+                    title: title,
+                    commonDescription: commonDescription,
+                    startDate: startDateTime,
+                    endDate: endDateTime,
+                },
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_V_SCHEDULE,}
+            );
 
-        const url = "/schedule/variable";
-        const response = await authenticatedApi.put(
-            url,
-            {
-                id: selectedEvent.id,
-                title: title,
-                commonDescription: commonDescription,
-                startDate: startDateTime,
-                endDate: endDateTime,
-            },
-            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_V_SCHEDULE,}
-        );
+            updateExtendedProps(selectedEvent.id, ['commonDescription'], [commonDescription]);
+            updateProps(selectedEvent.id, ['title', 'start', 'end'], [title, startDateTime, endDateTime]);
+            setHasCommonDescription(commonDescription.length > 0);
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MODIFICATION_SUCCESS);
+            setIsEditMode(false);
+        } catch (e) {
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MODIFICATION_FAIL);
+        }
 
-        updateExtendedProps(selectedEvent.id, ['commonDescription'], [commonDescription]);
-        updateProps(selectedEvent.id, ['title', 'start', 'end'], [title, startDateTime, endDateTime]);
-        setHasCommonDescription(commonDescription.length > 0);
-        setIsEditMode(false);
     }
 
     return (
@@ -202,29 +247,70 @@ const VScheduleDetails = ({selectedEvent, onClose}) => {
                                     isDisabled={true}/>
                             </div>
                             <div className="event-detail-prop">
-                                <h2>
-                                    <strong>일정 메모</strong>
-                                </h2>
-                                <hr className="event-detail-contour"/>
+                                <div className="description-header">
+                                    <h2>
+                                        <strong>일정 메모</strong>
+                                    </h2>
+                                    {!hasCommonDescription && !isDescriptionEditMode &&
+                                        <div className="description-btns">
+                                            <div className="description-btns">
+                                                <p className="description-btn variable"
+                                                   onClick={handleEditDescription}>수정</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <hr className="event-details-contour"/>
                                 {hasCommonDescription ? (
                                     <p>{commonDescription}</p>
                                 ) : (
-                                    <p className="no-description">등록된 일정 공통 메모가 없습니다.</p>
+                                    <>
+                                        {!isDescriptionEditMode ? (
+                                            <p className="no-description">등록된 일정 공통 메모가 없습니다.</p>
+                                        ) : (
+                                            <>
+                                                <textarea
+                                                    className="description-textarea variable"
+                                                    value={commonDescription}
+                                                    onChange={handleDescriptionChange}
+                                                    placeholder={"일정 메모를 입력해주세요."}
+                                                    cols="30"
+                                                    rows="3"
+                                                />
+                                            </>
+                                        )}
+                                        {isDescriptionEditMode &&
+                                            <div className="description-edit-btns">
+                                                <button
+                                                    className="description-edit-btn variable"
+                                                    onClick={handleDescriptionEditSubmit}
+                                                >등록
+                                                </button>
+                                                <button
+                                                    className="description-cancel-btn"
+                                                    onClick={handleDescriptionEditCancel}
+                                                >취소
+                                                </button>
+                                            </div>
+                                        }
+
+                                    </>
                                 )}
                             </div>
-
-                            <div className="handle-variable">
-                                <button
-                                    className="edit-variable"
-                                    onClick={handleEditModeChange}
-                                >수정
-                                </button>
-                                <button
-                                    className="delete-variable"
-                                    onClick={openModal}
-                                >삭제
-                                </button>
-                            </div>
+                            {!isDescriptionEditMode &&
+                                <div className="handle-variable">
+                                    <button
+                                        className="edit-variable"
+                                        onClick={handleEditModeChange}
+                                    > 일정 정보 수정
+                                    </button>
+                                    <button
+                                        className="delete-variable"
+                                        onClick={openModal}
+                                    >삭제
+                                    </button>
+                                </div>
+                            }
                         </div>
                     ) : (
                         <div className="event-detail-props">
