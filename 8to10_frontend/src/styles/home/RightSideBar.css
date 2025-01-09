@@ -116,7 +116,7 @@ select {
     flex-direction: row;
     color: #ffffff;
     justify-content: space-between;
-    background-color: #e15b27;
+    background-color: #e15b27   ;
 }
 .edit-variable {
     background-color: #e15b27 !important;
@@ -206,6 +206,17 @@ select {
 .description-btns {
     display: flex;
     justify-content: space-between;
+}
+
+.description-btn.variable {
+    cursor: pointer;
+    color: #e15b27;
+}
+
+.description-btn.variable:hover {
+    cursor: pointer;
+    color: #FF4757;
+    text-decoration: underline;
 }
 
 .description-btn.normal {
@@ -355,6 +366,14 @@ select {
 
 .description-edit-btn.normal:hover {
     background-color: rgba(56, 142, 60, 0.5) !important;
+}
+
+.description-edit-btn.variable {
+    background-color: #f4511e !important;
+}
+
+.description-edit-btn.variable:hover {
+    background-color: rgba(244, 81, 30, 0.5) !important;
 }
 
 .description-edit-btn.fixed {

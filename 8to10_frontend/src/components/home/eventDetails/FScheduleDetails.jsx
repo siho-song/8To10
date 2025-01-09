@@ -12,6 +12,7 @@ import {
     validateDateInput,
     validateTitle
 } from "@/components/home/eventDetails/ValidateEventDetails.js";
+import {EVENT_DETAILS_VALIDATE_MESSAGE} from "@/constants/ScheduleValidateMessage.js";
 
 const FScheduleDetails = ({selectedEvent, onClose}) => {
     const {deleteEvent, deleteEventsByGroupId, deleteEventsAfterDateByGroupId, updateExtendedProps, updateProps, updatePropsByGroupId, updateExtendedPropsByGroupId, countEventsByGroupId, getEarliestStartByGroupId} = useCalendar();
@@ -31,18 +32,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
     const startDateInfo = extractDateInfo(selectedEvent.start);
     const endDateInfo = extractDateInfo(selectedEvent.end);
     const [title, setTitle] = useState(selectedEvent.title);
-    const [startDate, setStartDate] = useState({
-        date: startDateInfo.date,
-        period: startDateInfo.period,
-        hour: startDateInfo.hour,
-        minute: startDateInfo.minute,
-    });
-    const [endDate, setEndDate] = useState({
-        date: endDateInfo.date,
-        period: endDateInfo.period,
-        hour: endDateInfo.hour,
-        minute: endDateInfo.minute,
-    });
+    const [startDate, setStartDate] = useState(startDateInfo);
+    const [endDate, setEndDate] = useState(endDateInfo);
 
     const [titleError, setTitleError] = useState("");
     const [dateObjectError, setDateObjectError] = useState("");
@@ -97,6 +88,8 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             const endDateTime = createLocalDateTime(endDate);
 
             isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        } else {
+            setDateObjectError("");
         }
     };
 
@@ -108,10 +101,10 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             const endDateTime = createLocalDateTime(updatedEndDate);
 
             isStartDateBeforeEndDate(startDateTime, endDateTime, setDateObjectError);
+        } else {
+            setDateObjectError("");
         }
     };
-
-
 
     const handleEditDetailDescription = () => {
         setIsDetailDescriptionEditMode(true);
@@ -188,26 +181,30 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             title: title,
             commonDescription: commonDescription,
         }
+        try {
+            await authenticatedApi.patch(
+                urlOfItemData,
+                itemData,
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,}
+            );
+            updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
+            updateProps(selectedEvent.id, ['start', 'end'], [startDateTime, endDateTime]);
+            setHasDetailDescription(detailDescription.length > 0);
 
-        await authenticatedApi.patch(
-            urlOfItemData,
-            itemData,
-            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,}
-        );
-        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription])
-        updateProps(selectedEvent.id, ['start', 'end'], [startDateTime, endDateTime]);
-        setHasDetailDescription(detailDescription.length > 0);
+            await authenticatedApi.put(
+                urlOfTotalData,
+                totalData,
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
+            )
+            updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription])
+            setHasCommonDescription(commonDescription.length > 0);
+            updatePropsByGroupId(parseInt(selectedEvent.groupId), ['title'], [title]);
 
-        await authenticatedApi.put(
-            urlOfTotalData,
-            totalData,
-            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
-        )
-        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription])
-        setHasCommonDescription(commonDescription.length > 0);
-        updatePropsByGroupId(parseInt(selectedEvent.groupId), ['title'], [title]);
-
-        setIsItemEditMode(false);
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MODIFICATION_SUCCESS);
+            setIsItemEditMode(false);
+        } catch(e) {
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MODIFICATION_FAIL);
+        }
     }
 
     const handleCommonDescriptionSubmit = async () => {
@@ -217,15 +214,19 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             title: selectedEvent.title,
             commonDescription: commonDescription,
         }
-
-        await authenticatedApi.put(
-            url,
-            data,
-            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
-        );
-        updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
-        setHasCommonDescription(commonDescription.length > 0);
-        setIsCommonDescriptionEditMode(false);
+        try {
+            await authenticatedApi.put(
+                url,
+                data,
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE},
+            );
+            updateExtendedPropsByGroupId(parseInt(selectedEvent.groupId), ['commonDescription'], [commonDescription]);
+            setHasCommonDescription(commonDescription.length > 0);
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_SUCCESS);
+            setIsCommonDescriptionEditMode(false);
+        } catch(e) {
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_FAIL);
+        }
     }
 
     const handleDetailDescriptionSubmit = async () => {
@@ -237,14 +238,19 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
             detailDescription: detailDescription,
         };
 
-        await authenticatedApi.patch(
-            url,
-            data,
-            {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
-        );
-        updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
-        setHasDetailDescription(detailDescription.length > 0);
-        setIsDetailDescriptionEditMode(false);
+        try {
+            await authenticatedApi.patch(
+                url,
+                data,
+                {apiEndPoint: API_ENDPOINT_NAMES.EDIT_F_SCHEDULE_ITEM,},
+            );
+            updateExtendedProps(selectedEvent.id, ['detailDescription'], [detailDescription]);
+            setHasDetailDescription(detailDescription.length > 0);
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_SUCCESS);
+            setIsDetailDescriptionEditMode(false);
+        } catch(e) {
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.MEMO_FAIL);
+        }
     }
 
     const handleDeleteButtonClick = () => {
@@ -258,12 +264,12 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                 url,
                 {apiEndPoint: API_ENDPOINT_NAMES.DELETE_SCHEDULE}
             );
-            alert("일정을 성공적으로 삭제했습니다.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_SUCCESS);
             deleteEventsByGroupId(parseInt(selectedEvent.groupId));
             closeModal();
             onClose();
         } catch (e) {
-            alert("일정을 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_FAIL);
         }
     }
 
@@ -281,12 +287,12 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                 url,
                 {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_FROM_NOW},
             );
-            alert("일정을 성공적으로 삭제했습니다.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_SUCCESS);
             deleteEventsAfterDateByGroupId(parseInt(selectedEvent.groupId), selectedEvent.start);
             closeModal();
             onClose();
         } catch (e) {
-            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_FAIL);
         }
 
     }
@@ -304,12 +310,12 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                 url,
                 {apiEndPoint: API_ENDPOINT_NAMES.DELETE_F_SCHEDULE_ITEM},
             );
-            alert("일정을 성공적으로 삭제했습니다.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_SUCCESS);
             deleteEvent(selectedEvent.id);
             closeModal();
             onClose();
         } catch (e) {
-            alert("일정 삭제하지 못했습니다. 다시시도 해주세요.");
+            alert(EVENT_DETAILS_VALIDATE_MESSAGE.DELETE_FAIL);
         }
     }
 
@@ -499,7 +505,7 @@ const FScheduleDetails = ({selectedEvent, onClose}) => {
                             <button
                                 className="fixed-edit-btn"
                                 onClick={handleItemEditButtonClick}>
-                                수정
+                                일정 정보 수정
                             </button>
                             <button
                                 className="edit-cancel-btn"
