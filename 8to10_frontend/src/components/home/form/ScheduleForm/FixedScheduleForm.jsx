@@ -1,39 +1,23 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
-import { InitializeTimeOptions, InitializeTimeOptionsWithPeriod } from "../ScheduleTimeUtils/TimeOptions.jsx";
-import {
-    formatPeriodTimeToLocalTimeFormat,
-    formatDuration
-} from "@/helpers/TimeFormatter.js"
-import { useCalendar } from "@/context/fullCalendar/UseCalendar.jsx";
+import {InitializeTimeOptions, InitializeTimeOptionsWithPeriod} from "../ScheduleTimeUtils/TimeOptions.jsx";
+import {formatDateToLocalDateTime, formatDuration, formatPeriodTimeToLocalTimeFormat} from "@/helpers/TimeFormatter.js"
+import {useCalendar} from "@/context/fullCalendar/UseCalendar.jsx";
 
 import "@/styles/home/ScheduleForm.css";
 import PropTypes from "prop-types";
 
-import * as Yup from 'yup';
 import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {formatFixedSchedule} from "@/helpers/ScheduleFormatter.js";
-
-const validationSchema = Yup.object().shape({
-    title: Yup.string()
-        .required('일정 제목을 입력해주세요.(1자~80자)')
-        .min(1, '일정 제목을 입력해주세요.(1자~80자)')
-        .max(80, '일정 제목을 입력해주세요.(1자~80자)'),
-    startDate: Yup.date()
-        .required('시작 날짜가 필요합니다')
-        .max(Yup.ref('endDate'), '시작 날짜는 종료 날짜 이전이어야 합니다.'),
-    endDate: Yup.date()
-        .required('종료 날짜가 필요합니다')
-        .min(Yup.ref('startDate'), '종료 날짜는 시작 날짜 이후여야 합니다'),
-    days: Yup.array()
-        .min(1, '최소 하나의 요일을 선택해야 합니다'),
-})
-    .test('duration', '지속 시간은 0시간 0분 이상이어야 합니다.', (values) => {
-        const {durationHour, durationMinute} = values;
-        return durationHour > 0 || durationMinute > 0;
-    })
-;
+import {
+    isStartDateBeforeEndDate,
+    validateDayChecked,
+    validateDurationTime,
+    validateDate,
+    validateTitle
+} from "@/components/home/form/ScheduleForm/ValidateScheduleForm.js";
+import {EVENT_CREATE_VALIDATE_MESSAGE} from "@/constants/ScheduleValidateMessage.js";
 
 function FixedScheduleForm({ onClose }) {
 
@@ -44,94 +28,116 @@ function FixedScheduleForm({ onClose }) {
     const [formData, setFormData] = useState({
         title: '',
         commonDescription: '',
-        startDate: `${today.toISOString().split('T')[0]}`,
-        endDate: `${new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}`,
+        startDate: `${formatDateToLocalDateTime(today).split('T')[0]}`,
+        endDate: `${formatDateToLocalDateTime(new Date(today.getTime() + 24 * 60 * 60 * 1000)).split('T')[0]}`,
         startTime: 'AM',
-        startHour: 1,
-        startMinute: 0,
-        durationHour: 0,
-        durationMinute: 0,
+        startHour: "01",
+        startMinute: "00",
+        durationHour: "00",
+        durationMinute: "00",
         frequency: 'daily',
         days: [],
     });
-    const [errors, setErrors] = useState({});
 
-    const validateField = async (name, value) => {
-        try {
-            await validationSchema.validateAt(name, { ...formData, [name]: value });
-            setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
-        } catch (error) {
-            setErrors(prevErrors => ({ ...prevErrors, [name]: error.message }));
-        }
-    };
-
-    const validateForm = async () => {
-        try {
-            await validationSchema.validate(formData, { abortEarly: false });
-            setErrors({});
-            return true;
-        } catch (error) {
-            const newErrors = error.inner.reduce((acc, err) => {
-                acc[err.path] = err.message;
-                return acc;
-            }, {});
-            setErrors(newErrors);
-            return false;
-        }
-    };
+    const [titleError, setTitleError] = useState("");
+    const [startDateError, setStartDateError] = useState("");
+    const [endDateError, setEndDateError] = useState("");
+    const [dateObjectError, setDateObjectError] = useState("");
+    const [durationTimeError, setDurationTimeError] = useState("");
+    const [dayUncheckedError, setDayUncheckedError] = useState("");
 
     useEffect(() => {
-        handleFrequencyChange({ target: { value: formData.frequency } });
-    }, [formData.frequency]);
+        handleFrequencyChange({target: {value: formData.frequency}});
+    }, [formData.frequency, formData.startDate, formData.endDate]);
+
+    useEffect(() => {
+        validateDayChecked(formData.days, setDayUncheckedError);
+    }, [formData.days]);
 
     const handleFrequencyChange = (e) => {
         const { value } = e.target;
-        setFormData((prevData) => ({ ...prevData, frequency: value }));
-
-        const weekdayCheckboxes = document.querySelectorAll('input[name="days"]');
+        const validDays = getValidDays(formData.startDate, formData.endDate);
 
         if (value === 'daily') {
-            weekdayCheckboxes.forEach((checkbox) => {
-                checkbox.checked = true;
-                checkbox.disabled = true;
-            });
-
             setFormData((prevData) => ({
                 ...prevData,
-                days: Array.from(weekdayCheckboxes).map((checkbox) => checkbox.value),
+                frequency: value,
+                days: validDays,
             }));
-        } else {
-            weekdayCheckboxes.forEach((checkbox) => {
-                checkbox.checked = false;
-                checkbox.disabled = false;
-            });
-
-            setFormData((prevData) => ({ ...prevData, days: [] }));
+        } else if (value === 'weekly') {
+            setFormData((prevData) => ({
+                ...prevData,
+                frequency: value,
+                days: [],
+            }));
         }
     };
 
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        validateFields(name, value);
 
         if (type === 'checkbox') {
+            const updatedDays = checked
+                ? [...formData.days, value]
+                : formData.days.filter((day) => day !== value);
             setFormData((prevData) => ({
                 ...prevData,
-                days: checked ? [...prevData.days, value] : prevData.days.filter((day) => day !== value),
+                days: updatedDays,
             }));
+
         } else {
             setFormData({
                 ...formData,
                 [name]: value,
             });
         }
-        validateField(name, type === 'checkbox' ? formData.days : value);
+    };
+
+    const validateFields = (name, value) => {
+        if (name === "title") {
+            validateTitle(value, setTitleError);
+        } else if (name === "startDate") {
+            if (validateDate(value, setStartDateError) && validateDate(formData.endDate, setEndDateError)) {
+                isStartDateBeforeEndDate(value, formData.endDate, setDateObjectError);
+            } else {
+                setDateObjectError("");
+            }
+        } else if (name === "endDate") {
+            if (validateDate(formData.startDate, setEndDateError) && validateDate(value, setEndDateError)) {
+                isStartDateBeforeEndDate(formData.startDate, value, setDateObjectError);
+            } else {
+                setDateObjectError("");
+            }
+        } else if (name === "durationHour") {
+            validateDurationTime(value, formData.durationMinute, setDurationTimeError);
+        } else if (name === "durationMinute") {
+            validateDurationTime(formData.durationHour, value, setDurationTimeError);
+        }
+    }
+
+    const validateSubmit = () => {
+        const isTitleValid = validateTitle(formData.title, setTitleError);
+        const isStartDateValid = validateDate(formData.startDate, setStartDateError);
+        const isEndDateValid = validateDate(formData.endDate, setEndDateError);
+        const isDurationTimeValid = validateDurationTime(formData.durationHour, formData.durationMinute, setDurationTimeError);
+        const areDaysChecked = validateDayChecked(formData.days, setDayUncheckedError);
+        const isValidInput = isTitleValid && isStartDateValid && isEndDateValid && isDurationTimeValid && areDaysChecked;
+
+        if (!isValidInput) {
+            return false;
+        }
+
+        const isDateTimeValid = isStartDateBeforeEndDate(formData.startDate, formData.endDate, setDateObjectError);
+
+        return isValidInput && isDateTimeValid;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const isValid = await validateForm();
-        if (!isValid) return;
+        if (!validateSubmit()) return;
 
         const finalData = {
             title: formData.title,
@@ -162,13 +168,44 @@ function FixedScheduleForm({ onClose }) {
                 const formattedEvent = formatFixedSchedule(event);
                 addEvent(formattedEvent);
             });
+            alert(EVENT_CREATE_VALIDATE_MESSAGE.SUBMIT_SUCCESS);
             onClose();
-
         } catch (error) {
-            console.error("Error : \n", error.toString());
-            console.error(error);
+            alert(EVENT_CREATE_VALIDATE_MESSAGE.SUBMIT);
         }
     };
+
+    const getMinDate = () => {
+        const currentYear = new Date().getFullYear();
+        return `${currentYear - 10}-01-01`;
+    };
+
+    const getMaxDate = () => {
+        const currentYear = new Date().getFullYear();
+        return `${currentYear + 10}-12-31`;
+    };
+
+    const getValidDays = (startDate, endDate) => {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const dayMapping = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
+
+        if (start > end) return [];
+
+        const validDays = new Set();
+
+        const differenceInDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        if (differenceInDays >= 7) {
+            return dayMapping;
+        }
+
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            validDays.add(dayMapping[d.getDay()]);
+        }
+
+        return Array.from(validDays);
+    };
+
 
     return (
         <div id="schedule-form-container" style={{padding: '20px'}}>
@@ -184,9 +221,8 @@ function FixedScheduleForm({ onClose }) {
                         maxLength="80"
                         value={formData.title}
                         onChange={handleChange}
-                        onBlur={(e) => validateField(e.target.name, e.target.value)}
                     />
-                    {errors.title && <p className="error-message">{errors.title}</p>}
+                    {titleError && <p className="error-message">{titleError}</p>}
                 </div>
 
                 <div className="form-group">
@@ -207,10 +243,11 @@ function FixedScheduleForm({ onClose }) {
                         id="schedule-start-date"
                         name="startDate"
                         value={formData.startDate}
+                        min={getMinDate()}
+                        max={getMaxDate()}
                         onChange={handleChange}
-                        onBlur={(e) => validateField(e.target.name, e.target.value)}
                     />
-                    {errors.startDate && <p className="error-message">{errors.startDate}</p>}
+                    {startDateError && <p className="error-message">{startDateError}</p>}
                 </div>
 
                 <div className="form-group">
@@ -220,20 +257,26 @@ function FixedScheduleForm({ onClose }) {
                         id="schedule-end-date"
                         name="endDate"
                         value={formData.endDate}
+                        min={getMinDate()}
+                        max={getMaxDate()}
                         onChange={handleChange}
                     />
+                    {endDateError && <p className="error-message">{endDateError}</p>}
                 </div>
+                {dateObjectError && <p className="error-message">{dateObjectError}</p>}
 
                 <InitializeTimeOptionsWithPeriod
                     labelText="시작 시간"
                     selectType="start"
                     handleChange={handleChange}
                 />
+
                 <InitializeTimeOptions
                     labelText="지속 시간"
                     selectType="duration"
                     handleChange={handleChange}
                 />
+                {durationTimeError && <p className="error-message">{durationTimeError}</p>}
 
                 <div className="form-group">
                     <label htmlFor="schedule-frequency">빈도</label>
@@ -251,29 +294,42 @@ function FixedScheduleForm({ onClose }) {
                 <div className="form-group">
                     <label>수행 요일</label>
                     <div className="weekday-checkbox-group">
-                        {['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'].map((day, index) => (
-                            <label key={day} htmlFor={`weekday-${day}`}>
-                                <input
-                                    type="checkbox"
-                                    id={`weekday-${day}`}
-                                    name="days"
-                                    value={day}
-                                    checked={formData.days.includes(day)}
-                                    onChange={handleChange}
-                                    onBlur={() => validateField('days', formData.days)}
-                                    disabled={formData.frequency === 'daily'}
-                                />
-                                {['월', '화', '수', '목', '금', '토', '일'][index]}
-                            </label>
-                        ))}
+                        {['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'].map((day, index) => {
+                            const validDays = getValidDays(formData.startDate, formData.endDate);
+                            const isDisabled = !validDays.includes(day);
+                            return (
+                                <label key={day} htmlFor={`weekday-${day}`}>
+                                    <input
+                                        type="checkbox"
+                                        id={`weekday-${day}`}
+                                        name="days"
+                                        value={day}
+                                        checked={formData.days.includes(day)}
+                                        onChange={handleChange}
+                                        disabled={formData.frequency === "daily" ? true : isDisabled}
+                                    />
+                                    {['월', '화', '수', '목', '금', '토', '일'][index]}
+                                </label>
+                            );
+                        })}
                     </div>
-                    {errors.days && <p className="error-message">{errors.days}</p>}
+                    {dayUncheckedError && <p className="error-message">{dayUncheckedError}</p>}
                 </div>
-
-                <button type="submit" id="submit-button">
+                <button
+                    type="submit"
+                    id="submit-button"
+                    disabled={!!titleError
+                        || !!startDateError
+                        || !!endDateError
+                        || !!dateObjectError
+                        || !!durationTimeError
+                        || !!dayUncheckedError}>
                     저장
                 </button>
-                <button type="button" id="cancel-btn" onClick={onClose}>
+                <button
+                    type="button"
+                    id="cancel-btn"
+                    onClick={onClose}>
                     취소
                 </button>
             </form>
