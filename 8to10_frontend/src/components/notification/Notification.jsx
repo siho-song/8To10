@@ -10,6 +10,17 @@ import authenticatedApi from "@/api/AuthenticatedApi.js";
 import {API_ENDPOINT_NAMES} from "@/constants/ApiEndPoints.js";
 import {useLocation} from "react-router-dom";
 
+const originalConsoleError = console.error;
+console.error = (...args) => {
+    const shouldIgnore = args.some(arg => {
+        return arg.toString().includes('No activity within') || arg.toString().includes('TypeError');
+    });
+
+    if (!shouldIgnore) {
+        originalConsoleError(...args);
+    }
+};
+
 const Notification = () => {
 
     const location = useLocation();
@@ -70,9 +81,11 @@ const Notification = () => {
         });
 
         eventSourceRef.current.onerror = (event) => {
-            if (eventSourceRef.current) eventSourceRef.current.close();
+            if (eventSourceRef.current){
+                eventSourceRef.current.close();
+            }
 
-            if (event.error.message.includes(DEFAULT_RETRY_MESSAGE)) {
+            if (event.error.message.toString().includes(DEFAULT_RETRY_MESSAGE)) {
                 setTimeout(() => startNotificationConnection(), BACKOFF);
             }
             else {
