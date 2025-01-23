@@ -40,7 +40,7 @@ button {
 
 button:disabled {
     flex: 1;
-    background-color: #a2a2a2;
+    background-color: #a2a2a2 !important;
     color: white;
     margin-right: 10px;
 }
