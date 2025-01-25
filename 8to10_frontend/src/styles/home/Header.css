@@ -13,6 +13,7 @@
 
 
 .logo {
+    color: #000000;
     font-size: 20px;
     font-weight: bold;
 }
@@ -44,7 +45,6 @@
 .image-container {
     position: relative; /* 텍스트 위치 설정을 위해 relative */
     display: inline-block;
-    margin-right: 20px;
 }
 
 
@@ -52,8 +52,8 @@
     content: attr(data-alt); /* data-alt 속성의 값을 텍스트로 사용 */
     display: none; /* 기본적으로 숨김 */
     position: absolute;
-    top: 110%; /* 이미지 바로 아래에 텍스트 배치 */
-    left: 50%;
+    top: 80%; /* 이미지 바로 아래에 텍스트 배치 */
+    left: 40%;
     transform: translate(-25%); /* 중앙 정렬 및 아래로 이동 */
     background-color: rgba(0, 0, 0, 0.7); /* 배경색 */
     color: #fff; /* 텍스트 색 */
@@ -70,11 +70,24 @@
 
 .image-link {
     display: inline-block;
-    width: 40px;
     height: auto;
+    color: #000000;
     text-decoration: none; /* 링크 밑줄 제거 */
     background: none;
     border: none;
+}
+
+.image-link svg {
+    /*display: block;*/
+    width: auto; /* 버튼의 너비 */
+    border: none;
+    height: 50px; /* 이미지 비율 유지 */
+}
+
+.image-link:hover svg {
+    border: none;
+    color: #868e96;
+    box-shadow: none; /* 그림자 효과 */
 }
 
 .image-link img {
@@ -82,6 +95,7 @@
     width: auto; /* 버튼의 너비 */
     height: 40px; /* 이미지 비율 유지 */
     margin-left: 20px;
+    border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 

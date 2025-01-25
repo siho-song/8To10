@@ -109,6 +109,7 @@
 }
 
 .notification-button {
+    width: 40px;
     position: relative;
     background: none;
     border: none;
@@ -116,6 +117,7 @@
     font-size: 20px;
     color: #555;
     transition: color 0.3s ease;
+    margin-right: 10px;
 }
 
 .notification-button.has-unread {
@@ -141,5 +143,6 @@
 
 .notification-button svg{
     width: auto;
-    height: 40px;
+    height: 45px;
+    margin-right: 0 !important;
 }

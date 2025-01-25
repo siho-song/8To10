@@ -57,7 +57,9 @@ button:disabled {
 
 .image-container {
     position: relative; /* 텍스트 위치 설정을 위해 relative */
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
 }
 
 
@@ -99,10 +101,8 @@ button:disabled {
     border: none;
 }
 
-.image-link svg {
-    display: block;
-    width: auto;
-    height: 50px;
+.image-link path {
+    height:50px;
 }
 
 .image-link:hover svg {
