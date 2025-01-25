@@ -15,6 +15,7 @@ import Community from "@/pages/Community.jsx";
 import Post from "@/pages/Post.jsx";
 import BoardPost from "@/pages/BoardPost.jsx";
 import SignUpComplete from "@/components/signUp/SignUpComplete.jsx";
+import Achievement from "@/components/achievement/Achievement.jsx";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                         <Route path="/community/board/add" element={<Post isEditMode={false}/>} />
                         <Route path="/community/board/edit/:postId" element={<Post isEditMode={true}/>}/>
                         <Route path="/community/board/:id" element={<BoardPost />}/>
+                        <Route path="/achievement" element={<Achievement />}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to="/home" replace />} />
