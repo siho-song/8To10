@@ -1,10 +1,10 @@
-package com.eighttoten.community.domain;
+package com.eighttoten.community;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.eighttoten.member.domain.Member;
+import com.eighttoten.member.MemberEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,24 +18,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table(name = "board_heart")
-public class BoardHeart {
+@Table(name = "post_heart")
+public class PostHeartEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "board_heart_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
+    @JoinColumn(name = "member_id", nullable = false)
+    private MemberEntity memberEntity;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity postEntity;
 
-    public static BoardHeart of(Board board, Member member) {
-        BoardHeart boardHeart = new BoardHeart();
-        boardHeart.board = board;
-        boardHeart.member = member;
-        return boardHeart;
+    public static PostHeartEntity from(MemberEntity memberEntity, PostEntity postEntity) {
+        PostHeartEntity postHeartEntity = new PostHeartEntity();
+        postHeartEntity.memberEntity = memberEntity;
+        postHeartEntity.postEntity = postEntity;
+        return postHeartEntity;
     }
 }

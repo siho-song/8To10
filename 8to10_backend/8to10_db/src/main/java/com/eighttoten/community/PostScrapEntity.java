@@ -1,9 +1,13 @@
-package com.eighttoten.community.domain;
+package com.eighttoten.community;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.BaseEntity;
+import com.eighttoten.community.domain.post.Post;
+import com.eighttoten.community.domain.post.PostScrap;
+import com.eighttoten.member.MemberEntity;
 import com.eighttoten.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,23 +23,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Table(name = "board_scrap")
-public class BoardScrap{
+public class PostScrapEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "board_scrap_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
+    private PostEntity postEntity;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
-    public static BoardScrap of(Board board, Member member) {
-        BoardScrap boardScrap = new BoardScrap();
-        boardScrap.board = board;
-        boardScrap.member = member;
-        return boardScrap;
+    public PostScrap toPostScrap(){
+        return new PostScrap(id, postEntity.toPost(), memberEntity.toMember(), createdBy);
+    }
+
+    public static PostScrapEntity from(PostEntity postEntity, MemberEntity memberEntity) {
+        PostScrapEntity postScrapEntity = new PostScrapEntity();
+        postScrapEntity.postEntity = postEntity;
+        postScrapEntity.memberEntity = memberEntity;
+        return postScrapEntity;
     }
 }
