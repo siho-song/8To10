@@ -1,0 +1,12 @@
+dependencies {
+    implementation (project(":8to10_domain"))
+    compileOnly (project(":8to10_db"))
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+}
