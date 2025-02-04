@@ -1,7 +1,10 @@
 package com.eighttoten.member.dto.request;
 
 import com.eighttoten.member.domain.Gender;
+import com.eighttoten.member.domain.Member;
 import com.eighttoten.member.domain.Mode;
+import com.eighttoten.member.domain.NewMember;
+import com.eighttoten.member.domain.Role;
 import com.eighttoten.member.validator.Nickname;
 import com.eighttoten.member.validator.Password;
 import com.eighttoten.member.validator.PhoneNumber;
@@ -37,7 +40,23 @@ public class SignUpRequest {
     private String phoneNumber;
 
     private Gender gender;
+    private Role role;
     private Mode mode;
     private boolean isAuthEmail;
     private boolean isAuthPhone;
+
+    public NewMember toNewMember(){
+        return new NewMember(
+                username,
+                nickname,
+                email,
+                password,
+                phoneNumber,
+                gender,
+                Role.NORMAL_USER,
+                mode,
+                isAuthEmail,
+                isAuthPhone
+        );
+    }
 }

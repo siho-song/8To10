@@ -1,5 +1,6 @@
 package com.eighttoten.schedule.dto.request;
 
+import com.eighttoten.schedule.domain.nschedule.NScheduleUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,4 +16,8 @@ public class NScheduleUpdateRequest {
     @Size(min = 1,max = 80)
     private String title;
     private String commonDescription;
+
+    public NScheduleUpdate toNScheduleUpdate(){
+        return new NScheduleUpdate(id, title, commonDescription);
+    }
 }

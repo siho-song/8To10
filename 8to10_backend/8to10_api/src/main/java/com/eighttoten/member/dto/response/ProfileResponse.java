@@ -18,7 +18,7 @@ public class ProfileResponse {
         response.email = member.getEmail();
         response.nickname = member.getNickname();
         response.role = member.getRole().getValue();
-        response.profileImageUrl = member.getImageFile();
+        response.profileImageUrl = member.getProfileImagePath();
         return response;
     }
 }

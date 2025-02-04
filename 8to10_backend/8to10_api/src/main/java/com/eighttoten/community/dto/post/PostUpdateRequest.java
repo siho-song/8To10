@@ -1,5 +1,6 @@
-package com.eighttoten.community.dto;
+package com.eighttoten.community.dto.post;
 
+import com.eighttoten.community.domain.post.UpdatePost;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BoardUpdateRequest {
+public class PostUpdateRequest {
     @NotBlank
     private Long id;
 
@@ -20,4 +21,8 @@ public class BoardUpdateRequest {
     @NotBlank
     @Size(min = 2)
     private String contents;
+
+    public UpdatePost toUpdatePost(){
+        return new UpdatePost(id, title, contents);
+    }
 }

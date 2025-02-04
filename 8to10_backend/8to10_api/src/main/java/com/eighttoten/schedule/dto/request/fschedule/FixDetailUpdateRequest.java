@@ -1,7 +1,9 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.dto.request.fschedule;
 
-import com.eighttoten.global.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.global.ValidationGroups.ObjectErrorGroup;
+import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
+import com.eighttoten.schedule.domain.fschedule.FDetailUpdate;
+import com.eighttoten.schedule.dto.request.DateRangeValidatable;
 import com.eighttoten.schedule.validator.fielderror.ZeroSeconds;
 import com.eighttoten.schedule.validator.objecterror.StartBeforeEnd;
 import jakarta.validation.constraints.NotNull;
@@ -24,19 +26,23 @@ public class FixDetailUpdateRequest implements DateRangeValidatable {
 
     @NotNull(groups = FieldErrorGroup.class)
     @ZeroSeconds(groups = FieldErrorGroup.class)
-    private LocalDateTime startDate;
+    private LocalDateTime startDateTime;
 
     @NotNull(groups = FieldErrorGroup.class)
     @ZeroSeconds(groups = FieldErrorGroup.class)
-    private LocalDateTime endDate;
+    private LocalDateTime endDateTime;
+
+    public FDetailUpdate toFDetailUpdate(){
+        return new FDetailUpdate(id, detailDescription, startDateTime, endDateTime);
+    }
 
     @Override
     public LocalDateTime takeStartDateTime() {
-        return startDate;
+        return startDateTime;
     }
 
     @Override
     public LocalDateTime takeEndDateTime() {
-        return endDate;
+        return endDateTime;
     }
 }

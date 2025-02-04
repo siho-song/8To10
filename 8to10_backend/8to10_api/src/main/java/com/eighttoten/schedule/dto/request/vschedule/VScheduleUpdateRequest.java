@@ -1,19 +1,21 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.dto.request.vschedule;
 
-import com.eighttoten.global.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.global.ValidationGroups.ObjectErrorGroup;
+import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
+import com.eighttoten.schedule.domain.vschedule.VScheduleUpdate;
+import com.eighttoten.schedule.dto.request.DateRangeValidatable;
 import com.eighttoten.schedule.validator.objecterror.StartBeforeEnd;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@Setter
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class VScheduleUpdateRequest implements DateRangeValidatable {
     private Long id;
@@ -25,18 +27,21 @@ public class VScheduleUpdateRequest implements DateRangeValidatable {
     private String commonDescription;
 
     @NotNull(groups = FieldErrorGroup.class)
-    private LocalDateTime startDate;
+    private LocalDateTime startDateTime;
 
     @NotNull(groups = FieldErrorGroup.class)
-    private LocalDateTime endDate;
+    private LocalDateTime endDateTime;
 
+    public VScheduleUpdate toVScheduleUpdate(){
+        return new VScheduleUpdate(id, title, commonDescription, startDateTime, endDateTime);
+    }
     @Override
     public LocalDateTime takeStartDateTime() {
-        return startDate;
+        return startDateTime;
     }
 
     @Override
     public LocalDateTime takeEndDateTime() {
-        return endDate;
+        return endDateTime;
     }
 }
