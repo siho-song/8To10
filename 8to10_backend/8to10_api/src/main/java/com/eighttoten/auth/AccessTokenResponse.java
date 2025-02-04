@@ -1,4 +1,4 @@
-package com.eighttoten.auth.dto;
+package com.eighttoten.auth;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.eighttoten.global.config;
+package com.eighttoten.config;
 
 import java.util.concurrent.Executor;
 import org.springframework.context.annotation.Bean;
