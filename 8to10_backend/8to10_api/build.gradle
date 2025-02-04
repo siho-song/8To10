@@ -1,0 +1,18 @@
+tasks.getByName("bootJar"){
+    enabled = true
+}
+
+tasks.getByName("jar"){
+    enabled = false
+}
+
+dependencies {
+    implementation(project(":8to10_domain"))
+    implementation(project(":8to10_security"))
+    runtimeOnly(project(":8to10_db"))
+
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
