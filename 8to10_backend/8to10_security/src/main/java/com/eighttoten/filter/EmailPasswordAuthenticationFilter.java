@@ -1,9 +1,9 @@
-package com.eighttoten.infrastructure.security.filter;
+package com.eighttoten.filter;
 
-import com.eighttoten.global.exception.BadRequestException;
-import com.eighttoten.global.exception.ExceptionCode;
-import com.eighttoten.infrastructure.security.exception.AuthException;
-import com.eighttoten.infrastructure.security.handler.AuthFilterExceptionHandler;
+import com.eighttoten.exception.BadRequestException;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.handler.AuthFilterExceptionHandler;
+import com.eighttoten.exception.CustomAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -38,7 +38,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
             setDetails(request, authRequest);
         } catch (Exception e) {
             log.error("",e);
-            throw new AuthException(ExceptionCode.USER_AUTHENTICATE_FAIL);
+            throw new CustomAuthenticationException(ExceptionCode.USER_AUTHENTICATE_FAIL);
         }
         return this.getAuthenticationManager().authenticate(authRequest);
     }

@@ -1,11 +1,11 @@
-package com.eighttoten.infrastructure.security.filter;
+package com.eighttoten.filter;
 
-import com.eighttoten.global.exception.ExceptionCode;
-import com.eighttoten.global.utils.BearerAuthorizationUtils;
-import com.eighttoten.infrastructure.TokenProvider;
-import com.eighttoten.infrastructure.security.exception.AuthException;
-import com.eighttoten.infrastructure.security.handler.AuthFilterExceptionHandler;
-import com.eighttoten.infrastructure.security.service.MemberDetailsService;
+import com.eighttoten.support.TokenProvider;
+import com.eighttoten.handler.AuthFilterExceptionHandler;
+import com.eighttoten.support.BearerAuthorizationUtils;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.CustomAuthenticationException;
+import com.eighttoten.service.MemberDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,7 +72,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
             else {
-                throw new AuthException(ExceptionCode.INVALID_ACCESS_TOKEN);
+                throw new CustomAuthenticationException(ExceptionCode.INVALID_ACCESS_TOKEN);
             }
         } catch (AuthenticationException e) {
             authFilterExceptionHandler.handleException(response,e);

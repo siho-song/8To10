@@ -1,7 +1,7 @@
-package com.eighttoten.infrastructure.security.handler;
+package com.eighttoten.handler;
 
-import com.eighttoten.global.dto.ErrorResponse;
-import com.eighttoten.infrastructure.security.exception.AuthException;
+import com.eighttoten.exception.CustomAuthenticationException;
+import com.eighttoten.support.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,11 +25,11 @@ public class AuthFilterExceptionHandler {
     public void handleException(HttpServletResponse response, AuthenticationException e) throws IOException {
         log.error(e.getMessage(), e);
 
-        AuthException userAuthenticationException;
+        CustomAuthenticationException userAuthenticationException;
         ErrorResponse errorResponse;
 
-        if(e instanceof AuthException){
-            userAuthenticationException = (AuthException) e;
+        if(e instanceof CustomAuthenticationException){
+            userAuthenticationException = (CustomAuthenticationException) e;
             errorResponse = ErrorResponse.of(userAuthenticationException.getCode(), e.getMessage());
         }
         else {
