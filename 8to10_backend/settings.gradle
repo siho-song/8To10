@@ -1,1 +1,24 @@
+pluginManagement {
+    String springBootVersion = settings.getProperty("springBootVersion")
+    String springDependencyManagementVersion = settings.getProperty("springDependencyManagementVersion")
+
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.springframework.boot") {
+                useVersion(springBootVersion)
+            } else if (requested.id.id == "io.spring.dependency-management") {
+                useVersion(springDependencyManagementVersion)
+            }
+        }
+    }
+}
+
 rootProject.name = 'eighttoten'
+
+include(
+        "8to10_api",
+        "8to10_db",
+        "8to10_scheduling",
+        "8to10_domain",
+        "8to10_security"
+)
