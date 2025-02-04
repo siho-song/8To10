@@ -1,4 +1,4 @@
-package com.eighttoten.global.dto;
+package com.eighttoten.support;
 
 import lombok.Getter;
 

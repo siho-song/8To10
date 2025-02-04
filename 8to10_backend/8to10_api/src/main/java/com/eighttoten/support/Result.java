@@ -1,4 +1,4 @@
-package com.eighttoten.global.dto;
+package com.eighttoten.support;
 
 import java.util.ArrayList;
 import java.util.List;

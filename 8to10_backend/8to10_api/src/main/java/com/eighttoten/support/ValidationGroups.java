@@ -1,4 +1,4 @@
-package com.eighttoten.global;
+package com.eighttoten.support;
 
 public class ValidationGroups {
     public interface FieldErrorGroup {}
