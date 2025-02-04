@@ -1,15 +1,14 @@
-package com.eighttoten.global.auditing;
+package com.eighttoten.support;
 
-import com.eighttoten.infrastructure.security.domain.MemberDetails;
+import com.eighttoten.domain.MemberDetails;
 import com.eighttoten.member.domain.Member;
 import java.util.Optional;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class AuditorAwareImpl implements AuditorAware<String> {
+@Component
+public class SecurityAuditorAware implements CustomAuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
