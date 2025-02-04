@@ -1,13 +1,12 @@
-package com.eighttoten.schedule.service;
+package com.eighttoten.schedule.service.nschedule;
 
-import static com.eighttoten.global.constant.AppConstant.WORK_END_TIME;
-import static com.eighttoten.global.constant.AppConstant.WORK_START_TIME;
-
+import com.eighttoten.common.AppConstant;
 import com.eighttoten.schedule.domain.ScheduleAble;
-import com.eighttoten.schedule.domain.TimeSlot;
+import com.eighttoten.schedule.domain.nschedule.TimeSlot;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,15 +21,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TimeSlotService {
-    public Map<LocalDate, List<TimeSlot>> findAllBetweenStartAndEnd(
+    public Map<LocalDateTime, List<TimeSlot>> findAllBetweenStartAndEnd(
             Map<LocalDate, List<ScheduleAble>> sortedScheduleAbleMap,
-            LocalDate startDate,
-            LocalDate endDate) {
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime) {
 
-        Map<LocalDate, List<TimeSlot>> slotsByDate = new HashMap<>();
-        LocalDate currentDate = startDate;
+        Map<LocalDateTime, List<TimeSlot>> slotsByDate = new HashMap<>();
+        LocalDateTime currentDate = startDateTime;
 
-        while (!currentDate.isAfter(endDate)) {
+        while (!currentDate.isAfter(endDateTime)) {
             List<ScheduleAble> scheduleAbles = sortedScheduleAbleMap.getOrDefault(currentDate, Collections.emptyList());
             List<TimeSlot> timeslots = findSlotsForDate(scheduleAbles);
             slotsByDate.put(currentDate, timeslots);
@@ -41,7 +40,7 @@ public class TimeSlotService {
     }
 
     public Map<DayOfWeek, List<TimeSlot>> findCommonSlotsForEachDay(
-            Map<LocalDate, List<TimeSlot>> slotsForPeriodByDate,
+            Map<LocalDateTime, List<TimeSlot>> slotsForPeriodByDate,
             Duration necessaryTime) {
 
         Map<DayOfWeek, List<TimeSlot>> commonRangeSlotsByDay = new EnumMap<>(DayOfWeek.class);
@@ -79,15 +78,15 @@ public class TimeSlotService {
             return addTotalWorkTime();
         }
 
-        LocalTime firstScheduleStart = sortedScheduleAbles.get(0).getStartDate().toLocalTime();
-        if (isTimeSlotAvailable(WORK_START_TIME, firstScheduleStart)) {
-            timeSlots.add(new TimeSlot(WORK_START_TIME, firstScheduleStart));
+        LocalTime firstScheduleStart = sortedScheduleAbles.get(0).getScheduleStart().toLocalTime();
+        if (isTimeSlotAvailable(AppConstant.WORK_START_TIME, firstScheduleStart)) {
+            timeSlots.add(new TimeSlot(AppConstant.WORK_START_TIME, firstScheduleStart));
         }
 
         LocalTime beforeScheduleEnd = null;
         for (ScheduleAble scheduleAble : sortedScheduleAbles) {
-            LocalTime nextScheduleStart = scheduleAble.getStartDate().toLocalTime();
-            LocalTime nextScheduleEnd = scheduleAble.getEndDate().toLocalTime();
+            LocalTime nextScheduleStart = scheduleAble.getScheduleStart().toLocalTime();
+            LocalTime nextScheduleEnd = scheduleAble.getScheduleEnd().toLocalTime();
 
             if (beforeScheduleEnd != null && isTimeSlotAvailable(beforeScheduleEnd, nextScheduleStart)) {
                 timeSlots.add(new TimeSlot(beforeScheduleEnd, nextScheduleStart));
@@ -96,30 +95,30 @@ public class TimeSlotService {
         }
 
         LocalTime lastScheduleEnd = sortedScheduleAbles.stream()
-                .map(scheduleAble -> scheduleAble.getEndDate().toLocalTime())
+                .map(scheduleAble -> scheduleAble.getScheduleEnd().toLocalTime())
                 .max(LocalTime::compareTo).get(); // 종료 시간 기준 가장 늦은 시간
 
-        if (isTimeSlotAvailable(lastScheduleEnd, WORK_END_TIME)) {
-            timeSlots.add(new TimeSlot(lastScheduleEnd, WORK_END_TIME));
+        if (isTimeSlotAvailable(lastScheduleEnd, AppConstant.WORK_END_TIME)) {
+            timeSlots.add(new TimeSlot(lastScheduleEnd, AppConstant.WORK_END_TIME));
         }
         return timeSlots;
     }
 
     private List<TimeSlot> addTotalWorkTime() {
-        return List.of(new TimeSlot(WORK_START_TIME, WORK_END_TIME));
+        return List.of(new TimeSlot(AppConstant.WORK_START_TIME, AppConstant.WORK_END_TIME));
     }
 
     private boolean isTimeSlotAvailable(LocalTime start, LocalTime end) {
         return Duration.between(start, end).toMinutes() > 0;
     }
 
-    private boolean hasAllDateSlots(Map<LocalDate, List<TimeSlot>> allSlotsForPeriodByDate, DayOfWeek dayOfWeek) {
+    private boolean hasAllDateSlots(Map<LocalDateTime, List<TimeSlot>> allSlotsForPeriodByDate, DayOfWeek dayOfWeek) {
         return allSlotsForPeriodByDate.entrySet().stream()
                 .filter(entry -> entry.getKey().getDayOfWeek().equals(dayOfWeek))
                 .noneMatch(entry -> entry.getValue().isEmpty());
     }
 
-    private LinkedHashMap<LocalDate, List<TimeSlot>> collectSlotsByDay(Map<LocalDate, List<TimeSlot>> slotsForPeriodByDate,
+    private LinkedHashMap<LocalDateTime, List<TimeSlot>> collectSlotsByDay(Map<LocalDateTime, List<TimeSlot>> slotsForPeriodByDate,
                                                                        DayOfWeek dayOfWeek) {
         return slotsForPeriodByDate.entrySet().stream()
                 .filter(entry -> entry.getKey().getDayOfWeek().equals(dayOfWeek))

@@ -1,11 +1,10 @@
 package com.eighttoten.notification.service;
 
-import static com.eighttoten.global.exception.ExceptionCode.FAILED_SSE_NOTIFICATION_SEND;
-
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.notification.domain.Notification;
+import com.eighttoten.notification.domain.NotificationSendInfo;
+import com.eighttoten.notification.domain.repository.NotificationRepository;
 import com.eighttoten.notification.domain.repository.SseEmitterRepository;
-import com.eighttoten.notification.dto.NotificationResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -13,19 +12,16 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class SseEmitterService {
     private static final Long DEFAULT_TIMEOUT = 2 * 60L * 1000 * 60;
 
     private final SseEmitterRepository sseEmitterRepository;
-
-    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public List<SseEmitter> findAllStartWithByMemberEmail(String email){
         return sseEmitterRepository.findAllStartWithByMemberEmail(email);
@@ -33,7 +29,7 @@ public class SseEmitterService {
 
     public SseEmitter subscribe(Member member, String lastEventId) {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
-        String uniqueEmitterId = generateUniqueClientId(member.getEmail(),LocalDateTime.now());
+        String uniqueEmitterId = generateUniqueClientId(member.getEmail(), LocalDateTime.now());
         sseEmitterRepository.save(uniqueEmitterId, emitter);
 
         emitter.onCompletion(() -> sseEmitterRepository.deleteById(uniqueEmitterId));
@@ -44,12 +40,12 @@ public class SseEmitterService {
 
         if(lastEventId != null){
             LocalDateTime dateTime = extractDateTime(lastEventId);
-            List<Notification> notifications = notificationService.findAllAfterDateTime(dateTime, member);
+            List<Notification> notifications = notificationRepository.findAllByMemberIdAfter(member.getId(), dateTime);
             notifications.forEach(
                     notification -> sendToClient(emitter,
                             uniqueEmitterId,
                             "notification",
-                            NotificationResponse.from(notification))
+                            NotificationSendInfo.from(notification))
             );
         }
 
@@ -65,9 +61,7 @@ public class SseEmitterService {
                             .data(data)
             );
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
             sseEmitterRepository.deleteById(id);
-            throw new RuntimeException(FAILED_SSE_NOTIFICATION_SEND.getMessage());
         }
     }
 
