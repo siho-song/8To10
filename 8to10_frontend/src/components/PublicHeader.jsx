@@ -8,7 +8,7 @@ function PublicHeader() {
                 <Link to="/" className="image-link"
                       style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                     <img src={logoIcon} alt="로고"/>
-                    <p style={{marginLeft: '10px'}}>EightToTen</p>
+                    <p style={{marginLeft: '10px'}}>8TO10</p>
                 </Link>
             </div>
         </div>
