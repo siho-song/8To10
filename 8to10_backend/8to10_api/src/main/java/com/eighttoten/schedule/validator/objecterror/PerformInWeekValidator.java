@@ -1,17 +1,17 @@
 package com.eighttoten.schedule.validator.objecterror;
 
-import com.eighttoten.schedule.dto.request.NScheduleSaveRequestRequest;
+import com.eighttoten.schedule.dto.request.NScheduleSaveRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.temporal.ChronoUnit;
 
-public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSaveRequestRequest> {
+public class PerformInWeekValidator implements ConstraintValidator<PerformInWeek, NScheduleSaveRequest> {
     @Override
-    public boolean isValid(NScheduleSaveRequestRequest nScheduleSaveRequest, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(NScheduleSaveRequest nScheduleSaveRequest, ConstraintValidatorContext constraintValidatorContext) {
         int performInWeek = nScheduleSaveRequest.getPerformInWeek();
         Boolean isIncludeSaturday = nScheduleSaveRequest.getIsIncludeSaturday();
         Boolean isIncludeSunday = nScheduleSaveRequest.getIsIncludeSunday();
-        long between = ChronoUnit.DAYS.between(nScheduleSaveRequest.getStartDate(), nScheduleSaveRequest.getEndDate()) + 1;
+        long between = ChronoUnit.DAYS.between(nScheduleSaveRequest.getStartDateTime(), nScheduleSaveRequest.getEndDateTime()) + 1;
 
         if(performInWeek >= 6 && areNotIncludeWeekend(isIncludeSaturday,isIncludeSunday)){
             if (performInWeek > 7) {
