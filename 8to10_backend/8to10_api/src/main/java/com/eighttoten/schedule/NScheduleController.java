@@ -1,24 +1,20 @@
-package com.eighttoten.schedule.presentation;
+package com.eighttoten.schedule;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.global.CurrentMember;
-import com.eighttoten.global.ValidationSequence;
-import com.eighttoten.global.dto.Result;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.ValidationSequence;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.schedule.domain.NSchedule;
-import com.eighttoten.schedule.dto.request.NScheduleSaveRequestRequest;
+import com.eighttoten.schedule.dto.request.NScheduleSaveRequest;
 import com.eighttoten.schedule.dto.request.NScheduleUpdateRequest;
-import com.eighttoten.schedule.dto.request.NormalDetailUpdateRequest;
-import com.eighttoten.schedule.dto.request.ProgressUpdateRequest;
-import com.eighttoten.schedule.dto.response.ScheduleResponse;
-import com.eighttoten.schedule.service.NScheduleDetailService;
-import com.eighttoten.schedule.service.NScheduleService;
-import com.eighttoten.schedule.service.ScheduleService;
+import com.eighttoten.schedule.dto.request.NDetailUpdateRequest;
+import com.eighttoten.schedule.dto.request.ProgressUpdatesRequest;
+import com.eighttoten.schedule.service.nschedule.NScheduleDetailService;
+import com.eighttoten.schedule.service.nschedule.NScheduleService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,50 +31,43 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/schedule/normal")
 @RequiredArgsConstructor
 public class NScheduleController {
-    private final ScheduleService scheduleService;
     private final NScheduleService nScheduleService;
     private final NScheduleDetailService nScheduleDetailService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponse>> add(
+    public ResponseEntity<Void> saveWithDetails(
             @CurrentMember Member member,
-            @RequestBody @Validated(value = ValidationSequence.class) NScheduleSaveRequestRequest dto)
+            @RequestBody @Validated(value = ValidationSequence.class) NScheduleSaveRequest request)
     {
-        NSchedule nSchedule = nScheduleService.create(member, dto);
-        scheduleService.save(nSchedule);
-
-        Result<ScheduleResponse> result = Result.fromElements(
-                nSchedule.getScheduleAbles(),
-                e -> ScheduleResponse.from(nSchedule, e)
-        );
-
-        return new ResponseEntity<>(result, CREATED);
+        nScheduleService.saveWithDetails(member, request.toNScheduleCreateInfo(),
+                request.toNewNSchedule(member.getId()));
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(
             @CurrentMember Member member,
-            @RequestBody @Valid NScheduleUpdateRequest dto)
+            @RequestBody @Valid NScheduleUpdateRequest request)
     {
-        nScheduleService.update(member, dto);
+        nScheduleService.update(member, request.toNScheduleUpdate());
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/progress", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateTodo(
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteById(
             @CurrentMember Member member,
-            @RequestBody @Valid ProgressUpdateRequest progressUpdateRequest)
+            @PathVariable(value = "id") Long id)
     {
-        nScheduleDetailService.updateProgressList(member, progressUpdateRequest);
+        nScheduleService.deleteById(member, id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateDetail(
             @CurrentMember Member member,
-            @RequestBody @Valid NormalDetailUpdateRequest dto)
+            @RequestBody @Valid NDetailUpdateRequest request)
     {
-        nScheduleDetailService.update(member,dto);
+        nScheduleDetailService.update(member, request.toNDetailUpdate());
         return ResponseEntity.noContent().build();
     }
 
@@ -99,6 +88,15 @@ public class NScheduleController {
             @CurrentMember Member member,
             @PathVariable(value = "id") Long id){
         nScheduleDetailService.deleteById(member, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/progress", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateTodo(
+            @CurrentMember Member member,
+            @RequestBody @Valid ProgressUpdatesRequest request)
+    {
+        nScheduleDetailService.updateProgressList(member, request.toProgressUpdates());
         return ResponseEntity.noContent().build();
     }
 }

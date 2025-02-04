@@ -1,4 +1,4 @@
-package com.eighttoten.member.presentation;
+package com.eighttoten.member;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -33,7 +33,7 @@ public class SignUpController {
 
     @PostMapping
     public ResponseEntity<Void> signUp(@Valid SignUpRequest signUpRequest){
-        signUpService.signUp(signUpRequest);
+        signUpService.signUp(signUpRequest.toNewMember());
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,15 +1,15 @@
-package com.eighttoten.member.presentation;
+package com.eighttoten.member;
 
-import com.eighttoten.global.CurrentMember;
-import com.eighttoten.global.dto.Result;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.member.dto.request.NicknameUpdateRequest;
 import com.eighttoten.member.dto.request.PasswordUpdateRequest;
-import com.eighttoten.member.dto.response.MemberBoardsResponse;
-import com.eighttoten.member.dto.response.MemberRepliesResponse;
 import com.eighttoten.member.dto.response.ProfileResponse;
-import com.eighttoten.member.dto.response.ScrappedBoardResponse;
+import com.eighttoten.member.dto.response.ScrappedPostResponse;
+import com.eighttoten.member.dto.response.WrittenPostResponse;
+import com.eighttoten.member.dto.response.WrittenReplyResponse;
 import com.eighttoten.member.service.MyPageService;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.Result;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +32,22 @@ public class MyPageController {
 
     @GetMapping
     public ResponseEntity<ProfileResponse> getProfile(@CurrentMember Member member) {
-        return ResponseEntity.ok(myPageService.getProfile(member));
+        return ResponseEntity.ok(ProfileResponse.from(member));
     }
 
-    @GetMapping("/boards")
-    public ResponseEntity<Result<MemberBoardsResponse>> getBoards(@CurrentMember Member member) {
-        return ResponseEntity.ok(myPageService.getMemberBoards(member));
+    @GetMapping("/posts")
+    public ResponseEntity<Result<WrittenPostResponse>> getWrittenPosts(@CurrentMember Member member) {
+        return ResponseEntity.ok(Result.fromElements(myPageService.getWrittenPosts(member.getId()), WrittenPostResponse::from));
     }
 
     @GetMapping("/replies")
-    public ResponseEntity<Result<MemberRepliesResponse>> getReplies(@CurrentMember Member member) {
-        return ResponseEntity.ok(myPageService.getMemberReplies(member));
+    public ResponseEntity<Result<WrittenReplyResponse>> getWrittenReplies(@CurrentMember Member member) {
+        return ResponseEntity.ok(Result.fromElements(myPageService.getWrittenReplies(member.getId()), WrittenReplyResponse::from));
     }
 
     @GetMapping("/scrapped-boards")
-    public ResponseEntity<Result<ScrappedBoardResponse>> getScrapBoards(@CurrentMember Member member) {
-        return ResponseEntity.ok(myPageService.getScrappedBoard(member));
+    public ResponseEntity<Result<ScrappedPostResponse>> getScrapedPosts(@CurrentMember Member member) {
+        return ResponseEntity.ok(Result.fromElements(myPageService.getScrappedPost(member.getId()), ScrappedPostResponse::from));
     }
 
     @PutMapping(value = "/profile/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -66,19 +66,19 @@ public class MyPageController {
 
     @PutMapping("/account/nickname")
     public ResponseEntity<Void> updateNickname(
-            @RequestBody @Valid NicknameUpdateRequest dto,
-            @CurrentMember Member member)
+            @CurrentMember Member member,
+            @RequestBody @Valid NicknameUpdateRequest request)
     {
-        myPageService.updateNickname(dto.getNickname(), member.getId());
+        myPageService.updateNickname(member, request.getNickname());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/account/password")
     public ResponseEntity<Void> updatePassword(
-            @RequestBody @Valid PasswordUpdateRequest dto,
-            @CurrentMember Member member)
+            @CurrentMember Member member,
+            @RequestBody @Valid PasswordUpdateRequest request)
     {
-        myPageService.updatePassword(dto.getPassword(), member.getId());
+        myPageService.updatePassword(member, request.getPassword());
         return ResponseEntity.noContent().build();
     }
 }

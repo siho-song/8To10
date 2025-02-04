@@ -1,12 +1,9 @@
-package com.eighttoten.achievement.presentation;
+package com.eighttoten.achievement;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.achievement.domain.Achievement;
-import com.eighttoten.achievement.dto.AchievementResponse;
-import com.eighttoten.achievement.service.AchievementService;
-import com.eighttoten.global.CurrentMember;
-import com.eighttoten.global.dto.Result;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.Result;
 import com.eighttoten.member.domain.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +25,9 @@ public class AchievementController {
             @PathVariable(value = "year") int year,
             @PathVariable(value = "month") int month)
     {
-        List<Achievement> achievements = achievementService.findAllBetweenYearAndMonth(
-                member,
-                year,
-                month
-        );
+        List<Achievement> achievements = achievementService.getMonthlyAchievement(member.getId(), year, month);
 
-        Result<AchievementResponse> result = Result.fromElements(
-                achievements,
-                AchievementResponse::from
-        );
+        Result<AchievementResponse> result = Result.fromElements(achievements, AchievementResponse::from);
 
         return ResponseEntity.ok(result);
     }

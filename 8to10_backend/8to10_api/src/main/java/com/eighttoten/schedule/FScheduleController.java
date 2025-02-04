@@ -1,20 +1,15 @@
-package com.eighttoten.schedule.presentation;
+package com.eighttoten.schedule;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.global.CurrentMember;
-import com.eighttoten.global.ValidationSequence;
-import com.eighttoten.global.dto.Result;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.ValidationSequence;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.schedule.domain.FSchedule;
-import com.eighttoten.schedule.dto.request.FScheduleSaveRequestRequest;
-import com.eighttoten.schedule.dto.request.FScheduleUpdateRequest;
-import com.eighttoten.schedule.dto.request.FixDetailUpdateRequest;
-import com.eighttoten.schedule.dto.response.ScheduleResponse;
-import com.eighttoten.schedule.service.FScheduleDetailService;
-import com.eighttoten.schedule.service.FScheduleService;
-import com.eighttoten.schedule.service.ScheduleService;
+import com.eighttoten.schedule.dto.request.fschedule.FScheduleSaveRequest;
+import com.eighttoten.schedule.dto.request.fschedule.FScheduleUpdateRequest;
+import com.eighttoten.schedule.dto.request.fschedule.FixDetailUpdateRequest;
+import com.eighttoten.schedule.service.fschedule.FScheduleDetailService;
+import com.eighttoten.schedule.service.fschedule.FScheduleService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -34,34 +29,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/schedule/fixed")
 public class FScheduleController {
-    private final ScheduleService scheduleService;
     private final FScheduleService fScheduleService;
     private final FScheduleDetailService fScheduleDetailService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Result<ScheduleResponse>> add(
+    public ResponseEntity<Void> save(
             @CurrentMember Member member,
-            @RequestBody @Validated(value = ValidationSequence.class) FScheduleSaveRequestRequest dto) {
+            @RequestBody @Validated(value = ValidationSequence.class) FScheduleSaveRequest request){
 
-        FSchedule fSchedule = FSchedule.from(member, dto);
+        long fScheduleId = fScheduleService.save(request.toNewFSchedule(member.getId()));
+        fScheduleDetailService.saveAllDetails(fScheduleId, request.toFScheduleCreateInfo());
 
-        fScheduleService.addDetails(fSchedule, dto);
-        scheduleService.save(fSchedule);
-
-        Result<ScheduleResponse> result = Result.fromElements(
-                fSchedule.getScheduleAbles(),
-                e -> ScheduleResponse.from(fSchedule, e)
-        );
-
-        return new ResponseEntity<>(result, CREATED);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(
             @CurrentMember Member member,
-            @RequestBody @Valid FScheduleUpdateRequest fScheduleUpdateRequest) {
+            @RequestBody @Valid FScheduleUpdateRequest request){
 
-        fScheduleService.update(member, fScheduleUpdateRequest);
+        fScheduleService.update(member, request.toFScheduleUpdate());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteById(
+            @CurrentMember Member member,
+            Long id
+    ){
+        fScheduleService.deleteById(member, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateDetail(
+            @CurrentMember Member member,
+            @RequestBody @Validated(value = ValidationSequence.class) FixDetailUpdateRequest request){
+
+        fScheduleDetailService.update(member, request.toFDetailUpdate());
         return ResponseEntity.noContent().build();
     }
 
@@ -75,17 +80,8 @@ public class FScheduleController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/detail", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateDetail(
-            @CurrentMember Member member,
-            @RequestBody @Validated(value = ValidationSequence.class) FixDetailUpdateRequest dto){
-
-        fScheduleDetailService.update(member, dto);
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping(value = "/detail/{id}")
-    public ResponseEntity<Void> deleteDetail(
+    public ResponseEntity<Void> deleteDetailById(
             @CurrentMember Member member,
             @PathVariable(value = "id") Long id) {
 
