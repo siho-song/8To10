@@ -1,9 +1,9 @@
-package com.eighttoten.infrastructure.security.handler;
+package com.eighttoten.handler;
 
-import static com.eighttoten.global.utils.BearerAuthorizationUtils.BEARER_CODE;
-
-import com.eighttoten.auth.service.AuthService;
-import com.eighttoten.infrastructure.TokenProvider;
+import com.eighttoten.support.BearerAuthorizationUtils;
+import com.eighttoten.support.TokenProvider;
+import com.eighttoten.auth.Auth;
+import com.eighttoten.auth.AuthRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     private static final String EMPTY_SUBJECT="";
 
     private final TokenProvider tokenProvider;
-    private final AuthService authService;
+    private final AuthRepository authRepository;
 
     @Override
     public void onAuthenticationSuccess(
@@ -33,7 +33,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
         String refreshToken = tokenProvider.generateRefreshToken(EMPTY_SUBJECT);
         setRefreshToken(response, refreshToken);
-        authService.save(email, refreshToken);
+        authRepository.save(Auth.of(email,refreshToken));
 
         response.setStatus(HttpStatus.OK.value());
     }
@@ -46,6 +46,6 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private void setAccessToken(HttpServletResponse response, String token){
-        response.setHeader("Authorization", BEARER_CODE + token);
+        response.setHeader("Authorization", BearerAuthorizationUtils.BEARER_CODE + token);
     }
 }
