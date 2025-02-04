@@ -1,7 +1,7 @@
-package com.eighttoten.infrastructure;
+package com.eighttoten.support;
 
-import com.eighttoten.global.exception.ExceptionCode;
-import com.eighttoten.global.exception.InvalidTokenException;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;

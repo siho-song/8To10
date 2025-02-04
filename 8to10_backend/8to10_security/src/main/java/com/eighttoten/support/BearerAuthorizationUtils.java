@@ -1,8 +1,10 @@
-package com.eighttoten.global.utils;
+package com.eighttoten.support;
 
-import com.eighttoten.global.exception.ExceptionCode;
-import com.eighttoten.global.exception.InvalidTokenException;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.InvalidTokenException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BearerAuthorizationUtils {
     public static final String BEARER_CODE = "Bearer ";
 

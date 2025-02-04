@@ -1,4 +1,4 @@
-package com.eighttoten.infrastructure.security.handler;
+package com.eighttoten.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

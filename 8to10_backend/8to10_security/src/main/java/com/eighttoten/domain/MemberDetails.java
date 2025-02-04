@@ -1,4 +1,4 @@
-package com.eighttoten.infrastructure.security.domain;
+package com.eighttoten.domain;
 
 import com.eighttoten.member.domain.Member;
 import java.util.Collection;

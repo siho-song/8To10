@@ -1,6 +1,6 @@
-package com.eighttoten.infrastructure.security.exception;
+package com.eighttoten.exception;
 
-import com.eighttoten.global.exception.ExceptionCode;
+import com.eighttoten.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
 
