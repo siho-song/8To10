@@ -1,15 +1,17 @@
-package com.eighttoten.notification.infrastructure;
+package com.eighttoten.notification.service;
 
-import static com.eighttoten.global.exception.ExceptionCode.INVALID_REDIS_MESSAGE;
+import static com.eighttoten.exception.ExceptionCode.INVALID_REDIS_MESSAGE;
 
-import com.eighttoten.global.exception.InvalidRedisMessageException;
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.InvalidRedisMessageException;
+import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.member.service.MemberService;
+import com.eighttoten.member.domain.MemberRepository;
+import com.eighttoten.notification.domain.NewNotification;
 import com.eighttoten.notification.domain.Notification;
-import com.eighttoten.notification.dto.NotificationResponse;
+import com.eighttoten.notification.domain.NotificationSendInfo;
+import com.eighttoten.notification.domain.repository.NotificationRepository;
 import com.eighttoten.notification.event.NotificationEvent;
-import com.eighttoten.notification.service.NotificationService;
-import com.eighttoten.notification.service.SseEmitterService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -23,33 +25,39 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class RedisChannelEventListener {
+public class RedisMessageSubscriber {
     private static final String NOTIFICATION_EVENT_NAME = "notification";
 
-    private final NotificationService notificationService;
-    private final MemberService memberService;
     private final SseEmitterService sseEmitterService;
-
+    private final MemberRepository memberRepository;
+    private final NotificationRepository notificationRepository;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 레디스 채널에 publish된 메시지를 subscribe한다.
+     * @param message
+     */
     public void handleNotificationEvent(String message) {
         NotificationEvent event = convertToObject(message, NotificationEvent.class);
+        Member member = memberRepository.findByEmail(event.getClientEmail())
+                .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_MEMBER));
 
-        Member member = memberService.findByEmail(event.getClientEmail());
-
-        Notification notification = Notification.from(member, event);
-        if (notification.getNotificationType().getIsNeededSave()) {
-            notificationService.save(notification);
+        NewNotification newNotification = NewNotification.from(member.getId(), event);
+        long savedId = 0L;
+        if (newNotification.getNotificationType().getIsNeededSave()) {
+            savedId = notificationRepository.save(newNotification);
         }
+
+        Notification notification = notificationRepository.findById(savedId)
+                .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_NOTIFICATION));
 
         List<SseEmitter> emitters = sseEmitterService.findAllStartWithByMemberEmail(member.getEmail());
         if (!emitters.isEmpty()) {
-            String response = convertToJson(NotificationResponse.from(notification));
             emitters.forEach(emitter -> sseEmitterService.sendToClient(
                     emitter,
                     sseEmitterService.generateUniqueClientId(member.getEmail(), LocalDateTime.now()),
                     NOTIFICATION_EVENT_NAME,
-                    response)
+                    convertToJson(NotificationSendInfo.from(notification)))
             );
         }
     }
