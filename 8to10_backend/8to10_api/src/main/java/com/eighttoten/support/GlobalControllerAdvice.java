@@ -1,11 +1,10 @@
-package com.eighttoten.global;
+package com.eighttoten.support;
 
-import static com.eighttoten.global.exception.ExceptionCode.INTERNAL_SERVER_ERROR;
-import static com.eighttoten.global.exception.ExceptionCode.INVALID_REQUEST;
+import static com.eighttoten.exception.ExceptionCode.INTERNAL_SERVER_ERROR;
+import static com.eighttoten.exception.ExceptionCode.INVALID_REQUEST;
 
-import com.eighttoten.global.dto.ErrorResponse;
-import com.eighttoten.global.exception.BusinessException;
-import com.eighttoten.infrastructure.security.exception.AuthException;
+import com.eighttoten.exception.AuthException;
+import com.eighttoten.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -65,7 +64,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ErrorResponse> handleAuthException(AuthException e) {
         log.error(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ErrorResponse.of(e.getCode(), e.getMessage()));
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e.getExceptionCode().getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
