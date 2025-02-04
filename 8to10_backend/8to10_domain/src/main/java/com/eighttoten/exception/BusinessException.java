@@ -1,4 +1,4 @@
-package com.eighttoten.global.exception;
+package com.eighttoten.exception;
 
 import lombok.Getter;
 

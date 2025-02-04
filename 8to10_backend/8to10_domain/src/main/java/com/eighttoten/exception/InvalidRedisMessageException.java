@@ -1,4 +1,4 @@
-package com.eighttoten.global.exception;
+package com.eighttoten.exception;
 
 public class InvalidRedisMessageException extends RuntimeException {
     private final ExceptionCode exceptionCode;

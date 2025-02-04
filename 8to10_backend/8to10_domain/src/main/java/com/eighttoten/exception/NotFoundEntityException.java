@@ -1,4 +1,4 @@
-package com.eighttoten.global.exception;
+package com.eighttoten.exception;
 
 public class NotFoundEntityException extends BusinessException {
     public NotFoundEntityException(ExceptionCode exceptionCode) {
