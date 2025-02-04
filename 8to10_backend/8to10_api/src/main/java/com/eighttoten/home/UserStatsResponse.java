@@ -8,11 +8,11 @@ public class UserStatsResponse {
     private String role;
     private double achievementRate;
 
-    public static UserStatsResponse of(String nickname, String role, double achievementRate) {
+    public static UserStatsResponse from(UserStats userStats) {
         UserStatsResponse statsResponse = new UserStatsResponse();
-        statsResponse.nickname = nickname;
-        statsResponse.role= role;
-        statsResponse.achievementRate = achievementRate;
+        statsResponse.nickname = userStats.getNickname();
+        statsResponse.role= userStats.getRole();
+        statsResponse.achievementRate = userStats.getAchievementRate();
         return statsResponse;
     }
 }
