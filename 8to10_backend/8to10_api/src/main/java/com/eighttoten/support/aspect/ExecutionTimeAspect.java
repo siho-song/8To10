@@ -1,4 +1,4 @@
-package com.eighttoten.global.aspect;
+package com.eighttoten.support.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ExecutionTimeAspect {
     @Pointcut("execution(* com.eighttoten.service..*(..)) ||"
-            + "execution(* com.eighttoten.controller..*(..)) ||"
-            + "execution(* com.eighttoten.repository..*(..)))")
+            + "execution(* com.eighttoten..*.controller..*(..)) ||"
+            + "execution(* com.eighttoten..*.repository..*(..)))")
     public void businessLogicPointcut(){}
 
     @Around("businessLogicPointcut()")
