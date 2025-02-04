@@ -1,28 +1,28 @@
-package com.eighttoten.infrastructure.security.config;
+package com.eighttoten.config;
 
-import com.eighttoten.auth.service.AuthService;
-import com.eighttoten.global.utils.BearerAuthorizationUtils;
-import com.eighttoten.infrastructure.TokenProvider;
-import com.eighttoten.infrastructure.security.filter.EmailPasswordAuthenticationFilter;
-import com.eighttoten.infrastructure.security.filter.JwtAuthorizationFilter;
-import com.eighttoten.infrastructure.security.handler.AuthFailureHandler;
-import com.eighttoten.infrastructure.security.handler.AuthFilterExceptionHandler;
-import com.eighttoten.infrastructure.security.handler.AuthSuccessHandler;
-import com.eighttoten.infrastructure.security.provider.CustomAuthenticationProvider;
-import com.eighttoten.infrastructure.security.service.MemberDetailsService;
-import com.eighttoten.member.domain.repository.MemberRepository;
+import com.eighttoten.support.PasswordEncoder;
+import com.eighttoten.support.AuthAccessor;
+import com.eighttoten.support.AuthAccessorImpl;
+import com.eighttoten.support.BearerAuthorizationUtils;
+import com.eighttoten.support.PasswordEncoderImpl;
+import com.eighttoten.support.TokenProvider;
+import com.eighttoten.auth.AuthRepository;
+import com.eighttoten.filter.EmailPasswordAuthenticationFilter;
+import com.eighttoten.filter.JwtAuthorizationFilter;
+import com.eighttoten.handler.AuthFailureHandler;
+import com.eighttoten.handler.AuthFilterExceptionHandler;
+import com.eighttoten.handler.AuthSuccessHandler;
+import com.eighttoten.provider.AuthProvider;
+import com.eighttoten.service.MemberDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,15 +42,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 public class SecurityConfig {
 
-    @Value(value = "${cors.allowed-origin}")
-    private String corsAllowedOrigin;
-
     private static final String[] STATIC_RESOURCES_LOCATION = new String[]{
             "/css/**", "/resources/**",
             "/static/**", "/images/**",
             "/js/**", "/public/**",
             "/favicon.ico"
     };
+
+    private final AuthFilterExceptionHandler authFilterExceptionHandler;
+    private final BearerAuthorizationUtils bearerAuthorizationUtils;
+    private final MemberDetailsService memberDetailsService;
+    private final AuthRepository authRepository;
+    private final TokenProvider tokenProvider;
+
+    @Value(value = "${cors.allowed-origin}")
+    private String corsAllowedOrigin;
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -115,56 +121,43 @@ public class SecurityConfig {
     }
 
     @Bean
-    public MemberDetailsService memberDetailsService(MemberRepository memberRepository) {
-        return new MemberDetailsService(memberRepository);
+    public AuthenticationProvider authProvider(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        return new AuthProvider(memberDetailsService, bCryptPasswordEncoder);
     }
 
     @Bean
-    public CustomAuthenticationProvider customAuthenticationProvider(MemberDetailsService memberDetailsService) {
-        return new CustomAuthenticationProvider(
-                memberDetailsService,
-                bCryptPasswordEncoder()
-        );
+    public AuthenticationManager authenticationManager(AuthenticationProvider authProvider) {
+        return new ProviderManager(authProvider);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider) {
-        return new ProviderManager(Collections.singletonList(customAuthenticationProvider));
+    public AuthSuccessHandler customAuthSuccessHandler() {
+        return new AuthSuccessHandler(tokenProvider, authRepository);
     }
 
     @Bean
-    public AuthSuccessHandler customAuthSuccessHandler(
-            TokenProvider tokenProvider, AuthService authService) {
-        return new AuthSuccessHandler(tokenProvider,authService);
-    }
-
-    @Bean
-    public AuthFailureHandler customAuthFailureHandler(AuthFilterExceptionHandler authFilterExceptionHandler) {
+    public AuthFailureHandler customAuthFailureHandler() {
         return new AuthFailureHandler(authFilterExceptionHandler);
     }
 
     @Bean
-    public BearerAuthorizationUtils bearerAuthorizationUtils(){
-        return new BearerAuthorizationUtils();
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter(memberDetailsService, bearerAuthorizationUtils,
+                tokenProvider, authFilterExceptionHandler);
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(
-            MemberDetailsService memberDetailsService,
-            TokenProvider tokenProvider,
-            BearerAuthorizationUtils bearerAuthorizationUtils,
-            AuthFilterExceptionHandler authFilterExceptionHandler)
-    {
-        return new JwtAuthorizationFilter(
-                memberDetailsService,
-                bearerAuthorizationUtils,
-                tokenProvider,
-                authFilterExceptionHandler
-        );
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        return new PasswordEncoderImpl(bCryptPasswordEncoder);
+    }
+
+    @Bean
+    public AuthAccessor authAccessor(){
+        return new AuthAccessorImpl(memberDetailsService);
     }
 }
