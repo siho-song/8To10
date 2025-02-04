@@ -1,4 +1,4 @@
-package com.eighttoten.global.auditing.baseentity;
+package com.eighttoten;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -15,8 +15,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }

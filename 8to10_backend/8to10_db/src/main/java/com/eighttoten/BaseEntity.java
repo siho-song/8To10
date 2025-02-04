@@ -1,4 +1,4 @@
-package com.eighttoten.global.auditing.baseentity;
+package com.eighttoten;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
