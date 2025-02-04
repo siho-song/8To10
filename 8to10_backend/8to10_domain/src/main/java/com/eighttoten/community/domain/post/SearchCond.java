@@ -1,4 +1,4 @@
-package com.eighttoten.community.domain;
+package com.eighttoten.community.domain.post;
 
 import lombok.Getter;
 

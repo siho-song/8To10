@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.domain;
+package com.eighttoten.schedule.domain.nschedule;
 
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;

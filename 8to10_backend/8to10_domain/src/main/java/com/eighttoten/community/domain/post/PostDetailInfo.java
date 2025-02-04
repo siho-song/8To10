@@ -1,13 +1,13 @@
-package com.eighttoten.community.dto;
+package com.eighttoten.community.domain.post;
 
+import com.eighttoten.community.domain.reply.ReplyDetailInfo;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-public class BoardSearchResponse {
+public class PostDetailInfo {
     private Long id;
     private String title;
     private String contents;
@@ -19,6 +19,8 @@ public class BoardSearchResponse {
     private long totalScrap;
     private boolean hasLike;
     private boolean hasScrap;
+    @Setter
     private List<Long> likedReplyIds;
-    private List<ReplySearchResponse> replies;
+    @Setter
+    private List<ReplyDetailInfo> replies;
 }

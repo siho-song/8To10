@@ -1,4 +1,4 @@
-package com.eighttoten.community.dto;
+package com.eighttoten.community.domain.reply;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -6,14 +6,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoardPageResponse {
+public class ReplyDetailInfo {
     private Long id;
-    private String title;
+    private Long parentId;
     private String contents;
-    private String writer;
     private String nickname;
+    private String writer;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private long totalLike;
-    private long totalScrap;
 }

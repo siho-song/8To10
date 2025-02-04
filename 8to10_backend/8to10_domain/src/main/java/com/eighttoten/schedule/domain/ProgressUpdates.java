@@ -1,6 +1,5 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.domain;
 
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -9,11 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProgressUpdateRequest{
-    @NotNull
+public class ProgressUpdates {
     private LocalDate date;
     private List<ProgressUpdate> progressUpdates;
 
@@ -22,13 +18,12 @@ public class ProgressUpdateRequest{
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProgressUpdate {
-        @NotNull
         private Long scheduleDetailId;
         private boolean completeStatus;
         private int achievedAmount;
     }
 
-    public List<Long> fetchIds(){
+    public List<Long> getIds(){
         return progressUpdates.stream().map(ProgressUpdate::getScheduleDetailId).toList();
     }
 }
