@@ -1,6 +1,6 @@
-package com.eighttoten.infrastructure.redis;
+package com.eighttoten.config;
 
-import com.eighttoten.notification.infrastructure.RedisChannelEventListener;
+import com.eighttoten.notification.service.RedisMessageSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,8 +48,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter notificationListenerAdapter(RedisChannelEventListener redisChannelEventListener){
-        return new MessageListenerAdapter(redisChannelEventListener, "handleNotificationEvent");
+    public MessageListenerAdapter notificationListenerAdapter(RedisMessageSubscriber redisMessageSubscriber){
+        return new MessageListenerAdapter(redisMessageSubscriber, "handleNotificationEvent");
     }
 
     @Bean
