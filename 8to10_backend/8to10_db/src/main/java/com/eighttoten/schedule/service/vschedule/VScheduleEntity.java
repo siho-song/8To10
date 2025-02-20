@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.vschedule;
+package com.eighttoten.schedule.service.vschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -36,7 +36,7 @@ public class VScheduleEntity extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT DEFAULT ''")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String commonDescription;
 
     @Column(nullable = false)
