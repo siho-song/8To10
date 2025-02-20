@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.nschedule;
+package com.eighttoten.schedule.service.nschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -37,7 +37,7 @@ public class NScheduleEntity extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT DEFAULT ''")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String commonDescription;
 
     @Column(nullable = false)
@@ -53,9 +53,9 @@ public class NScheduleEntity extends BaseEntity {
 
     public NSchedule toNSchedule(){
         return new NSchedule(
-                id, memberEntity.getId(), title,
-                commonDescription, createdBy, startDateTime, endDateTime,
-                bufferTime, totalAmount
+                id, title,
+                commonDescription, startDateTime, endDateTime,
+                bufferTime, createdBy, totalAmount
         );
     }
 

@@ -1,9 +1,9 @@
-package com.eighttoten.schedule.nschedule.repository;
+package com.eighttoten.schedule.service.nschedule.repository;
 
 import com.eighttoten.member.MemberEntity;
 import com.eighttoten.member.repository.MemberJpaRepository;
 import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
-import com.eighttoten.schedule.nschedule.NScheduleEntity;
+import com.eighttoten.schedule.service.nschedule.NScheduleEntity;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.schedule.domain.nschedule.NSchedule;
@@ -20,8 +20,10 @@ public class NScheduleRepositoryImpl implements NScheduleRepository {
     private final MemberJpaRepository memberRepository;
 
     @Override
-    public void deleteById(Long id) {
-        nScheduleRepository.deleteById(id);
+    public long save(NewNSchedule newNSchedule) {
+        MemberEntity memberEntity = memberRepository.findById(newNSchedule.getMemberId())
+                .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_MEMBER));
+        return nScheduleRepository.save(NScheduleEntity.from(newNSchedule, memberEntity)).getId();
     }
 
     @Override
@@ -32,10 +34,8 @@ public class NScheduleRepositoryImpl implements NScheduleRepository {
     }
 
     @Override
-    public long save(NewNSchedule newNSchedule) {
-        MemberEntity memberEntity = memberRepository.findById(newNSchedule.getMemberId())
-                .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_MEMBER));
-        return nScheduleRepository.save(NScheduleEntity.from(newNSchedule, memberEntity)).getId();
+    public void deleteById(Long id) {
+        nScheduleRepository.deleteById(id);
     }
 
     @Override

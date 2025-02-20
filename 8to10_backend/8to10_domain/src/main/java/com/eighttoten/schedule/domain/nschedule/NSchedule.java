@@ -9,27 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NSchedule {
     private Long id;
-    private Long memberId;
     private String title;
     private String commonDescription;
-    private String createdBy;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private LocalTime bufferTime;
+    private String createdBy;
     private int totalAmount;
 
     public NSchedule(
-            Long id, Long memberId, String title,
-            String commonDescription, String createdBy, LocalDateTime startDateTime, LocalDateTime endDateTime,
-            LocalTime bufferTime, int totalAmount) {
+            Long id, String title,
+            String commonDescription, LocalDateTime startDateTime, LocalDateTime endDateTime,
+            LocalTime bufferTime, String createdBy, int totalAmount) {
         this.id = id;
-        this.memberId = memberId;
         this.title = title;
         this.commonDescription = commonDescription;
-        this.createdBy = createdBy;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.bufferTime = bufferTime;
+        this.createdBy = createdBy;
         this.totalAmount = totalAmount;
     }
 
