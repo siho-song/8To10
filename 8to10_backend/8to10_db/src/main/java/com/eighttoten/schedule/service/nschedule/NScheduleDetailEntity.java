@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.nschedule;
+package com.eighttoten.schedule.service.nschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -32,8 +32,11 @@ public class NScheduleDetailEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "schedule_id", nullable = false)
+    @JoinColumn(name = "n_schedule_id", nullable = false)
     private NScheduleEntity nScheduleEntity;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String detailDescription;
 
     @Column(nullable = false)
     private LocalDateTime startDateTime;
@@ -41,10 +44,8 @@ public class NScheduleDetailEntity extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
+    @Column(nullable = false)
     private LocalTime bufferTime;
-
-    @Column(columnDefinition = "TEXT DEFAULT ''")
-    private String detailDescription;
 
     private boolean completeStatus;
 
@@ -68,15 +69,15 @@ public class NScheduleDetailEntity extends BaseEntity {
 
     public NScheduleDetail toNScheduleDetail(){
         return new NScheduleDetail(
-                id, nScheduleEntity.getId(), startDateTime,
-                endDateTime,bufferTime, detailDescription,createdBy, completeStatus,
+                id, nScheduleEntity.getId(), detailDescription, startDateTime,
+                endDateTime, bufferTime, createdBy, completeStatus,
                 dailyAmount, achievedAmount
         );
     }
 
     public NDetailWithParent toNDetailWithParent(){
-        return new NDetailWithParent(id, nScheduleEntity.toNSchedule(), startDateTime, endDateTime, bufferTime,
-                detailDescription, createdBy, completeStatus, dailyAmount, achievedAmount);
+        return new NDetailWithParent(id, nScheduleEntity.toNSchedule(), detailDescription, startDateTime, endDateTime,
+                bufferTime, createdBy, completeStatus, dailyAmount, achievedAmount);
     }
 
     public void update(NScheduleDetail nScheduleDetail){
