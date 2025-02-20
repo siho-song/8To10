@@ -3,12 +3,12 @@ package com.eighttoten.community.service;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_POST;
 
 import com.eighttoten.common.Pagination;
-import com.eighttoten.community.domain.post.PostDetailInfo;
 import com.eighttoten.community.domain.post.NewPost;
-import com.eighttoten.community.domain.post.UpdatePost;
 import com.eighttoten.community.domain.post.Post;
+import com.eighttoten.community.domain.post.PostDetailInfo;
 import com.eighttoten.community.domain.post.PostPreview;
 import com.eighttoten.community.domain.post.SearchPostPage;
+import com.eighttoten.community.domain.post.UpdatePost;
 import com.eighttoten.community.domain.post.repository.PostHeartRepository;
 import com.eighttoten.community.domain.post.repository.PostRepository;
 import com.eighttoten.community.domain.post.repository.PostScrapRepository;
@@ -43,37 +43,33 @@ public class PostService {
     }
 
     @Transactional
-    public void save(NewPost newPost) {
+    public void addPost(NewPost newPost) {
         postRepository.save(newPost);
     }
 
     @Transactional
-    public void deleteById(Member member, Long id) {
+    public void deletePost(Member member, Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_POST));
 
         List<Reply> replies = replyRepository.findAllByPostId(post.getId());
+        List<Long> replyIds = replies.stream().map(Reply::getId).toList();
 
-        if (member.isSameEmail(post.getCreatedBy())) {
-            postHeartRepository.deleteHeartsByPostId(id);
-            postScrapRepository.deleteScrapByPostId(id);
-            replyHeartRepository.deleteByReplyIds(replies
-                    .stream()
-                    .map(Reply::getId)
-                    .toList()
-            );
-            postRepository.deleteById(id);
-        }
+        member.checkIsSameEmail(post.getCreatedBy());
+        postHeartRepository.deleteHeartsByPostId(id);
+        postScrapRepository.deleteScrapsByPostId(id);
+        replyHeartRepository.deleteAllByReplyIds(replyIds);
+        replyRepository.deleteByReplyIds(replyIds);
+        postRepository.deleteById(id);
     }
 
     @Transactional
-    public void update(Member member, UpdatePost updatePost) {
+    public void updatePost(Member member, UpdatePost updatePost) {
         Post post = postRepository.findById(updatePost.getId())
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_POST));
 
-        if (member.isSameEmail(post.getCreatedBy())) {
-            post.update(updatePost);
-            postRepository.update(post);
-        }
+        member.checkIsSameEmail(post.getCreatedBy());
+        post.update(updatePost);
+        postRepository.update(post);
     }
 }

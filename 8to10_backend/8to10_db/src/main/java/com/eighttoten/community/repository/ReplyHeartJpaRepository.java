@@ -10,11 +10,11 @@ import org.springframework.data.repository.query.Param;
 public interface ReplyHeartJpaRepository extends JpaRepository<ReplyHeartEntity, Long> {
     @Modifying
     @Query("delete from ReplyHeartEntity rh where rh.replyEntity.id = :replyId")
-    void deleteByReplyId(@Param(value = "replyId") Long replyId);
+    void deleteAllByReplyId(@Param(value = "replyId") Long replyId);
 
     @Modifying
     @Query("delete from ReplyHeartEntity rh where rh.replyEntity.id in :replyIds")
-    void deleteByReplyIds(@Param(value = "replyIds") List<Long> replyIds);
+    void deleteAllByReplyIds(@Param(value = "replyIds") List<Long> replyIds);
 
     void deleteByMemberEntityIdAndReplyEntityId(Long memberId, Long replyId);
     boolean existsByMemberEntityIdAndReplyEntityId(Long memberId, Long replyId);

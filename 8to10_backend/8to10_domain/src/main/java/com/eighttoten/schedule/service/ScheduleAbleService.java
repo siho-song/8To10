@@ -22,9 +22,9 @@ public class ScheduleAbleService {
     @Transactional(readOnly = true)
     public List<ScheduleAble> findAllBetweenStartAndEnd(Member member, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         List<ScheduleAble> allSchedules = new ArrayList<>();
-        allSchedules.addAll(vScheduleRepository.findAllBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
-        allSchedules.addAll(fScheduleDetailRepository.findAllBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
-        allSchedules.addAll(nScheduleDetailRepository.findAllBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
+        allSchedules.addAll(vScheduleRepository.findAllByEmailBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
+        allSchedules.addAll(fScheduleDetailRepository.findAllByEmailBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
+        allSchedules.addAll(nScheduleDetailRepository.findAllByEmailBetweenStartAndEnd(member.getEmail(), startDateTime, endDateTime));
         return allSchedules;
     }
 
