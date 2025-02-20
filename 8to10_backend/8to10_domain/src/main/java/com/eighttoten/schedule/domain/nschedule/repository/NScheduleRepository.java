@@ -5,8 +5,8 @@ import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
 import java.util.Optional;
 
 public interface NScheduleRepository {
-    void deleteById(Long id);
-    void update(NSchedule nSchedule);
     long save(NewNSchedule newNSchedule);
+    void update(NSchedule nSchedule);
+    void deleteById(Long id);
     Optional<NSchedule> findById(Long id);
 }
