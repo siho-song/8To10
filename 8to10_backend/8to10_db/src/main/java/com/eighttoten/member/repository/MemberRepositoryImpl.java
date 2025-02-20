@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Repository
 public class MemberRepositoryImpl implements MemberRepository {
-
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
@@ -27,6 +26,11 @@ public class MemberRepositoryImpl implements MemberRepository {
         MemberEntity entity = memberJpaRepository.findById(member.getId())
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_MEMBER));
         entity.update(member);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        memberJpaRepository.deleteById(id);
     }
 
     @Override
