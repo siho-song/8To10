@@ -1,5 +1,7 @@
 package com.eighttoten.member.domain;
 
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.MismatchException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +24,10 @@ public class Member {
     private boolean authEmail;
     private boolean authPhone;
 
-    public boolean isSameEmail(String email) {
-        return this.email.equals(email);
+    public void checkIsSameEmail(String email) {
+        if(!this.email.equals(email)) {
+            throw new MismatchException(ExceptionCode.WRITER_NOT_EQUAL_MEMBER);
+        }
     }
 
     public void updateNickname(String nickname) {
