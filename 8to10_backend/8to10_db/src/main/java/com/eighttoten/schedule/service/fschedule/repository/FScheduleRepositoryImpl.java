@@ -1,9 +1,9 @@
-package com.eighttoten.schedule.fschedule.repository;
+package com.eighttoten.schedule.service.fschedule.repository;
 
 import com.eighttoten.member.MemberEntity;
 import com.eighttoten.member.repository.MemberJpaRepository;
 import com.eighttoten.schedule.domain.fschedule.NewFSchedule;
-import com.eighttoten.schedule.fschedule.FScheduleEntity;
+import com.eighttoten.schedule.service.fschedule.FScheduleEntity;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.schedule.domain.fschedule.FSchedule;
@@ -25,10 +25,11 @@ public class FScheduleRepositoryImpl implements FScheduleRepository {
     }
 
     @Override
-    public void update(FScheduleUpdate fScheduleUpdate) {
-        FScheduleEntity entity = fScheduleRepository.findById(fScheduleUpdate.getId())
+    public void update(FSchedule fSchedule) {
+        FScheduleEntity entity = fScheduleRepository.findById(fSchedule.getId())
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_F_SCHEDULE));
-        entity.update(fScheduleUpdate.getTitle(), fScheduleUpdate.getCommonDescription());
+
+        entity.update(fSchedule);
     }
 
     @Override
