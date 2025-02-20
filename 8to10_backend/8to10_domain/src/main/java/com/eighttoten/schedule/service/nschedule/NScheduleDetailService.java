@@ -3,9 +3,7 @@ package com.eighttoten.schedule.service.nschedule;
 import static com.eighttoten.exception.ExceptionCode.NOT_EXIST_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
-import static com.eighttoten.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
 
-import com.eighttoten.exception.MismatchException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.notification.event.ProgressUpdatedEvent;
@@ -65,13 +63,8 @@ public class NScheduleDetailService {
                 LocalDateTime endDateTime = startDateTime.plusHours(performInDay.getHour())
                         .plusMinutes(performInDay.getMinute());
 
-                newNDetails.add(NewNDetail.builder()
-                        .nScheduleId(nSchedule.getId())
-                        .startDateTime(startDateTime)
-                        .endDateTime(endDateTime)
-                        .bufferTime(bufferTime)
-                        .detailDescription(nSchedule.getCommonDescription())
-                        .build());
+                newNDetails.add(new NewNDetail(nSchedule.getId(), startDateTime, endDateTime, bufferTime,
+                        nSchedule.getCommonDescription(), false, 0, 0));
             }
             current = current.plusDays(1L);
         }
@@ -84,10 +77,8 @@ public class NScheduleDetailService {
         NScheduleDetail nScheduleDetail = nScheduleDetailRepository.findById(nDetailUpdate.getId())
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_DETAIL));
 
-        if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
-        nScheduleDetail.updateDetailDescription(nDetailUpdate.getDetailDescription());
+        member.checkIsSameEmail(nScheduleDetail.getCreatedBy());
+        nScheduleDetail.update(nDetailUpdate.getDetailDescription());
         nScheduleDetailRepository.update(nScheduleDetail);
     }
 
@@ -95,10 +86,8 @@ public class NScheduleDetailService {
     public void deleteById(Member member, Long id) {
         NDetailWithParent nScheduleDetail = nScheduleDetailRepository.findByIdWithParent(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_DETAIL));;
-        if(!member.isSameEmail(nScheduleDetail.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
 
+        member.checkIsSameEmail(nScheduleDetail.getCreatedBy());
         NSchedule parent = nScheduleDetail.getNSchedule();
         parent.updateTotalAmount(true, nScheduleDetail.getDailyAmount());
         nScheduleRepository.update(parent);
@@ -106,20 +95,21 @@ public class NScheduleDetailService {
     }
 
     @Transactional
-    public void deleteByStartDateGEAndMemberAndParentId(
+    public void deleteAllByStartDateGEAndMemberAndParentId(
             LocalDateTime startDate,
             Member member,
             Long parentId)
     {
-        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findByStartDateGEAndEmailAndParentId(
-                startDate,
+        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByEmailAndParentIdGEStartDate(
                 member.getEmail(),
-                parentId);
+                parentId,
+                startDate);
         NSchedule parent = nScheduleRepository.findById(parentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_SCHEDULE));
 
+        nScheduleDetailRepository.deleteAllByIds(nScheduleDetails.stream().map(NScheduleDetail::getId).toList());
+
         parent.updateTotalAmount(true, getDailyAmountSum(nScheduleDetails));
-        nScheduleDetailRepository.deleteByIds(nScheduleDetails.stream().map(NScheduleDetail::getId).toList());
         nScheduleRepository.update(parent);
     }
 

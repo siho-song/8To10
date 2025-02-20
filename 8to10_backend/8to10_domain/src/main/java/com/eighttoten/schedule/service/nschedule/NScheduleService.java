@@ -2,19 +2,17 @@ package com.eighttoten.schedule.service.nschedule;
 
 import static com.eighttoten.exception.ExceptionCode.INVALID_N_SCHEDULE_CREATION;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
-import static com.eighttoten.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
 
-import com.eighttoten.exception.BadRequestException;
-import com.eighttoten.exception.MismatchException;
-import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.common.AppConstant;
+import com.eighttoten.exception.BadRequestException;
+import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.domain.ScheduleAble;
 import com.eighttoten.schedule.domain.nschedule.NSchedule;
-import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
-import com.eighttoten.schedule.domain.nschedule.TimeSlot;
 import com.eighttoten.schedule.domain.nschedule.NScheduleCreateInfo;
 import com.eighttoten.schedule.domain.nschedule.NScheduleUpdate;
+import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
+import com.eighttoten.schedule.domain.nschedule.TimeSlot;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleRepository;
 import com.eighttoten.schedule.service.ScheduleAbleService;
 import java.time.DayOfWeek;
@@ -34,18 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class NScheduleService {
-    private final ScheduleAbleService scheduleAbleService;
     private final NScheduleRepository nScheduleRepository;
+    private final ScheduleAbleService scheduleAbleService;
     private final NScheduleDetailService nScheduleDetailService;
     private final TimeSlotService timeSlotService;
-    private final Random random = new Random();
-
-    public NSchedule findById(Long id){
-        return nScheduleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_SCHEDULE));
-    }
 
     @Transactional
     public void saveWithDetails(Member member, NScheduleCreateInfo nScheduleCreateInfo, NewNSchedule newNSchedule) {
@@ -80,20 +71,20 @@ public class NScheduleService {
 
     @Transactional
     public void update(Member member, NScheduleUpdate nScheduleUpdate){
-        NSchedule nSchedule = findById(nScheduleUpdate.getId());
-        if(!member.isSameEmail(nSchedule.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
+        NSchedule nSchedule = nScheduleRepository.findById(nScheduleUpdate.getId())
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_SCHEDULE));
+
+        member.checkIsSameEmail(nSchedule.getCreatedBy());
         nSchedule.update(nScheduleUpdate);
         nScheduleRepository.update(nSchedule);
     }
 
     @Transactional
     public void deleteById(Member member, Long id) {
-        NSchedule nSchedule = findById(id);
-        if(!member.isSameEmail(nSchedule.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
+        NSchedule nSchedule = nScheduleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_N_SCHEDULE));
+
+        member.checkIsSameEmail(nSchedule.getCreatedBy());
         nScheduleRepository.deleteById(id);
     }
 
@@ -128,7 +119,7 @@ public class NScheduleService {
         List<DayOfWeek> selectableDays = candidateDays.stream()
                 .filter(availableDays::contains)
                 .collect(Collectors.toList());
-        Collections.shuffle(selectableDays, random);
+        Collections.shuffle(selectableDays, new Random());
         return selectableDays.subList(0, Math.min(numberOfDays, selectableDays.size()));
     }
 
