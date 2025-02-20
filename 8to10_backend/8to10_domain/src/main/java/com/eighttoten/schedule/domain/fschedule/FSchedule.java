@@ -22,8 +22,8 @@ public class FSchedule {
         this.createdBy = createdBy;
     }
 
-    public void update(String title, String commonDescription){
-        this.title = title;
-        this.commonDescription = commonDescription;
+    public void update(FScheduleUpdate fScheduleUpdate){
+        this.title = fScheduleUpdate.getTitle();
+        this.commonDescription = fScheduleUpdate.getCommonDescription();
     }
 }
