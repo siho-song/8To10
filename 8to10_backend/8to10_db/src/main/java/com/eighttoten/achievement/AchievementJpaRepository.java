@@ -1,7 +1,6 @@
 package com.eighttoten.achievement;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,9 +12,9 @@ public interface AchievementJpaRepository extends JpaRepository<AchievementEntit
     Optional<AchievementEntity> findByMemberEntityIdAndAchievementDate(Long memberId, LocalDate achievementDate);
 
     @Query("select a from AchievementEntity a where a.memberEntity.id = :memberId and a.achievementDate between :start and :end")
-    List<AchievementEntity> findAllBetweenStartAndEnd(@Param(value = "memberId") Long memberId,
-                                                      @Param(value = "start") LocalDate start,
-                                                      @Param(value = "end") LocalDate end);
+    List<AchievementEntity> findAllByMemberIdBetweenStartAndEnd(@Param(value = "memberId") Long memberId,
+                                                                @Param(value = "start") LocalDate start,
+                                                                @Param(value = "end") LocalDate end);
 
     @Query("select a from AchievementEntity a where a.achievementDate = :date")
     @EntityGraph(attributePaths = {"memberEntity"})

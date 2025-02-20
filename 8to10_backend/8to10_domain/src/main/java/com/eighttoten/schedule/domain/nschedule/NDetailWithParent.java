@@ -12,10 +12,10 @@ import lombok.Setter;
 public class NDetailWithParent implements ScheduleAble {
     private Long id;
     private NSchedule nSchedule;
+    private String detailDescription;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private LocalTime bufferTime;
-    private String detailDescription;
     private String createdBy;
     private boolean completeStatus;
     @Setter

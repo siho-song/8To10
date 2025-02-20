@@ -4,11 +4,9 @@ import com.eighttoten.schedule.domain.ScheduleAble;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class FScheduleDetail implements ScheduleAble {
     private Long id;
     private Long fScheduleId;
@@ -24,4 +22,10 @@ public class FScheduleDetail implements ScheduleAble {
 
     @Override
     public LocalDateTime getScheduleEnd() { return endDateTime; }
+
+    public void update(FDetailUpdate fDetailUpdate) {
+        detailDescription = fDetailUpdate.getDetailDescription();
+        startDateTime = fDetailUpdate.getStartDateTime();
+        endDateTime = fDetailUpdate.getEndDateTime();
+    }
 }

@@ -22,28 +22,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@Table(name = "board_scrap")
+@Table(name = "post_scrap")
 public class PostScrapEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "board_scrap_id")
+    @Column(name = "post_scrap_id")
     private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private PostEntity postEntity;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
-    public PostScrap toPostScrap(){
-        return new PostScrap(id, postEntity.toPost(), memberEntity.toMember(), createdBy);
-    }
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity postEntity;
 
     public static PostScrapEntity from(PostEntity postEntity, MemberEntity memberEntity) {
         PostScrapEntity postScrapEntity = new PostScrapEntity();
         postScrapEntity.postEntity = postEntity;
         postScrapEntity.memberEntity = memberEntity;
         return postScrapEntity;
+    }
+
+    public PostScrap toPostScrap(){
+        return new PostScrap(id, postEntity.toPost(), memberEntity.toMember(), createdBy);
     }
 }

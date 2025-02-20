@@ -1,11 +1,5 @@
 package com.eighttoten.config;
 
-import com.eighttoten.support.PasswordEncoder;
-import com.eighttoten.support.AuthAccessor;
-import com.eighttoten.support.AuthAccessorImpl;
-import com.eighttoten.support.BearerAuthorizationUtils;
-import com.eighttoten.support.PasswordEncoderImpl;
-import com.eighttoten.support.TokenProvider;
 import com.eighttoten.auth.AuthRepository;
 import com.eighttoten.filter.EmailPasswordAuthenticationFilter;
 import com.eighttoten.filter.JwtAuthorizationFilter;
@@ -14,10 +8,15 @@ import com.eighttoten.handler.AuthFilterExceptionHandler;
 import com.eighttoten.handler.AuthSuccessHandler;
 import com.eighttoten.provider.AuthProvider;
 import com.eighttoten.service.MemberDetailsService;
+import com.eighttoten.support.AuthAccessor;
+import com.eighttoten.support.AuthAccessorImpl;
+import com.eighttoten.support.BearerAuthorizationUtils;
+import com.eighttoten.support.PasswordEncoder;
+import com.eighttoten.support.PasswordEncoderImpl;
+import com.eighttoten.support.TokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +38,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Slf4j
 public class SecurityConfig {
 
     private static final String[] STATIC_RESOURCES_LOCATION = new String[]{

@@ -37,8 +37,8 @@ public class PostScrapRepositoryImpl implements PostScrapRepository {
     }
 
     @Override
-    public void deleteScrapByPostId(Long postId) {
-        postScrapRepository.deleteScrapByPostId(postId);
+    public void deleteScrapsByPostId(Long postId) {
+        postScrapRepository.deleteScrapsByPostId(postId);
     }
 
     @Override

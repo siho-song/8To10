@@ -4,6 +4,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.eighttoten.BaseEntity;
 import com.eighttoten.member.MemberEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,9 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Table(name = "post_heart")
-public class PostHeartEntity {
+public class PostHeartEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "board_heart_id")
+    @Column(name = "post_heart_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)

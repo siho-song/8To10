@@ -20,18 +20,18 @@ public class NotificationService {
     public void deleteById(Member member, Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_NOTIFICATION));
-        if(member.isSameEmail(notification.getCreatedBy())){
-            notificationRepository.deleteById(id);
-        }
+
+        member.checkIsSameEmail(notification.getCreatedBy());
+        notificationRepository.deleteById(id);
     }
 
     @Transactional
     public void updateReadStatus(Member member, Long id, boolean readStatus) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_NOTIFICATION));
-        if (member.isSameEmail(notification.getCreatedBy())) {
-            notification.updateReadStatus(readStatus);
-            notificationRepository.update(notification);
-        }
+
+        member.checkIsSameEmail(notification.getCreatedBy());
+        notification.updateReadStatus(readStatus);
+        notificationRepository.update(notification);
     }
 }

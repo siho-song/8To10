@@ -38,8 +38,8 @@ public class AchievementRepositoryImpl implements AchievementRepository {
     }
 
     @Override
-    public List<Achievement> findAllByMemberIdAndBetween(Long memberId, LocalDate start, LocalDate end) {
-        List<AchievementEntity> result = achievementRepository.findAllBetweenStartAndEnd(memberId, start, end);
+    public List<Achievement> findAllByMemberIdAndBetweenStartAndEnd(Long memberId, LocalDate start, LocalDate end) {
+        List<AchievementEntity> result = achievementRepository.findAllByMemberIdBetweenStartAndEnd(memberId, start, end);
         return result.stream().map(AchievementEntity::toAchievement).toList();
     }
 

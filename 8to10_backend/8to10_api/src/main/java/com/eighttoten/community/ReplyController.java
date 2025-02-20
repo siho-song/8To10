@@ -33,7 +33,7 @@ public class ReplyController {
             @CurrentMember Member member,
             @RequestBody @Valid AddReplyRequest request)
     {
-        replyService.add(request.toNewReply(member.getId()));
+        replyService.addReply(request.toNewReply(member.getId()));
         return ResponseEntity.status(CREATED).build();
     }
 
@@ -60,7 +60,7 @@ public class ReplyController {
             @CurrentMember Member member,
             @PathVariable(value = "id") Long id)
     {
-        replyHeartService.add(NewReplyHeart.from(member.getId(),id));
+        replyHeartService.addReplyHeart(NewReplyHeart.from(member.getId(),id));
         return ResponseEntity.status(CREATED).build();
     }
 

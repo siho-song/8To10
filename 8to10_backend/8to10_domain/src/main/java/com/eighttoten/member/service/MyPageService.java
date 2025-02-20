@@ -26,6 +26,9 @@ public class MyPageService {
     private final MultipartFileStorageService multiPartFileStorageService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
+    public void deleteMember(Member member) { memberRepository.deleteById(member.getId()); }
+
     @Transactional(readOnly = true)
     public List<Post> getWrittenPosts(Long memberId) {
         return postRepository.findAllByMemberId(memberId);
@@ -36,6 +39,7 @@ public class MyPageService {
         return replyRepository.findAllByMemberId(memberId);
     }
 
+    @Transactional(readOnly = true)
     public List<Post> getScrappedPost(Long memberId) {
         List<PostScrap> postScraps = postScrapRepository.findAllByMemberIdWithPost(memberId);
         return postScraps.stream().map(PostScrap::getPost).toList();

@@ -19,7 +19,7 @@ public class MultipartFileStorageService {
         validateImageFileType(multipartFile.getContentType());
         String originalFilename = multipartFile.getOriginalFilename();
 
-        if (originalFilename == null) {
+        if (originalFilename == null || originalFilename.isEmpty()) {
             throw new BadRequestException(ExceptionCode.REQUIRE_FILE_NAME);
         }
 

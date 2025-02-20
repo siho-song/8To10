@@ -31,7 +31,6 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         if (request == null) {
             return new BadRequestException("잘못된 요청 입니다.");
         }
-
         return authAccessor.getAuthenticatedMember();
     }
 }

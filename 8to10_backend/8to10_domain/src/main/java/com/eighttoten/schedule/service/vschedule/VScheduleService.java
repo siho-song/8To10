@@ -29,10 +29,9 @@ public class VScheduleService {
         VSchedule vSchedule = vScheduleRepository.findById(vScheduleUpdate.getId())
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_V_SCHEDULE));
 
-        if(!member.isSameEmail(vSchedule.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
-        vScheduleRepository.update(vScheduleUpdate);
+        member.checkIsSameEmail(vSchedule.getCreatedBy());
+        vSchedule.update(vScheduleUpdate);
+        vScheduleRepository.update(vSchedule);
     }
 
     @Transactional
@@ -40,9 +39,7 @@ public class VScheduleService {
         VSchedule vSchedule = vScheduleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_V_SCHEDULE));
 
-        if(!member.isSameEmail(vSchedule.getCreatedBy())){
-            throw new MismatchException(WRITER_NOT_EQUAL_MEMBER);
-        }
+        member.checkIsSameEmail(vSchedule.getCreatedBy());
         vScheduleRepository.deleteById(id);
     }
 }

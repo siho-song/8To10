@@ -16,12 +16,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@Table(name = "reply")
 public class ReplyEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_id")
@@ -48,6 +50,7 @@ public class ReplyEntity extends BaseEntity {
         replyEntity.memberEntity = memberEntity;
         replyEntity.postEntity = postEntity;
         replyEntity.parentId = newReply.getParentId();
+        replyEntity.contents = newReply.getContents();
         return replyEntity;
     }
 

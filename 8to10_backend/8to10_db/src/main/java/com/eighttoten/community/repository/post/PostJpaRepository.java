@@ -10,13 +10,5 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PostJpaRepository extends JpaRepository<PostEntity, Long>, PostRepositoryCustom {
-    @EntityGraph(attributePaths = {"memberEntity"})
-    @Query("select p from PostEntity p where p.id = :id")
-    Optional<PostEntity> findByIdWithMember(@Param(value = "id") Long id);
-    
-    @EntityGraph(attributePaths = {"replyEntities"})
-    @Query("select p from PostEntity p where p.id = :id")
-    Optional<PostEntity> findByIdWithReplies(@Param(value = "id") Long id);
-
     List<PostEntity> findAllByMemberEntityId(Long memberId);
 }

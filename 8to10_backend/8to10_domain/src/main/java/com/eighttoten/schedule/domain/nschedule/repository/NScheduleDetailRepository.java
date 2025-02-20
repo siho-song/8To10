@@ -10,14 +10,17 @@ import java.util.Optional;
 
 public interface NScheduleDetailRepository {
     void deleteById(Long id);
-    void deleteByIds(List<Long> ids);
-    void saveAll(Long nScheduleId, List<NewNDetail> newNDetails);
+    void deleteAllByIds(List<Long> ids);
     void update(NScheduleDetail nScheduleDetail);
+    void saveAll(Long nScheduleId, List<NewNDetail> newNDetails);
+
     Optional<NScheduleDetail> findById(Long id);
     Optional<NDetailWithParent> findByIdWithParent(Long id);
-    List<NScheduleDetail> findByStartDateGEAndEmailAndParentId(LocalDateTime start, String email, Long parentId);
-    List<NScheduleDetail> findAllByEmailAndDate(String email, LocalDate date);
+
     List<NScheduleDetail> findAllByIds(List<Long> ids);
-    List<NScheduleDetail> findAllBetweenStartAndEnd(String memberEmail, LocalDateTime startDateTime, LocalDateTime endDateTime);
-    List<NDetailWithParent> findAllWithParentByMemberEmail(String memberEmail);
+    List<NScheduleDetail> findAllByEmailAndDate(String email, LocalDate date);
+    List<NScheduleDetail> findAllByEmailBetweenStartAndEnd(String email, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<NScheduleDetail> findAllByEmailAndParentIdGEStartDate(String email, Long parentId, LocalDateTime start);
+
+    List<NDetailWithParent> findAllWithParentByMemberEmail(String email);
 }

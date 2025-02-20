@@ -30,13 +30,13 @@ public class ReplyHeartRepositoryImpl implements ReplyHeartRepository {
     }
 
     @Override
-    public void deleteByReplyId(Long replyId) {
-        replyHeartRepository.deleteByReplyId(replyId);
+    public void deleteAllByReplyId(Long replyId) {
+        replyHeartRepository.deleteAllByReplyId(replyId);
     }
 
     @Override
-    public void deleteByReplyIds(List<Long> replyIds) {
-        replyHeartRepository.deleteByReplyIds(replyIds);
+    public void deleteAllByReplyIds(List<Long> replyIds) {
+        replyHeartRepository.deleteAllByReplyIds(replyIds);
     }
 
     @Override

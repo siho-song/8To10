@@ -21,11 +21,6 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
-    public void deleteById(Long id) {
-        notificationRepository.deleteById(id);
-    }
-
-    @Override
     public long save(NewNotification newNotification) {
         MemberEntity memberEntity = memberJpaRepository.findById(newNotification.getMemberId())
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_MEMBER));
@@ -40,13 +35,18 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
+    public void deleteById(Long id) {
+        notificationRepository.deleteById(id);
+    }
+
+    @Override
     public Optional<Notification> findById(Long id) {
         return notificationRepository.findById(id).map(NotificationEntity::toNotification);
     }
 
     @Override
-    public List<Notification> findAllByMemberIdAfter(Long memberId, LocalDateTime dateTime) {
-        List<NotificationEntity> entities = notificationRepository.findAllByMemberIdAfter(memberId, dateTime);
+    public List<Notification> findAllByMemberIdAfterStart(Long memberId, LocalDateTime start) {
+        List<NotificationEntity> entities = notificationRepository.findAllByMemberIdAfterStart(memberId, start);
         return entities.stream().map(NotificationEntity::toNotification).toList();
     }
 }
