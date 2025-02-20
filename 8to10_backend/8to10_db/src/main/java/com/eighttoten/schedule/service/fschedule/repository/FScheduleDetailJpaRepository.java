@@ -1,6 +1,6 @@
-package com.eighttoten.schedule.fschedule.repository;
+package com.eighttoten.schedule.service.fschedule.repository;
 
-import com.eighttoten.schedule.fschedule.FScheduleDetailEntity;
+import com.eighttoten.schedule.service.fschedule.FScheduleDetailEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,12 +13,12 @@ public interface FScheduleDetailJpaRepository extends JpaRepository<FScheduleDet
 
     @Modifying
     @Query("delete from FScheduleDetailEntity fd where fd.id in :ids")
-    void deleteByIds(@Param(value = "ids") List<Long> ids);
+    void deleteAllByIds(@Param(value = "ids") List<Long> ids);
 
     @Query("select fd from FScheduleDetailEntity fd where fd.startDateTime >= :start and fd.createdBy = :email and fd.fScheduleEntity.id = :parentId")
-    List<FScheduleDetailEntity> findByStartDateGEAndEmailAndParentId(@Param(value = "start") LocalDateTime start,
-                                                                     @Param(value = "email") String email,
-                                                                     @Param(value = "parentId") Long parentId);
+    List<FScheduleDetailEntity> findAllByStartDateGEAndEmailAndParentId(@Param(value = "start") LocalDateTime start,
+                                                                        @Param(value = "email") String email,
+                                                                        @Param(value = "parentId") Long parentId);
 
     @Query("select fd from FScheduleDetailEntity fd where fd.startDateTime >= :start and fd.endDateTime <= :end and fd.createdBy = :memberEmail")
     List<FScheduleDetailEntity> findAllBetweenStartAndEnd(@Param(value = "memberEmail") String memberEmail,
