@@ -23,7 +23,7 @@ public class AchievementService {
     public List<Achievement> getMonthlyAchievement(Long memberId, int year, int month){
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = LocalDate.of(year, month, start.lengthOfMonth());
-        return achievementRepository.findAllByMemberIdAndBetween(memberId, start, end);
+        return achievementRepository.findAllByMemberIdAndBetweenStartAndEnd(memberId, start, end);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -50,7 +50,7 @@ public class AchievementService {
         achievementRepository.update(achievement);
     }
 
-    public double calculateAchievementRate(List<NScheduleDetail> nScheduleDetails){
+    private double calculateAchievementRate(List<NScheduleDetail> nScheduleDetails){
         double achievementSum = nScheduleDetails.stream()
                 .mapToDouble(NScheduleDetail::getAchievementRate)
                 .sum();

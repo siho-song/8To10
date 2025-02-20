@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface ReplyHeartRepository {
     void save(NewReplyHeart newReplyHeart);
-    void deleteByReplyId(Long replyId);
-    void deleteByReplyIds(List<Long> replyIds);
+    void deleteAllByReplyId(Long replyId);
+    void deleteAllByReplyIds(List<Long> replyIds);
     void deleteByMemberIdAndReplyId(Long memberId, Long replyId);
     boolean existsByMemberIdAndReplyId(Long memberId, Long replyId);
 }

@@ -76,7 +76,7 @@ public class FScheduleController {
             @RequestParam(value = "parentId") Long parentId,
             @RequestParam(value = "startDate") LocalDateTime startDate) {
 
-        fScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(startDate, member, parentId);
+        fScheduleDetailService.deleteByMemberAndParentIdGEStartDate(member, parentId, startDate);
         return ResponseEntity.noContent().build();
     }
 

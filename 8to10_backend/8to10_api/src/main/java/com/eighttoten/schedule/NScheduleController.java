@@ -77,7 +77,7 @@ public class NScheduleController {
             @RequestParam(value = "startDate") LocalDateTime startDate,
             @RequestParam(value = "parentId") Long parentId)
     {
-        nScheduleDetailService.deleteByStartDateGEAndMemberAndParentId(
+        nScheduleDetailService.deleteAllByStartDateGEAndMemberAndParentId(
                 startDate, member, parentId);
 
         return ResponseEntity.noContent().build();

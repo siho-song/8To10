@@ -1,6 +1,6 @@
-package com.eighttoten.schedule.nschedule.repository;
+package com.eighttoten.schedule.service.nschedule.repository;
 
-import com.eighttoten.schedule.nschedule.NScheduleDetailEntity;
+import com.eighttoten.schedule.service.nschedule.NScheduleDetailEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,16 +14,16 @@ import org.springframework.data.repository.query.Param;
 public interface NScheduleDetailJpaRepository extends JpaRepository<NScheduleDetailEntity, Long> {
     @Modifying
     @Query("delete from NScheduleDetailEntity nd where nd in :ids")
-    void deleteByIds(@Param(value = "ids") List<Long> ids);
+    void deleteAllByIds(@Param(value = "ids") List<Long> ids);
 
-    @EntityGraph(attributePaths = "nSchedule")
+    @EntityGraph(attributePaths = "nScheduleEntity")
     @Query("select nd from NScheduleDetailEntity nd where nd.id = :id")
     Optional<NScheduleDetailEntity> findByIdWithParent(@Param(value = "id") Long id);
 
     @Query("select nd from NScheduleDetailEntity nd where nd.startDateTime >= :start and nd.nScheduleEntity.id = :parentId and nd.createdBy = :email")
-    List<NScheduleDetailEntity> findByStartDateGEAndEmailAndParentId(@Param(value = "start") LocalDateTime start,
-                                                                     @Param(value = "email") String email,
-                                                                     @Param(value = "parentId") Long parentId);
+    List<NScheduleDetailEntity> findAllByEmailAndParentIdGEStartDate(@Param(value = "email") String email,
+                                                                     @Param(value = "parentId") Long parentId,
+                                                                     @Param(value = "start") LocalDateTime start);
 
     @Query("select nd from NScheduleDetailEntity nd where nd.createdBy = :email and DATE(nd.startDateTime) = :date")
     List<NScheduleDetailEntity> findAllByEmailAndDate(@Param(value = "email") String email,

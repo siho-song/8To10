@@ -20,7 +20,7 @@ public class ReplyHeartService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void add(NewReplyHeart newReplyHeart) {
+    public void addReplyHeart(NewReplyHeart newReplyHeart) {
         Long memberId = newReplyHeart.getMemberId();
         Long replyId = newReplyHeart.getReplyId();
         boolean hasLiked = replyHeartRepository.existsByMemberIdAndReplyId(memberId, replyId);

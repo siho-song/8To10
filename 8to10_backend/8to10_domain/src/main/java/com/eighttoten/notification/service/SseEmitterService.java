@@ -40,7 +40,7 @@ public class SseEmitterService {
 
         if(lastEventId != null){
             LocalDateTime dateTime = extractDateTime(lastEventId);
-            List<Notification> notifications = notificationRepository.findAllByMemberIdAfter(member.getId(), dateTime);
+            List<Notification> notifications = notificationRepository.findAllByMemberIdAfterStart(member.getId(), dateTime);
             notifications.forEach(
                     notification -> sendToClient(emitter,
                             uniqueEmitterId,

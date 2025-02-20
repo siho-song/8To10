@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NotificationRepository {
-    void deleteById(Long id);
     long save(NewNotification newNotification);
     void update(Notification notification);
+    void deleteById(Long id);
     Optional<Notification> findById(Long id);
-    List<Notification> findAllByMemberIdAfter(Long memberId, LocalDateTime dateTime);
+    List<Notification> findAllByMemberIdAfterStart(Long memberId, LocalDateTime start);
 }

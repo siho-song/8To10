@@ -58,7 +58,7 @@ public class PostController {
             @CurrentMember Member member,
             @RequestBody PostUpdateRequest request) {
 
-        postService.update(member, request.toUpdatePost());
+        postService.updatePost(member, request.toUpdatePost());
         return ResponseEntity.noContent().build();
     }
 
@@ -74,7 +74,7 @@ public class PostController {
             @CurrentMember Member member,
             @PathVariable(name = "id") Long id) {
 
-        postService.deleteById(member, id);
+        postService.deletePost(member, id);
         return ResponseEntity.noContent().build();
     }
 
@@ -83,7 +83,7 @@ public class PostController {
             @CurrentMember Member member,
             @RequestBody @Valid PostSaveRequest request) {
 
-        postService.save(request.toNewPost(member.getId()));
+        postService.addPost(request.toNewPost(member.getId()));
         return ResponseEntity.status(CREATED).build();
     }
 
