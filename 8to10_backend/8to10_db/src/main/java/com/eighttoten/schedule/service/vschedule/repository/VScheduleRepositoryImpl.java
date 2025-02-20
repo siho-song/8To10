@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.vschedule.repository;
+package com.eighttoten.schedule.service.vschedule.repository;
 
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.NotFoundEntityException;
@@ -6,9 +6,8 @@ import com.eighttoten.member.MemberEntity;
 import com.eighttoten.member.repository.MemberJpaRepository;
 import com.eighttoten.schedule.domain.vschedule.NewVSchedule;
 import com.eighttoten.schedule.domain.vschedule.VSchedule;
-import com.eighttoten.schedule.domain.vschedule.VScheduleUpdate;
 import com.eighttoten.schedule.domain.vschedule.repository.VScheduleRepository;
-import com.eighttoten.schedule.vschedule.VScheduleEntity;
+import com.eighttoten.schedule.service.vschedule.VScheduleEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +28,12 @@ public class VScheduleRepositoryImpl implements VScheduleRepository {
     }
 
     @Override
-    public void update(VScheduleUpdate vScheduleUpdate) {
-        VScheduleEntity entity = vScheduleRepository.findById(vScheduleUpdate.getId())
+    public void update(VSchedule vSchedule) {
+        VScheduleEntity entity = vScheduleRepository.findById(vSchedule.getId())
                 .orElseThrow(() -> new NotFoundEntityException(ExceptionCode.NOT_FOUND_V_SCHEDULE));
 
-        entity.update(vScheduleUpdate.getTitle(), vScheduleUpdate.getCommonDescription(),
-                vScheduleUpdate.getStartDateTime(), vScheduleUpdate.getEndDateTime());
+        entity.update(vSchedule.getTitle(), vSchedule.getCommonDescription(),
+                vSchedule.getStartDateTime(), vSchedule.getEndDateTime());
     }
 
     @Override
@@ -48,14 +47,14 @@ public class VScheduleRepositoryImpl implements VScheduleRepository {
     }
 
     @Override
-    public List<VSchedule> findAllBetweenStartAndEnd(String memberEmail, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        List<VScheduleEntity> entities = vScheduleRepository.findAllBetweenStartAndEnd(memberEmail, startDateTime, endDateTime);
+    public List<VSchedule> findAllByMemberEmail(String memberEmail) {
+        List<VScheduleEntity> entities = vScheduleRepository.findAllByMemberEmail(memberEmail);
         return entities.stream().map(VScheduleEntity::toVSchedule).toList();
     }
 
     @Override
-    public List<VSchedule> findAllByMemberEmail(String memberEmail) {
-        List<VScheduleEntity> entities = vScheduleRepository.findAllByMemberEmail(memberEmail);
+    public List<VSchedule> findAllByEmailBetweenStartAndEnd(String email, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<VScheduleEntity> entities = vScheduleRepository.findAllBetweenStartAndEnd(email, startDateTime, endDateTime);
         return entities.stream().map(VScheduleEntity::toVSchedule).toList();
     }
 }
