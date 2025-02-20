@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.fschedule;
+package com.eighttoten.schedule.service.fschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -7,7 +7,7 @@ import static lombok.AccessLevel.PROTECTED;
 import com.eighttoten.BaseEntity;
 import com.eighttoten.schedule.domain.fschedule.FDetailWithParent;
 import com.eighttoten.schedule.domain.fschedule.FScheduleDetail;
-import com.eighttoten.schedule.domain.fschedule.NewFScheduleDetail;
+import com.eighttoten.schedule.domain.fschedule.NewFDetail;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,15 +16,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Table(name = "f_schedule_detail")
 public class FScheduleDetailEntity extends BaseEntity {
@@ -36,7 +32,7 @@ public class FScheduleDetailEntity extends BaseEntity {
     @JoinColumn(name = "f_schedule_id", nullable = false)
     private FScheduleEntity fScheduleEntity;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String detailDescription;
 
     @Column(nullable = false)
@@ -45,18 +41,13 @@ public class FScheduleDetailEntity extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
-    public void update(String detailDescription,LocalDateTime start, LocalDateTime end){
-        this.detailDescription = detailDescription;
-        this.startDateTime = start;
-        this.endDateTime = end;
-    }
-
-    public static FScheduleDetailEntity from(NewFScheduleDetail newFScheduleDetail, FScheduleEntity fScheduleEntity) {
-        return new FScheduleDetailEntity(null,
-                fScheduleEntity,
-                newFScheduleDetail.getDetailDescription(),
-                newFScheduleDetail.getStartDateTime(),
-                newFScheduleDetail.getEndDateTime());
+    public static FScheduleDetailEntity from(NewFDetail newFDetail, FScheduleEntity fScheduleEntity) {
+        FScheduleDetailEntity fScheduleDetailEntity = new FScheduleDetailEntity();
+        fScheduleDetailEntity.fScheduleEntity = fScheduleEntity;
+        fScheduleDetailEntity.detailDescription = newFDetail.getDetailDescription();
+        fScheduleDetailEntity.startDateTime = newFDetail.getStartDateTime();
+        fScheduleDetailEntity.endDateTime = newFDetail.getEndDateTime();
+        return fScheduleDetailEntity;
     }
 
     public FScheduleDetail toFScheduleDetail(){
@@ -68,5 +59,11 @@ public class FScheduleDetailEntity extends BaseEntity {
     public FDetailWithParent toFDetailWithParent(){
         return new FDetailWithParent(id, fScheduleEntity.toFSchedule(), detailDescription, startDateTime, endDateTime,
                 createdBy);
+    }
+
+    public void update(FScheduleDetail fScheduleDetail){
+        detailDescription = fScheduleDetail.getDetailDescription();
+        startDateTime = fScheduleDetail.getStartDateTime();
+        endDateTime = fScheduleDetail.getEndDateTime();
     }
 }

@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.fschedule;
+package com.eighttoten.schedule.service.fschedule;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -35,31 +35,31 @@ public class FScheduleEntity extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT DEFAULT ''")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String commonDescription;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private LocalDateTime startDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private LocalDateTime endDateTime;
 
     public static FScheduleEntity from(NewFSchedule newFSchedule, MemberEntity memberEntity){
         FScheduleEntity fScheduleEntity = new FScheduleEntity();
         fScheduleEntity.memberEntity = memberEntity;
         fScheduleEntity.title = newFSchedule.getTitle();
         fScheduleEntity.commonDescription = newFSchedule.getCommonDescription();
-        fScheduleEntity.startDate = newFSchedule.getStartDate();
-        fScheduleEntity.endDate = newFSchedule.getEndDate();
+        fScheduleEntity.startDateTime = newFSchedule.getStartDate();
+        fScheduleEntity.endDateTime = newFSchedule.getEndDate();
         return fScheduleEntity;
     }
 
     public FSchedule toFSchedule() {
-        return new FSchedule(id, title, commonDescription, startDate, endDate, createdBy);
+        return new FSchedule(id, title, commonDescription, startDateTime, endDateTime, createdBy);
     }
 
-    public void update(String title, String commonDescription) {
-        this.title = title;
-        this.commonDescription = commonDescription;
+    public void update(FSchedule fSchedule) {
+        this.title = fSchedule.getTitle();
+        this.commonDescription = fSchedule.getCommonDescription();
     }
 }
