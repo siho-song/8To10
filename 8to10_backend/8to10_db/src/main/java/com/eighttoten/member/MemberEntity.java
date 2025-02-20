@@ -66,6 +66,7 @@ public class MemberEntity extends BaseEntity {
 
     public static MemberEntity from(NewMember newMember) {
         MemberEntity memberEntity = new MemberEntity();
+        memberEntity.username = newMember.getUsername();
         memberEntity.nickname = newMember.getNickname();
         memberEntity.email = newMember.getEmail();
         memberEntity.password = newMember.getPassword();
