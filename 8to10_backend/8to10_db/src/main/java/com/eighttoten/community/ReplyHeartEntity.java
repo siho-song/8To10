@@ -14,12 +14,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@Table(name = "reply_heart")
 public class ReplyHeartEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "reply_heart_id")
@@ -38,9 +40,5 @@ public class ReplyHeartEntity extends BaseEntity {
         replyHeartEntity.replyEntity = replyEntity;
         replyHeartEntity.memberEntity = memberEntity;
         return replyHeartEntity;
-    }
-
-    public ReplyHeart toReplyHeart(){
-        return new ReplyHeart(id, replyEntity.toReply(), memberEntity.toMember(), createdBy);
     }
 }
