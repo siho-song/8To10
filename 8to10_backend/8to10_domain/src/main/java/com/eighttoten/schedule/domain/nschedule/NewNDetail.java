@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
-@Builder
 public class NewNDetail {
     private Long nScheduleId;
     private LocalDateTime startDateTime;

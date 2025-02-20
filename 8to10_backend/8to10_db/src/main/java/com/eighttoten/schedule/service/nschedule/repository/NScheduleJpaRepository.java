@@ -1,6 +1,6 @@
-package com.eighttoten.schedule.nschedule.repository;
+package com.eighttoten.schedule.service.nschedule.repository;
 
-import com.eighttoten.schedule.nschedule.NScheduleEntity;
+import com.eighttoten.schedule.service.nschedule.NScheduleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NScheduleJpaRepository extends JpaRepository<NScheduleEntity, Long> {

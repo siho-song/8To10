@@ -1,6 +1,6 @@
-package com.eighttoten.schedule.vschedule.repository;
+package com.eighttoten.schedule.service.vschedule.repository;
 
-import com.eighttoten.schedule.vschedule.VScheduleEntity;
+import com.eighttoten.schedule.service.vschedule.VScheduleEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,5 @@
-package com.eighttoten.infrastructure;
+package com.eighttoten.support;
 
-import com.eighttoten.support.MessagePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
