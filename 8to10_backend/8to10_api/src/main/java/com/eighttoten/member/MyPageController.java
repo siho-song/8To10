@@ -64,6 +64,12 @@ public class MyPageController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/account")
+    public ResponseEntity<Void> deleteMember(@CurrentMember Member member){
+        myPageService.deleteMember(member);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/account/nickname")
     public ResponseEntity<Void> updateNickname(
             @CurrentMember Member member,
