@@ -50,7 +50,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         qPost.id,
                         qPost.title,
                         qPost.contents,
-                        qPost.memberEntity.createdBy,
+                        qPost.memberEntity.createdBy.as("writer"),
                         qPost.memberEntity.nickname,
                         qPost.createdAt,
                         qPost.updatedAt,
