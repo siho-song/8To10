@@ -1,6 +1,7 @@
 package com.eighttoten.community.dto.post;
 
 import com.eighttoten.community.domain.post.SearchPostPage;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class PostPageRequest {
     private String sortCond;
     private String sortDirection;
     @NotNull
+    @Min(value = 1)
     private Long pageNum;
     @NotNull
     private Long pageSize;
