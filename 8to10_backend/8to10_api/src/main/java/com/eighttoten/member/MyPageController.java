@@ -1,5 +1,8 @@
 package com.eighttoten.member;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.member.dto.request.NicknameUpdateRequest;
 import com.eighttoten.member.dto.request.PasswordUpdateRequest;
@@ -13,7 +16,6 @@ import com.eighttoten.support.Result;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,12 +47,12 @@ public class MyPageController {
         return ResponseEntity.ok(Result.fromElements(myPageService.getWrittenReplies(member.getId()), WrittenReplyResponse::from));
     }
 
-    @GetMapping("/scrapped-boards")
+    @GetMapping("/scrapped-posts")
     public ResponseEntity<Result<ScrappedPostResponse>> getScrapedPosts(@CurrentMember Member member) {
         return ResponseEntity.ok(Result.fromElements(myPageService.getScrappedPost(member.getId()), ScrappedPostResponse::from));
     }
 
-    @PutMapping(value = "/profile/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/profile/photo", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadProfilePhoto(
             @CurrentMember Member member,
             @RequestParam(name = "file") MultipartFile file) throws IOException {
@@ -70,7 +72,7 @@ public class MyPageController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/account/nickname")
+    @PutMapping(value = "/account/nickname" , consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateNickname(
             @CurrentMember Member member,
             @RequestBody @Valid NicknameUpdateRequest request)
@@ -79,7 +81,7 @@ public class MyPageController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/account/password")
+    @PutMapping(value = "/account/password", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updatePassword(
             @CurrentMember Member member,
             @RequestBody @Valid PasswordUpdateRequest request)
