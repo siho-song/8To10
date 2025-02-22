@@ -1,14 +1,13 @@
 package com.eighttoten.achievement;
 
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.schedule.event.AchievementUpdateEvent;
 import com.eighttoten.schedule.domain.nschedule.NScheduleDetail;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleDetailRepository;
+import com.eighttoten.schedule.event.AchievementUpdateEvent;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;

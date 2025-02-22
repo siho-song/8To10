@@ -1,18 +1,16 @@
 package com.eighttoten.schedule.service.fschedule;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.domain.fschedule.FScheduleCreateInfo;
 import com.eighttoten.schedule.domain.fschedule.NewFSchedule;
-import com.eighttoten.schedule.domain.fschedule.repository.FScheduleDetailRepository;
 import com.eighttoten.support.AuthAccessor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

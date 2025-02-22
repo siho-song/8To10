@@ -1,8 +1,8 @@
 package com.eighttoten.schedule.service.nschedule;
 
-import static com.eighttoten.exception.ExceptionCode.*;
 import static com.eighttoten.exception.ExceptionCode.INVALID_N_SCHEDULE_CREATION;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
+import static com.eighttoten.exception.ExceptionCode.NOT_WITHIN_WORK_TIME;
 
 import com.eighttoten.common.AppConstant;
 import com.eighttoten.exception.BadRequestException;

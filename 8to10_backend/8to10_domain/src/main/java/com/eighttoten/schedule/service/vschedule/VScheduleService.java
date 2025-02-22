@@ -1,9 +1,6 @@
 package com.eighttoten.schedule.service.vschedule;
 
-import static com.eighttoten.exception.ExceptionCode.WRITER_NOT_EQUAL_MEMBER;
-
 import com.eighttoten.exception.ExceptionCode;
-import com.eighttoten.exception.MismatchException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.domain.vschedule.NewVSchedule;

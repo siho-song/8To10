@@ -1,7 +1,6 @@
 package com.eighttoten;
 
 import com.eighttoten.community.domain.post.Post;
-import com.eighttoten.community.domain.post.PostScrap;
 import com.eighttoten.community.domain.reply.Reply;
 import com.eighttoten.member.domain.Gender;
 import com.eighttoten.member.domain.Member;

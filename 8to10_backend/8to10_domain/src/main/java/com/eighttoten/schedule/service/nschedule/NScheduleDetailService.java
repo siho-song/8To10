@@ -1,15 +1,14 @@
 package com.eighttoten.schedule.service.nschedule;
 
-import static com.eighttoten.exception.ExceptionCode.*;
+import static com.eighttoten.exception.ExceptionCode.INVALID_ACHIEVEMENT_AMOUNT;
+import static com.eighttoten.exception.ExceptionCode.NOT_EQUAL_DATE;
 import static com.eighttoten.exception.ExceptionCode.NOT_EXIST_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
 
 import com.eighttoten.exception.BadRequestException;
-import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.schedule.event.AchievementUpdateEvent;
 import com.eighttoten.schedule.domain.ProgressUpdates;
 import com.eighttoten.schedule.domain.ProgressUpdates.ProgressUpdate;
 import com.eighttoten.schedule.domain.nschedule.NDetailUpdate;
@@ -21,6 +20,7 @@ import com.eighttoten.schedule.domain.nschedule.NewNDetail;
 import com.eighttoten.schedule.domain.nschedule.TimeSlot;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleDetailRepository;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleRepository;
+import com.eighttoten.schedule.event.AchievementUpdateEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

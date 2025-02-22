@@ -3,7 +3,6 @@ package com.eighttoten.schedule.domain.nschedule;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
