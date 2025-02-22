@@ -119,8 +119,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authProvider(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        return new AuthProvider(memberDetailsService, bCryptPasswordEncoder);
+    public AuthenticationProvider authProvider(PasswordEncoder passwordEncoder) {
+        return new AuthProvider(memberDetailsService, passwordEncoder);
     }
 
     @Bean
