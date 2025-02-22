@@ -22,6 +22,7 @@ public enum ExceptionCode {
     INVALID_N_SCHEDULE_CREATION(3002, "일반 일정을 생성할 수 없습니다. 일정을 조율해주세요."),
     NOT_FOUND_N_DETAIL(3011, "일반일정을 세부사항을 찾을 수 없습니다"),
     NOT_EXIST_N_DETAIL(3012, "업데이트 하려는 일반일정이 존재하지 않습니다."),
+    NOT_WITHIN_WORK_TIME(3100, "일과시간 내에 존재하지않는 타임슬롯이 있습니다."),
 
 
     NOT_EQUAL_POST(3501, "부모댓글의 게시글과 대댓글의 게시글이 일치하지 않습니다."),
@@ -44,6 +45,8 @@ public enum ExceptionCode {
     NOT_FOUND_NOTIFICATION(5001,"알림을 찾을 수 없습니다."),
 
     NOT_FOUND_ACHIEVEMENT(5501,"성취도를 찾을 수 없습니다"),
+    INVALID_ACHIEVEMENT_AMOUNT(5502, "유효하지 않은 성취량입니다."),
+    NOT_EQUAL_DATE(5503, "업데이트 하려는 날짜와 업데이트 하려는 일정의 날짜가 일치해야 합니다."),
 
     NOT_FOUND_REFRESH_TOKEN(8001, "REFRESH TOKEN 을 찾을 수 없습니다"),
     INVALID_ACCESS_TOKEN(8002,"유효하지 않은 ACCESS TOKEN 입니다."),
