@@ -1,4 +1,4 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.dto.request.nschedule;
 
 import com.eighttoten.schedule.domain.nschedule.NScheduleUpdate;
 import jakarta.validation.constraints.NotBlank;

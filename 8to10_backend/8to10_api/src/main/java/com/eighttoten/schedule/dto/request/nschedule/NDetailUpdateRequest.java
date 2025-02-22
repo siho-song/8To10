@@ -1,12 +1,10 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.dto.request.nschedule;
 
 import com.eighttoten.schedule.domain.nschedule.NDetailUpdate;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class NDetailUpdateRequest {
     @NotNull
     private Long id;

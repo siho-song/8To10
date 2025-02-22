@@ -2,7 +2,6 @@ package com.eighttoten.schedule.dto.response;
 
 import com.eighttoten.schedule.domain.nschedule.NDetailWithParent;
 import com.eighttoten.schedule.domain.nschedule.NSchedule;
-import com.eighttoten.schedule.domain.nschedule.NScheduleDetail;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

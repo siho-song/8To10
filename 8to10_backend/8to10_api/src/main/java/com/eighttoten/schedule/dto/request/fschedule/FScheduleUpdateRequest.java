@@ -4,11 +4,9 @@ import com.eighttoten.schedule.domain.fschedule.FScheduleUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class FScheduleUpdateRequest {
     @NotNull
     private Long id;

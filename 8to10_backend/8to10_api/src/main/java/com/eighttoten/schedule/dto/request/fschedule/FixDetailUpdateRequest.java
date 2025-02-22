@@ -1,11 +1,11 @@
 package com.eighttoten.schedule.dto.request.fschedule;
 
-import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import com.eighttoten.schedule.domain.fschedule.FDetailUpdate;
 import com.eighttoten.schedule.dto.request.DateRangeValidatable;
 import com.eighttoten.schedule.validator.fielderror.ZeroSeconds;
 import com.eighttoten.schedule.validator.objecterror.StartBeforeEnd;
+import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

@@ -1,20 +1,16 @@
 package com.eighttoten.schedule.dto.request.vschedule;
 
-import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import com.eighttoten.schedule.domain.vschedule.VScheduleUpdate;
 import com.eighttoten.schedule.dto.request.DateRangeValidatable;
 import com.eighttoten.schedule.validator.objecterror.StartBeforeEnd;
+import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
 public class VScheduleUpdateRequest implements DateRangeValidatable {
