@@ -353,7 +353,7 @@ VALUES
     (1, 'Detail of the first N_SCHEDULE.', '2024-05-02 10:00:00', '2024-05-02 11:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
     (1, 'Detail of the first N_SCHEDULE.', '2024-05-03 11:00:00', '2024-05-03 12:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
     (1, 'Detail of the first N_SCHEDULE.', '2024-05-04 12:00:00', '2024-05-04 13:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
-    (1, 'Detail of the first N_SCHEDULE.', '2024-05-05 13:00:00', '2024-05-05 14:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
+    (1, 'Detail of the first N_SCHEDULE.', '2024-05-05 13:00:00', '2024-05-05 14:00:00', '01:00:00', false, 0, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
     (2, 'Detail of the first N_SCHEDULE.', '2024-05-01 13:00:00', '2024-05-05 14:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
     (2, 'Detail of the first N_SCHEDULE.', '2024-05-02 13:00:00', '2024-05-05 14:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
     (2, 'Detail of the first N_SCHEDULE.', '2024-05-03 13:00:00', '2024-05-05 14:00:00', '01:00:00', false, 20, 0, '2024-04-30 09:00:00', '2024-04-30 09:00:00', 'normal@example.com', 'normal@example.com'),
@@ -395,7 +395,11 @@ VALUES
     (3, 'Detail of the third F_SCHEDULE.', '2024-03-01 10:00:00', '2024-03-01 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
     (3, 'Detail of the third F_SCHEDULE.', '2024-03-08 10:00:00', '2024-03-08 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
     (3, 'Detail of the third F_SCHEDULE.', '2024-03-14 10:00:00', '2024-03-14 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
-    (3, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com');
+    (3, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
+    (4, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
+    (4, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
+    (4, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com'),
+    (4, 'Detail of the third F_SCHEDULE.', '2024-03-21 10:00:00', '2024-03-21 14:00:00', '2024-03-01 09:00:00', '2024-03-01 09:00:00', 'normal@example.com', 'normal@example.com');
 
 INSERT INTO V_SCHEDULE (member_id, title, common_description, start_date_time, end_date_time, created_at, updated_at, created_by, updated_by)
 VALUES
@@ -415,6 +419,8 @@ VALUES
     (1, '2024-01-08', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
     (1, '2024-01-09', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
     (1, '2024-01-10', 90, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-05-02', 0, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+    (1, '2024-05-03', 0, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
     (2, '2024-01-02', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
     (2, '2024-01-03', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
     (2, '2024-01-04', 80, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
@@ -437,8 +443,8 @@ VALUES
     (3, '2024-01-12', 70, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com');
 
 INSERT INTO NOTIFICATION (member_id, notification_type, message, target_url, related_entity_id, is_read, created_at, updated_at, created_by, updated_by)
-VALUES (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'system', 'system'),
-       (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'system', 'system'),
-       (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'system', 'system'),
-       (2, 'TODO_UPDATE', 'Your scheduleEntity is updated.', NULL, NULL, false, NOW(), NOW(), 'system', 'system'),
-       (3, 'ACHIEVEMENT_FEEDBACK', 'Your post received a new comment.', NULL, NULL, false, NOW(), NOW(), 'system', 'system');
+VALUES (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+       (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+       (1, 'REPLY_ADD', 'You have a new message!', '/postEntity/1', 2, false, NOW(), NOW(), 'normal@example.com', 'normal@example.com'),
+       (2, 'TODO_UPDATE', 'Your scheduleEntity is updated.', NULL, NULL, false, NOW(), NOW(), 'normal2@example.com', 'normal2@example.com'),
+       (3, 'ACHIEVEMENT_FEEDBACK', 'Your post received a new comment.', NULL, NULL, false, NOW(), NOW(), 'normal3@example.com', 'normal3@example.com');
