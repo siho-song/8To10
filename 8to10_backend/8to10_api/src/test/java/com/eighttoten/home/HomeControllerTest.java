@@ -1,10 +1,11 @@
-package com.eighttoten.presentation;
+package com.eighttoten.home;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.eighttoten.support.TokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,14 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.infrastructure.TokenProvider;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@DisplayName("홈 컨트롤러 테스트")
+@DisplayName("홈 컨트롤러 통합 테스트")
 class HomeControllerTest {
-
     @Autowired
     MockMvc mockMvc;
 
@@ -35,8 +33,7 @@ class HomeControllerTest {
     }
 
     @Test
-    @DisplayName("유저 스텟 정보를 반환한다.")
-    @Transactional
+    @DisplayName("특정 멤버의 스텟 정보를 반환한다.")
     void getUserStat() throws Exception {
         ResultActions result = mockMvc.perform(get("/home/user-stats")
                 .header("Authorization", "Bearer " + token)
