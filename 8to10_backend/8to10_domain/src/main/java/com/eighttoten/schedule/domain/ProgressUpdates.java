@@ -14,16 +14,10 @@ public class ProgressUpdates {
     private List<ProgressUpdate> progressUpdates;
 
     @Getter
-    @Builder
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class ProgressUpdate {
         private Long scheduleDetailId;
         private boolean completeStatus;
         private int achievedAmount;
-    }
-
-    public List<Long> getIds(){
-        return progressUpdates.stream().map(ProgressUpdate::getScheduleDetailId).toList();
     }
 }
