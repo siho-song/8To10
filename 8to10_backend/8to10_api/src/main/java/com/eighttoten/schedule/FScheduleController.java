@@ -2,17 +2,18 @@ package com.eighttoten.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.support.CurrentMember;
-import com.eighttoten.support.ValidationSequence;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.dto.request.fschedule.FScheduleSaveRequest;
 import com.eighttoten.schedule.dto.request.fschedule.FScheduleUpdateRequest;
 import com.eighttoten.schedule.dto.request.fschedule.FixDetailUpdateRequest;
 import com.eighttoten.schedule.service.fschedule.FScheduleDetailService;
 import com.eighttoten.schedule.service.fschedule.FScheduleService;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.ValidationSequence;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,7 @@ public class FScheduleController {
         long fScheduleId = fScheduleService.save(request.toNewFSchedule(member.getId()));
         fScheduleDetailService.saveAllDetails(fScheduleId, request.toFScheduleCreateInfo());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
