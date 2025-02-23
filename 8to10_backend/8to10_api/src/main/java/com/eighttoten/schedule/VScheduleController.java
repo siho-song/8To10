@@ -2,13 +2,14 @@ package com.eighttoten.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.support.CurrentMember;
-import com.eighttoten.support.ValidationSequence;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.dto.request.vschedule.VScheduleSaveRequest;
 import com.eighttoten.schedule.dto.request.vschedule.VScheduleUpdateRequest;
 import com.eighttoten.schedule.service.vschedule.VScheduleService;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.ValidationSequence;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,7 @@ public class VScheduleController {
             @RequestBody @Validated(value = ValidationSequence.class) VScheduleSaveRequest request)
     {
         vScheduleService.save(request.toNewVSchedule(member.getId()));
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
@@ -49,6 +50,6 @@ public class VScheduleController {
             @PathVariable(value = "id") Long id)
     {
         vScheduleService.deleteById(member, id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

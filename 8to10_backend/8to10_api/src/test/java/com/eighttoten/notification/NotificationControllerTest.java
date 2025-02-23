@@ -1,4 +1,4 @@
-package com.eighttoten.presentation;
+package com.eighttoten.notification;
 
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.eighttoten.entity.notification.repository.SseEmitterRepository;
-import com.eighttoten.infrastructure.TokenProvider;
+import com.eighttoten.notification.domain.repository.SseEmitterRepository;
 import com.eighttoten.notification.service.SseEmitterService;
+import com.eighttoten.support.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@DisplayName("알림 컨트롤러 테스트")
-class NotificationEntityControllerTest {
+@DisplayName("알림 컨트롤러 통합 테스트")
+class NotificationControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -64,7 +64,7 @@ class NotificationEntityControllerTest {
     }
 
     @Test
-    @DisplayName("알림을 삭제한다")
+    @DisplayName("특정 알림을 삭제한다")
     public void deleteById() throws Exception {
         Long notificationId = 1L;
         mockMvc.perform(delete("/notification/{id}", notificationId)
@@ -73,11 +73,12 @@ class NotificationEntityControllerTest {
     }
 
     @Test
-    @DisplayName("알림 읽음 상태를 읽음 처리한다")
+    @DisplayName("특정 알림 읽음 상태를 읽음 처리한다")
     public void updateById() throws Exception {
         Long notificationId = 1L;
         mockMvc.perform(put("/notification/{id}", notificationId)
                 .header("Authorization", "Bearer " + token)
+                .param("readStatus", "true")
         ).andExpect(status().isNoContent());
     }
 }

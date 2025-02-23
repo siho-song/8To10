@@ -1,6 +1,7 @@
 package com.eighttoten.member.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +11,6 @@ import com.eighttoten.member.domain.Member;
 import com.eighttoten.member.domain.MemberRepository;
 import com.eighttoten.member.domain.NewMember;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -38,7 +38,7 @@ out/
 
 ### app config ###
 **/src/main/**/*.yaml
-**/src/test/**/application-test.yaml
+**/src/test/**/*.yaml
 
 ### resources ###
 **/src/main/resources/static/lib/**

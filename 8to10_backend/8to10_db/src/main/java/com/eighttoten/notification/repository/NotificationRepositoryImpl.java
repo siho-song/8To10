@@ -1,10 +1,10 @@
 package com.eighttoten.notification.repository;
 
+import com.eighttoten.exception.ExceptionCode;
+import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.MemberEntity;
 import com.eighttoten.member.repository.MemberJpaRepository;
 import com.eighttoten.notification.NotificationEntity;
-import com.eighttoten.exception.ExceptionCode;
-import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.notification.domain.NewNotification;
 import com.eighttoten.notification.domain.Notification;
 import com.eighttoten.notification.domain.repository.NotificationRepository;

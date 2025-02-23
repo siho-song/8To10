@@ -1,6 +1,6 @@
 package com.eighttoten.schedule.validator.objecterror;
 
-import com.eighttoten.schedule.dto.request.NScheduleSaveRequest;
+import com.eighttoten.schedule.dto.request.nschedule.NScheduleSaveRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.temporal.ChronoUnit;

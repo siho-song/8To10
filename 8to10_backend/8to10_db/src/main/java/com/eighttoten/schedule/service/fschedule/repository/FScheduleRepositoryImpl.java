@@ -1,14 +1,13 @@
 package com.eighttoten.schedule.service.fschedule.repository;
 
-import com.eighttoten.member.MemberEntity;
-import com.eighttoten.member.repository.MemberJpaRepository;
-import com.eighttoten.schedule.domain.fschedule.NewFSchedule;
-import com.eighttoten.schedule.service.fschedule.FScheduleEntity;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.exception.NotFoundEntityException;
+import com.eighttoten.member.MemberEntity;
+import com.eighttoten.member.repository.MemberJpaRepository;
 import com.eighttoten.schedule.domain.fschedule.FSchedule;
-import com.eighttoten.schedule.domain.fschedule.FScheduleUpdate;
+import com.eighttoten.schedule.domain.fschedule.NewFSchedule;
 import com.eighttoten.schedule.domain.fschedule.repository.FScheduleRepository;
+import com.eighttoten.schedule.service.fschedule.FScheduleEntity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

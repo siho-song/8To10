@@ -1,4 +1,4 @@
-package com.eighttoten.presentation;
+package com.eighttoten.auth;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.eighttoten.TestDataUtils;
-import com.eighttoten.entity.member.MemberEntity;
+import com.eighttoten.member.domain.Member;
+import com.eighttoten.member.domain.MemberRepository;
+import com.eighttoten.service.AuthService;
+import com.eighttoten.support.PasswordEncoder;
 import jakarta.servlet.http.Cookie;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,42 +22,32 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import com.eighttoten.entity.member.repository.MemberJpaRepository;
-import com.eighttoten.service.AuthService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("인증 컨트롤러 테스트")
-class AuthEntityControllerTest {
+class AuthControllerTest {
     @MockBean
-    MemberJpaRepository memberJpaRepository;
+    MemberRepository memberRepository;
 
     @MockBean
     AuthService authService;
 
     @MockBean
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     MockMvc mockMvc;
-
-    Optional<MemberEntity> member;
-
-    @BeforeEach
-    void init() {
-        // 테스트 데이터 초기화
-        member = Optional.of(TestDataUtils.createTestMember());
-    }
 
     @Test
     @DisplayName("로그인에 성공하면 AccessToken, RefreshToken을 발급 받는다.")
     void loginSuccess() throws Exception {
         // given
-        when(memberJpaRepository.findByEmail(any())).thenReturn(member);
-        when(bCryptPasswordEncoder.matches(any(), any())).thenReturn(true);
+        Member member = TestDataUtils.createTestMember();
+        when(memberRepository.findByEmail(any())).thenReturn(Optional.of(member));
+        when(passwordEncoder.matches(any(), any())).thenReturn(true);
 
         // When
         ResultActions resultActions = mockMvc.perform(post("/login")
@@ -73,16 +65,17 @@ class AuthEntityControllerTest {
     @DisplayName("로그인에 실패하면 응답 상태코드로 401을 받는다.")
     void inValidPassword() throws Exception {
         // given
-        when(memberJpaRepository.findByEmail(any())).thenReturn(member);
-        when(bCryptPasswordEncoder.matches(any(), any())).thenReturn(false);
+        Member member = TestDataUtils.createTestMember();
+        when(memberRepository.findByEmail(any())).thenReturn(Optional.of(member));
+        when(passwordEncoder.matches(any(), any())).thenReturn(false);
 
-        // When
+        // when
         ResultActions resultActions = mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("email", "test1@example.com")
                 .param("password", "wrongpassword"));
 
-        // Then
+        // then
         resultActions.andExpect(status().isUnauthorized());
     }
 

@@ -2,9 +2,11 @@ package com.eighttoten.schedule.service.nschedule;
 
 import static com.eighttoten.exception.ExceptionCode.INVALID_N_SCHEDULE_CREATION;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
+import static com.eighttoten.exception.ExceptionCode.NOT_WITHIN_WORK_TIME;
 
 import com.eighttoten.common.AppConstant;
 import com.eighttoten.exception.BadRequestException;
+import com.eighttoten.exception.BusinessException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.domain.ScheduleAble;
@@ -19,8 +21,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -47,9 +49,10 @@ public class NScheduleService {
         List<ScheduleAble> scheduleAbles = scheduleAbleService
                 .findAllBetweenStartAndEnd(member, startDateTime, endDateTime);
 
-        Map<LocalDateTime, List<TimeSlot>> slotMap = timeSlotService.findAllBetweenStartAndEnd(
-                getSortedAfter8AMScheduleAbleMap(scheduleAbles), startDateTime, endDateTime
-        );
+        Map<LocalDate, List<TimeSlot>> slotMap = timeSlotService.findAllBetweenStartAndEnd(
+                getScheduleMapWithinWorkTime(scheduleAbles), startDateTime, endDateTime);
+
+        checkAllSlotsWithinWorkTime(slotMap);
 
         Map<DayOfWeek, List<TimeSlot>> availableSlotMap = timeSlotService
                 .findCommonSlotsForEachDay(slotMap, nScheduleCreateInfo.getNecessaryTime());
@@ -63,7 +66,7 @@ public class NScheduleService {
         validateCreateNSchedule(selectedDays, performInWeek);
 
         Map<DayOfWeek, TimeSlot> selectedTimeSlots = timeSlotService
-                .selectRandomTimeSlots(selectedDays, availableSlotMap);
+                .selectEarlierTimeSlot(selectedDays, availableSlotMap);
 
         long nScheduleId = nScheduleRepository.save(newNSchedule);
         nScheduleDetailService.saveDetails(nScheduleId, selectedTimeSlots, nScheduleCreateInfo);
@@ -88,25 +91,18 @@ public class NScheduleService {
         nScheduleRepository.deleteById(id);
     }
 
-    private Map<LocalDate, List<ScheduleAble>> getSortedAfter8AMScheduleAbleMap(List<ScheduleAble> scheduleAbles) {
+    private Map<LocalDate, List<ScheduleAble>> getScheduleMapWithinWorkTime(List<ScheduleAble> scheduleAbles) {
         LocalTime startTime = AppConstant.WORK_START_TIME;
         LocalTime endTime = AppConstant.WORK_END_TIME;
 
         return scheduleAbles.stream()
-                .filter(scheduleAble -> isWithinTimeRange(scheduleAble, startTime, endTime))
+                .filter(scheduleAble -> isWithinWorkTimeRange(scheduleAble, startTime, endTime))
                 .collect(Collectors.groupingBy(
                         scheduleAble -> scheduleAble.getScheduleStart().toLocalDate(),
-                        Collectors.collectingAndThen(
-                                Collectors.toList(),
-                                list -> {
-                                    list.sort(Comparator.comparing(ScheduleAble::getScheduleStart));
-                                    return list;
-                                }
-                        )
-                ));
+                        Collectors.toList()));
     }
 
-    private boolean isWithinTimeRange(ScheduleAble scheduleAble, LocalTime startTime, LocalTime endTime) {
+    private boolean isWithinWorkTimeRange(ScheduleAble scheduleAble, LocalTime startTime, LocalTime endTime) {
         LocalTime scheduleEnd = scheduleAble.getScheduleEnd().toLocalTime();
         return !scheduleEnd.isBefore(startTime) && !scheduleEnd.isAfter(endTime);
     }
@@ -126,6 +122,12 @@ public class NScheduleService {
     private void validateCreateNSchedule(List<DayOfWeek> selectedDays, int performInWeek) {
         if(selectedDays.size() < performInWeek){
             throw new BadRequestException(INVALID_N_SCHEDULE_CREATION);
+        }
+    }
+
+    private void checkAllSlotsWithinWorkTime(Map<LocalDate, List<TimeSlot>> slots) {
+        if (!slots.values().stream().flatMap(Collection::stream).allMatch(TimeSlot::isWithinWorkTime)) {
+            throw new BusinessException(NOT_WITHIN_WORK_TIME);
         }
     }
 }

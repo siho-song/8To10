@@ -6,7 +6,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.eighttoten.BaseEntity;
 import com.eighttoten.member.MemberEntity;
-import com.eighttoten.member.domain.Member;
 import com.eighttoten.schedule.domain.nschedule.NSchedule;
 import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
 import jakarta.persistence.Column;

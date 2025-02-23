@@ -5,10 +5,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.eighttoten.BaseEntity;
-import com.eighttoten.community.domain.post.Post;
 import com.eighttoten.community.domain.post.PostScrap;
 import com.eighttoten.member.MemberEntity;
-import com.eighttoten.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

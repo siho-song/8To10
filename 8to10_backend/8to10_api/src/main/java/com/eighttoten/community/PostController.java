@@ -6,21 +6,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.eighttoten.common.Pagination;
 import com.eighttoten.community.domain.post.PostPreview;
+import com.eighttoten.community.dto.post.PostDetailResponse;
 import com.eighttoten.community.dto.post.PostPageRequest;
 import com.eighttoten.community.dto.post.PostPreviewResponse;
 import com.eighttoten.community.dto.post.PostSaveRequest;
-import com.eighttoten.community.dto.post.PostDetailResponse;
 import com.eighttoten.community.dto.post.PostUpdateRequest;
 import com.eighttoten.community.service.PostHeartService;
 import com.eighttoten.community.service.PostScrapService;
 import com.eighttoten.community.service.PostService;
-import com.eighttoten.support.CurrentMember;
 import com.eighttoten.member.domain.Member;
+import com.eighttoten.support.CurrentMember;
 import com.eighttoten.support.PageResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/community/post")
 @RequiredArgsConstructor
-@Slf4j
 public class PostController {
     private final PostService postService;
     private final PostHeartService postHeartService;
     private final PostScrapService postScrapService;
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<PostPreviewResponse>> getPostPage(PostPageRequest request)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PageResponse<PostPreviewResponse>> getPostPage(@Valid @RequestBody PostPageRequest request)
     {
         Pagination<PostPreview> postPreviews = postService.searchPostPreviewPages(request.toSearchPostPage());
-        //여기 아래부터는 걍 변환
         List<PostPreviewResponse> postPreviewResponses = postPreviews.getContents().stream().map(PostPreviewResponse::from).toList();
         PageResponse<PostPreviewResponse> response = new PageResponse<>(postPreviewResponses,
                 postPreviews.getPageNumber(), postPreviews.getPageSize(),
@@ -56,7 +53,7 @@ public class PostController {
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updatePost(
             @CurrentMember Member member,
-            @RequestBody PostUpdateRequest request) {
+            @Valid @RequestBody PostUpdateRequest request) {
 
         postService.updatePost(member, request.toUpdatePost());
         return ResponseEntity.noContent().build();

@@ -18,16 +18,10 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @StartBeforeEnd(groups = ObjectErrorGroup.class)
-@Builder
-@AllArgsConstructor
 public class FScheduleSaveRequest implements DateRangeValidatable {
     @NotBlank(groups = FieldErrorGroup.class)
     @Size(min = 1,max = 80, groups = FieldErrorGroup.class)

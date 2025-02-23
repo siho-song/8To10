@@ -1,7 +1,6 @@
 package com.eighttoten.member.dto.request;
 
 import com.eighttoten.member.domain.Gender;
-import com.eighttoten.member.domain.Member;
 import com.eighttoten.member.domain.Mode;
 import com.eighttoten.member.domain.NewMember;
 import com.eighttoten.member.domain.Role;

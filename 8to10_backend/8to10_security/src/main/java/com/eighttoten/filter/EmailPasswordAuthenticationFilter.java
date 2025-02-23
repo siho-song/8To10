@@ -1,9 +1,9 @@
 package com.eighttoten.filter;
 
 import com.eighttoten.exception.BadRequestException;
+import com.eighttoten.exception.CustomAuthenticationException;
 import com.eighttoten.exception.ExceptionCode;
 import com.eighttoten.handler.AuthFilterExceptionHandler;
-import com.eighttoten.exception.CustomAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

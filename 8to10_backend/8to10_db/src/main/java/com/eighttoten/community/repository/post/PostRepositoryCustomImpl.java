@@ -9,8 +9,8 @@ import com.eighttoten.community.QReplyHeartEntity;
 import com.eighttoten.community.ReplyEntity;
 import com.eighttoten.community.domain.post.PostDetailInfo;
 import com.eighttoten.community.domain.post.PostPreview;
-import com.eighttoten.community.domain.post.SearchPostPage;
 import com.eighttoten.community.domain.post.SearchCond;
+import com.eighttoten.community.domain.post.SearchPostPage;
 import com.eighttoten.community.domain.post.SortCondition;
 import com.eighttoten.member.QMemberEntity;
 import com.querydsl.core.types.Order;
@@ -50,7 +50,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         qPost.id,
                         qPost.title,
                         qPost.contents,
-                        qPost.memberEntity.createdBy,
+                        qPost.memberEntity.createdBy.as("writer"),
                         qPost.memberEntity.nickname,
                         qPost.createdAt,
                         qPost.updatedAt,

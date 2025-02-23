@@ -1,12 +1,14 @@
 package com.eighttoten.schedule.service.nschedule;
 
+import static com.eighttoten.exception.ExceptionCode.INVALID_ACHIEVEMENT_AMOUNT;
+import static com.eighttoten.exception.ExceptionCode.NOT_EQUAL_DATE;
 import static com.eighttoten.exception.ExceptionCode.NOT_EXIST_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_DETAIL;
 import static com.eighttoten.exception.ExceptionCode.NOT_FOUND_N_SCHEDULE;
 
+import com.eighttoten.exception.BadRequestException;
 import com.eighttoten.exception.NotFoundEntityException;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.notification.event.ProgressUpdatedEvent;
 import com.eighttoten.schedule.domain.ProgressUpdates;
 import com.eighttoten.schedule.domain.ProgressUpdates.ProgressUpdate;
 import com.eighttoten.schedule.domain.nschedule.NDetailUpdate;
@@ -18,7 +20,9 @@ import com.eighttoten.schedule.domain.nschedule.NewNDetail;
 import com.eighttoten.schedule.domain.nschedule.TimeSlot;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleDetailRepository;
 import com.eighttoten.schedule.domain.nschedule.repository.NScheduleRepository;
+import com.eighttoten.schedule.event.AchievementUpdateEvent;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -116,9 +120,18 @@ public class NScheduleDetailService {
     @Transactional
     public void updateProgressList(Member member, ProgressUpdates progressUpdates) {
         List<ProgressUpdate> allProgress = progressUpdates.getProgressUpdates();
-        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByIds(progressUpdates.getIds());
+        List<Long> ids = progressUpdates.getProgressUpdates().stream()
+                .map(ProgressUpdate::getScheduleDetailId).toList();
+
+        List<NScheduleDetail> nScheduleDetails = nScheduleDetailRepository.findAllByIds(ids);
+        LocalDate updateDate = progressUpdates.getDate();
+
+        if(!isAllSameDate(nScheduleDetails, updateDate)){
+            throw new BadRequestException(NOT_EQUAL_DATE);
+        }
+
         allProgress.forEach(progressUpdate -> updateProgress(progressUpdate, nScheduleDetails));
-        publisher.publishEvent(ProgressUpdatedEvent.createdEvent(member, progressUpdates.getDate()));
+        publisher.publishEvent(new AchievementUpdateEvent(member, updateDate));
     }
 
     private void setScheduleDailyAmount(
@@ -139,7 +152,7 @@ public class NScheduleDetailService {
     }
 
     private boolean isValidAchievementAmount(int newAchievementAmount, int dailyAmount) {
-        return newAchievementAmount >= 0 && dailyAmount > 0 && newAchievementAmount <= dailyAmount;
+        return newAchievementAmount >= 0 && dailyAmount >= 0 && newAchievementAmount <= dailyAmount;
     }
 
     private double getDailyAmountSum(List<NScheduleDetail> nScheduleDetails) {
@@ -154,15 +167,22 @@ public class NScheduleDetailService {
         int dailyAmount = nScheduleDetail.getDailyAmount();
         int newAchievementAmount = progressUpdate.getAchievedAmount();
 
-        if (dailyAmount == 0) {
-            nScheduleDetail.updateCompleteStatus(progressUpdate.isCompleteStatus());
+        if (!isValidAchievementAmount(newAchievementAmount, dailyAmount)) {
+            throw new BadRequestException(INVALID_ACHIEVEMENT_AMOUNT);
         }
 
-        if (isValidAchievementAmount(newAchievementAmount, dailyAmount)) {
+        if(dailyAmount == 0){
+            nScheduleDetail.updateCompleteStatus(progressUpdate.isCompleteStatus());
+        }
+        else {
             nScheduleDetail.updateAchievedAmount(newAchievementAmount);
             nScheduleDetail.updateCompleteStatus(nScheduleDetail.getAchievedAmount() == dailyAmount);
         }
-
         nScheduleDetailRepository.update(nScheduleDetail);
+    }
+
+    private boolean isAllSameDate(List<NScheduleDetail> nScheduleDetails, LocalDate updateDate) {
+        return nScheduleDetails.stream()
+                .allMatch(nScheduleDetail -> nScheduleDetail.getStartDateTime().toLocalDate().equals(updateDate));
     }
 }

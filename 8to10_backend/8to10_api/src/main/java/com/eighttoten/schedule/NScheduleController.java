@@ -2,15 +2,15 @@ package com.eighttoten.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.eighttoten.support.CurrentMember;
-import com.eighttoten.support.ValidationSequence;
 import com.eighttoten.member.domain.Member;
-import com.eighttoten.schedule.dto.request.NScheduleSaveRequest;
-import com.eighttoten.schedule.dto.request.NScheduleUpdateRequest;
-import com.eighttoten.schedule.dto.request.NDetailUpdateRequest;
-import com.eighttoten.schedule.dto.request.ProgressUpdatesRequest;
+import com.eighttoten.schedule.dto.request.nschedule.NDetailUpdateRequest;
+import com.eighttoten.schedule.dto.request.nschedule.NScheduleSaveRequest;
+import com.eighttoten.schedule.dto.request.nschedule.NScheduleUpdateRequest;
+import com.eighttoten.schedule.dto.request.nschedule.ProgressUpdatesRequest;
 import com.eighttoten.schedule.service.nschedule.NScheduleDetailService;
 import com.eighttoten.schedule.service.nschedule.NScheduleService;
+import com.eighttoten.support.CurrentMember;
+import com.eighttoten.support.ValidationSequence;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class NScheduleController {
     {
         nScheduleService.saveWithDetails(member, request.toNScheduleCreateInfo(),
                 request.toNewNSchedule(member.getId()));
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)

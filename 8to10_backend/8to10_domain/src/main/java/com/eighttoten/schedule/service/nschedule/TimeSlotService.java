@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,16 +22,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TimeSlotService {
-    public Map<LocalDateTime, List<TimeSlot>> findAllBetweenStartAndEnd(
-            Map<LocalDate, List<ScheduleAble>> sortedScheduleAbleMap,
+    public Map<LocalDate, List<TimeSlot>> findAllBetweenStartAndEnd(
+            Map<LocalDate, List<ScheduleAble>> scheduleAbleMap,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime) {
 
-        Map<LocalDateTime, List<TimeSlot>> slotsByDate = new HashMap<>();
-        LocalDateTime currentDate = startDateTime;
+        Map<LocalDate, List<TimeSlot>> slotsByDate = new HashMap<>();
+        LocalDate currentDate = startDateTime.toLocalDate();
+        LocalDate endDate = endDateTime.toLocalDate();
 
-        while (!currentDate.isAfter(endDateTime)) {
-            List<ScheduleAble> scheduleAbles = sortedScheduleAbleMap.getOrDefault(currentDate, Collections.emptyList());
+        while (currentDate.isBefore(endDate)) {
+            List<ScheduleAble> scheduleAbles = scheduleAbleMap.getOrDefault(currentDate, Collections.emptyList());
+            scheduleAbles.sort(Comparator.comparing(ScheduleAble::getScheduleStart));
             List<TimeSlot> timeslots = findSlotsForDate(scheduleAbles);
             slotsByDate.put(currentDate, timeslots);
             currentDate = currentDate.plusDays(1);
@@ -40,7 +43,7 @@ public class TimeSlotService {
     }
 
     public Map<DayOfWeek, List<TimeSlot>> findCommonSlotsForEachDay(
-            Map<LocalDateTime, List<TimeSlot>> slotsForPeriodByDate,
+            Map<LocalDate, List<TimeSlot>> slotsForPeriodByDate,
             Duration necessaryTime) {
 
         Map<DayOfWeek, List<TimeSlot>> commonRangeSlotsByDay = new EnumMap<>(DayOfWeek.class);
@@ -63,7 +66,7 @@ public class TimeSlotService {
         return commonRangeSlotsByDay;
     }
 
-    public Map<DayOfWeek, TimeSlot> selectRandomTimeSlots(List<DayOfWeek> days, Map<DayOfWeek, List<TimeSlot>> availableTimeSlotsByDay) {
+    public Map<DayOfWeek, TimeSlot> selectEarlierTimeSlot(List<DayOfWeek> days, Map<DayOfWeek, List<TimeSlot>> availableTimeSlotsByDay) {
         return days.stream()
                 .filter(availableTimeSlotsByDay::containsKey)
                 .collect(Collectors.toMap(
@@ -112,13 +115,13 @@ public class TimeSlotService {
         return Duration.between(start, end).toMinutes() > 0;
     }
 
-    private boolean hasAllDateSlots(Map<LocalDateTime, List<TimeSlot>> allSlotsForPeriodByDate, DayOfWeek dayOfWeek) {
+    private boolean hasAllDateSlots(Map<LocalDate, List<TimeSlot>> allSlotsForPeriodByDate, DayOfWeek dayOfWeek) {
         return allSlotsForPeriodByDate.entrySet().stream()
                 .filter(entry -> entry.getKey().getDayOfWeek().equals(dayOfWeek))
                 .noneMatch(entry -> entry.getValue().isEmpty());
     }
 
-    private LinkedHashMap<LocalDateTime, List<TimeSlot>> collectSlotsByDay(Map<LocalDateTime, List<TimeSlot>> slotsForPeriodByDate,
+    private LinkedHashMap<LocalDate, List<TimeSlot>> collectSlotsByDay(Map<LocalDate, List<TimeSlot>> slotsForPeriodByDate,
                                                                        DayOfWeek dayOfWeek) {
         return slotsForPeriodByDate.entrySet().stream()
                 .filter(entry -> entry.getKey().getDayOfWeek().equals(dayOfWeek))

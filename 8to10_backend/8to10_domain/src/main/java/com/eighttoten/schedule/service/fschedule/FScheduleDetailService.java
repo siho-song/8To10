@@ -16,7 +16,6 @@ import com.eighttoten.schedule.domain.fschedule.repository.FScheduleRepository;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

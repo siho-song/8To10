@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
-public class ScheduleController {
+public class ScheduleAbleController {
     private final ScheduleAbleService scheduleAbleService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

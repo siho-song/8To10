@@ -1,6 +1,5 @@
 package com.eighttoten.exception;
 
-import com.eighttoten.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
 

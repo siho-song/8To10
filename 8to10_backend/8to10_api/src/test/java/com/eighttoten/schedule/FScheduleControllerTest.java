@@ -1,4 +1,4 @@
-package com.eighttoten.presentation.schedule;
+package com.eighttoten.schedule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,86 +23,81 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-import com.eighttoten.schedule.dto.request.fschedule.FixDetailUpdateRequest;
-import com.eighttoten.schedule.dto.request.fschedule.FScheduleSaveRequest;
-import com.eighttoten.schedule.dto.request.fschedule.FScheduleUpdateRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Slf4j
-@DisplayName("고정일정 엔드포인트")
-@Transactional
+@DisplayName("고정일정 컨트롤러 통합테스트")
 class FScheduleControllerTest {
-
     @Autowired
-    MockMvc mockMvc ;
+    MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
-    TokenProvider tokenProvider;  // TokenProvider 주입받기
+    TokenProvider tokenProvider;
 
     String token;
 
     @BeforeEach
     void init(){
-        token = tokenProvider.generateAccessToken("normal@example.com"); // 토큰 생성
+        token = tokenProvider.generateAccessToken("normal@example.com");
     }
 
     @Test
-    @DisplayName("고정일정 정상 생성 - weekly")
+    @DisplayName("고정일정의 생성주기가 '주간' 일 때 생성에 성공한다.")
     void add_weekly() throws Exception {
-        FScheduleSaveRequest fScheduleSaveRequest = FScheduleSaveRequest.builder()
-                .title("테스트 title")
-                .commonDescription("테스트 commonDescription")
-                .startDateTime(LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)))
-                .endDateTime(LocalDateTime.of(LocalDate.now().plusMonths(2), LocalTime.of(0, 0)))
-                .frequency("weekly")
-                .startTime(LocalTime.of(8,0))
-                .duration(LocalTime.of(2, 0))
-                .days(new ArrayList<>(List.of("mo", "we","fr")))
-                .build();
+        //given
+        Map<String, Object> request = new HashMap<>();
+        request.put("title", "테스트 title");
+        request.put("commonDescription", "테스트 commonDescription");
+        request.put("startDateTime", LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)).toString());
+        request.put("endDateTime", LocalDateTime.of(LocalDate.now().plusMonths(2), LocalTime.of(0, 0)).toString());
+        request.put("frequency", "weekly");
+        request.put("startTime", LocalTime.of(8,0).toString());
+        request.put("duration", LocalTime.of(2, 0).toString());
+        request.put("days", List.of("mo", "we", "fr"));
+        String body = objectMapper.writeValueAsString(request);
 
-        String dto = objectMapper.writeValueAsString(fScheduleSaveRequest);
-
+        //when,then
         mockMvc.perform(post("/schedule/fixed")
                         .header("Authorization","Bearer " + token) // JWT 쿠키 추가
-                        .content(dto)
+                        .content(body)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("고정일정 정상 생성 - daily")
+    @DisplayName("고정일정의 생성주기가 '매일' 일때 생성에 성공한다.")
     void add_daily() throws Exception {
-        FScheduleSaveRequest fScheduleSaveRequest = FScheduleSaveRequest.builder()
-                .title("테스트 title ")
-                .commonDescription("테스트 commonDescription")
-                .startDateTime(LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)))
-                .endDateTime(LocalDateTime.of(LocalDate.now().plusMonths(2), LocalTime.of(0, 0)))
-                .frequency("daily")
-                .startTime(LocalTime.of(8, 0))
-                .duration(LocalTime.of(2, 0))
-                .days(new ArrayList<>(List.of("mo", "tu", "we", "th", "fr", "sa", "su")))
-                .build();
+        //given
+        Map<String, Object> request = new HashMap<>();
+        request.put("title", "테스트 title");
+        request.put("commonDescription", "테스트 commonDescription");
+        request.put("startDateTime", LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)).toString());
+        request.put("endDateTime", LocalDateTime.of(LocalDate.now().plusMonths(2), LocalTime.of(0, 0)).toString());
+        request.put("frequency", "daily");
+        request.put("startTime", LocalTime.of(8,0).toString());
+        request.put("duration", LocalTime.of(2, 0).toString());
+        request.put("days", List.of("mo", "tu", "we", "th", "fr", "sa", "su"));
+        String body = objectMapper.writeValueAsString(request);
 
-        String dto = objectMapper.writeValueAsString(fScheduleSaveRequest);
-
+        //when,then
         mockMvc.perform(post("/schedule/fixed")
                         .header("Authorization","Bearer " + token) // JWT 쿠키 추가
-                        .content(dto)
+                        .content(body)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("특정 날짜 이후의 고정일정 자식일정 벌크 삭제")
+    @DisplayName("특정 날짜 이후의 고정일정 벌크 삭제에 성공한다")
     public void delete_ById_detail_greater_than_equal_start() throws Exception {
-        String parentId = "1";
+        //given
+        String parentId = "4";
         String startDate = LocalDateTime.of(2024, 1, 1, 15, 30).toString();
 
+        //when,then
         mockMvc.perform(delete("/schedule/fixed/detail")
                 .param("parentId", parentId)
                 .param("startDate", startDate)
@@ -111,56 +106,60 @@ class FScheduleControllerTest {
     }
 
     @Test
-    @DisplayName("고정일정 자식일정 단건 삭제")
+    @DisplayName("고정일정 자식일정 단건 삭제에 성공한다.")
     public void delete_ById_detail() throws Exception {
-        Long id = 1L;
+        //given
+        Long detailId = 1L;
 
-        mockMvc.perform(delete("/schedule/fixed/detail/{id}",id)
+        //when,then
+        mockMvc.perform(delete("/schedule/fixed/detail/{id}",detailId)
                 .header("Authorization","Bearer " + token)
         ).andExpect(status().isNoContent());
     }
 
     @Test
-    @DisplayName("고정일정 부모일정 수정")
-    public void update() throws Exception {
-        Long id = 1L;
+    @DisplayName("고정일정 부모일정 수정에 성공한다.")
+    public void update_FSchedule() throws Exception {
+        //given
+        Long fScheduleId = 1L;
         String title = "고정일정 제목 수정";
         String commonDescription = "고정일정 메모 수정";
-        FScheduleUpdateRequest fScheduleUpdateRequest = FScheduleUpdateRequest.builder()
-                .id(id)
-                .title(title)
-                .commonDescription(commonDescription)
-                .build();
 
-        String dto = objectMapper.writeValueAsString(fScheduleUpdateRequest);
+        Map<String, Object> request = new HashMap<>();
+        request.put("id",fScheduleId);
+        request.put("title",title);
+        request.put("commonDescription", commonDescription);
 
+        String body = objectMapper.writeValueAsString(request);
+
+        //when,then
         mockMvc.perform(put("/schedule/fixed")
                 .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON)
-                .content(dto)
+                .content(body)
         ).andExpect(status().isNoContent());
     }
 
     @Test
-    @DisplayName("고정일정 자식일정 단건 수정")
+    @DisplayName("고정일정 자식일정 단건 수정에 성공한다.")
     void updateDetail() throws Exception {
-        Long id = 1L;
+        //given
+        Long detailId = 12L;
         LocalDateTime startDate = LocalDateTime.of(2024, 9, 9, 10, 30);
         LocalDateTime endDate = LocalDateTime.of(2024, 9, 9, 12, 30);
         String detailDescription = "수정된 메모";
-        FixDetailUpdateRequest fixDetailUpdateRequest = FixDetailUpdateRequest.builder()
-                .id(id)
-                .detailDescription(detailDescription)
-                .startDateTime(startDate)
-                .endDateTime(endDate)
-                .build();
+        Map<String, Object> request = new HashMap<>();
+        request.put("id",detailId);
+        request.put("detailDescription",detailDescription);
+        request.put("startDateTime", startDate);
+        request.put("endDateTime", endDate);
+        String body = objectMapper.writeValueAsString(request);
 
-        String dto = objectMapper.writeValueAsString(fixDetailUpdateRequest);
-
+        //when,then
         mockMvc.perform(patch("/schedule/fixed/detail")
                 .header("Authorization","Bearer " + token)
                 .contentType(APPLICATION_JSON_VALUE)
-                .content(dto)
+                .content(body)
         ).andExpect(status().isNoContent());
     }
 }

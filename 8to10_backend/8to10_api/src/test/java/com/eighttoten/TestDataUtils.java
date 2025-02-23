@@ -15,8 +15,8 @@ public class TestDataUtils {
                 "test", 0, false, false);
     }
 
-    public static Reply createTestReply(Long parentId, String createdBy){
-        return new Reply(null, parentId, "테스트 댓글", createdBy, null, 0);
+    public static Reply createTestReply(Long parentId, Long postId , String createdBy){
+        return new Reply(null, parentId, postId,"테스트 댓글", createdBy, null,0);
     }
     public static Post createTestPost(Member member) {
         return new Post(null, "테스트 데이터 내용", "테스트 데이터", member.getEmail(), null, 0, 0);

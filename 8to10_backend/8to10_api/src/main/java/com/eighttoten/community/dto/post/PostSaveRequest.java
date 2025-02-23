@@ -1,16 +1,11 @@
 package com.eighttoten.community.dto.post;
 
 import com.eighttoten.community.domain.post.NewPost;
-import com.eighttoten.member.domain.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
-@AllArgsConstructor
 public class PostSaveRequest {
     @NotBlank
     @Size(max = 60)

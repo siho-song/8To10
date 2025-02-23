@@ -1,9 +1,9 @@
 package com.eighttoten.notification;
 
-import com.eighttoten.support.CurrentMember;
 import com.eighttoten.member.domain.Member;
 import com.eighttoten.notification.service.NotificationService;
 import com.eighttoten.notification.service.SseEmitterService;
+import com.eighttoten.support.CurrentMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

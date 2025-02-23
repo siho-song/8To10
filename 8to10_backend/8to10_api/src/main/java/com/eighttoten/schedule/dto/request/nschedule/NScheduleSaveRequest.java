@@ -1,29 +1,23 @@
-package com.eighttoten.schedule.dto.request;
+package com.eighttoten.schedule.dto.request.nschedule;
 
-import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
-import com.eighttoten.schedule.validator.fielderror.ZeroTimeInfo;
-import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
-import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import com.eighttoten.schedule.domain.nschedule.NScheduleCreateInfo;
+import com.eighttoten.schedule.domain.nschedule.NewNSchedule;
+import com.eighttoten.schedule.dto.request.DateRangeValidatable;
 import com.eighttoten.schedule.validator.fielderror.PerformInDay;
 import com.eighttoten.schedule.validator.fielderror.ZeroSeconds;
+import com.eighttoten.schedule.validator.fielderror.ZeroTimeInfo;
 import com.eighttoten.schedule.validator.objecterror.PerformInWeek;
 import com.eighttoten.schedule.validator.objecterror.StartDateBeforeEqEndDate;
+import com.eighttoten.support.ValidationGroups.FieldErrorGroup;
+import com.eighttoten.support.ValidationGroups.ObjectErrorGroup;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @PerformInWeek(groups = ObjectErrorGroup.class)
 @StartDateBeforeEqEndDate(groups = ObjectErrorGroup.class)
 public class NScheduleSaveRequest implements DateRangeValidatable {
